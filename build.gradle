@@ -1,0 +1,73 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+group = 'com.bertramlabs.plugins'
+version = '2.0.0'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        // classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3"
+    }
+}
+
+
+repositories {
+    jcenter()
+    mavenCentral()
+
+}
+
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.2.2'
+    compile "org.spockframework:spock-core:0.7-groovy-2.0"
+    compile 'org.mozilla:rhino:1.7R4'
+    compile 'commons-io:commons-io:2.2'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'asset-pipeline-core'
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+sourceSets {
+    main.groovy.srcDir 'src'
+    test.groovy.srcDir 'test'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+
+// bintrayUpload.dependsOn build, sourcesJar, javadocJar
