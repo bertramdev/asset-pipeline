@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package asset.pipeline
 
 import groovy.util.logging.Log4j
@@ -21,18 +20,28 @@ import groovy.util.logging.Log4j
 @Log4j
 class DirectiveProcessor {
 
+    /**
+    * References names of directives to implemented methods.
+    * This can be adjusted at run time to either override behavior or add custom directives
+    */
     static DIRECTIVES = [require_self: "requireSelfDirective" ,require_tree: "requireTreeDirective", require_full_tree: "requireFullTreeDirective" , require: "requireFileDirective", encoding: "encodingTypeDirective"]
 
-    def contentType
-    AssetCompiler precompiler
-    def files = []
-    def baseFile
+    private String contentType
+    private AssetCompiler precompiler
+    private def files = []
+    private def baseFile
 
     DirectiveProcessor(contentType, precompiler=null) {
         this.contentType = contentType
         this.precompiler = precompiler
     }
 
+
+    /**
+    * Takes an AssetFile and compiles it to a final result based on input directives and
+    * setup Processors. If a GenericAssetFile is passed in the raw byte array is returned.
+    * @param file an instance of an AbstractAssetFile (i.e. JsAssetFile or CssAssetFile)
+    */
     def compile(file) {
         if(file instanceof GenericAssetFile) {
             return file.getBytes()
@@ -46,6 +55,11 @@ class DirectiveProcessor {
         return buffer
     }
 
+    /**
+    * Returns a Flattened list of files based on the require tree
+    * This is useful for converting a script tag into several script tags for debugging
+    * @param file an instance of an AbstractAssetFile (i.e. JsAssetFile or CssAssetFile)
+    */
     def getFlattenedRequireList(file) {
         if(file instanceof GenericAssetFile) {
             return [path: file.path, encoding: null]
@@ -57,7 +71,11 @@ class DirectiveProcessor {
         return flattenedList
     }
 
-    def loadRequiresForTree(treeSet, flattenedList) {
+
+    /**
+    * Scans through a generated tree and builds a flatted list of requirements recursively
+    */
+    protected loadRequiresForTree(treeSet, flattenedList) {
         def selfLoaded = false
         for(childTree in treeSet.tree) {
             if(childTree == "self") {
@@ -78,7 +96,11 @@ class DirectiveProcessor {
         return flattenedList
     }
 
-    def loadContentsForTree(treeSet,buffer) {
+
+    /**
+    * Scans through a generated tree and builds a files contents recursively
+    */
+    protected loadContentsForTree(treeSet,buffer) {
         def selfLoaded = false
         for(childTree in treeSet.tree) {
             if(childTree == "self") {
@@ -95,26 +117,26 @@ class DirectiveProcessor {
         return buffer
     }
 
-    def getDependencyTree(file) {
+    /**
+    * Builds a dependency tree for a particular file
+    */
+    protected getDependencyTree(file) {
         this.files << file
         def tree = [file:file,tree:[]]
-        if(file.class.name != 'java.io.File') {
+        if(!(file instanceof GenericAssetFile)) {
             this.findDirectives(file,tree)
         }
 
         return tree
     }
 
-    def fileContents(file) {
-        if(file.class.name == 'java.io.File') {
-            return file.bytes
-        }
-        return file.processedStream(this.precompiler)
-    }
-
-    def findDirectives(fileSpec, tree) {
+    /**
+    * Scans an AssetFile for directive patterns and builds a dependency tree
+    * @param fileSpec The assetFile we wish to scan
+    * @param tree The tree object we use to build the graph (should be a List)
+    */
+    protected findDirectives(fileSpec, tree) {
         def lines = fileSpec.inputStream.readLines()
-        // def directiveFound = false
         def startTime = new Date().time
         lines.find { line ->
             def directive = fileSpec.directiveForLine(line)
@@ -137,10 +159,17 @@ class DirectiveProcessor {
         }
     }
 
+
+    /**
+    * Used to control file order for when content within your manifest exists
+    */
     def requireSelfDirective(command, file, tree) {
         tree.tree << "self"
     }
 
+    /**
+    * Set your file encoding within your manifest
+    */
     def encodingTypeDirective(command, fileSpec, tree) {
         if(!command[1]) {
             return;
@@ -151,6 +180,11 @@ class DirectiveProcessor {
         fileSpec.encoding = command[1]
     }
 
+
+    /**
+    * Loads files recursively within the specified folder within the same source resolver
+    * Example: //=require_tree .
+    */
     def requireTreeDirective(command, fileSpec, tree) {
         String directivePath = command[1]
         def resolver = fileSpec.sourceResolver
@@ -163,6 +197,11 @@ class DirectiveProcessor {
         }
     }
 
+
+    /**
+    * Loads files recursively within the specified relative path across ALL resolvers
+    * Example: //=require_full_tree /spud/admin
+    */
     def requireFullTreeDirective(command, fileSpec, tree) {
         String directivePath = command[1]
         for(resolver in AssetPipelineConfigHolder.resolvers) {
@@ -175,32 +214,10 @@ class DirectiveProcessor {
         }
     }
 
-    def recursiveTreeAppend(directory,tree) {
-        def files = directory.listFiles()
-        files = files?.sort { a, b -> a.name.compareTo b.name }
-        for(file in files) {
-            if(file.isDirectory()) {
-                recursiveTreeAppend(file,tree)
-            }
-            else if(contentType in AssetHelper.assetMimeTypeForURI(file.getAbsolutePath())) {
-                if(!isFileInTree(file,tree)) {
-                    tree.tree << getDependencyTree(AssetHelper.assetForFile(file,contentType, this.baseFile))
-                }
-            }
-        }
-    }
-
-    def isFileInTree(file,currentTree) {
-        def result = files.find { it ->
-            it.path == file.path
-        }
-        if(result) {
-            return true
-        } else {
-            return false
-        }
-    }
-
+    /**
+    * Directive which allows inclusion of individual files
+    * Example: //=require sample.js
+    */
     def requireFileDirective(command, file, tree) {
         def fileName = command[1]
 
@@ -217,13 +234,11 @@ class DirectiveProcessor {
             }
             else {
                 def relativeFileName = [ file.parentPath, fileName ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
-                // println "Including Relative File: ${relativeFileName} - ${fileName}"
                 newFile = AssetHelper.fileForUri( relativeFileName, this.contentType, null, this.baseFile )
             }
 
             if( newFile ) {
                 if( !isFileInTree( newFile, tree ) ) {
-                    // println("Inserting File")
                     tree.tree << getDependencyTree( newFile )
                 }
             }
@@ -237,27 +252,26 @@ class DirectiveProcessor {
         }
     }
 
-    // def relativePath(file, includeFileName=false) {
-    //     def path
-    //     if(includeFileName) {
-    //         path = file.class.name == 'java.io.File' ? file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR) : file.file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-    //     } else {
-    //         path = file.getParent().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-    //     }
-    //
-    //     def startPosition = path.findLastIndexOf{ it == "grails-app" }
-    //     if(startPosition == -1) {
-    //         startPosition = path.findLastIndexOf{ it == 'web-app' }
-    //         if(startPosition+2 >= path.length) {
-    //             return ""
-    //         }
-    //         path = path[(startPosition+2)..-1]
-    //     } else {
-    //         if(startPosition+3 >= path.length) {
-    //             return ""
-    //         }
-    //         path = path[(startPosition+3)..-1]
-    //     }
-    //     return path.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-    // }
+    protected isFileInTree(file,currentTree) {
+        def result = files.find { it ->
+            it.path == file.path
+        }
+        if(result) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /**
+    * Used for fetching the contents of a file be it a Generic unprocessable entity
+    * or an AssetFile with a processable stream
+    */
+    protected fileContents(file) {
+        if(file.class.name instanceof GenericAssetFile) {
+            return file.bytes
+        }
+        return file.processedStream(this.precompiler)
+    }
+
 }

@@ -19,9 +19,7 @@ package asset.pipeline.fs
 import asset.pipeline.*
 import java.util.regex.Pattern
 import groovy.util.logging.Log4j
-import java.net.URI
 import java.util.jar.JarFile
-import org.apache.commons.codec.net.URLCodec
 
 @Log4j
 class JarAssetResolver extends AbstractAssetResolver {
@@ -41,7 +39,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 		if(!relativePath) {
 			return null
 		}
-
+		def normalizedPath = AssetHelper.normalizePath(relativePath)
 		def specs
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
@@ -50,7 +48,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 
 			if(specs) {
 				for(fileSpec in specs) {
-					def fileName = relativePath
+					def fileName = normalizedPath
 					if(fileName.endsWith(".${fileSpec.compiledExtension}")) {
 						fileName = fileName.substring(0,fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
 					}
@@ -66,7 +64,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 					}
 				}
 			} else {
-				def fileName = relativePath
+				def fileName = normalizedPath
 				if(extension) {
 					if(!fileName.endsWith(".${extension}")) {
 						fileName += ".${extension}"
@@ -94,7 +92,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 			basePath = parentPathArgs.join(File.separator)
 		}
 		def combinedPath = basePath ? [prefixPath, basePath].join("/") : prefixPath
-		basePath = normalizedPath(combinedPath + "/")
+		basePath = AssetHelper.normalizePath(combinedPath + "/")
 
 		baseJar.entries().each { entry ->
 			if(entry.name.startsWith(basePath)) {
@@ -131,12 +129,6 @@ class JarAssetResolver extends AbstractAssetResolver {
 
 	def getEntry(String name) {
 		return baseJar.getEntry([prefixPath, name].join("/"))
-	}
-
-	def normalizedPath(path) {
-		def encodedFileName = new URLCodec().encode(path)
-		def normalizedFileName = new URI(encodedFileName).normalize().getPath()
-		return new URLCodec().decode(normalizedFileName)
 	}
 
 	def relativePathToResolver(file, scanDirectoryPath) {

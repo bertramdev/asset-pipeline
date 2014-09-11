@@ -18,7 +18,6 @@ package asset.pipeline.processors
 import asset.pipeline.*
 import java.net.URL
 import java.net.URI
-import org.apache.commons.codec.net.URLCodec
 
 /**
 * This Processor iterates over relative image paths in a CSS file and
@@ -41,10 +40,8 @@ class CssProcessor extends AbstractProcessor {
             } else if(isRelativePath(assetPath)) {
                 def urlRep = new URL("http://hostname/${assetPath}") //Split out subcomponents
                 def relativeFileName = [assetFile.parentPath,urlRep.path].join("/")
-                def encodedFileName = new URLCodec().encode(relativeFileName)
-                def normalizedFileName = new URI(encodedFileName).normalize().getPath()
-                normalizedFileName = new URLCodec().decode(normalizedFileName)
-                
+                def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
+
                 def cssFile = AssetHelper.fileForFullName(relativeFileName)
                 if(!cssFile) {
                     cssFile = AssetHelper.fileForFullName(normalizedFileName)

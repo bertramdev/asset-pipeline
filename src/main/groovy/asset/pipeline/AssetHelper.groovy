@@ -26,71 +26,6 @@ class AssetHelper {
     static QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
     static DIRECTIVE_FILE_SEPARATOR = '/'
 
-        /**
-    * Used for serving assets in development mode via the AssetController
-    * This method is NOT recommended for public use as behavior changes in production mode.
-    */
-    static byte[] serveAsset(uri, contentType = null, extension = null, encoding = null) {
-
-        def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
-
-        def directiveProcessor = new DirectiveProcessor(contentType)
-        if (assetFile) {
-            if(assetFile instanceof GenericAssetFile) {
-                return assetFile.inputStream.bytes
-            }
-            def fileContents = directiveProcessor.compile(assetFile)
-            encoding = encoding ?: assetFile.encoding
-            if(encoding) {
-                return fileContents.getBytes(encoding)
-            } else {
-                return fileContents.bytes
-            }
-
-        }
-
-        return null
-    }
-
-
-    /**
-    * Used for serving assets in development mode via the AssetController
-    * This method is NOT recommended for public use as behavior changes in production mode.
-    */
-    static def getDependencyList(uri, contentType = null, extension = null) {
-        def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
-        def directiveProcessor = new DirectiveProcessor(contentType)
-        if (assetFile) {
-            return directiveProcessor.getFlattenedRequireList(assetFile)
-        }
-        return null
-    }
-
-
-    /**
-    * Used for serving assets in development mode without bundling
-    * This method is NOT recommended for public use as behavior changes in production mode.
-    */
-    static byte[] serveUncompiledAsset(uri, contentType, extension = null,encoding=null) {
-        def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
-
-        def directiveProcessor = new DirectiveProcessor(contentType)
-        if (assetFile) {
-            if(assetFile instanceof GenericAssetFile) {
-                return directiveProcessor.fileContents(assetFile)
-            }
-            if(encoding) {
-                assetFile.encoding = encoding
-                return directiveProcessor.fileContents(assetFile).getBytes(encoding)
-            } else {
-                return directiveProcessor.fileContents(assetFile).bytes
-            }
-
-        }
-
-        return null
-    }
-
     static fileForUri(uri, contentType=null,ext=null, baseFile=null) {
         def file
         for(resolver in AssetPipelineConfigHolder.resolvers) {
@@ -124,12 +59,6 @@ class AssetHelper {
         return file
     }
 
-    @Deprecated
-    static artefactForFile(file) {
-        println "DEPRECATION WARNING: AssetHelper.artefactForFile() has been renamed to AssetHelper.assetForFile()."
-        AssetHelper.assetForFile(file)
-    }
-
     static assetForFile(file) {
         if(file == null) {
             return file
@@ -142,7 +71,11 @@ class AssetHelper {
         return file
     }
 
-    static assetForFileName(filename) {
+    /**
+    * Finds the AssetFile definition for the specified file name based on its extension
+    * @param filename String filename representation
+    */
+    static Class assetForFileName(filename) {
         return AssetHelper.assetFileClasses().find{ fileClass ->
             fileClass.extensions.find { filename.endsWith(".${it}") }
         }
@@ -159,7 +92,6 @@ class AssetHelper {
     }
 
     static extensionFromURI(uri) {
-
         def uriComponents = uri.split("/")
         def lastUriComponent = uriComponents[uriComponents.length - 1]
         def extension
@@ -279,7 +211,12 @@ class AssetHelper {
         AssetHelper.assetFileClasses().findAll { (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
     }
 
-    static getByteDigest(byte[] fileBytes) {
+    /**
+    * Generates an MD5 Byte Digest from a byte array
+    * @param fileBytes byte[] array of the contents of a file
+    * @return md5 String
+    */
+    static String getByteDigest(byte[] fileBytes) {
         // Generate Checksum based on the file contents and the configuration settings
         MessageDigest md = MessageDigest.getInstance("MD5")
         md.update(fileBytes)
@@ -287,4 +224,28 @@ class AssetHelper {
         return checksum.encodeHex().toString()
     }
 
+
+    /**
+     * Normalizes a path into a standard path, stripping out all path elements that walk the path (i.e. '..' and '.')
+     * @param path String path (i.e. '/path/to/../file.js')
+     * @return normalied path String (i.e. '/path/file.js')
+    */
+    static String normalizePath(path) {
+        def pathArgs = path.split("/")
+        def newPath = []
+        for(int counter=0;counter < pathArgs.length; counter++) {
+            def pathElement = pathArgs[counter]
+            if(pathElement == '..') {
+                if(newPath.size() > 0) {
+                    newPath = newPath[0..(newPath.size() - 2)]
+                    continue;
+                }
+            } else if(pathElement == '.') {
+                continue;
+            } else {
+                newPath << pathElement
+            }
+        }
+        return newPath.join("/")
+    }
 }
