@@ -25,9 +25,8 @@ repositories {
 
 dependencies {
 	compile 'org.codehaus.groovy:groovy-all:2.2.2'
-    compile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
     compile 'org.mozilla:rhino:1.7R4'
-    compile 'commons-io:commons-io:2.2'
     compile 'log4j:log4j:1.2.17'
 }
 
