@@ -43,4 +43,6 @@ public interface AssetResolverInterface {
 	public def getAssets(String basePath, String contentType, String extension)
 	public def getAssets(String basePath, String contentType)
 	public def getAssets(String basePath)
+
+	public List scanForFiles(List excludePatterns, List includePatterns)
 }

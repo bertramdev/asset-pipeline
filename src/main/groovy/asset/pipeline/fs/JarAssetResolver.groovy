@@ -141,4 +141,31 @@ class JarAssetResolver extends AbstractAssetResolver {
 		}
 	}
 
+	/**
+	* Uses file globbing to scan for files that need precompiled
+	*/
+	public List scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
+		def fileList = []
+		def excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : []
+		def includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : []
+
+		baseJar.entries().each { entry ->
+			if(entry.name.startsWith(prefixPath + "/")) {
+				def relativePath = relativePathToResolver(entry, prefixPath)
+				if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
+					if(!entry.isDirectory()) {
+						def assetFileClass = AssetHelper.assetForFileName(relativePath)
+						if(assetFileClass) {
+							fileList << assetFileClass.newInstance(inputStreamSource: { baseJar.getInputStream(entry) }, path: relativePath, sourceResolver: this)
+						} else {
+							fileList << new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(entry) }, path: relativePath)
+						}
+					}
+				}
+			}
+		}
+
+		return fileList.unique { a, b -> a.path <=> b.path }
+	}
+
 }

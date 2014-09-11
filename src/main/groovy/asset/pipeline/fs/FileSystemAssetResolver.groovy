@@ -172,4 +172,41 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		return directivePath?.replace(DIRECTIVE_FILE_SEPARATOR, File.separator)
 	}
 
+
+	/**
+	* Uses file globbing to scan for files that need precompiled
+	*/
+	public List scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
+		def fileList = []
+		def excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : []
+		def includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : []
+
+		scanDirectories.each { scanDirectory ->
+			def scanPath = new File(scanDirectory)
+			iterateOverFileSystem(file,excludedPatternRegex,includedPatternRegex.fileList, scanDirectory)
+		}
+
+		return fileList.unique { a, b -> a.path <=> b.path }
+	}
+
+	private iterateOverFileSystem(dir, excludePatterns,includePatterns,fileList, sourcePath) {
+		dir.listFiles().each { file ->
+			def relativePath = relativePathToResolver(file, sourcePath)
+			if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
+				if(file.isDirectory()) {
+					iterateOverFileSystem(file,excludePatterns, includePatterns, fileList, sourcePath)
+				} else {
+					def assetFileClass = AssetHelper.assetForFileName(relativePath)
+					if(assetFileClass) {
+						fileList << assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: baseFile, path: relativePath, sourceResolver: this)
+					} else {
+						fileList << new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePath)
+					}
+				}
+
+			}
+		}
+	}
+
+
 }

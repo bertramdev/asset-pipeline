@@ -90,7 +90,6 @@ class CssProcessor extends AbstractProcessor {
         if(useDigest) {
             def extension = AssetHelper.extensionFromURI(file.getName())
             def fileName  = AssetHelper.nameWithoutExtension(file.getName())
-            // def assetFile = AssetHelper.assetForFile(file)
             def digestName
             if(!(file instanceof GenericAssetFile)) {
                 def directiveProcessor = new DirectiveProcessor(assetFile.contentType, precompiler)

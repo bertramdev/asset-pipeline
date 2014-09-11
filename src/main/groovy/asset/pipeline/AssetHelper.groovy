@@ -22,7 +22,7 @@ import java.security.MessageDigest
 import java.nio.channels.FileChannel
 
 class AssetHelper {
-    static assetSpecs = [JsAssetFile, CssAssetFile, ManifestAssetFile]
+    static assetSpecs = [JsAssetFile, CssAssetFile]
     static QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
     static DIRECTIVE_FILE_SEPARATOR = '/'
 
@@ -59,17 +59,17 @@ class AssetHelper {
         return file
     }
 
-    static assetForFile(file) {
-        if(file == null) {
-            return file
-        }
-
-        def possibleFileSpec = AssetHelper.assetForFileName(file.getName())
-        if(possibleFileSpec) {
-            return possibleFileSpec.newInstance(file:file)
-        }
-        return file
-    }
+    // static assetForFile(file) {
+    //     if(file == null) {
+    //         return file
+    //     }
+    //
+    //     def possibleFileSpec = AssetHelper.assetForFileName(file.getName())
+    //     if(possibleFileSpec) {
+    //         return possibleFileSpec.newInstance(file:file)
+    //     }
+    //     return file
+    // }
 
     /**
     * Finds the AssetFile definition for the specified file name based on its extension
@@ -248,4 +248,6 @@ class AssetHelper {
         }
         return newPath.join("/")
     }
+
+
 }

@@ -1,5 +1,4 @@
 package asset.pipeline
-import org.apache.tools.ant.DirectoryScanner
 import groovy.util.logging.Log4j
 import asset.pipeline.processors.UglifyJsProcessor
 import asset.pipeline.processors.CssMinifyPostProcessor
@@ -7,7 +6,7 @@ import asset.pipeline.processors.CssMinifyPostProcessor
 class AssetCompiler {
 	def includeRules = [:]
 	def excludeRules = [:]
-	def assetPaths = [:]
+
 	def options = [:]
 	def eventListener
 	def filesToProcess = []
@@ -44,18 +43,20 @@ class AssetCompiler {
 		removeDeletedFiles(filesToProcess)
 
 		for(int index = 0 ; index < filesToProcess.size() ; index++) {
-			def fileName = filesToProcess[index]
+			def assetFile = filesToProcess[index]
+			def fileName = assetFile.path
 			eventListener?.triggerEvent("StatusUpdate", "Processing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 
 			def digestName
-			def isUnchanged = false
-			def assetFile   = AssetHelper.assetForFile(AssetHelper.fileForUri(filesToProcess[index],null,null))
-			def extension   = AssetHelper.extensionFromURI(fileName)
-			fileName        = AssetHelper.nameWithoutExtension(fileName)
+			def isUnchanged    = false
+			def extension      = AssetHelper.extensionFromURI(fileName)
+			fileName           = AssetHelper.nameWithoutExtension(fileName)
+			def fileSystemName = fileName.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR, File.separator)
+
 
 			if(assetFile) {
 				def fileData
-				if(assetFile.class.name != 'java.io.File') {
+				if(!(assetFile instanceof GenericAssetFile)) {
 					if(assetFile.compiledExtension) {
 						extension = assetFile.compiledExtension
 						fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(fileName,assetFile)
@@ -64,9 +65,9 @@ class AssetCompiler {
 					def directiveProcessor = new DirectiveProcessor(contentType, this)
 					fileData   = directiveProcessor.compile(assetFile)
 					digestName = AssetHelper.getByteDigest(fileData.bytes)
-					def fileNameUri = fileName.replaceAll(AssetHelper.QUOTED_FILE_SEPARATOR, AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-					def existingDigestFile = manifestProperties.getProperty("${fileNameUri}.${extension}")
-					if(existingDigestFile && existingDigestFile == "${fileNameUri}-${digestName}.${extension}") {
+
+					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
+					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
 						isUnchanged=true
 					}
 
@@ -109,7 +110,7 @@ class AssetCompiler {
 				if(!isUnchanged) {
 					def outputFileName = fileName
 					if(extension) {
-						outputFileName = "${fileName}.${extension}"
+						outputFileName = "${fileSystemName}.${extension}"
 					}
 					def outputFile = new File(options.compileDir, "${outputFileName}")
 
@@ -123,22 +124,21 @@ class AssetCompiler {
 						outputStream.flush()
 						outputStream.close()
 					} else {
-						if(assetFile.class.name == 'java.io.File') {
-							AssetHelper.copyFile(assetFile, outputFile)
+						if(assetFile instanceof GenericAssetFile) {
+							outputFile.bytes = assetFile.bytes
 						} else {
-							AssetHelper.copyFile(assetFile.file, outputFile)
-							digestName = AssetHelper.getByteDigest(assetFile.file.bytes)
+							outputFile.bytes = assetFile.inputStream.bytes
+							digestName = AssetHelper.getByteDigest(assetFile.inputStream.bytes)
 						}
 					}
 
 					if(extension) {
 						try {
-
-							def digestedFile = new File(options.compileDir,"${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
+							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 							digestedFile.createNewFile()
 							AssetHelper.copyFile(outputFile, digestedFile)
-							def fileNameUri = fileName.replaceAll(AssetHelper.QUOTED_FILE_SEPARATOR, AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-							manifestProperties.setProperty("${fileNameUri}.${extension}", "${fileNameUri}-${digestName}${extension ? ('.' + extension) : ''}")
+
+							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 
 							// Zip it Good!
 							if(!options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
@@ -175,22 +175,6 @@ class AssetCompiler {
 	  return assetDir
   }
 
-	void addPaths(String key, paths) {
-		// If key is not specified, group with "application"
-		def assetPath = assetPaths[key ?: 'application'] ?: []
-		if(paths instanceof String) {
-			paths = [paths]
-		}
-		assetPath += paths
-		assetPath.unique()
-		assetPaths[key ?: 'application'] = assetPath
-
-	}
-
-	void removePathsByKey(String key) {
-		assetPaths.remove(key)
-	}
-
 	def getIncludesForPathKey(String key) {
 		def includes = []
 		def defaultIncludes = includeRules.default
@@ -218,36 +202,13 @@ class AssetCompiler {
 
 
 	def getAllAssets() {
-		DirectoryScanner scanner = new DirectoryScanner()
-		def assetPaths           = assetPaths
-		def filesToProcess       = []
-
-		assetPaths.each { key, value ->
-
-			scanner.setExcludes(getExcludesForPathKey(key) as String[])
-			scanner.setIncludes(["**/*"] as String[])
-			for(path in value) {
-				scanner.setBasedir(path)
-				scanner.setCaseSensitive(false)
-				scanner.scan()
-				filesToProcess += scanner.getIncludedFiles().flatten()
-			}
-
-			scanner.setExcludes([] as String[])
-			def includes = getIncludesForPathKey(key)
-			if(includes.size() > 0) {
-				scanner.setIncludes(includes as String[])
-				for(path in value) {
-				scanner.setBasedir(path)
-				scanner.setCaseSensitive(false)
-				scanner.scan()
-				filesToProcess += scanner.getIncludedFiles().flatten()
-				}
-			}
-
+		def filesToProcess = []
+		AssetPipelineConfigHolder.resolvers.each { resolver ->
+			def files = resolver.scanFiles(getExcludesForPathKey(resolver.name),getIncludesForPathKey(resolver.name))
+			filesToProcess += files
 		}
 
-		filesToProcess.unique()
+		filesToProcess.unique{ a,b -> a.path <=> b.path}
 		return filesToProcess //Make sure we have a unique set
 	}
 
@@ -274,12 +235,12 @@ class AssetCompiler {
 	}
 
 	private removeDeletedFiles(filesToProcess) {
-		def compiledFileNames = filesToProcess.collect { fileToProcess ->
-			def fileName    = fileToProcess
+		def compiledFileNames = filesToProcess.collect { assetFile ->
+			def fileName  = assetFile.path
 			def extension   = AssetHelper.extensionFromURI(fileName)
 			fileName        = AssetHelper.nameWithoutExtension(fileName)
-			def assetFile   = AssetHelper.assetForFile(AssetHelper.fileForUri(fileToProcess,null,null))
-			if(assetFile && assetFile.class.name != 'java.io.File' && assetFile.compiledExtension) {
+
+			if(assetFile && !(assetFile instanceof GenericAssetFile) && assetFile.compiledExtension) {
 				extension = assetFile.compiledExtension
 				fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(fileName,assetFile)
 			}
@@ -288,12 +249,12 @@ class AssetCompiler {
 
 		def propertiesToRemove = []
 		manifestProperties.keySet().each { compiledUri ->
-			def compiledName = 	compiledUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)						
+			def compiledName = 	compiledUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
 
 			def fileFound = compiledFileNames.find{ it == compiledName.toString()}
 			if(!fileFound) {
 				def digestedUri = manifestProperties.getProperty(compiledName)
-				def digestedName = digestedUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)						
+				def digestedName = digestedUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
 				def compiledFile = new File(options.compileDir, compiledName)
 				def digestedFile = new File(options.compileDir, digestedName)
 				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
