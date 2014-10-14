@@ -105,7 +105,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		if(!basePath.startsWith('/') && relativeFile != null) {
 			def pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR) : [] //(path should be relative not canonical)
 			def basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
-			def parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 2)] : []
+			def parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] : []
 			parentPathArgs.addAll(basePathArgs)
 			basePath = (parentPathArgs).join(File.separator)
 		}

@@ -18,7 +18,7 @@ You can register resovlers in the `AssetPipelineConfigHolder` to essentially add
 import asset.pipeline.*
 import asset.pipeline.fs.*
 
-def fsResolver = new FileSystemAssetResolver('application','grails-app/assets')
+def fsResolver = new FileSystemAssetResolver('application','assets')
 def jarResolver = new JarAssetResolver('application','/path/to/file.jar','META-INF/assets')
 AssetPipelineConfigHolder.registerResolver(fsResolver)
 AssetPipelineConfigHolder.registerResolver(jarResolver)

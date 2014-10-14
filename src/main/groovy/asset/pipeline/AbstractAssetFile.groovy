@@ -82,4 +82,8 @@ abstract class AbstractAssetFile implements AssetFile {
 
 		return fileText
 	}
+
+	public String toString() {
+		return path
+	}
 }

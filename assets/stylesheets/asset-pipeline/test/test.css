@@ -1,0 +1,8 @@
+#logo {
+	background: url('../../../images/grails_logo.png');
+}
+
+/*We have a second identical url call to verify caching in integration test*/
+.logo {
+	background: url('../../../images/grails_logo.png');
+}
