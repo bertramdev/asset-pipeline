@@ -204,7 +204,7 @@ class AssetCompiler {
 	def getAllAssets() {
 		def filesToProcess = []
 		AssetPipelineConfigHolder.resolvers.each { resolver ->
-			def files = resolver.scanFiles(getExcludesForPathKey(resolver.name),getIncludesForPathKey(resolver.name))
+			def files = resolver.scanForFiles(getExcludesForPathKey(resolver.name),getIncludesForPathKey(resolver.name))
 			filesToProcess += files
 		}
 
