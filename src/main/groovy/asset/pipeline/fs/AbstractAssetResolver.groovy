@@ -34,7 +34,7 @@ abstract class AbstractAssetResolver implements AssetResolverInterface {
 
 	}
 
-	private Pattern convertGlobToRegEx(String line)
+	public Pattern convertGlobToRegEx(String line)
 	{
 		line = line.trim();
 		int strLen = line.length();
@@ -134,7 +134,7 @@ abstract class AbstractAssetResolver implements AssetResolverInterface {
 		return Pattern.compile(sb.toString());
 	}
 
-	private isFileMatchingPatterns(filePath, patterns) {
+	protected isFileMatchingPatterns(filePath, patterns) {
 		for(pattern in patterns) {
 			if(filePath =~ pattern) {
 				return true

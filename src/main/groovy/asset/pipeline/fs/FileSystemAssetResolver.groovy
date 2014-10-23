@@ -183,13 +183,13 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 
 		scanDirectories.each { scanDirectory ->
 			def scanPath = new File(scanDirectory)
-			iterateOverFileSystem(file,excludedPatternRegex,includedPatternRegex.fileList, scanDirectory)
+			iterateOverFileSystem(scanPath,excludedPatternRegex,includedPatternRegex, fileList, scanDirectory)
 		}
 
 		return fileList.unique { a, b -> a.path <=> b.path }
 	}
 
-	private iterateOverFileSystem(dir, excludePatterns,includePatterns,fileList, sourcePath) {
+	protected iterateOverFileSystem(dir, excludePatterns,includePatterns,fileList, sourcePath) {
 		dir.listFiles().each { file ->
 			def relativePath = relativePathToResolver(file, sourcePath)
 			if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
@@ -198,7 +198,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 				} else {
 					def assetFileClass = AssetHelper.assetForFileName(relativePath)
 					if(assetFileClass) {
-						fileList << assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: baseFile, path: relativePath, sourceResolver: this)
+						fileList << assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: null, path: relativePath, sourceResolver: this)
 					} else {
 						fileList << new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePath)
 					}
