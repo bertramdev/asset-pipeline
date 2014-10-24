@@ -25,10 +25,10 @@ class CacheManager {
 		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
 			def cacheFiles = cacheRecord.dependencies.keySet()
 			def expiredCacheFound = cacheFiles.find { cacheFileName ->
-				def cacheFile = new File(cacheFileName)
-				if(!cacheFile.exists())
+				def cacheFile = AssetHelper.fileForUri(cacheFileName)
+				if(!cacheFile)
 					return true
-				def depMd5 = AssetHelper.getByteDigest(cacheFile.bytes)
+				def depMd5 = AssetHelper.getByteDigest(cacheFile.inputStream.bytes)
 				if(cacheRecord.dependencies[cacheFileName] != depMd5) {
 					return true
 				}
@@ -71,7 +71,7 @@ class CacheManager {
 			CacheManager.createCache(fileName, null, null)
 			cacheRecord = CacheManager.cache[fileName]
 		}
-		def newMd5 = AssetHelper.getByteDigest(dependentFile.bytes)
-		cacheRecord.dependencies[dependentFile.canonicalPath] = newMd5
+		def newMd5 = AssetHelper.getByteDigest(dependentFile.inputStream.bytes)
+		cacheRecord.dependencies[dependentFile.path] = newMd5
 	}
 }

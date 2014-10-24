@@ -16,6 +16,7 @@
 
 package asset.pipeline
 
+import asset.pipeline.fs.*
 import spock.lang.Specification
 
 /**
@@ -23,6 +24,10 @@ import spock.lang.Specification
  */
 
 class CacheManagerSpec extends Specification {
+    def setup() {
+        AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('application','assets'))
+    }
+
     void "should createCache by filename and md5"() {
         given:
             def testFile = new File('assets/stylesheets/asset-pipeline/test/test.css')
@@ -63,23 +68,24 @@ class CacheManagerSpec extends Specification {
 
             def dependentFile = new File('assets/stylesheets/asset-pipeline/test/_dependent.css')
             dependentFile.text = "/*Cache Manager Dependency Test*/"
+            def dependentAssetFile = AssetHelper.fileForUri('asset-pipeline/test/_dependent','text/css','css')
             def cacheContent
             CacheManager.createCache(testFileName, testMd5, testFile.text)
         when: "adding dependency should return file if unchanged"
             dependentFile.text = "/*Cache Manager Dependency Test*/"
-            CacheManager.addCacheDependency(testFileName, dependentFile)
+            CacheManager.addCacheDependency(testFileName, dependentAssetFile)
             cacheContent = CacheManager.findCache(testFileName, testMd5)
         then:
             cacheContent == testFile.text
 
         when: "expiring cache dependency"
-            CacheManager.addCacheDependency(testFileName, dependentFile)
+            CacheManager.addCacheDependency(testFileName, dependentAssetFile)
             dependentFile.text = "/*Cache Manager Dependency Test Cache Expire*/"
             cacheContent = CacheManager.findCache(testFileName, testMd5)
         then:
             cacheContent == null
         when: "removing dependency should expire cache"
-            CacheManager.addCacheDependency(testFileName, dependentFile)
+            CacheManager.addCacheDependency(testFileName, dependentAssetFile)
             dependentFile.delete()
             cacheContent = CacheManager.findCache(testFileName, testMd5)
         then:
