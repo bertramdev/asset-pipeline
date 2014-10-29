@@ -66,12 +66,12 @@ abstract class AbstractAssetFile implements AssetFile {
 
 		def md5 = AssetHelper.getByteDigest(fileText.bytes)
 		if(!skipCache) {
-			def cache = CacheManager.findCache(canonicalPath, md5, baseFile?.path)
+			def cache = CacheManager.findCache(path, md5, baseFile?.path)
 			if(cache) {
 				return cache
 			}
 		}
-		for(processor in processors) {
+	for(processor in processors) {
 			def processInstance = processor.newInstance(precompiler)
 			fileText = processInstance.process(fileText, this)
 		}
