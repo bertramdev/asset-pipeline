@@ -71,7 +71,7 @@ abstract class AbstractAssetFile implements AssetFile {
 				return cache
 			}
 		}
-		for(processor in processors) {
+	for(processor in processors) {
 			def processInstance = processor.newInstance(precompiler)
 			fileText = processInstance.process(fileText, this)
 		}

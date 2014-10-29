@@ -4,15 +4,49 @@ Asset Pipeline Core
 
 Overview
 --------
-The Asset-Pipeline is a plugin used for managing and processing static assets in JVM applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
+The Asset-Pipeline is a plugin used for managing and processing static assets in JVM applications primarily via Gradle (however not mandatory). Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
 
-Usage
------
+
+Basic Usage
+-----------
+If using gradle, this plugin adds a series of tasks directly to your gradle plugin. All you have to do is `apply plugin:'asset-pipeline-core'` after confirming this is in the classpath of your `buildscript` block. i.e.:
+
+```groovy
+//Example build.gradle file
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.bertramlabs.plugins.asset-pipeline-core:2.0.1'
+	//Example additional LESS support
+	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.0.1'
+  }
+}
+
+apply plugin: 'asset-pipeline'
+//apply plugin: 'less-asset-pipeline'
+
+assets {
+  minifyJs = true
+  minifyCss = true
+}
+```
+
+Now that you have your build.gradle files. All you need to do is put files in your projects `assets/javascripts`, `assets/stylesheets`, `assets/images`, or whatever subdirectory you want.
+When you run `gradle asset-precompile` these files will be processed and output into your `build/assets` folder by default.
+
+You can also configure custom resolution paths for your project (STILL WORKING ON IT).
+
+Thats about all there is to it. Now you can use gradle to handle processing of all your client side assets.
+
+Advanced Usage
+--------------
 The core part of asset-pipeline is rather agnostic to whichever implementation you want to use, be it servlet based, netty based, or whatever else you want to do.
 The recommended use case for this aspect of the plugin is to integrate with other plugins that are capable of being scoped to specific frameworks. Currently the best example of the use case for the asset-pipeline plugin is in the Grails framework.
 
 The core plugin provides interfaces for asset resolution, processing, and compiling into a target directory.
-You can register resovlers in the `AssetPipelineConfigHolder` to essentially add scan paths for your static assets. This includes both File System support as well as Jar file support
+You can register resolvers in the `AssetPipelineConfigHolder` to essentially add scan paths for your static assets. This includes both File System support as well as Jar file support (ClassPathResolver coming soonish)
 
 ```groovy
 import asset.pipeline.*
@@ -66,10 +100,6 @@ This extraction is not yet 100% complete and is in active development. If you ar
 Grails Documentation
 -------------
 http://bertramdev.github.io/asset-pipeline
-
-Things to be Done
------------------
-* Decoupling
 
 
 Contributions
