@@ -48,15 +48,34 @@ interface AssetFile {
      */
     void setBaseFile(AssetFile baseFile)
 
+    /**
+     * An input stream for the AssetFile
+     */
     InputStream getInputStream()
+    /**
+     * The path to the parent
+     */
     String getParentPath()
+    /**
+     * The path to the asset file
+     */
     String getPath()
+    /**
+     * The name of the asset file
+     */
     String getName()
+    /**
+     * The AssetResolver used to resolve the asset file
+     */
     AssetResolver getSourceResolver()
-
 
     String processedStream(AssetCompiler precompiler)
 
+    /**
+     * Return a directive name for the given line or null if there isn't one
+     * @param line The line
+     * @return The asset directive
+     */
     String directiveForLine(String line)
 
 }

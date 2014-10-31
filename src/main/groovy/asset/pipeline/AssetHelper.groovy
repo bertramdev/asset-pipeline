@@ -28,7 +28,7 @@ import java.nio.channels.FileChannel
  * @author Graeme Rocher
  */
 class AssetHelper {
-    static final Collection<Class<AssetFile>> assetSpecs = [JsAssetFile, CssAssetFile]
+    static final Collection<Class<AssetFile>> assetSpecs = AssetSpecLoader.loadSpecifications()
     static final String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
     static final String DIRECTIVE_FILE_SEPARATOR = '/'
 

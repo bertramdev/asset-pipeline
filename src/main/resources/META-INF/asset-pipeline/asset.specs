@@ -1,0 +1,3 @@
+asset.pipeline.HtmlAssetFile
+asset.pipeline.JsAssetFile
+asset.pipeline.CssAssetFile
