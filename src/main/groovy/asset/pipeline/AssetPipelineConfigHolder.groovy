@@ -8,8 +8,8 @@ import asset.pipeline.fs.AssetResolver
  */
 class AssetPipelineConfigHolder {
 	static Collection<AssetResolver> resolvers = []
-	static def manifest
-	static def config =[:]
+	static Properties manifest
+	static Map config = [:]
 
 	public static registerResolver(AssetResolver resolver) {
 		resolvers << resolver

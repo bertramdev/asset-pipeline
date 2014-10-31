@@ -1,9 +1,6 @@
 package asset.pipeline
 
-import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
 
 /*
  * Copyright 2014 original authors
