@@ -32,13 +32,15 @@ abstract class AbstractAssetFile implements AssetFile {
 	AssetResolver sourceResolver
 	String encoding
 
-	private def _byteCache
-
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 
 	InputStream getInputStream() {
 		return inputStreamSource()
 	}
+
+    String getCanonicalPath() {
+        path
+    }
 
 	public String getParentPath() {
 		def pathArgs = path.split("/")
