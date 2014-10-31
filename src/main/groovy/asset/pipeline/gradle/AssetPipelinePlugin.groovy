@@ -23,27 +23,39 @@ import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
 
 /**
-* This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
-* task: asset-compile Compiles your assets into your build directory
-* task: asset-clean Cleans the build/assets directory
-* @author David Estes
+ * This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
+ *
+ * task: asset-compile Compiles your assets into your build directory
+ * task: asset-clean Cleans the build/assets directory
+ *
+ * @author David Estes
+ * @author Graeme Rocher
 */
 class AssetPipelinePlugin implements Plugin<Project> {
+
 	void apply(Project project) {
-		project.extensions.create('assets', AssetPipelineExtension)
-		def resolver = new FileSystemAssetResolver('application','assets')
+        AssetPipelineExtension assetPipeline = project.extensions.create('assets', AssetPipelineExtension)
+
+		def resolver = new FileSystemAssetResolver('application', "${project.projectDir}/$assetPipeline.assetsPath")
 		AssetPipelineConfigHolder.registerResolver(resolver)
 
-		project.task('asset-precompile') << {
-			def assetCompiler = new AssetCompiler(project.assets.toMap(),new GradleEventListener())
-			assetCompiler.excludeRules.default = project.assets.excludes
-			assetCompiler.includeRules.default = project.assets.includes
+
+        def assetPrecompileTask = project.task('asset-precompile')
+        assetPrecompileTask << {
+			def assetCompiler = new AssetCompiler(assetPipeline.toMap(),new GradleEventListener())
+			assetCompiler.excludeRules.default = assetPipeline.excludes
+			assetCompiler.includeRules.default = assetPipeline.includes
 			assetCompiler.compile()
 		}
 
-		project.task('asset-clean') << {
-			//TODO: REMOVE target compileDir
-		}
+        def assembleTask = project.tasks.findByName('assemble')
+        if(assembleTask) {
+            assembleTask.dependsOn(assetPrecompileTask)
+        }
+
+//		project.task('asset-clean') << {
+//			//TODO: REMOVE target compileDir
+//		}
 
 		// project.task('asset-watch') << {
 		// 	//TODO: Implement live watcher to auto recompile assets as they change

@@ -16,14 +16,21 @@
 
 package asset.pipeline.gradle
 
+/**
+ * Allows configuration of the Gradle plugin
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
 class AssetPipelineExtension {
-	def Boolean minifyJs = true
-	def Boolean minifyCss = true
-	def String  compileDir = 'build/assets'
-	def Map minifyOptions
-	def List excludesGzip
-	def List excludes = []
-	def List includes = []
+	boolean minifyJs = true
+    boolean minifyCss = true
+	String  compileDir = 'build/assets'
+    String assetsPath = 'assets'
+	Map minifyOptions
+	List excludesGzip
+	List excludes = []
+	List includes = []
 
 
 	Map toMap() {

@@ -69,6 +69,12 @@ interface AssetFile {
      */
     AssetResolver getSourceResolver()
 
+    /**
+     * Processes the AssetFile uses the Asset {@link Processor} instances
+     *
+     * @param precompiler The {@link AssetCompiler}
+     * @return The processes contents
+     */
     String processedStream(AssetCompiler precompiler)
 
     /**
