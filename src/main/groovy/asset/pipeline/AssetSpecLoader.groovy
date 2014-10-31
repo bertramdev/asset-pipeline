@@ -51,7 +51,7 @@ class AssetSpecLoader {
                 for(className in classNames) {
                     try {
                         def cls = classLoader.loadClass(className)
-                        if(AssetFile.isAssignableFrom(cls)) {
+                        if(AssetFile.isAssignableFrom(cls) && !specifications.contains(cls)) {
                             specifications << (Class<AssetFile>) cls
                         }
                         else {
