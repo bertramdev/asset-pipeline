@@ -16,24 +16,19 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+import groovy.transform.CompileStatic
+
 import java.util.regex.Pattern
 
 /**
 * The abstract class for any helper methods in resolving files
+ *
 * @author David Estes
 */
-abstract class AbstractAssetResolver implements AssetResolverInterface {
+abstract class AbstractAssetResolver implements AssetResolver {
 	String name
 
-	public def getAsset(String relativePath, String contentType = null, String extension = null) {
-
-	}
-
-	public def getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true) {
-
-	}
-
+    @CompileStatic
 	public Pattern convertGlobToRegEx(String line)
 	{
 		line = line.trim();
@@ -134,7 +129,8 @@ abstract class AbstractAssetResolver implements AssetResolverInterface {
 		return Pattern.compile(sb.toString());
 	}
 
-	protected isFileMatchingPatterns(filePath, patterns) {
+    @CompileStatic
+	protected boolean isFileMatchingPatterns(String filePath, List<Pattern> patterns) {
 		for(pattern in patterns) {
 			if(filePath =~ pattern) {
 				return true

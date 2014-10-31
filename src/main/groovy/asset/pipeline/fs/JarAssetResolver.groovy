@@ -17,14 +17,25 @@
 package asset.pipeline.fs
 
 import asset.pipeline.*
-import java.util.regex.Pattern
-import groovy.util.logging.Log4j
-import java.util.jar.JarFile
+import groovy.transform.CompileStatic
+import groovy.util.logging.Commons
 
-@Log4j
+import java.util.jar.JarEntry
+import java.util.regex.Pattern
+import java.util.jar.JarFile
+import java.util.zip.ZipEntry
+
+
+/**
+ * Implementation of the {@link AssetResolver} interface for resolving from JAR files
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
+@Commons
 class JarAssetResolver extends AbstractAssetResolver {
-	static QUOTED_FILE_SEPARATOR = Pattern.quote("/")
-	static DIRECTIVE_FILE_SEPARATOR = '/'
+	static String QUOTED_FILE_SEPARATOR = Pattern.quote("/")
+	static String DIRECTIVE_FILE_SEPARATOR = '/'
 
 	JarFile baseJar
 	String prefixPath
@@ -35,66 +46,68 @@ class JarAssetResolver extends AbstractAssetResolver {
 		this.prefixPath = prefixPath
 	}
 
-	public def getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
+	AssetFile getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
 		if(!relativePath) {
 			return null
 		}
 		def normalizedPath = AssetHelper.normalizePath(relativePath)
 		def specs
+
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		}
 
 
-			if(specs) {
-				for(fileSpec in specs) {
-					def fileName = normalizedPath
-					if(fileName.endsWith(".${fileSpec.compiledExtension}")) {
-						fileName = fileName.substring(0,fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
-					}
-					for(ext in fileSpec.extensions) {
-						def tmpFileName = fileName
-						if(!tmpFileName.endsWith("." + ext)) {
-							tmpFileName += "." + ext
-						}
-						def file = getEntry(tmpFileName)
-						if(file) {
-							return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,prefixPath), sourceResolver: this)
-						}
-					}
-				}
-			} else {
-				def fileName = normalizedPath
-				if(extension) {
-					if(!fileName.endsWith(".${extension}")) {
-						fileName += ".${extension}"
-					}
-				}
-				def file = getEntry(fileName)
+        if(specs) {
+            for(fileSpec in specs) {
+                def fileName = normalizedPath
+                if(fileName.endsWith(".${fileSpec.compiledExtension}")) {
+                    fileName = fileName.substring(0,fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
+                }
+                for(ext in fileSpec.extensions) {
+                    def tmpFileName = fileName
+                    if(!tmpFileName.endsWith("." + ext)) {
+                        tmpFileName += "." + ext
+                    }
+                    def file = getEntry(tmpFileName)
+                    if(file) {
+                        return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,prefixPath), sourceResolver: this)
+                    }
+                }
+            }
+        } else {
+            def fileName = normalizedPath
+            if(extension) {
+                if(!fileName.endsWith(".${extension}")) {
+                    fileName += ".${extension}"
+                }
+            }
+            def file = getEntry(fileName)
 
-				if(file) {
-					return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,directoryPath))
-				}
-			}
+            if(file) {
+                return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,directoryPath))
+            }
+        }
 
 		return null
 	}
 
-	public def getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile=null, AssetFile baseFile = null) {
+    @CompileStatic
+	public List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile=null, AssetFile baseFile = null) {
 		def fileList = []
 
 		if(!basePath.startsWith('/') && relativeFile != null) {
-			def pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR) : [] //(path should be relative not canonical)
+			def pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).toList() : [] //(path should be relative not canonical)
 			def basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
 			def parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] : []
-			parentPathArgs.addAll(basePathArgs)
+			parentPathArgs.addAll(basePathArgs.toList())
 			parentPathArgs = (parentPathArgs).findAll{it != "."}
 			basePath = parentPathArgs.join(File.separator)
 		}
 		def combinedPath = basePath ? [prefixPath, basePath].join("/") : prefixPath
 		basePath = AssetHelper.normalizePath(combinedPath + "/")
 
-		baseJar.entries().each { entry ->
+		baseJar.entries().each { JarEntry entry ->
 			if(entry.name.startsWith(basePath)) {
 
 				if(!entry.isDirectory() && contentType in AssetHelper.assetMimeTypeForURI(entry.name)) {
@@ -106,7 +119,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 		return fileList
 	}
 
-	def assetForFile(file,contentType, baseFile=null, sourceDirectory) {
+	protected AssetFile assetForFile(JarEntry file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
 		if(file == null) {
 			return null
 		}
@@ -119,40 +132,42 @@ class JarAssetResolver extends AbstractAssetResolver {
 		for(fileSpec in possibleFileSpecs) {
 			for(extension in fileSpec.extensions) {
 				def fileName = file.name
-				if(fileName.endsWith("." + extension)) {
+				if(fileName.endsWith(".$extension" )) {
 					return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
 				}
 			}
 		}
-		return file
+        return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,sourceDirectory))
 	}
 
-	def getEntry(String name) {
+    @CompileStatic
+    protected ZipEntry getEntry(String name) {
 		return baseJar.getEntry([prefixPath, name].join("/"))
 	}
 
-	def relativePathToResolver(file, scanDirectoryPath) {
+    @CompileStatic
+	protected String relativePathToResolver(JarEntry file, String scanDirectoryPath) {
 		def filePath = file.name
 
 		if(filePath.startsWith(scanDirectoryPath)) {
 			return filePath.substring(scanDirectoryPath.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
 		} else {
-			throw RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
+			throw new RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
 		}
 	}
 
 	/**
 	* Uses file globbing to scan for files that need precompiled
 	*/
-	public List scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
+	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
 		def fileList = []
-		def excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : []
-		def includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : []
+		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
+        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
 
-		baseJar.entries().each { entry ->
+		for(JarEntry entry in baseJar.entries()) {
 			if(entry.name.startsWith(prefixPath + "/")) {
 				def relativePath = relativePathToResolver(entry, prefixPath)
-				if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
+				if(!isFileMatchingPatterns(relativePath,excludedPatternRegex) || isFileMatchingPatterns(relativePath,includedPatternRegex)) {
 					if(!entry.isDirectory()) {
 						def assetFileClass = AssetHelper.assetForFileName(relativePath)
 						if(assetFileClass) {
@@ -165,7 +180,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 			}
 		}
 
-		return fileList.unique { a, b -> a.path <=> b.path }
+		return fileList.unique { AssetFile a,  AssetFile b -> a.path <=> b.path }
 	}
 
 }

@@ -31,7 +31,7 @@ class CssProcessor extends AbstractProcessor {
         super(precompiler)
     }
 
-    def process(inputText, assetFile) {
+    String process(String inputText, AssetFile assetFile) {
         def cachedPaths = [:]
         return inputText.replaceAll(/url\([\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?\)/) { fullMatch, assetPath ->
             def replacementPath = assetPath.trim()

@@ -16,33 +16,46 @@
 
 package asset.pipeline
 
-import asset.pipeline.fs.AssetResolverInterface
+import asset.pipeline.fs.AssetResolver
 
 /**
 * Provides an interface for referencing files resolved by the Asset-Pipeline AssetResolvers
+ *
 * @author David Estes
 */
 interface AssetFile {
-    static contentType
-    static List extensions
+    static List<String> contentType
+    static List<String> extensions
     static String compiledExtension
-    static List processors
+    static List<Class<Processor>> processors
 
-
-
+    /**
+     * @return The base file
+     */
     AssetFile getBaseFile()
+
+    /**
+     * @return The encoding to use
+     */
     String getEncoding()
+
+    /**
+     * Sets the encoding to use
+     */
     void setEncoding(String encoding)
+    /**
+     * Sets the base file
+     */
     void setBaseFile(AssetFile baseFile)
 
     InputStream getInputStream()
-    public String getParentPath()
-    public String getPath()
-    public String getName()
-    public AssetResolverInterface getSourceResolver()
+    String getParentPath()
+    String getPath()
+    String getName()
+    AssetResolver getSourceResolver()
 
 
-    String processedStream(precompiler)
+    String processedStream(AssetCompiler precompiler)
 
     String directiveForLine(String line)
 

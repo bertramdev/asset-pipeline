@@ -17,16 +17,25 @@
 package asset.pipeline.fs
 
 import asset.pipeline.*
-import java.util.regex.Pattern
-import groovy.util.logging.Log4j
+import groovy.transform.CompileStatic
+import groovy.util.logging.Commons
 
-@Log4j
+import java.util.regex.Pattern
+
+/**
+ * Implementation of the {@link AssetResolver} interface for the file system
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
+
+@Commons
 class FileSystemAssetResolver extends AbstractAssetResolver {
-	static QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
-	static DIRECTIVE_FILE_SEPARATOR = '/'
+	static String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
+	static String DIRECTIVE_FILE_SEPARATOR = '/'
 
 	File baseDirectory
-	def scanDirectories = []
+	List<String> scanDirectories = []
 
 	FileSystemAssetResolver(String name,String basePath, boolean flattenSubDirectories=true) {
 		this.name = name
@@ -49,7 +58,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 
 
 	//TODO: WINDOWS SUPPORT USE QUOTED FILE SEPARATORS
-	public def getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
+	public AssetFile getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
 		if(!relativePath) {
 			return null
 		}
@@ -98,15 +107,16 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 	* Implementation Requirements
 	* Should be able to take a relative to baseFile scenario
 	*/
-	public def getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile=null, AssetFile baseFile = null) {
+    @CompileStatic
+	public List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile = null, AssetFile baseFile = null) {
 		//We are going absolute
-		def fileList = []
+        List<AssetFile> fileList = []
 
 		if(!basePath.startsWith('/') && relativeFile != null) {
-			def pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR) : [] //(path should be relative not canonical)
+			List<String> pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).toList() : new ArrayList<String>() //(path should be relative not canonical)
 			def basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
 			def parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] : []
-			parentPathArgs.addAll(basePathArgs)
+			parentPathArgs.addAll(basePathArgs.toList())
 			basePath = (parentPathArgs).join(File.separator)
 		}
 
@@ -119,9 +129,10 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		return fileList
 	}
 
-	def recursiveTreeAppend(directory,tree,contentType=null, baseFile, recursive=true, sourceDirectory) {
+    @CompileStatic
+	protected void recursiveTreeAppend(File directory, List<AssetFile> tree, String contentType=null, AssetFile baseFile, boolean recursive=true, String sourceDirectory) {
 		def files = directory.listFiles()
-		files = files?.sort { a, b -> a.name.compareTo b.name }
+		files = files?.sort { File a, File b -> a.name.compareTo b.name }
 		for(file in files) {
 			if(file.isDirectory() && recursive) {
 				recursiveTreeAppend(file,tree, contentType, baseFile, recursive, sourceDirectory)
@@ -132,7 +143,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		}
 	}
 
-	def assetForFile(file,contentType, baseFile=null, sourceDirectory) {
+	protected AssetFile assetForFile(File file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
 		if(file == null) {
 			return null
 		}
@@ -150,10 +161,11 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 				}
 			}
 		}
-		return file
+        return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,sourceDirectory))
 	}
 
-	def relativePathToResolver(file, scanDirectoryPath) {
+    @CompileStatic
+	protected String relativePathToResolver(File file, String scanDirectoryPath) {
 		def filePath = file.canonicalPath
 
 		if(filePath.startsWith(scanDirectoryPath)) {
@@ -164,33 +176,31 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 					return filePath.substring(scanDir.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
 				}
 			}
-			throw RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
+			throw new RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
 		}
-	}
-
-	def fileSystemPathFromDirectivePath(directivePath) {
-		return directivePath?.replace(DIRECTIVE_FILE_SEPARATOR, File.separator)
 	}
 
 
 	/**
 	* Uses file globbing to scan for files that need precompiled
 	*/
-	public List scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
-		def fileList = []
-		def excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : []
-		def includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : []
+    @CompileStatic
+	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
+		List<AssetFile> fileList = []
+		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
+        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
 
-		scanDirectories.each { scanDirectory ->
+		for(String scanDirectory in scanDirectories) {
 			def scanPath = new File(scanDirectory)
 			iterateOverFileSystem(scanPath,excludedPatternRegex,includedPatternRegex, fileList, scanDirectory)
 		}
 
-		return fileList.unique { a, b -> a.path <=> b.path }
+		return fileList.unique { AssetFile a, AssetFile b -> a.path <=> b.path }
 	}
 
-	protected iterateOverFileSystem(dir, excludePatterns,includePatterns,fileList, sourcePath) {
-		dir.listFiles().each { file ->
+    @CompileStatic
+	protected iterateOverFileSystem(File dir, List<Pattern> excludePatterns, List<Pattern> includePatterns, List<AssetFile> fileList, String sourcePath) {
+		dir.listFiles()?.each { File file ->
 			def relativePath = relativePathToResolver(file, sourcePath)
 			if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
 				if(file.isDirectory()) {

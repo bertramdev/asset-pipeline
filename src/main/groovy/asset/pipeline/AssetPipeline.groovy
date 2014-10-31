@@ -17,6 +17,7 @@ package asset.pipeline
 
 /**
 * Provides methods for fetching contents of assets within the asset-pipeline
+ *
 * @author David Estes
 */
 class AssetPipeline {
@@ -25,7 +26,7 @@ class AssetPipeline {
 	* Used for serving assets in development mode via the AssetController
 	* This method is NOT recommended for public use as behavior changes in production mode.
 	*/
-	static byte[] serveAsset(uri, contentType = null, extension = null, encoding = null) {
+	static byte[] serveAsset(String uri, String contentType = null, String extension = null, String encoding = null) {
 
 		def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
 
@@ -51,13 +52,13 @@ class AssetPipeline {
 	* Used for serving assets in development mode without bundling
 	* This method is NOT recommended for public use as behavior changes in production mode.
 	*/
-	static byte[] serveUncompiledAsset(uri, contentType, extension = null,encoding=null) {
+	static byte[] serveUncompiledAsset(String uri, String contentType, String extension = null, String encoding=null) {
 		def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
 
 		def directiveProcessor = new DirectiveProcessor(contentType)
 		if (assetFile) {
 			if(assetFile instanceof GenericAssetFile) {
-				return directiveProcessor.fileContents(assetFile)
+				return assetFile.bytes
 			}
 			if(encoding) {
 				assetFile.encoding = encoding
@@ -75,7 +76,7 @@ class AssetPipeline {
 	* Used for serving assets in development mode via the AssetController
 	* This method is NOT recommended for public use as behavior changes in production mode.
 	*/
-	static def getDependencyList(uri, contentType = null, extension = null) {
+	static def getDependencyList(String uri, String contentType = null, String extension = null) {
 		def assetFile = AssetHelper.fileForUri(uri, contentType, extension)
 		def directiveProcessor = new DirectiveProcessor(contentType)
 		if (assetFile) {

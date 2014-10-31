@@ -18,11 +18,17 @@ package asset.pipeline
 
 import asset.pipeline.processors.CssProcessor
 
+/**
+ * An {@link AssetFile} implementation for CSS
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
 class CssAssetFile extends AbstractAssetFile {
-	static final String contentType = 'text/css'
-	static extensions = ['css']
-	static compiledExtension = 'css'
-	static processors = [CssProcessor]
+	static final List<String> contentType = ['text/css']
+	static List<String> extensions = ['css']
+	static String compiledExtension = 'css'
+	static List<Class<Processor>> processors = [CssProcessor]
 
 	String directiveForLine(String line) {
 		line.find(/\*=(.*)/) { fullMatch, directive -> return directive }

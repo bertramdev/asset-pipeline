@@ -20,17 +20,18 @@ import asset.pipeline.*
 
 /**
 * A public interface defining a class that can resolve files
+ *
 * @author David Estes
 */
-public interface AssetResolverInterface {
+public interface AssetResolver {
 
 	public String getName()
 	/**
 	* Resolves a file given a relative path to this particular resolver
 	*/
-	public def getAsset(String relativePath, String contentType, String extension, AssetFile baseFile)
-	public def getAsset(String relativePath, String contentType)
-	public def getAsset(String relativePath)
+	public AssetFile getAsset(String relativePath, String contentType, String extension, AssetFile baseFile)
+	public AssetFile getAsset(String relativePath, String contentType)
+	public AssetFile getAsset(String relativePath)
 
 	/**
 	* Resolves multiple files given a basePath and content type
@@ -39,10 +40,10 @@ public interface AssetResolverInterface {
 	* @param extension   String containing the target extension
 	* @return AssetFile[] Returns a list of Asset Files
 	*/
-	public def getAssets(String basePath, String contentType, String extension,  Boolean recursive, AssetFile relativeFile, AssetFile baseFile)
-	public def getAssets(String basePath, String contentType, String extension)
-	public def getAssets(String basePath, String contentType)
-	public def getAssets(String basePath)
+	public List<AssetFile> getAssets(String basePath, String contentType, String extension,  Boolean recursive, AssetFile relativeFile, AssetFile baseFile)
+	public List<AssetFile> getAssets(String basePath, String contentType, String extension)
+	public List<AssetFile> getAssets(String basePath, String contentType)
+	public List<AssetFile> getAssets(String basePath)
 
-	public List scanForFiles(List excludePatterns, List includePatterns)
+	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns)
 }

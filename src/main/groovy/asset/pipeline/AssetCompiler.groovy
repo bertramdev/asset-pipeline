@@ -1,8 +1,11 @@
 package asset.pipeline
-import groovy.util.logging.Log4j
+
+import groovy.util.logging.Commons
 import asset.pipeline.processors.UglifyJsProcessor
 import asset.pipeline.processors.CssMinifyPostProcessor
-@Log4j
+
+
+@Commons
 class AssetCompiler {
 	def includeRules = [:]
 	def excludeRules = [:]

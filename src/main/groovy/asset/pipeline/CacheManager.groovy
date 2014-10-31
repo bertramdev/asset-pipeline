@@ -16,15 +16,21 @@
 
 package asset.pipeline
 
+/**
+ * Simple cache manager for Asset Pipeline
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
 class CacheManager {
-	static cache = [:]
+	static Map<String, Map<String, Object>> cache = [:]
 
-	static def findCache(fileName, md5, originalFileName = null) {
-		def cacheRecord = CacheManager.cache[fileName]
+	static String findCache(String fileName, String md5, String originalFileName = null) {
+		def cacheRecord = cache[fileName]
 
 		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
 			def cacheFiles = cacheRecord.dependencies.keySet()
-			def expiredCacheFound = cacheFiles.find { cacheFileName ->
+			def expiredCacheFound = cacheFiles.find { String cacheFileName ->
 				def cacheFile = AssetHelper.fileForUri(cacheFileName)
 				if(!cacheFile)
 					return true
@@ -36,26 +42,27 @@ class CacheManager {
 			}
 
 			if(expiredCacheFound) {
-				CacheManager.cache.remove(fileName)
+				cache.remove(fileName)
 				return null
 			}
 			return cacheRecord.processedFileText
 		} else if (cacheRecord) {
-			CacheManager.cache.remove(fileName)
+			cache.remove(fileName)
 			return null
 		}
 	}
 
-	static def createCache(fileName, md5Hash, processedFileText, originalFileName = null) {
-		def cacheRecord = CacheManager.cache[fileName]
+	static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
+        def thisCache = cache
+        def cacheRecord = thisCache[fileName]
 		if(cacheRecord) {
-			CacheManager.cache[fileName] = cacheRecord + [
+			thisCache[fileName] = cacheRecord + [
 				md5: md5Hash,
 				originalFileName: originalFileName,
 				processedFileText: processedFileText
 			]
 		} else {
-			CacheManager.cache[fileName] = [
+			thisCache[fileName] = [
 				md5: md5Hash,
 				originalFileName: originalFileName,
 				processedFileText: processedFileText,
@@ -65,11 +72,11 @@ class CacheManager {
 
 	}
 
-	static def addCacheDependency(fileName, dependentFile) {
-		def cacheRecord = CacheManager.cache[fileName]
+	static void addCacheDependency(String fileName, AssetFile dependentFile) {
+		def cacheRecord = cache[fileName]
 		if(!cacheRecord) {
-			CacheManager.createCache(fileName, null, null)
-			cacheRecord = CacheManager.cache[fileName]
+			createCache(fileName, null, null)
+			cacheRecord = cache[fileName]
 		}
 		def newMd5 = AssetHelper.getByteDigest(dependentFile.inputStream.bytes)
 		cacheRecord.dependencies[dependentFile.path] = newMd5

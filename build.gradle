@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.1'
+version = '2.0.2-SNAPSHOT'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {
@@ -59,11 +59,6 @@ bintray {
         name = 'asset-pipeline-core'
         licenses = ['Apache-2.0']
     }
-}
-
-sourceSets {
-    main.groovy.srcDir 'src'
-    test.groovy.srcDir 'test'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

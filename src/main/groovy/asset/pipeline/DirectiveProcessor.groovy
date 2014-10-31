@@ -15,9 +15,12 @@
  */
 package asset.pipeline
 
-import groovy.util.logging.Log4j
+import groovy.util.logging.Commons
 
-@Log4j
+import java.nio.charset.Charset
+
+
+@Commons
 class DirectiveProcessor {
 
     /**
@@ -267,10 +270,7 @@ class DirectiveProcessor {
     * Used for fetching the contents of a file be it a Generic unprocessable entity
     * or an AssetFile with a processable stream
     */
-    protected fileContents(file) {
-        if(file.class.name instanceof GenericAssetFile) {
-            return file.bytes
-        }
+    String fileContents(AssetFile file) {
         return file.processedStream(this.precompiler)
     }
 

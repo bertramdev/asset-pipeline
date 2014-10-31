@@ -16,8 +16,7 @@
 
 package asset.pipeline
 
-import java.io.InputStream
-import asset.pipeline.fs.AssetResolverInterface
+import asset.pipeline.fs.AssetResolver
 
 /**
 * This is the base Asset File specification class. An AssetFile object should extend this abstract base class.
@@ -30,7 +29,7 @@ import asset.pipeline.fs.AssetResolverInterface
 abstract class AbstractAssetFile implements AssetFile {
 	String path
 	AssetFile baseFile
-	AssetResolverInterface sourceResolver
+	AssetResolver sourceResolver
 	String encoding
 
 	private def _byteCache
@@ -54,8 +53,8 @@ abstract class AbstractAssetFile implements AssetFile {
 	}
 
 
-	String processedStream(precompiler) {
-		def fileText
+	String processedStream(AssetCompiler precompiler) {
+		String fileText
 		def skipCache = precompiler ?: (!processors || processors.size() == 0)
 		def cacheKey
 		if(baseFile?.encoding || encoding) {
@@ -64,14 +63,14 @@ abstract class AbstractAssetFile implements AssetFile {
 			fileText = inputStream?.text
 		}
 
-		def md5 = AssetHelper.getByteDigest(fileText.bytes)
+		String md5 = AssetHelper.getByteDigest(fileText.bytes)
 		if(!skipCache) {
 			def cache = CacheManager.findCache(path, md5, baseFile?.path)
 			if(cache) {
 				return cache
 			}
 		}
-	for(processor in processors) {
+	    for(processor in processors) {
 			def processInstance = processor.newInstance(precompiler)
 			fileText = processInstance.process(fileText, this)
 		}

@@ -1,11 +1,17 @@
 package asset.pipeline
 
+import asset.pipeline.fs.AssetResolver
+
+/**
+ * Holder for Asset Pipeline's configuration
+ *
+ */
 class AssetPipelineConfigHolder {
-	static def resolvers = []
+	static Collection<AssetResolver> resolvers = []
 	static def manifest
 	static def config =[:]
 
-	public static registerResolver(resolver) {
+	public static registerResolver(AssetResolver resolver) {
 		resolvers << resolver
 	}
 

@@ -16,10 +16,16 @@
 
 package asset.pipeline
 
+/**
+ * An {@link AssetFile} implementation for Javascript
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
 class JsAssetFile extends AbstractAssetFile {
-    static final contentType = ['application/javascript', 'application/x-javascript','text/javascript']
-    static extensions = ['js']
-    static compiledExtension = 'js'
+    static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
+    static List<String> extensions = ['js']
+    static String compiledExtension = 'js'
     static processors = []
 
     String directiveForLine(String line) {

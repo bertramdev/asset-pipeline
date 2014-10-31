@@ -16,16 +16,20 @@
 
 package asset.pipeline
 
-import asset.pipeline.processors.CssProcessor
+import groovy.transform.CompileStatic
 
-class GenericAssetFile {
+/**
+ * Generic implementation of the {@link AssetFile} interface
+ */
+@CompileStatic
+class GenericAssetFile extends AbstractAssetFile {
 
 	String path
 
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 
 	InputStream getInputStream() {
-		return inputStreamSource()
+		return (InputStream)inputStreamSource()
 	}
 
 	public String getParentPath() {
@@ -44,4 +48,6 @@ class GenericAssetFile {
 		path.split("/")[-1]
 	}
 
+    @Override
+    String directiveForLine(String line) { null }
 }
