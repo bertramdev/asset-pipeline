@@ -34,24 +34,24 @@ import asset.pipeline.fs.FileSystemAssetResolver
 class AssetPipelinePlugin implements Plugin<Project> {
 
 	void apply(Project project) {
-        AssetPipelineExtension assetPipeline = project.extensions.create('assets', AssetPipelineExtension)
+		AssetPipelineExtension assetPipeline = project.extensions.create('assets', AssetPipelineExtension)
 
 		def resolver = new FileSystemAssetResolver('application', "${project.projectDir}/$assetPipeline.assetsPath")
 		AssetPipelineConfigHolder.registerResolver(resolver)
 
 
-        def assetPrecompileTask = project.task('asset-precompile')
-        assetPrecompileTask << {
+		def assetPrecompileTask = project.task('asset-precompile')
+		assetPrecompileTask << {
 			def assetCompiler = new AssetCompiler(assetPipeline.toMap(),new GradleEventListener())
 			assetCompiler.excludeRules.default = assetPipeline.excludes
 			assetCompiler.includeRules.default = assetPipeline.includes
 			assetCompiler.compile()
 		}
 
-        def assembleTask = project.tasks.findByName('assemble')
-        if(assembleTask) {
-            assembleTask.dependsOn(assetPrecompileTask)
-        }
+		def assembleTask = project.tasks.findByName('assemble')
+		if(assembleTask) {
+			assembleTask.dependsOn(assetPrecompileTask)
+		}
 
 //		project.task('asset-clean') << {
 //			//TODO: REMOVE target compileDir
