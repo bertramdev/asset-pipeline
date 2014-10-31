@@ -57,7 +57,7 @@ def jarResolver = new JarAssetResolver('application','/path/to/file.jar','META-I
 AssetPipelineConfigHolder.registerResolver(fsResolver)
 AssetPipelineConfigHolder.registerResolver(jarResolver)
 ```
-As can be seen above, we have registered 2 examples of implementations of the `AssetResolverInterface`
+As can be seen above, we have registered 2 examples of implementations of the `AssetResolver` interface
 
 Now we can take advantage of asset-pipeline endpoints to fetch files for development mode as well as compiling files for production.
 
