@@ -23,17 +23,23 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.name == 'groovy-all') {
+            details.useTarget group: details.requested.group, name: 'groovy', version:'2.2.0'
+        }
+    }
+}
+
 
 dependencies {
     compile gradleApi()
-    compile localGroovy()
+    // compile localGroovy()
 
     compile 'org.mozilla:rhino:1.7R4'
     compile 'log4j:log4j:1.2.17'
 
-    testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
-        exclude group:'org.codehaus.groovy'
-    }
+    testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }
 
 publishing {
