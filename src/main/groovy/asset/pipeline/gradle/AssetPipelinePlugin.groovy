@@ -36,12 +36,13 @@ class AssetPipelinePlugin implements Plugin<Project> {
 	void apply(Project project) {
 		AssetPipelineExtension assetPipeline = project.extensions.create('assets', AssetPipelineExtension)
 
-		def resolver = new FileSystemAssetResolver('application', "${project.projectDir}/$assetPipeline.assetsPath")
-		AssetPipelineConfigHolder.registerResolver(resolver)
-
 
 		def assetPrecompileTask = project.task('asset-precompile')
 		assetPrecompileTask << {
+            def assetsPath = "${project.projectDir}/$assetPipeline.assetsPath"
+            def resolver = new FileSystemAssetResolver('application', assetsPath)
+            AssetPipelineConfigHolder.registerResolver(resolver)
+
 			def assetCompiler = new AssetCompiler(assetPipeline.toMap(),new GradleEventListener())
 			assetCompiler.excludeRules.default = assetPipeline.excludes
 			assetCompiler.includeRules.default = assetPipeline.includes
