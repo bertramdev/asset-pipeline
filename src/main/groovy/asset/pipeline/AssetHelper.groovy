@@ -283,6 +283,39 @@ class AssetHelper {
         }
         return newPath.join("/")
     }
+	
+    /**
+     * Returns the path relative to the asset pipeline root
+     * @param file asset file
+     * @param includeFileName whether the result should include the file name
+     * @return relative path String (i.e. 'path/to/file.js')
+    */
+	static String getRelativePath(file, boolean includeFileName = false) {
+        def path
+		
+        if (includeFileName) {
+            path = file.getClass().name == 'java.io.File' ? file.getCanonicalPath().split(QUOTED_FILE_SEPARATOR) : file.file.getCanonicalPath().split(QUOTED_FILE_SEPARATOR)
+        } else {
+            path = file.getParent().split(QUOTED_FILE_SEPARATOR)
+        }
 
+        int startPosition = path.findLastIndexOf { it == "grails-app" }
+		
+        if (startPosition == -1) {
+            startPosition = path.findLastIndexOf { it == 'web-app' }
+            if (startPosition + 2 >= path.length) {
+                return ""
+            }
+            path = path[(startPosition + 2)..-1]
+        } else {
+            if (startPosition + 3 >= path.length) {
+                return ""
+            }
+            path = path[(startPosition + 3)..-1]
+        }
+
+        return path.join(DIRECTIVE_FILE_SEPARATOR)
+	
+	}
 
 }
