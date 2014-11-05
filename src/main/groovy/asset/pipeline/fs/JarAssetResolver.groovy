@@ -96,26 +96,11 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 		return fileList
 	}
 
-	protected AssetFile assetForFile(JarEntry file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
-		if(file == null) {
-			return null
-		}
-
-		if(contentType == null) {
-			return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,sourceDirectory))
-		}
-
-		def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
-		for(fileSpec in possibleFileSpecs) {
-			for(extension in fileSpec.extensions) {
-				def fileName = file.name
-				if(fileName.endsWith(".$extension" )) {
-					return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
-				}
-			}
-		}
-        return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,sourceDirectory))
-	}
+    @Override
+    @CompileStatic
+    protected String getFileName(ZipEntry file) {
+        return file.name
+    }
 
     @CompileStatic
     protected ZipEntry getRelativeFile(String relativePath, String name) {

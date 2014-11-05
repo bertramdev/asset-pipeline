@@ -21,6 +21,7 @@ import asset.pipeline.AssetHelper
 import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 
+import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 
@@ -179,6 +180,29 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 		}
 		return Pattern.compile(sb.toString());
 	}
+
+    protected AssetFile assetForFile(T file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
+        if(file == null) {
+            return null
+        }
+
+        if(contentType == null) {
+            return new GenericAssetFile(inputStreamSource: createInputStreamClosure(file), path: relativePathToResolver(file,sourceDirectory))
+        }
+
+        def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
+        for(fileSpec in possibleFileSpecs) {
+            for(extension in fileSpec.extensions) {
+                def fileName = getFileName(file)
+                if(fileName.endsWith(".$extension" )) {
+                    return fileSpec.newInstance(inputStreamSource: createInputStreamClosure(file), baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
+                }
+            }
+        }
+        return new GenericAssetFile(inputStreamSource: createInputStreamClosure(file), path: relativePathToResolver(file,sourceDirectory))
+    }
+
+    protected abstract String getFileName(T file)
 
     @CompileStatic
 	protected boolean isFileMatchingPatterns(String filePath, List<Pattern> patterns) {

@@ -130,26 +130,11 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		}
 	}
 
-	protected AssetFile assetForFile(File file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
-		if(file == null) {
-			return null
-		}
-
-		if(contentType == null) {
-			return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,sourceDirectory))
-		}
-
-		def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
-		for(fileSpec in possibleFileSpecs) {
-			for(extension in fileSpec.extensions) {
-				def fileName = file.getAbsolutePath()
-				if(fileName.endsWith("." + extension)) {
-					return fileSpec.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
-				}
-			}
-		}
-        return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,sourceDirectory))
-	}
+    @Override
+    @CompileStatic
+    protected String getFileName(File file) {
+        return file.name
+    }
 
     @CompileStatic
 	protected String relativePathToResolver(File file, String scanDirectoryPath) {
@@ -163,7 +148,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 					return filePath.substring(scanDir.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
 				}
 			}
-			throw new RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
+			throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
 		}
 	}
 
