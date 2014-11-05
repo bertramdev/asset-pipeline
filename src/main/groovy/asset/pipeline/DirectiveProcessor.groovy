@@ -34,7 +34,7 @@ class DirectiveProcessor {
     private def files = []
     private def baseFile
 
-    DirectiveProcessor(contentType, precompiler=null) {
+    DirectiveProcessor(String contentType, AssetCompiler precompiler = null) {
         this.contentType = contentType
         this.precompiler = precompiler
     }
@@ -45,7 +45,7 @@ class DirectiveProcessor {
     * setup Processors. If a GenericAssetFile is passed in the raw byte array is returned.
     * @param file an instance of an AbstractAssetFile (i.e. JsAssetFile or CssAssetFile)
     */
-    def compile(file) {
+    def compile(AssetFile file) {
         if(file instanceof GenericAssetFile) {
             return file.getBytes()
         }
@@ -255,7 +255,7 @@ class DirectiveProcessor {
         }
     }
 
-    protected isFileInTree(file,currentTree) {
+    protected boolean isFileInTree(file,currentTree) {
         def result = files.find { it ->
             it.path == file.path
         }

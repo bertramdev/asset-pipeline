@@ -30,7 +30,7 @@ import java.util.regex.Pattern
  */
 
 @Commons
-class FileSystemAssetResolver extends AbstractAssetResolver {
+class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	static String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
 	static String DIRECTIVE_FILE_SEPARATOR = '/'
 
@@ -38,7 +38,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 	List<String> scanDirectories = []
 
 	FileSystemAssetResolver(String name,String basePath, boolean flattenSubDirectories=true) {
-		this.name = name
+		super(name)
 		baseDirectory = new File(basePath)
 		if(baseDirectory.exists()) {
 			if(flattenSubDirectories) {
@@ -69,41 +69,28 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		}
 
 		for(directoryPath in scanDirectories) {
-			if(specs) {
-				for(fileSpec in specs) {
-					def fileName = relativePath
-					if(fileName.endsWith(".${fileSpec.compiledExtension}")) {
-						fileName = fileName.substring(0,fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
-					}
-					for(ext in fileSpec.extensions) {
-						def tmpFileName = fileName
-						if(!tmpFileName.endsWith("." + ext)) {
-							tmpFileName += "." + ext
-						}
-						def file = new File(directoryPath, tmpFileName)
-						if(file.exists()) {
-							return fileSpec.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: baseFile, path: relativePathToResolver(file,directoryPath), sourceResolver: this)
-						}
-					}
-				}
-			} else {
-				def fileName = relativePath
-				if(extension) {
-					if(!fileName.endsWith(".${extension}")) {
-						fileName += ".${extension}"
-					}
-				}
-				def file = new File(directoryPath, fileName)
-				if(file.exists()) {
-					return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,directoryPath))
-				}
-			}
+            AssetFile assetFile = resolveAsset(specs, directoryPath, relativePath, baseFile, extension)
+            if(assetFile) {
+                return assetFile
+            }
 		}
 		return null
 	}
 
+    @Override
+    protected File getRelativeFile(String relativePath, String name) {
+        return new File(relativePath, name)
+    }
 
-	/**
+    @Override
+    protected Closure<InputStream> createInputStreamClosure(File file) {
+        if(file.exists()) {
+            return {-> file.newInputStream() }
+        }
+        return null
+    }
+
+    /**
 	* Implementation Requirements
 	* Should be able to take a relative to baseFile scenario
 	*/
@@ -143,26 +130,11 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 		}
 	}
 
-	protected AssetFile assetForFile(File file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
-		if(file == null) {
-			return null
-		}
-
-		if(contentType == null) {
-			return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,sourceDirectory))
-		}
-
-		def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
-		for(fileSpec in possibleFileSpecs) {
-			for(extension in fileSpec.extensions) {
-				def fileName = file.getAbsolutePath()
-				if(fileName.endsWith("." + extension)) {
-					return fileSpec.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
-				}
-			}
-		}
-        return new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePathToResolver(file,sourceDirectory))
-	}
+    @Override
+    @CompileStatic
+    protected String getFileName(File file) {
+        return file.name
+    }
 
     @CompileStatic
 	protected String relativePathToResolver(File file, String scanDirectoryPath) {
@@ -176,7 +148,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver {
 					return filePath.substring(scanDir.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
 				}
 			}
-			throw new RuntimeException("File was not sourced from the same ScanDirectory #{filePath}")
+			throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
 		}
 	}
 

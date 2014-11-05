@@ -16,17 +16,69 @@
 
 package asset.pipeline.fs
 
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 
+import java.util.jar.JarEntry
 import java.util.regex.Pattern
+import java.util.zip.ZipEntry
 
 /**
 * The abstract class for any helper methods in resolving files
  *
 * @author David Estes
 */
-abstract class AbstractAssetResolver implements AssetResolver {
+abstract class AbstractAssetResolver<T> implements AssetResolver {
 	String name
+
+    AbstractAssetResolver(String name) {
+        this.name = name
+    }
+
+    protected abstract String relativePathToResolver(T file, String scanDirectoryPath)
+
+    protected abstract T getRelativeFile(String relativePath, String name)
+
+    protected abstract Closure<InputStream> createInputStreamClosure(T file)
+
+
+    protected AssetFile resolveAsset(specs, String prefixPath, String normalizedPath, AssetFile baseFile, String extension) {
+        if (specs) {
+            for (fileSpec in specs) {
+                def fileName = normalizedPath
+                if (fileName.endsWith(".${fileSpec.compiledExtension}")) {
+                    fileName = fileName.substring(0, fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
+                }
+                for (ext in fileSpec.extensions) {
+                    def tmpFileName = fileName
+                    if (!tmpFileName.endsWith("." + ext)) {
+                        tmpFileName += "." + ext
+                    }
+                    def file = getRelativeFile(prefixPath, tmpFileName)
+                    def inputStreamClosure = createInputStreamClosure(file)
+
+                    if (inputStreamClosure) {
+                        return fileSpec.newInstance(inputStreamSource: inputStreamClosure, baseFile: baseFile, path: relativePathToResolver(file, prefixPath), sourceResolver: this)
+                    }
+                }
+            }
+        } else {
+            def fileName = normalizedPath
+            if (extension) {
+                if (!fileName.endsWith(".${extension}")) {
+                    fileName += ".${extension}"
+                }
+            }
+            def file = getRelativeFile(prefixPath, fileName)
+            def inputStreamClosure = createInputStreamClosure(file)
+            if (inputStreamClosure) {
+                return new GenericAssetFile(inputStreamSource: inputStreamClosure, path: relativePathToResolver(file, prefixPath))
+            }
+        }
+        return null
+    }
 
     @CompileStatic
 	public Pattern convertGlobToRegEx(String line)
@@ -128,6 +180,29 @@ abstract class AbstractAssetResolver implements AssetResolver {
 		}
 		return Pattern.compile(sb.toString());
 	}
+
+    protected AssetFile assetForFile(T file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
+        if(file == null) {
+            return null
+        }
+
+        if(contentType == null) {
+            return new GenericAssetFile(inputStreamSource: createInputStreamClosure(file), path: relativePathToResolver(file,sourceDirectory))
+        }
+
+        def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
+        for(fileSpec in possibleFileSpecs) {
+            for(extension in fileSpec.extensions) {
+                def fileName = getFileName(file)
+                if(fileName.endsWith(".$extension" )) {
+                    return fileSpec.newInstance(inputStreamSource: createInputStreamClosure(file), baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
+                }
+            }
+        }
+        return new GenericAssetFile(inputStreamSource: createInputStreamClosure(file), path: relativePathToResolver(file,sourceDirectory))
+    }
+
+    protected abstract String getFileName(T file)
 
     @CompileStatic
 	protected boolean isFileMatchingPatterns(String filePath, List<Pattern> patterns) {

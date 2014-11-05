@@ -33,7 +33,7 @@ import java.util.zip.ZipEntry
  * @author Graeme Rocher
  */
 @Commons
-class JarAssetResolver extends AbstractAssetResolver {
+class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 	static String QUOTED_FILE_SEPARATOR = Pattern.quote("/")
 	static String DIRECTIVE_FILE_SEPARATOR = '/'
 
@@ -41,7 +41,7 @@ class JarAssetResolver extends AbstractAssetResolver {
 	String prefixPath
 
 	JarAssetResolver(String name,String jarPath, String prefixPath) {
-		this.name = name
+		super(name)
 		baseJar = new JarFile(jarPath)
 		this.prefixPath = prefixPath
 	}
@@ -57,40 +57,17 @@ class JarAssetResolver extends AbstractAssetResolver {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		}
 
+        if(!specs) return null
 
-        if(specs) {
-            for(fileSpec in specs) {
-                def fileName = normalizedPath
-                if(fileName.endsWith(".${fileSpec.compiledExtension}")) {
-                    fileName = fileName.substring(0,fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
-                }
-                for(ext in fileSpec.extensions) {
-                    def tmpFileName = fileName
-                    if(!tmpFileName.endsWith("." + ext)) {
-                        tmpFileName += "." + ext
-                    }
-                    def file = getEntry(tmpFileName)
-                    if(file) {
-                        return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,prefixPath), sourceResolver: this)
-                    }
-                }
-            }
-        } else {
-            def fileName = normalizedPath
-            if(extension) {
-                if(!fileName.endsWith(".${extension}")) {
-                    fileName += ".${extension}"
-                }
-            }
-            def file = getEntry(fileName)
+        AssetFile assetFile = resolveAsset(specs, prefixPath, normalizedPath, baseFile, extension)
 
-            if(file) {
-                return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,directoryPath))
-            }
-        }
-
-		return null
+		return assetFile
 	}
+
+
+    protected Closure<InputStream> createInputStreamClosure(ZipEntry file) {
+        {-> baseJar.getInputStream(file) }
+    }
 
     @CompileStatic
 	public List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile=null, AssetFile baseFile = null) {
@@ -119,34 +96,19 @@ class JarAssetResolver extends AbstractAssetResolver {
 		return fileList
 	}
 
-	protected AssetFile assetForFile(JarEntry file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
-		if(file == null) {
-			return null
-		}
+    @Override
+    @CompileStatic
+    protected String getFileName(ZipEntry file) {
+        return file.name
+    }
 
-		if(contentType == null) {
-			return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,sourceDirectory))
-		}
-
-		def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
-		for(fileSpec in possibleFileSpecs) {
-			for(extension in fileSpec.extensions) {
-				def fileName = file.name
-				if(fileName.endsWith(".$extension" )) {
-					return fileSpec.newInstance(inputStreamSource: { baseJar.getInputStream(file) }, baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
-				}
-			}
-		}
-        return new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(file) }, path: relativePathToResolver(file,sourceDirectory))
+    @CompileStatic
+    protected ZipEntry getRelativeFile(String relativePath, String name) {
+		return baseJar.getEntry([relativePath, name].join("/"))
 	}
 
     @CompileStatic
-    protected ZipEntry getEntry(String name) {
-		return baseJar.getEntry([prefixPath, name].join("/"))
-	}
-
-    @CompileStatic
-	protected String relativePathToResolver(JarEntry file, String scanDirectoryPath) {
+	protected String relativePathToResolver(ZipEntry file, String scanDirectoryPath) {
 		def filePath = file.name
 
 		if(filePath.startsWith(scanDirectoryPath)) {
