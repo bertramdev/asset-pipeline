@@ -101,18 +101,18 @@ class AssetHelperSpec extends Specification {
     	then:
     		ext == 'js'
     }
-	
+
     void "should get relative path from asset file"() {
-    	when:
-    		def assetHelper = AssetHelper
-		then:
-	    	assetHelper.getRelativePath(file, includeFileName)	== expectedPath
-	    where:
-	    	file														| includeFileName		||	expectedPath
-	    	new File('grails-app/assets/javascripts/path/to/file.js')	| false					||	"path/to"
-	    	new File('grails-app/assets/javascripts/path/to/file.js')	| true					|| 	"path/to/file.js"
-	    	new File('web-app/javascripts/path/to/file.js')				| false					|| 	"path/to"
-	    	new File('web-app/javascripts/path/to/file.js')				| true					|| 	"path/to/file.js"
+        when:
+            def assetHelper = AssetHelper
+        then:
+            assetHelper.getRelativePath(file, includeFileName)	== expectedPath
+        where:
+            file														| includeFileName		||	expectedPath
+            new File('grails-app/assets/javascripts/path/to/file.js')	| false					||	"path/to"
+            new File('grails-app/assets/javascripts/path/to/file.js')	| true					|| 	"path/to/file.js"
+            new File('web-app/javascripts/path/to/file.js')				| false					|| 	"path/to"
+            new File('web-app/javascripts/path/to/file.js')				| true					|| 	"path/to/file.js"
     }
 	
 }
