@@ -48,8 +48,9 @@ class AssetSpecLoader {
                 for(className in classNames) {
                     try {
                         def cls = classLoader.loadClass(className)
-                        if(AssetFile.isAssignableFrom(cls) && !specifications.contains(cls)) {
-                            specifications << (Class<AssetFile>) cls
+                        if(AssetFile.isAssignableFrom(cls) ) {
+                            if(!specifications.contains(cls))
+                                specifications << (Class<AssetFile>) cls
                         }
                         else {
                             log.warn("Asset specification $className not regsistered because it does not implement the AssetFile interface")
