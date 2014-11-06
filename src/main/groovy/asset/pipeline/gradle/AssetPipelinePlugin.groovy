@@ -26,8 +26,8 @@ import org.gradle.api.tasks.Delete
 /**
  * This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
  *
- * task: asset-compile Compiles your assets into your build directory
- * task: asset-clean Cleans the build/assets directory
+ * task: assetCompile Compiles your assets into your build directory
+ * task: assetClean Cleans the build/assets directory
  *
  * @author David Estes
  * @author Graeme Rocher
@@ -39,10 +39,10 @@ class AssetPipelinePlugin implements Plugin<Project> {
         defaultConfiguration.assetsPath = 'grails-app/assets'
         defaultConfiguration.compileDir = 'build/assets'
 
-		project.tasks.create('asset-precompile', AssetCompile)
+		project.tasks.create('assetCompile', AssetCompile)
 
-        def assetPrecompileTask = project.tasks.getByName('asset-precompile')
-        def assetCleanTask = project.tasks.create('asset-clean', Delete)
+        def assetPrecompileTask = project.tasks.getByName('assetCompile')
+        def assetCleanTask = project.tasks.create('assetClean', Delete)
 
         project.afterEvaluate {
             def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
