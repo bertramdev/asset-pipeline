@@ -34,13 +34,11 @@ class ClosureCompilerProcessor {
 		def compiler = new Compiler()
 		CompilerOptions options = new CompilerOptions();
 		CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
-		WarningLevel.DEFAULT.setOptionsForWarningLevel(options);
+		WarningLevel.QUIET.setOptionsForWarningLevel(options);
 
 		def sourceFile = new SourceFile(fileName)
 		sourceFile.setCode(inputText)
-		def now = new Date()
 		def result = compiler.compile([] as List<SourceFile>,[sourceFile] as List<SourceFile>,options)
-		println "--Finished Compiling Actual Source Code ${now.time - new Date().time}"
 		def output = compiler.toSource()
 		return output
 	}
