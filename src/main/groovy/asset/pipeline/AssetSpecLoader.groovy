@@ -27,6 +27,7 @@ import groovy.util.logging.Commons
 class AssetSpecLoader {
 
     static final String FACTORIES_RESOURCE_LOCATION = "META-INF/asset-pipeline/asset.specs"
+    static final String PROCESSORS_RESOURCE_LOCATION = "META-INF/asset-pipeline/processor.specs"
 
     private static List<Class<AssetFile>> specifications = null
     /**
@@ -53,15 +54,38 @@ class AssetSpecLoader {
                                 specifications << (Class<AssetFile>) cls
                         }
                         else {
-                            log.warn("Asset specification $className not regsistered because it does not implement the AssetFile interface")
+                            log.warn("Asset specification $className not registered because it does not implement the AssetFile interface")
                         }
                     } catch (Throwable e) {
                         log.error("Error loading asset specification $className: $e.message", e)
                     }
                 }
             }
+            applyProcessors(classLoader)
         }
-
         return specifications
+    }
+
+
+    static void applyProcessors(ClassLoader classLoader = Thread.currentThread().contextClassLoader) {
+        def resources = classLoader.getResources(PROCESSORS_RESOURCE_LOCATION)
+        resources.each { URL res ->
+            Properties prop = new Properties()
+            prop.load(res.inputStream)
+            res.keySet().each { processorName ->
+                def processorClass = classLoader.loadClass(processorName)
+                def specs = res.getProperty(processorName).split(',')
+                specs.each { specName ->
+                    try {
+                        def specCls = classLoader.loadClass(specName)
+                        if(!specCls.processors.contains(processorClass)) {
+                            specCls.processors << processorClass
+                        }
+                    } catch(e) {
+                        //Spec doesnt exist this could be normal if it is for example supporting coffee too
+                    }
+                }
+            }
+        }
     }
 }
