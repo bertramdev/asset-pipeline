@@ -36,8 +36,11 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
 	void apply(Project project) {
         def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtension)
-        defaultConfiguration.assetsPath = 'grails-app/assets'
-        defaultConfiguration.compileDir = 'build/assets'
+
+        if(project.extensions.findByName('grails')) {
+            defaultConfiguration.assetsPath = 'grails-app/assets'
+            defaultConfiguration.compileDir = 'build/assetCompile/assets'
+        }
 
 		project.tasks.create('assetCompile', AssetCompile)
 
