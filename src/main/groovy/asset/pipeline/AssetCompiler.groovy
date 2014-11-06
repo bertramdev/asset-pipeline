@@ -16,6 +16,7 @@
 package asset.pipeline
 
 import groovy.util.logging.Commons
+import asset.pipeline.processors.ClosureCompilerProcessor
 import asset.pipeline.processors.UglifyJsProcessor
 import asset.pipeline.processors.CssMinifyPostProcessor
 
@@ -59,7 +60,8 @@ class AssetCompiler {
 
 	void compile() {
 		def assetDir           = initializeWorkspace()
-		def uglifyJsProcessor  = new UglifyJsProcessor()
+		// def closureCompilerProcessor  = new UglifyJsProcessor()
+		def closureCompilerProcessor = new ClosureCompilerProcessor()
 		def minifyCssProcessor = new CssMinifyPostProcessor()
 
 		filesToProcess = this.getAllAssets()
@@ -99,7 +101,7 @@ class AssetCompiler {
 						def newFileData = fileData
 						try {
 							eventListener?.triggerEvent("StatusUpdate", "Uglifying File ${index+1} of ${filesToProcess.size()} - ${fileName}")
-							newFileData = uglifyJsProcessor.process(fileData, options.minifyOptions ?: [:])
+							newFileData = closureCompilerProcessor.process(fileName,fileData, options.minifyOptions ?: [:])
 						} catch(e) {
 							log.error("Uglify JS Exception", e)
 							newFileData = fileData

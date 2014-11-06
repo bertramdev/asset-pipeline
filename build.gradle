@@ -38,6 +38,7 @@ dependencies {
 
     compile 'org.mozilla:rhino:1.7R4'
     compile 'log4j:log4j:1.2.17'
+    compile 'com.google.javascript:closure-compiler:v20141023'
 
     testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }

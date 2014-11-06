@@ -50,7 +50,7 @@ class UglifyJsProcessor {
 
 
 
-    def process(inputText, options = [:]) {
+    def process(fileName, inputText, options = [:]) {
         call uglify, inputText, parseOptions(options)
     }
 
