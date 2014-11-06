@@ -21,6 +21,7 @@ import org.gradle.api.Project
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
+import org.gradle.api.tasks.Delete
 
 /**
  * This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
@@ -41,12 +42,16 @@ class AssetPipelinePlugin implements Plugin<Project> {
 		project.tasks.create('asset-precompile', AssetCompile)
 
         def assetPrecompileTask = project.tasks.getByName('asset-precompile')
+        def assetCleanTask = project.tasks.create('asset-clean', Delete)
 
         project.afterEvaluate {
+            def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
+            assetCleanTask.configure {
+                delete project.file(assetPipeline.compileDir)
+            }
             assetPrecompileTask.configure {
-                def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
-                destinationDir = new File(assetPipeline.compileDir)
-                assetsDir = new File(assetPipeline.assetsPath)
+                destinationDir = project.file(assetPipeline.compileDir)
+                assetsDir = project.file(assetPipeline.assetsPath)
                 minifyJs = assetPipeline.minifyJs
                 minifyCss = assetPipeline.minifyCss
                 minifyOptions = assetPipeline.minifyOptions
@@ -60,9 +65,11 @@ class AssetPipelinePlugin implements Plugin<Project> {
 			assembleTask.dependsOn( assetPrecompileTask )
 		}
 
-//		project.task('asset-clean') << {
-//			//TODO: REMOVE target compileDir
-//		}
+        def cleanTask = project.tasks.findByName('clean')
+        if(cleanTask) {
+            cleanTask.dependsOn( assetCleanTask )
+        }
+
 
 		// project.task('asset-watch') << {
 		// 	//TODO: Implement live watcher to auto recompile assets as they change
