@@ -34,24 +34,30 @@ import asset.pipeline.fs.FileSystemAssetResolver
 class AssetPipelinePlugin implements Plugin<Project> {
 
 	void apply(Project project) {
-		AssetPipelineExtension assetPipeline = project.extensions.create('assets', AssetPipelineExtension)
+        def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtension)
+        defaultConfiguration.assetsPath = 'grails-app/assets'
+        defaultConfiguration.compileDir = 'build/assets'
 
+		project.tasks.create('asset-precompile', AssetCompile)
 
-		def assetPrecompileTask = project.task('asset-precompile')
-		assetPrecompileTask << {
-            def assetsPath = "${project.projectDir}/$assetPipeline.assetsPath"
-            def resolver = new FileSystemAssetResolver('application', assetsPath)
-            AssetPipelineConfigHolder.registerResolver(resolver)
+        def assetPrecompileTask = project.tasks.getByName('asset-precompile')
 
-			def assetCompiler = new AssetCompiler(assetPipeline.toMap(),new GradleEventListener())
-			assetCompiler.excludeRules.default = assetPipeline.excludes
-			assetCompiler.includeRules.default = assetPipeline.includes
-			assetCompiler.compile()
-		}
-
+        project.afterEvaluate {
+            assetPrecompileTask.configure {
+                def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
+                destinationDir = new File(assetPipeline.compileDir)
+                assetsDir = new File(assetPipeline.assetsPath)
+                minifyJs = assetPipeline.minifyJs
+                minifyCss = assetPipeline.minifyCss
+                minifyOptions = assetPipeline.minifyOptions
+                includes = assetPipeline.includes
+                excludes = assetPipeline.excludes
+                excludesGzip = assetPipeline.excludesGzip
+            }
+        }
 		def assembleTask = project.tasks.findByName('assemble')
 		if(assembleTask) {
-			assembleTask.dependsOn(assetPrecompileTask)
+			assembleTask.dependsOn( assetPrecompileTask )
 		}
 
 //		project.task('asset-clean') << {

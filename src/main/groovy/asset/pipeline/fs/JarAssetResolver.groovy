@@ -133,9 +133,9 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 					if(!entry.isDirectory()) {
 						def assetFileClass = AssetHelper.assetForFileName(relativePath)
 						if(assetFileClass) {
-							fileList << assetFileClass.newInstance(inputStreamSource: { baseJar.getInputStream(entry) }, path: relativePath, sourceResolver: this)
+							fileList << assetFileClass.newInstance(inputStreamSource: createInputStreamClosure(entry), path: relativePath, sourceResolver: this)
 						} else {
-							fileList << new GenericAssetFile(inputStreamSource: { baseJar.getInputStream(entry) }, path: relativePath)
+							fileList << new GenericAssetFile(inputStreamSource: createInputStreamClosure(entry), path: relativePath)
 						}
 					}
 				}
