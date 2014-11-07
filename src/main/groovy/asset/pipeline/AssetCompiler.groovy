@@ -61,7 +61,7 @@ class AssetCompiler {
 	void compile() {
 		def assetDir           = initializeWorkspace()
 		// def closureCompilerProcessor  = new UglifyJsProcessor()
-		def closureCompilerProcessor = new ClosureCompilerProcessor()
+		def closureCompilerProcessor = new ClosureCompilerProcessor(this)
 		def minifyCssProcessor = new CssMinifyPostProcessor()
 
 		filesToProcess = this.getAllAssets()

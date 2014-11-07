@@ -24,16 +24,18 @@ package asset.pipeline.gradle
  */
 class AssetPipelineExtension {
 	boolean minifyJs = true
+	boolean enableSourceMaps = true
 	boolean minifyCss = true
 	String  compileDir = 'build/assets'
 	String assetsPath = 'assets'
 	Map minifyOptions
+
 	List excludesGzip
 	List excludes = []
 	List includes = []
 
 
 	Map toMap() {
-		return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir:compileDir, excludesGzip: excludesGzip]
+		return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir:compileDir, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
 	}
 }
