@@ -53,6 +53,16 @@ publishing {
             artifact javadocJar
         }
     }
+
+    repositories {
+        maven {
+            credentials {
+                username project.properties.get('artifactoryPublishUsername')
+                password project.properties.get('artifactoryPublishPassword')
+            }
+            url "https://repo.grails.org/grails/libs-snapshots-local/"
+        }
+    }
 }
 
 bintray {
