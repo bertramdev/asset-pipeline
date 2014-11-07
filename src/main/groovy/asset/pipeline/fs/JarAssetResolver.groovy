@@ -66,7 +66,10 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
 
     protected Closure<InputStream> createInputStreamClosure(ZipEntry file) {
-        {-> baseJar.getInputStream(file) }
+        if(file) {
+			return {-> baseJar.getInputStream(file) }
+		}
+		return null
     }
 
     @CompileStatic
