@@ -71,10 +71,10 @@ class AssetSpecLoader {
         def resources = classLoader.getResources(PROCESSORS_RESOURCE_LOCATION)
         resources.each { URL res ->
             Properties prop = new Properties()
-            prop.load(res.inputStream)
-            res.keySet().each { processorName ->
+            prop.load(res.openStream())
+            prop.keySet().each { processorName ->
                 def processorClass = classLoader.loadClass(processorName)
-                def specs = res.getProperty(processorName).split(',')
+                def specs = prop.getProperty(processorName).split(',')
                 specs.each { specName ->
                     try {
                         def specCls = classLoader.loadClass(specName)
