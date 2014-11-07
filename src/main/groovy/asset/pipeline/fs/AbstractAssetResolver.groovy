@@ -59,7 +59,7 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
                     def file = getRelativeFile(prefixPath, tmpFileName)
                     def inputStreamClosure = createInputStreamClosure(file)
 
-                    if (inputStreamClosure) {
+                    if (inputStreamClosure && file != null) {
                         return fileSpec.newInstance(inputStreamSource: inputStreamClosure, baseFile: baseFile, path: relativePathToResolver(file, prefixPath), sourceResolver: this)
                     }
                 }
@@ -73,7 +73,7 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
             }
             def file = getRelativeFile(prefixPath, fileName)
             def inputStreamClosure = createInputStreamClosure(file)
-            if (inputStreamClosure) {
+            if (inputStreamClosure && file != null) {
                 return new GenericAssetFile(inputStreamSource: inputStreamClosure, path: relativePathToResolver(file, prefixPath))
             }
         }
