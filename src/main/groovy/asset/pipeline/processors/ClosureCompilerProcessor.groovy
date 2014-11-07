@@ -16,6 +16,7 @@
 
 package asset.pipeline.processors
 import com.google.javascript.jscomp.*
+import com.google.javascript.jscomp.CompilerOptions.LanguageMode
 import java.util.logging.Level
 
 class ClosureCompilerProcessor {
@@ -33,6 +34,7 @@ class ClosureCompilerProcessor {
 	def process(fileName, inputText, myoptions = [:]) {
 		def compiler = new Compiler()
 		CompilerOptions options = new CompilerOptions();
+		options.languageIn = LanguageMode.ECMASCRIPT5
 		CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
 
