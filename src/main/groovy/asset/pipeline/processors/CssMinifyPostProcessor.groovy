@@ -18,7 +18,7 @@ package asset.pipeline.processors
 import java.util.regex.Pattern
 class CssMinifyPostProcessor {
     static contentTypes = ['text/css']
-    
+
     CssMinifyPostProcessor() {
 
     }
@@ -31,8 +31,9 @@ class CssMinifyPostProcessor {
 
         def processedCss = inputText
         if(removeComments) {
-            Pattern p = Pattern.compile("/\\*+(.*?)\\*+/", Pattern.DOTALL);
-        	processedCss = processedCss.replaceAll(p,"")	
+            Pattern p = Pattern.compile("(/\\*\\*/)|(/\\*(.+?)?\\*/)", Pattern.DOTALL);
+
+        	processedCss = processedCss.replaceAll(p,"")
         }
         if(stripWhitespace) {
         	processedCss = processedCss.replaceAll("\r\n","\n")
@@ -40,7 +41,7 @@ class CssMinifyPostProcessor {
         	cssLines = cssLines.collect { it.trim() }
         	processedCss = cssLines.join("")
         }
-        
+
         return processedCss
 
     }
