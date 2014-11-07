@@ -17,7 +17,6 @@ package asset.pipeline
 
 import groovy.util.logging.Commons
 import asset.pipeline.processors.ClosureCompilerProcessor
-import asset.pipeline.processors.UglifyJsProcessor
 import asset.pipeline.processors.CssMinifyPostProcessor
 
 
@@ -60,7 +59,6 @@ class AssetCompiler {
 
 	void compile() {
 		def assetDir           = initializeWorkspace()
-		// def closureCompilerProcessor  = new UglifyJsProcessor()
 		def closureCompilerProcessor = new ClosureCompilerProcessor(this)
 		def minifyCssProcessor = new CssMinifyPostProcessor()
 

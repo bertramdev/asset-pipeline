@@ -52,10 +52,10 @@ class DirectiveProcessor {
         this.baseFile = file
         this.files = []
         def tree = getDependencyTree(file)
-        def buffer = ""
+        def buffer = new StringBuilder(64000)
 
         buffer = loadContentsForTree(tree,buffer)
-        return buffer
+        return buffer.toString()
     }
 
     /**
@@ -104,18 +104,21 @@ class DirectiveProcessor {
     * Scans through a generated tree and builds a files contents recursively
     */
     protected loadContentsForTree(treeSet,buffer) {
+
         def selfLoaded = false
         for(childTree in treeSet.tree) {
             if(childTree == "self") {
-                buffer += fileContents(treeSet.file) + "\n"
+                buffer.append(fileContents(treeSet.file)).append('\n')
+                // buffer += fileContents(treeSet.file) + "\n"
                 selfLoaded = true
             } else {
-                buffer = loadContentsForTree(childTree,buffer)
+                loadContentsForTree(childTree,buffer)
             }
         }
 
         if(!selfLoaded) {
-            buffer += fileContents(treeSet.file) + "\n"
+            buffer.append(fileContents(treeSet.file)).append('\n')
+            // buffer += fileContents(treeSet.file) + "\n"
         }
         return buffer
     }
