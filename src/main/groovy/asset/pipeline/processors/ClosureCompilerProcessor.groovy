@@ -20,7 +20,9 @@ import asset.pipeline.AssetCompiler
 import com.google.javascript.jscomp.*
 import com.google.javascript.jscomp.CompilerOptions.LanguageMode
 import java.util.logging.Level
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class ClosureCompilerProcessor {
 	static contentTypes = ['application/javascript']
 
@@ -42,18 +44,18 @@ class ClosureCompilerProcessor {
 		}
 
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
-
-		def sourceFile = new SourceFile(fileName + ".unminified.js")
-		sourceFile.setCode(inputText)
+		SourceFile sourceFile = SourceFile.fromCode(fileName + ".unminified.js", inputText)
+		// def sourceFile = new SourceFile.Preloaded(fileName + ".unminified.js",fileName, inputText)
+		// sourceFile.setCode(inputText)
 		def result = compiler.compile([] as List<SourceFile>,[sourceFile] as List<SourceFile>,options)
 		def output = compiler.toSource()
 		if(compiler.sourceMap) {
-			File mapFile = new File(assetCompiler.options.compileDir,fileName + ".js.map")
+			File mapFile = new File(assetCompiler.options.compileDir as String,fileName + ".js.map")
 
 			if(!mapFile.exists()) {
 				mapFile.parentFile.mkdirs()
 			}
-			File unminifiedFile = new File(assetCompiler.options.compileDir,fileName + ".unminified.js")
+			File unminifiedFile = new File(assetCompiler.options.compileDir as String,fileName + ".unminified.js")
 			unminifiedFile.text = inputText
 			mapFile.createNewFile()
 			FileWriter outputWriter = new FileWriter(mapFile)
@@ -71,15 +73,15 @@ class ClosureCompilerProcessor {
 			optimizationLevel: 'SIMPLE' //WHITESPACE , ADVANCED
 		]
 		minifyOptions = defaultOptions + minifyOptions
-		def languageIn = evaluateLanguageMode(minifyOptions.languageMode)
+		LanguageMode languageIn = evaluateLanguageMode(minifyOptions.get('languageMode') as String)
 		if(minifyOptions.targetLanguage) {
-			def languageOut = evaluateLanguageMode(minifyOptions.targetLanguage)
+			LanguageMode languageOut = evaluateLanguageMode(minifyOptions.get('targetLanguage') as String)
 			compilerOptions.setLanguageIn(languageIn)
 			compilerOptions.setLanguageOut(languageOut)
 		} else {
 			compilerOptions.setLanguage(languageIn)
 		}
-		setCompilationLevelOptions(compilerOptions, minifyOptions.optimizationLevel)
+		setCompilationLevelOptions(compilerOptions, minifyOptions.get('optimizationLevel') as String)
 	}
 
 
@@ -106,7 +108,7 @@ class ClosureCompilerProcessor {
 				CompilationLevel.WHITESPACE_ONLY.setOptionsForCompilationLevel(options);
 				break;
 			case 'ADVANCED':
-				CompilationLevel.ADVANCED.setOptionsForCompilationLevel(options);
+				// CompilationLevel.ADVANCED.setOptionsForCompilationLevel(options);
 				break;
 			case 'SIMPLE':
 			default:
