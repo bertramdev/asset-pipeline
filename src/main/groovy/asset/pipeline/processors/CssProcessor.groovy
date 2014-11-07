@@ -18,7 +18,7 @@ package asset.pipeline.processors
 import asset.pipeline.*
 import java.net.URL
 import java.net.URI
-
+import groovy.transform.CompileStatic
 /**
 * This Processor iterates over relative image paths in a CSS file and
 * recalculates their path relative to the base file. In precompiler mode
@@ -32,9 +32,9 @@ class CssProcessor extends AbstractProcessor {
     }
 
     String process(String inputText, AssetFile assetFile) {
-        def cachedPaths = [:]
+        Map cachedPaths = [:]
         return inputText.replaceAll(/url\([\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?\)/) { fullMatch, assetPath ->
-            def replacementPath = assetPath.trim()
+            String replacementPath = assetPath.trim()
             if(cachedPaths[assetPath]) {
                 replacementPath = cachedPaths[assetPath]
             } else if(isRelativePath(assetPath)) {
