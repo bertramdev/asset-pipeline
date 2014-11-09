@@ -54,7 +54,7 @@ abstract class AbstractAssetFile implements AssetFile {
 		if(pathArgs.size() == 1) {
 			return null
 		}
-		return pathArgs[0..(pathArgs.size()-2)].join("/")
+		return (Arrays.copyOfRange(pathArgs,0,pathArgs.size() - 1) as String[]).join("/")
 	}
 
 	public String getName() {

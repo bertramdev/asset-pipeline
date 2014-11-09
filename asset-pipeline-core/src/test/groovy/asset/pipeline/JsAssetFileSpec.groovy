@@ -23,11 +23,13 @@ import spock.lang.Specification
  */
 class JsAssetFileSpec extends Specification {
     void "should match directive patterns"() {
-     	when:
+     	given:
      		def jsFile = new JsAssetFile()
- 		then:
-             def matches = (line =~ jsFile.directivePattern)?.collect{it[1]} ?: []
- 			directive ==  matches.size() > 0 ? matches[0].trim() : null
+         when:
+            def matches = (line =~ jsFile.directivePattern)?.collect{ it[1].trim()} ?: []
+            def match = matches.size > 0 ? matches[0] : null
+        then:
+ 			directive ==  match
  		where:
 	 		line 				 | directive
 	 		'//=require_self'	 | 'require_self'

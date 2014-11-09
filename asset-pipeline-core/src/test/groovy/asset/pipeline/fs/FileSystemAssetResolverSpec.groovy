@@ -74,6 +74,7 @@ class FileSystemAssetResolverSpec extends Specification {
 			def resolver = new FileSystemAssetResolver('application','assets')
 		when:
 			def relativeFile = resolver.getAsset('asset-pipeline/test/libs/file_a','application/javascript')
+			println "Fetched Relative File ${relativeFile?.name}"
 			def files = resolver.getAssets('.','application/javascript', null, true, relativeFile)
 		then:
 			files?.size() == 4

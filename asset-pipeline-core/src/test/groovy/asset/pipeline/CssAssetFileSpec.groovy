@@ -24,11 +24,13 @@ import spock.lang.Specification
 class CssAssetFileSpec extends Specification {
 
     void "should match directive patterns"() {
-      when:
-        def cssFile = new CssAssetFile()
+      given:
+          def cssFile = new CssAssetFile()
+     when:
+        def matches = (line =~ cssFile.directivePattern)?.collect{ it[1].trim()} ?: []
+        def match = matches.size > 0 ? matches[0] : null
     then:
-      def matches = (line =~ cssFile.directivePattern) ?: []
-      directive ==  matches.size() > 0 ? matches[0][1].trim() : null
+      directive == match
     where:
       line                 | directive
       '*=require_self'    | 'require_self'

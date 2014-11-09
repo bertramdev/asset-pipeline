@@ -20,16 +20,17 @@ buildscript {
 
 repositories {
 	jcenter()
+	mavenLocal()
 	mavenCentral()
 }
 
-configurations.all {
-	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-		if (details.requested.name == 'groovy-all') {
-			details.useTarget group: details.requested.group, name: 'groovy', version:'2.3.0'
-		}
-	}
-}
+// configurations.all {
+// 	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+// 		if (details.requested.name == 'groovy-all') {
+// 			details.useTarget group: details.requested.group, name: 'groovy', version:'2.3.0'
+// 		}
+// 	}
+// }
 
 
 dependencies {

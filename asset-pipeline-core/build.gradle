@@ -23,21 +23,22 @@ repositories {
     mavenCentral()
 }
 
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        if (details.requested.name == 'groovy-all') {
-            details.useTarget group: details.requested.group, name: 'groovy', version:'2.0.7'
-        }
-    }
-}
+// configurations.all {
+//     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//         if (details.requested.name == 'groovy-all') {
+//             details.useTarget group: details.requested.group, name: 'groovy', version:'2.2.1'
+//         }
+//     }
+// }
 
 
 dependencies {
 
-    compile 'org.codehaus.groovy:groovy:2.0.7'
+    compile 'org.codehaus.groovy:groovy-all:2.0.7'
     compile 'org.mozilla:rhino:1.7R4'
     compile 'com.google.javascript:closure-compiler:v20141023'
-
+    compile("commons-logging:commons-logging:1.1.1")
+    // compile 'log4j:log4j:1.2.16'
     testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }
 

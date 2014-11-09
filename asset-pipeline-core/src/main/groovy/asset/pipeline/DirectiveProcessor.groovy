@@ -130,7 +130,7 @@ class DirectiveProcessor {
         this.files[file.path] = file
         Map tree = [file:file,tree:[]]
         if(!(file instanceof GenericAssetFile)) {
-            this.findDirectives(file,tree)
+            this.findDirectives(file as AssetFile,tree)
         }
 
         return tree

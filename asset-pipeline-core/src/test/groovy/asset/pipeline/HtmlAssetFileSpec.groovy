@@ -24,11 +24,13 @@ import spock.lang.Specification
 class HtmlAssetFileSpec extends Specification {
 
     void "should not ever return a directive pattern"() {
-     	when:
+     	given:
      		def htmlFile = new HtmlAssetFile()
- 		then:
- 			def matches = (line =~ htmlFile.directivePattern) ?: []
-            directive ==  matches.size() > 0 ? matches[0][1] : null
+         when:
+            def matches = (line =~ htmlFile.directivePattern)?.collect{ it[1].trim()} ?: []
+            def match = matches.size > 0 ? matches[0] : null
+        then:
+            directive == match
  		where:
 	 		line 				 | directive
 	 		'//=require_self'	 | null

@@ -101,14 +101,14 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
 		if(!basePath.startsWith('/') && relativeFile != null) {
 			List<String> pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).toList() : new ArrayList<String>() //(path should be relative not canonical)
-			def basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
-			def parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] : []
-			parentPathArgs.addAll(basePathArgs.toList())
+			String[] basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
+			List<String> parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] as List<String> : [] as List<String>
+			parentPathArgs.addAll(basePathArgs.toList() as List<String>)
 			basePath = (parentPathArgs).join(File.separator)
 		}
 
 		for(directoryPath in scanDirectories) {
-			def file = new File(directoryPath,basePath)
+			File file = new File(directoryPath,basePath)
 			if(file.exists() && file.isDirectory()) {
 				recursiveTreeAppend(file, fileList, contentType,baseFile,recursive, directoryPath)
 			}
@@ -118,13 +118,14 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
     @CompileStatic
 	protected void recursiveTreeAppend(File directory, List<AssetFile> tree, String contentType=null, AssetFile baseFile, boolean recursive=true, String sourceDirectory) {
-		def files = directory.listFiles()
-		files = files?.sort { File a, File b -> a.name.compareTo b.name }
-		for(file in files) {
+		File[] files = directory.listFiles()
+		files = files?.sort { File a, File b -> a.name.compareTo b.name } as File[]
+		for(File file in files) {
+			String[] mimeType = AssetHelper.assetMimeTypeForURI(file.getAbsolutePath())
 			if(file.isDirectory() && recursive) {
 				recursiveTreeAppend(file,tree, contentType, baseFile, recursive, sourceDirectory)
 			}
-			else if(contentType in AssetHelper.assetMimeTypeForURI(file.getAbsolutePath())) {
+			else if(mimeType && contentType in mimeType) {
 				tree << assetForFile(file,contentType, baseFile, sourceDirectory)
 			}
 		}
@@ -159,8 +160,8 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
     @CompileStatic
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
 		List<AssetFile> fileList = []
-		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
-        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
+		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ String it -> convertGlobToRegEx(it) }  as List<Pattern> : new ArrayList<Pattern>()
+        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ String it -> convertGlobToRegEx(it) } as List<Pattern> : new ArrayList<Pattern>()
 
 		for(String scanDirectory in scanDirectories) {
 			def scanPath = new File(scanDirectory)
@@ -180,9 +181,9 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 				} else {
 					def assetFileClass = AssetHelper.assetForFileName(relativePath)
 					if(assetFileClass) {
-						fileList << assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: null, path: relativePath, sourceResolver: this)
+						fileList.add(assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: null, path: relativePath, sourceResolver: this) as AssetFile)
 					} else {
-						fileList << new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePath)
+						fileList.add(new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePath))
 					}
 				}
 
