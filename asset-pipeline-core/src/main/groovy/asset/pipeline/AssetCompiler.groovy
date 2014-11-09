@@ -162,7 +162,6 @@ class AssetCompiler {
 							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 							digestedFile.createNewFile()
 							digestedFile.bytes = outputBytes
-							// AssetHelper.copyFile(outputFile, digestedFile)
 
 							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 
@@ -258,7 +257,6 @@ class AssetCompiler {
 		byte[] zipBytes = targetStream.toByteArray()
 		zipFile.bytes = zipBytes
 		zipFileDigest.bytes = zipBytes
-		// AssetHelper.copyFile(zipFile, zipFileDigest)
 		targetStream.close()
 	}
 

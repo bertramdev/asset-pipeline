@@ -1,0 +1,101 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'com.bertramlabs.plugins'
+version = '2.0.2-SNAPSHOT'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+	}
+}
+
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
+configurations.all {
+	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+		if (details.requested.name == 'groovy-all') {
+			details.useTarget group: details.requested.group, name: 'groovy', version:'2.3.0'
+		}
+	}
+}
+
+
+dependencies {
+	compile gradleApi()
+	compile localGroovy()
+
+	compile "com.bertramlabs.plugins:asset-pipeline-core:${version}"
+
+	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			artifactId 'asset-pipeline-gradle'
+
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
+
+	repositories {
+		maven {
+			credentials {
+				username project.properties.get('artifactoryPublishUsername')
+				password project.properties.get('artifactoryPublishPassword')
+			}
+			url "https://repo.grails.org/grails/libs-snapshots-local/"
+		}
+	}
+}
+
+bintray {
+	user = bintrayUser
+	key = bintrayKey
+	publications = ['maven']
+	pkg {
+		repo = 'asset-pipeline'
+		userOrg = 'bertramlabs'
+		name = 'asset-pipeline-gradle'
+		licenses = ['Apache-2.0']
+	}
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+main = 'groovy.ui.Console'
+classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+	testLogging {
+		exceptionFormat = 'full'
+		showStandardStreams = true
+	}
+}
+
+
+bintrayUpload.dependsOn build, sourcesJar, javadocJar

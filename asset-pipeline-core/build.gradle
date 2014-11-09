@@ -26,18 +26,16 @@ repositories {
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         if (details.requested.name == 'groovy-all') {
-            details.useTarget group: details.requested.group, name: 'groovy', version:'2.2.0'
+            details.useTarget group: details.requested.group, name: 'groovy', version:'2.0.7'
         }
     }
 }
 
 
 dependencies {
-    compile gradleApi()
-    // compile localGroovy()
 
+    compile 'org.codehaus.groovy:groovy:2.0.7'
     compile 'org.mozilla:rhino:1.7R4'
-    compile 'log4j:log4j:1.2.17'
     compile 'com.google.javascript:closure-compiler:v20141023'
 
     testCompile("org.spockframework:spock-core:0.7-groovy-2.0")

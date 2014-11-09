@@ -170,32 +170,6 @@ class AssetHelper {
     }
 
     /**
-    * Copies a files contents from one file to another and flushes.
-    * Note: We use FileChannel instead of FileUtils.copyFile to ensure a synchronous forced save.
-    * This helps ensures files exist on the disk before a war file is created.
-    * @param sourcceFile the originating file we want to copy
-    * @param destFile the destination file object we want to save to
-    */
-    static void copyFile(File sourceFile, File destFile) throws IOException {
-        if(!destFile.exists()) {
-            destFile.createNewFile()
-        }
-
-         FileChannel source = null
-         FileChannel destination = null
-        try {
-            source = new FileInputStream(sourceFile).getChannel()
-            destination = new FileOutputStream(destFile).getChannel()
-            destination.transferFrom(source, 0, source.size())
-            destination.force(true)
-        }
-        finally {
-            source?.close()
-            destination?.close()
-        }
-    }
-
-    /**
      *
      * @param uri the string of the asset uri.
      * @param possibleFileSpecs is a list of possible file specs that the file for the uri can belong to.

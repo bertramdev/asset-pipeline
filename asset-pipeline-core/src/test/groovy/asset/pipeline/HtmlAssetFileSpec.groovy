@@ -27,7 +27,8 @@ class HtmlAssetFileSpec extends Specification {
      	when:
      		def htmlFile = new HtmlAssetFile()
  		then:
- 			directive == htmlFile.directiveForLine(line)?.trim()
+ 			def matches = (line =~ htmlFile.directivePattern) ?: []
+            directive ==  matches.size() > 0 ? matches[0][1] : null
  		where:
 	 		line 				 | directive
 	 		'//=require_self'	 | null

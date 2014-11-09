@@ -21,21 +21,23 @@ import spock.lang.Specification
 /**
  * @author David Estes
  */
-class JsAssetFileSpec extends Specification {
-    void "should match directive patterns"() {
-     	when:
-     		def jsFile = new JsAssetFile()
- 		then:
- 			directive == jsFile.directiveForLine(line)?.trim()
- 		where:
-	 		line 				 | directive
-	 		'//=require_self'	 | 'require_self'
-	 		'//= require_self'   | 'require_self'
-	 		'//= require jquery' | 'require jquery'
-	 		'Blank Section'      | null
-	 		'//= require_tree .' | 'require_tree .'
-    }
+class CssAssetFileSpec extends Specification {
 
+    void "should match directive patterns"() {
+      when:
+        def cssFile = new CssAssetFile()
+    then:
+      def matches = (line =~ cssFile.directivePattern) ?: []
+      directive ==  matches.size() > 0 ? matches[0][1].trim() : null
+    where:
+      line                 | directive
+      '*=require_self'    | 'require_self'
+      '*= require_self'   | 'require_self'
+      '*= require jquery' | 'require jquery'
+      'Blank Section'      | null
+      '*= require_tree .' | 'require_tree .'
+
+    }
 
 
 }

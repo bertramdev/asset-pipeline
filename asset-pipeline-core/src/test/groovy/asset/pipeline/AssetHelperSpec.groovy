@@ -66,22 +66,6 @@ class AssetHelperSpec extends Specification {
         	assetFile?.name == 'test.css'
     }
 
-    void "should copy file"() {
-    	given:
-	        def testFileName = 'assets/stylesheets/asset-pipeline/test/test-copy.css'
-	        def destFileName = 'assets/stylesheets/asset-pipeline/test/test-copy2.css'
-	        def testFile = new File(testFileName)
-	        testFile.text = "Testing123"
-	        def destFile = new File(destFileName)
-	    when:
-	    	AssetHelper.copyFile(testFile, destFile)
-	    then:
-	    	destFile.text == testFile.text
-	   	cleanup:
-		   	testFile.delete()
-	   		destFile.delete()
-    }
-
     void "should provide file name without the extension"() {
     	given:
 	    	def testName = "test.min.js"
