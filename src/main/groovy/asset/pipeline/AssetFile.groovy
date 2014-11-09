@@ -17,6 +17,7 @@
 package asset.pipeline
 
 import asset.pipeline.fs.AssetResolver
+import java.util.regex.Pattern
 
 /**
 * Provides an interface for referencing files resolved by the Asset-Pipeline AssetResolvers
@@ -28,6 +29,7 @@ interface AssetFile {
     static List<String> extensions
     static String compiledExtension
     static List<Class<Processor>> processors
+    static Pattern directivePattern
 
     /**
      * @return The base file
@@ -76,12 +78,5 @@ interface AssetFile {
      * @return The processes contents
      */
     String processedStream(AssetCompiler precompiler)
-
-    /**
-     * Return a directive name for the given line or null if there isn't one
-     * @param line The line
-     * @return The asset directive
-     */
-    String directiveForLine(String line)
 
 }

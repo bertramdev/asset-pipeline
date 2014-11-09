@@ -48,6 +48,4 @@ class GenericAssetFile extends AbstractAssetFile {
 		path.split("/")[-1]
 	}
 
-    @Override
-    String directiveForLine(String line) { null }
 }

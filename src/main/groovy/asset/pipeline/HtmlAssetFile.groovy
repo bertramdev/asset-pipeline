@@ -15,14 +15,13 @@
  */
 
 package asset.pipeline
+import java.util.regex.Pattern
+
 
 class HtmlAssetFile extends  AbstractAssetFile {
     static final List<String> contentType = ['text/html']
     static List<String> extensions = ['html']
     static String compiledExtension = 'html'
     static processors = []
-
-    String directiveForLine(String line) {
-        return null
-    }
+    static Pattern directivePattern = null
 }

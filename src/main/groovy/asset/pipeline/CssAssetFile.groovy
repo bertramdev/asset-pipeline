@@ -17,20 +17,19 @@
 package asset.pipeline
 
 import asset.pipeline.processors.CssProcessor
-
+import java.util.regex.Pattern
+import groovy.transform.CompileStatic
 /**
  * An {@link AssetFile} implementation for CSS
  *
  * @author David Estes
  * @author Graeme Rocher
  */
+@CompileStatic
 class CssAssetFile extends AbstractAssetFile {
 	static final List<String> contentType = ['text/css']
 	static List<String> extensions = ['css']
 	static String compiledExtension = 'css'
 	static List<Class<Processor>> processors = [CssProcessor]
-
-	String directiveForLine(String line) {
-		line.find(/\*=(.*)/) { fullMatch, directive -> return directive }
-	}
+	static Pattern directivePattern = ~/(?m)\*=(.*)/
 }

@@ -17,7 +17,7 @@
 package asset.pipeline
 
 import asset.pipeline.fs.AssetResolver
-
+import groovy.transform.CompileStatic
 /**
 * This is the base Asset File specification class. An AssetFile object should extend this abstract base class.
 * The AssetFile specification provides information on what processors need to be run on a file.
@@ -26,6 +26,7 @@ import asset.pipeline.fs.AssetResolver
 *
 * @author David Estes
 */
+@CompileStatic
 abstract class AbstractAssetFile implements AssetFile {
 	String path
 	AssetFile baseFile
@@ -33,17 +34,23 @@ abstract class AbstractAssetFile implements AssetFile {
 	String encoding
 
 	Closure inputStreamSource = {} //Implemented by AssetResolver
+	byte[] byteCache
 
+
+	// @CompileStatic
 	InputStream getInputStream() {
-		return inputStreamSource()
+		if(byteCache == null) {
+			byteCache = (inputStreamSource() as InputStream).bytes
+		}
+		return new ByteArrayInputStream(byteCache)
 	}
 
     String getCanonicalPath() {
-        path
+        return path
     }
 
 	public String getParentPath() {
-		def pathArgs = path.split("/")
+		String[] pathArgs = path.split("/")
 		if(pathArgs.size() == 1) {
 			return null
 		}
@@ -57,23 +64,24 @@ abstract class AbstractAssetFile implements AssetFile {
 
 	String processedStream(AssetCompiler precompiler) {
 		String fileText
-		def skipCache = precompiler ?: (!processors || processors.size() == 0)
-		def cacheKey
+		Boolean skipCache = precompiler ?: (!processors || processors.size() == 0)
+		String cacheKey
 		if(baseFile?.encoding || encoding) {
 			fileText = inputStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
 		} else {
 			fileText = inputStream?.text
 		}
 
-		String md5 = AssetHelper.getByteDigest(fileText.bytes)
+		String md5 = null
 		if(!skipCache) {
-			def cache = CacheManager.findCache(path, md5, baseFile?.path)
+			md5 = AssetHelper.getByteDigest(fileText.bytes)
+			String cache = CacheManager.findCache(path, md5, baseFile?.path)
 			if(cache) {
 				return cache
 			}
 		}
-	    for(processor in processors) {
-			def processInstance = processor.newInstance(precompiler)
+	    for(Class<Processor> processor in processors) {
+			Processor processInstance = processor.newInstance(precompiler) as Processor
 			fileText = processInstance.process(fileText, this)
 		}
 

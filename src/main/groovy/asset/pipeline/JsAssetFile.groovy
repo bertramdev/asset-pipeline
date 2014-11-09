@@ -16,19 +16,19 @@
 
 package asset.pipeline
 
+import java.util.regex.Pattern
+import groovy.transform.CompileStatic
 /**
  * An {@link AssetFile} implementation for Javascript
  *
  * @author David Estes
  * @author Graeme Rocher
  */
+@CompileStatic
 class JsAssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
     static List<String> extensions = ['js']
     static String compiledExtension = 'js'
     static processors = []
-
-    String directiveForLine(String line) {
-        line.find(/\/\/=(.*)/) { fullMatch, directive -> return directive }
-    }
+    static Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 }

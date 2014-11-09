@@ -1,24 +1,24 @@
 /*
- * Copyright 2014 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* Copyright 2014 the original author or authors.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*    http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package asset.pipeline
 
 import groovy.util.logging.Commons
 
 import java.nio.charset.Charset
-
+import groovy.transform.CompileStatic
 
 @Commons
 class DirectiveProcessor {
@@ -31,7 +31,7 @@ class DirectiveProcessor {
 
     private String contentType
     private AssetCompiler precompiler
-    private def files = []
+    private Map files = [:]
     private def baseFile
 
     DirectiveProcessor(String contentType, AssetCompiler precompiler = null) {
@@ -45,16 +45,18 @@ class DirectiveProcessor {
     * setup Processors. If a GenericAssetFile is passed in the raw byte array is returned.
     * @param file an instance of an AbstractAssetFile (i.e. JsAssetFile or CssAssetFile)
     */
+    @CompileStatic
     def compile(AssetFile file) {
+        Long startTime =  new Date().time
         if(file instanceof GenericAssetFile) {
             return file.getBytes()
         }
         this.baseFile = file
-        this.files = []
-        def tree = getDependencyTree(file)
-        def buffer = new StringBuilder(64000)
+        this.files = [:]
+        Map tree = getDependencyTree(file)
+        StringBuilder buffer = new StringBuilder(64000)
 
-        buffer = loadContentsForTree(tree,buffer)
+        loadContentsForTree(tree,buffer)
         return buffer.toString()
     }
 
@@ -103,13 +105,12 @@ class DirectiveProcessor {
     /**
     * Scans through a generated tree and builds a files contents recursively
     */
-    protected loadContentsForTree(treeSet,buffer) {
+    protected void loadContentsForTree(Map treeSet,StringBuilder buffer) {
 
-        def selfLoaded = false
+        Boolean selfLoaded = false
         for(childTree in treeSet.tree) {
             if(childTree == "self") {
                 buffer.append(fileContents(treeSet.file)).append('\n')
-                // buffer += fileContents(treeSet.file) + "\n"
                 selfLoaded = true
             } else {
                 loadContentsForTree(childTree,buffer)
@@ -118,17 +119,16 @@ class DirectiveProcessor {
 
         if(!selfLoaded) {
             buffer.append(fileContents(treeSet.file)).append('\n')
-            // buffer += fileContents(treeSet.file) + "\n"
         }
-        return buffer
     }
 
     /**
     * Builds a dependency tree for a particular file
     */
-    protected getDependencyTree(file) {
-        this.files << file
-        def tree = [file:file,tree:[]]
+    @CompileStatic
+    protected Map getDependencyTree(AssetFile file) {
+        this.files[file.path] = file
+        Map tree = [file:file,tree:[]]
         if(!(file instanceof GenericAssetFile)) {
             this.findDirectives(file,tree)
         }
@@ -141,31 +141,29 @@ class DirectiveProcessor {
     * @param fileSpec The assetFile we wish to scan
     * @param tree The tree object we use to build the graph (should be a List)
     */
-    protected findDirectives(fileSpec, tree) {
-        def lines = fileSpec.inputStream.readLines()
-        def startTime = new Date().time
-        lines.find { line ->
-            def directive = fileSpec.directiveForLine(line)
-            if(directive) {
-            	directive = directive.trim()
-                def unprocessedArgs = directive.split(/\s+/)
-
-                def processor = DIRECTIVES[unprocessedArgs[0].toLowerCase()]
-
-                if(processor) {
-                    def directiveArguments = unprocessedArgs
-                    if(directive.indexOf('$') >= 0) {
-                        directiveArguments = new groovy.text.GStringTemplateEngine(this.class.classLoader).createTemplate(directive).make().toString().split(/\s+/)
-                    }
-                    directiveArguments[0] = directiveArguments[0].toLowerCase()
-                    this."${processor}"(directiveArguments, fileSpec,tree)
+    @CompileStatic
+    protected findDirectives(AssetFile fileSpec, Map tree) {
+        String line = fileSpec.inputStream.text
+        List directives = fileSpec.directivePattern ? (line =~ fileSpec.directivePattern)?.collect { List it -> it[1] as String } : []
+        for(String directive in directives) {
+            directive = directive.trim()
+            String[] unprocessedArgs = directive.split(/\s+/)
+            String processor = DIRECTIVES[unprocessedArgs[0].toLowerCase()]
+            if(processor) {
+                String[] directiveArguments = unprocessedArgs
+                if(directive.indexOf('$') >= 0) {
+                    directiveArguments = new groovy.text.GStringTemplateEngine(this.class.classLoader).createTemplate(directive).make().toString().split(/\s+/)
                 }
+                directiveArguments[0] = directiveArguments[0].toLowerCase()
+                callDirective(processor,directiveArguments, fileSpec, tree)
             }
-            return false
         }
     }
 
 
+    public void callDirective(String name, String[] directiveArguments, AssetFile fileSpec, Map tree) {
+        this."${name}"(directiveArguments, fileSpec,tree)
+    }
     /**
     * Used to control file order for when content within your manifest exists
     */
@@ -181,7 +179,7 @@ class DirectiveProcessor {
             return;
         }
         if(fileSpec.baseFile) {
-           fileSpec.baseFile.encoding = command[1]
+            fileSpec.baseFile.encoding = command[1]
         }
         fileSpec.encoding = command[1]
     }
@@ -197,7 +195,7 @@ class DirectiveProcessor {
         def files = resolver.getAssets(directivePath,contentType,null,true ,fileSpec,baseFile)
 
         files.each { file ->
-            if(!isFileInTree(file,tree)) {
+            if(!isFileInTree(file)) {
                 tree.tree << getDependencyTree(file)
             }
         }
@@ -213,7 +211,7 @@ class DirectiveProcessor {
         for(resolver in AssetPipelineConfigHolder.resolvers) {
             def files = resolver.getAssets(directivePath,contentType,null,true ,fileSpec,baseFile)
             files.each { file ->
-                if(!isFileInTree(file,tree)) {
+                if(!isFileInTree(file)) {
                     tree.tree << getDependencyTree(file)
                 }
             }
@@ -244,7 +242,7 @@ class DirectiveProcessor {
             }
 
             if( newFile ) {
-                if( !isFileInTree( newFile, tree ) ) {
+                if( !isFileInTree( newFile ) ) {
                     tree.tree << getDependencyTree( newFile )
                 }
             }
@@ -258,10 +256,9 @@ class DirectiveProcessor {
         }
     }
 
-    protected boolean isFileInTree(file,currentTree) {
-        def result = files.find { it ->
-            it.path == file.path
-        }
+    @CompileStatic
+    protected boolean isFileInTree(AssetFile file) {
+        AssetFile result = files[file.path] as AssetFile
         if(result) {
             return true
         } else {
@@ -273,6 +270,7 @@ class DirectiveProcessor {
     * Used for fetching the contents of a file be it a Generic unprocessable entity
     * or an AssetFile with a processable stream
     */
+    @CompileStatic
     String fileContents(AssetFile file) {
         return file.processedStream(this.precompiler)
     }

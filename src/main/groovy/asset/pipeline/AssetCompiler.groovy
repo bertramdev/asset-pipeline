@@ -69,6 +69,7 @@ class AssetCompiler {
 		for(int index = 0 ; index < filesToProcess.size() ; index++) {
 			def assetFile = filesToProcess[index]
 			def fileName = assetFile.path
+			def startTime = new Date().time
 			eventListener?.triggerEvent("StatusUpdate", "Processing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 
 			def digestName
@@ -142,32 +143,33 @@ class AssetCompiler {
 					parentTree.mkdirs()
 					outputFile.createNewFile()
 
+					byte[] outputBytes
 					if(fileData) {
-						def outputStream = outputFile.newOutputStream()
-						outputStream.write(fileData, 0 , fileData.length)
-						outputStream.flush()
-						outputStream.close()
+						outputBytes = fileData
+
 					} else {
 						if(assetFile instanceof GenericAssetFile) {
-							outputFile.bytes = assetFile.bytes
+							outputBytes = assetFile.bytes
 						} else {
-							outputFile.bytes = assetFile.inputStream.bytes
+							outputBytes = assetFile.inputStream.bytes
 							digestName = AssetHelper.getByteDigest(assetFile.inputStream.bytes)
 						}
 					}
+					outputFile.bytes = outputBytes
 
 					if(extension) {
 						try {
 							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 							digestedFile.createNewFile()
-							AssetHelper.copyFile(outputFile, digestedFile)
+							digestedFile.bytes = outputBytes
+							// AssetHelper.copyFile(outputFile, digestedFile)
 
 							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 
 							// Zip it Good!
 							if(!options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
 								eventListener?.triggerEvent("StatusUpdate","Compressing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
-								createCompressedFiles(outputFile, digestedFile)
+								createCompressedFiles(outputFile,outputBytes, digestedFile)
 							}
 
 
@@ -178,7 +180,7 @@ class AssetCompiler {
 				}
 
 			}
-
+			// eventListener?.triggerEvent("StatusUpdate","...Finished Processing File ${new Date().time - startTime}ms")
 		}
 
 		saveManifest()
@@ -242,19 +244,21 @@ class AssetCompiler {
 		manifestProperties.store(manifestFile.newWriter(),"")
 	}
 
-	private createCompressedFiles(outputFile, digestedFile) {
-		def targetStream  = new java.io.ByteArrayOutputStream()
-		def zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
-		def zipFile       = new File("${outputFile.getAbsolutePath()}.gz")
-		def zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
+	@groovy.transform.CompileStatic
+	private void createCompressedFiles(File outputFile, byte[] outputBytes, File digestedFile) {
+		java.io.ByteArrayOutputStream targetStream  = new java.io.ByteArrayOutputStream()
+		java.util.zip.GZIPOutputStream zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
+		File zipFile       = new File("${outputFile.getAbsolutePath()}.gz")
+		File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
 
-		zipStream.write(outputFile.bytes)
+		zipStream.write(outputBytes)
 		zipFile.createNewFile()
 		zipFileDigest.createNewFile()
 		zipStream.finish()
-
-		zipFile.bytes = targetStream.toByteArray()
-		AssetHelper.copyFile(zipFile, zipFileDigest)
+		byte[] zipBytes = targetStream.toByteArray()
+		zipFile.bytes = zipBytes
+		zipFileDigest.bytes = zipBytes
+		// AssetHelper.copyFile(zipFile, zipFileDigest)
 		targetStream.close()
 	}
 
