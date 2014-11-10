@@ -160,7 +160,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
     @CompileStatic
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
 		List<AssetFile> fileList = []
-		println "Resolver ${name} Looking for Excludes ${excludePatterns} -- Includes: ${includePatterns}"
+		// println "Resolver ${name} Looking for Excludes ${excludePatterns} -- Includes: ${includePatterns}"
 		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ String it -> convertGlobToRegEx(it) }  as List<Pattern> : new ArrayList<Pattern>()
         List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ String it -> convertGlobToRegEx(it) } as List<Pattern> : new ArrayList<Pattern>()
 
