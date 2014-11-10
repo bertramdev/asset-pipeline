@@ -33,7 +33,7 @@ class GenericAssetFile extends AbstractAssetFile {
 	}
 
 	public String getParentPath() {
-		List pathArgs = path.tokenize("/")
+		List<String> pathArgs = path.tokenize("/")
 		if(pathArgs.size() == 1) {
 			return null
 		}
