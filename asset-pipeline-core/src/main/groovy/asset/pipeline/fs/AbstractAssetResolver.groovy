@@ -207,10 +207,13 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
     @CompileStatic
 	protected boolean isFileMatchingPatterns(String filePath, List<Pattern> patterns) {
 		for(pattern in patterns) {
+			println "Comparing Pattern ${filePath}, ${pattern}"
 			if(filePath =~ pattern) {
+				println " -- matched"
 				return true
 			}
 		}
+		println "-- not matched"
 		return false
 	}
 

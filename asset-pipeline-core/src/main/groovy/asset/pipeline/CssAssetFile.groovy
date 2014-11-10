@@ -31,5 +31,6 @@ class CssAssetFile extends AbstractAssetFile {
 	static List<String> extensions = ['css']
 	static String compiledExtension = 'css'
 	static List<Class<Processor>> processors = [CssProcessor]
-	static Pattern directivePattern = ~/(?m)\*=(.*)/
+	Pattern directivePattern = ~/(?m)\*=(.*)/
+
 }

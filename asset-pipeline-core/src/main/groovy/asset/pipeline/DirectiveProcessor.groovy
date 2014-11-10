@@ -143,8 +143,12 @@ class DirectiveProcessor {
     */
     @CompileStatic
     protected findDirectives(AssetFile fileSpec, Map tree) {
+
         String line = fileSpec.inputStream.text
-        List directives = fileSpec.directivePattern ? (line =~ fileSpec.directivePattern)?.collect { List it -> it[1] as String } : []
+        List directives = []
+        if(fileSpec.directivePattern) {
+            directives = (line =~ fileSpec.directivePattern)?.collect { List it -> it[1] as String }
+        }
         for(String directive in directives) {
             directive = directive.trim()
             String[] unprocessedArgs = directive.split(/\s+/)

@@ -23,5 +23,6 @@ class HtmlAssetFile extends  AbstractAssetFile {
     static List<String> extensions = ['html']
     static String compiledExtension = 'html'
     static processors = []
-    static Pattern directivePattern = null
+    public Pattern directivePattern = null
+    
 }

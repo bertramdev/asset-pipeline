@@ -18,6 +18,8 @@ package asset.pipeline
 
 import asset.pipeline.fs.AssetResolver
 import groovy.transform.CompileStatic
+import java.util.regex.Pattern
+
 /**
 * This is the base Asset File specification class. An AssetFile object should extend this abstract base class.
 * The AssetFile specification provides information on what processors need to be run on a file.
@@ -32,7 +34,7 @@ abstract class AbstractAssetFile implements AssetFile {
 	AssetFile baseFile
 	AssetResolver sourceResolver
 	String encoding
-
+	Pattern directivePattern = null
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 	byte[] byteCache
 
@@ -94,5 +96,9 @@ abstract class AbstractAssetFile implements AssetFile {
 
 	public String toString() {
 		return path
+	}
+
+	public Pattern getDirectivePattern() {
+		return this.directivePattern
 	}
 }
