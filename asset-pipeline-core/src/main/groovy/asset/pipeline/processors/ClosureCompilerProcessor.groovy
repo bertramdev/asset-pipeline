@@ -33,14 +33,14 @@ class ClosureCompilerProcessor {
 	}
 
 
-
 	public String process(String fileName, String inputText, Map minifyOptions = [:]) {
 		def compiler = new Compiler()
-		CompilerOptions options = new CompilerOptions();
+		CompilerOptions options = new CompilerOptions()
+		options.trustedStrings = true
 
-		translateMinifyOptions(options,minifyOptions);
+		translateMinifyOptions(options,minifyOptions)
 		if(assetCompiler.options.enableSourceMaps) {
-			setSourceMapOptions(options,minifyOptions, fileName);
+			setSourceMapOptions(options,minifyOptions, fileName)
 		}
 
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);

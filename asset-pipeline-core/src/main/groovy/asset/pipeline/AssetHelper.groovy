@@ -113,8 +113,8 @@ class AssetHelper {
         def uriComponents = uri.split("/")
         def lastUriComponent = uriComponents[uriComponents.length - 1]
         String extension = null
-        if(lastUriComponent.lastIndexOf(".") >= 0) {
-            extension = uri.substring(uri.lastIndexOf(".") + 1)
+        if(lastUriComponent.indexOf(".") >= 0) {
+            extension = uri.substring(uri.indexOf(".") + 1)
         }
         return extension
     }
@@ -128,8 +128,8 @@ class AssetHelper {
     static String nameWithoutExtension(String uri) {
         def uriComponents = uri.split("/")
         def lastUriComponent = uriComponents[uriComponents.length - 1]
-        if(lastUriComponent.lastIndexOf(".") >= 0) {
-            return uri.substring(0,uri.lastIndexOf("."))
+        if(lastUriComponent.indexOf(".") >= 0) {
+            return uri.substring(0,uri.indexOf("."))
         }
         return uri
     }
