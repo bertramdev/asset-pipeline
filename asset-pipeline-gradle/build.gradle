@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.3'
+version = '2.0.4'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {
@@ -46,7 +46,33 @@ publishing {
 	publications {
 		maven(MavenPublication) {
 			artifactId 'asset-pipeline-gradle'
-
+			pom.withXml {
+				asNode().children().last() + {
+					resolveStrategy = Closure.DELEGATE_FIRST
+					name 'asset-pipeline-gradle'
+					description 'JVM Asset Pipeline Gradle Adapter.'
+					url 'https://github.com/bertramdev/asset-pipeline-gradle'
+					scm {
+						url 'https://github.com/bertramdev/asset-pipeline-gradle'
+						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-gradle.git'
+						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-gradle.git'
+					}
+					licenses {
+						license {
+							name 'The Apache Software License, Version 2.0'
+							url 'http://www.apache.org/license/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+					developers {
+						developer {
+							id 'davydotcom'
+							name 'David Estes'
+							email 'davydotcom@gmail.com'
+						}
+					}
+				}
+			}
 			from components.java
 			artifact sourcesJar
 			artifact javadocJar
