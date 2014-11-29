@@ -161,8 +161,8 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
 		List<AssetFile> fileList = []
 		// println "Resolver ${name} Looking for Excludes ${excludePatterns} -- Includes: ${includePatterns}"
-		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ String it -> convertGlobToRegEx(it) }  as List<Pattern> : new ArrayList<Pattern>()
-        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ String it -> convertGlobToRegEx(it) } as List<Pattern> : new ArrayList<Pattern>()
+		List<String> excludedPatternRegex =  excludePatterns ? excludePatterns  as List<String> : new ArrayList<String>()
+        List<String> includedPatternRegex =  includePatterns ? includePatterns as List<String> : new ArrayList<String>()
 
 		for(String scanDirectory in scanDirectories) {
 			def scanPath = new File(scanDirectory)
@@ -173,7 +173,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	}
 
     @CompileStatic
-	protected iterateOverFileSystem(File dir, List<Pattern> excludePatterns, List<Pattern> includePatterns, List<AssetFile> fileList, String sourcePath) {
+	protected iterateOverFileSystem(File dir, List<String> excludePatterns, List<String> includePatterns, List<AssetFile> fileList, String sourcePath) {
 		dir.listFiles()?.each { File file ->
 			def relativePath = relativePathToResolver(file, sourcePath)
 			if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {

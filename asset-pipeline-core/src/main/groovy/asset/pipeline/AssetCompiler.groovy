@@ -87,7 +87,7 @@ class AssetCompiler {
 						fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(fileName,assetFile)
 					}
 					def contentType = (assetFile.contentType instanceof String) ? assetFile.contentType : assetFile.contentType[0]
-					def directiveProcessor = new DirectiveProcessor(contentType, this)
+					def directiveProcessor = new DirectiveProcessor(contentType, this, options.classLoader)
 					fileData   = directiveProcessor.compile(assetFile)
 					digestName = AssetHelper.getByteDigest(fileData.bytes)
 
@@ -95,7 +95,6 @@ class AssetCompiler {
 					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
 						isUnchanged=true
 					}
-
 					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
 						def newFileData = fileData
 						try {

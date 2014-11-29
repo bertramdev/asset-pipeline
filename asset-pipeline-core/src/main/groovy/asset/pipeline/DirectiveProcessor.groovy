@@ -33,8 +33,10 @@ class DirectiveProcessor {
     private AssetCompiler precompiler
     private Map files = [:]
     private def baseFile
+    ClassLoader classLoader
 
-    DirectiveProcessor(String contentType, AssetCompiler precompiler = null) {
+    DirectiveProcessor(String contentType, AssetCompiler precompiler = null, ClassLoader classLoader=null) {
+        this.classLoader = classLoader
         this.contentType = contentType
         this.precompiler = precompiler
     }
@@ -55,7 +57,6 @@ class DirectiveProcessor {
         this.files = [:]
         Map tree = getDependencyTree(file)
         StringBuilder buffer = new StringBuilder(64000)
-
         loadContentsForTree(tree,buffer)
         return buffer.toString()
     }
@@ -156,7 +157,8 @@ class DirectiveProcessor {
             if(processor) {
                 String[] directiveArguments = unprocessedArgs
                 if(directive.indexOf('$') >= 0) {
-                    directiveArguments = new groovy.text.GStringTemplateEngine(this.class.classLoader).createTemplate(directive).make().toString().split(/\s+/)
+                        directiveArguments = directiveArgumentsFromGString(directive)
+
                 }
                 directiveArguments[0] = directiveArguments[0].toLowerCase()
                 callDirective(processor,directiveArguments, fileSpec, tree)
@@ -164,6 +166,16 @@ class DirectiveProcessor {
         }
     }
 
+
+    public String[] directiveArgumentsFromGString(String directive) {
+        try {
+            return new groovy.text.GStringTemplateEngine(classLoader ?: this.class.classLoader).createTemplate(directive).make().toString().split(/\s+/)
+        } catch(ex) {
+            println "Error Processing GString Template Engine ${ex}"
+            log.error("Error Processing GString Template Engine",ex)
+            return directive
+        }
+    }
 
     public void callDirective(String name, String[] directiveArguments, AssetFile fileSpec, Map tree) {
         this."${name}"(directiveArguments, fileSpec,tree)

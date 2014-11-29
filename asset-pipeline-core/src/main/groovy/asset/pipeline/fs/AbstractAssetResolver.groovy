@@ -20,7 +20,10 @@ import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
 import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
-
+import java.nio.file.FileSystems
+import java.nio.file.PathMatcher
+import java.nio.file.Paths
+import java.nio.file.Path
 import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry
@@ -205,15 +208,14 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
     protected abstract String getFileName(T file)
 
     @CompileStatic
-	protected boolean isFileMatchingPatterns(String filePath, List<Pattern> patterns) {
+	protected boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
 		for(pattern in patterns) {
-			// println "Comparing Pattern ${filePath}, ${pattern}"
-			if(filePath =~ pattern) {
-				// println " -- matched"
+			PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern}")
+
+			if(pathMatcher.matches(Paths.get("assets",filePath))) {
 				return true
 			}
 		}
-		// println "-- not matched"
 		return false
 	}
 

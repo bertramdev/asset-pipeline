@@ -126,13 +126,13 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 	*/
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns) {
 		def fileList = []
-		List<Pattern> excludedPatternRegex =  excludePatterns ? excludePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
-        List<Pattern> includedPatternRegex =  includePatterns ? includePatterns.collect{ convertGlobToRegEx(it) } : new ArrayList<Pattern>()
+		List<String> excludedPatternList =  excludePatterns ? excludePatterns : new ArrayList<String>()
+        List<String> includedPatternList =  includePatterns ? includePatterns : new ArrayList<String>()
 
 		for(JarEntry entry in baseJar.entries()) {
 			if(entry.name.startsWith(prefixPath + "/")) {
 				def relativePath = relativePathToResolver(entry, prefixPath)
-				if(!isFileMatchingPatterns(relativePath,excludedPatternRegex) || isFileMatchingPatterns(relativePath,includedPatternRegex)) {
+				if(!isFileMatchingPatterns(relativePath,excludedPatternList) || isFileMatchingPatterns(relativePath,includedPatternList)) {
 					if(!entry.isDirectory()) {
 						def assetFileClass = AssetHelper.assetForFileName(relativePath)
 						if(assetFileClass) {
