@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.4'
+version = '2.0.5'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {
@@ -37,7 +37,7 @@ dependencies {
 	compile gradleApi()
 	compile localGroovy()
 
-	compile "com.bertramlabs.plugins:asset-pipeline-core:${version}"
+	compile "com.bertramlabs.plugins:asset-pipeline-core:2.0.4"
 
 	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }
@@ -51,11 +51,11 @@ publishing {
 					resolveStrategy = Closure.DELEGATE_FIRST
 					name 'asset-pipeline-gradle'
 					description 'JVM Asset Pipeline Gradle Adapter.'
-					url 'https://github.com/bertramdev/asset-pipeline-gradle'
+					url 'https://github.com/bertramdev/asset-pipeline-core'
 					scm {
-						url 'https://github.com/bertramdev/asset-pipeline-gradle'
-						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-gradle.git'
-						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-gradle.git'
+						url 'https://github.com/bertramdev/asset-pipeline-core'
+						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
+						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
 					}
 					licenses {
 						license {
