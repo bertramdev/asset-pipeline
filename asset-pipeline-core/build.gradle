@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.3'
+version = '2.0.4'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {
@@ -47,7 +47,33 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifactId 'asset-pipeline-core'
-
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'asset-pipeline-core'
+                    description 'JVM Asset Pipeline library for serving static web assets, bundling, minifying, and extensibility for transpiling.'
+                    url 'https://github.com/bertramdev/asset-pipeline-core'
+                    scm {
+                        url 'https://github.com/bertramdev/asset-pipeline-core'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
+                        developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
+                        }
+                    }
+                }
+            }
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -76,6 +102,7 @@ bintray {
         licenses = ['Apache-2.0']
     }
 }
+
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
