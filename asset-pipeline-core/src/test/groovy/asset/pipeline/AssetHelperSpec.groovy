@@ -41,6 +41,15 @@ class AssetHelperSpec extends Specification {
 
     }
 
+    void "Should Resolve asset:// URL Protocol Spec"() {
+        given:
+            def url = new java.net.URL("asset:///asset-pipeline/test/test.css")
+        when:
+            def results = url.text
+        then:
+            results.contains('#logo')
+    }
+
     void "should get asset file object based on file name and extension" () {
     	given:
             def testFileName = 'asset-pipeline/test/test'
