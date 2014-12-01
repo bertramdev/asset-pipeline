@@ -119,4 +119,9 @@ Thanks to several people for suggestions throughout development. Notably: Brian 
 
 Additional Resources
 --------------------
-* TODO: Port grails extension plugins to gradle
+* [Coffeescript Asset-Pipeline Plugin](http://github.com/bertramdev/coffee-asset-pipeline)
+* [LESS Css Asset-Pipeline Plugin](http://github.com/bertramdev/less-asset-pipeline)
+* SASS Coming Soon
+* [Handlebars Asset-Pipeline Plugin](http://github.com/bertramdev/handlebars-asset-pipeline)
+* [Ember Asset-Pipeline Plugin](http://github.com/bertramdev/ember-asset-pipeline)
+* [Grails Asset Pipeline Guide](http://bertramdev.github.io/asset-pipeline/)
