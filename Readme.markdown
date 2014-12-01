@@ -9,32 +9,32 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 
 Basic Usage
 -----------
-If using gradle, this plugin adds a series of tasks directly to your gradle plugin. All you have to do is `apply plugin:'asset-pipeline-core'` after confirming this is in the classpath of your `buildscript` block. i.e.:
+If using gradle, this plugin adds a series of tasks directly to your gradle plugin. All you have to do is `apply plugin:'asset-pipeline'` after confirming this is in the classpath of your `buildscript` block. i.e.:
 
 ```groovy
 //Example build.gradle file
 buildscript {
   repositories {
-    jcenter()
+    mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins.asset-pipeline-core:2.0.1'
+    classpath 'com.bertramlabs.plugins.asset-pipeline-gradle:2.0.6'
 	//Example additional LESS support
-	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.0.1'
+	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.0.4'
   }
 }
 
 apply plugin: 'asset-pipeline'
-//apply plugin: 'less-asset-pipeline'
 
 assets {
   minifyJs = true
   minifyCss = true
+  config = [:]
 }
 ```
 
 Now that you have your build.gradle files. All you need to do is put files in your projects `assets/javascripts`, `assets/stylesheets`, `assets/images`, or whatever subdirectory you want.
-When you run `gradle asset-precompile` these files will be processed and output into your `build/assets` folder by default.
+When you run `gradle assetCompile` these files will be processed and output into your `build/assets` folder by default.
 
 You can also configure custom resolution paths for your project (STILL WORKING ON IT).
 
