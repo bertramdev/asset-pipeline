@@ -6,8 +6,18 @@ Overview
 --------
 The Asset-Pipeline is a plugin used for managing and processing static assets in JVM applications primarily via Gradle (however not mandatory). Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
 
+**Features:**
+* Asset Bundling
+* Extensible Modules (Supports LESS,Handlebars,Coffeescript, Ember-Handlebars, SASS(Soon)) via other modules.
+* Cache Digest Names (Creates cache digested names and stores aliases in a manifest.properties)
+* Js Minification
+* Js SourceMap Generation
+* Css Minification / Relative Path assertion
+* File Encoding Support
+* GZIP File Generation
 
-Basic Usage
+
+Gradle Usage
 -----------
 If using gradle, this plugin adds a series of tasks directly to your gradle plugin. All you have to do is `apply plugin:'asset-pipeline'` after confirming this is in the classpath of your `buildscript` block. i.e.:
 
@@ -109,4 +119,9 @@ Thanks to several people for suggestions throughout development. Notably: Brian 
 
 Additional Resources
 --------------------
-* TODO: Port grails extension plugins to gradle
+* [Coffeescript Asset-Pipeline Plugin](http://github.com/bertramdev/coffee-asset-pipeline)
+* [LESS Css Asset-Pipeline Plugin](http://github.com/bertramdev/less-asset-pipeline)
+* SASS Coming Soon
+* [Handlebars Asset-Pipeline Plugin](http://github.com/bertramdev/handlebars-asset-pipeline)
+* [Ember Asset-Pipeline Plugin](http://github.com/bertramdev/ember-asset-pipeline)
+* [Grails Asset Pipeline Guide](http://bertramdev.github.io/asset-pipeline/)
