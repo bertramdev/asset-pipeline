@@ -91,8 +91,8 @@ publishing {
 }
 
 bintray {
-	user = bintrayUser
-	key = bintrayKey
+	user = hasProperty('bintrayUser') ? bintrayUser: 'anonymous'
+	key = hasProperty('bintrayKey') ? bintrayKey : null
 	publications = ['maven']
 	pkg {
 		repo = 'asset-pipeline'
