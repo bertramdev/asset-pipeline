@@ -48,6 +48,7 @@ apply plugin: 'asset-pipeline'
 jar {
     baseName = 'demo'
     version = '0.0.1-SNAPSHOT'
+    from "${buildDir}/assetCompile"
 }
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -58,7 +59,7 @@ repositories {
 }
 
 assets {
-    compileDir = 'build/resources/main/assets'
+    compileDir = "${buildDir}/assetCompile/assets"
 }
 
 
