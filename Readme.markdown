@@ -39,7 +39,17 @@ apply plugin: 'asset-pipeline'
 assets {
   minifyJs = true
   minifyCss = true
-  config = [:]
+  enableSourceMaps = true
+  configOptions = [:]
+  
+  minifyOptions = [
+    languageMode: 'ES5',
+    targetLanguage: 'ES5', //Can go from ES6 to ES5 for those bleeding edgers
+    optimizationLevel: 'SIMPLE'
+  ]
+  
+  includes = []
+  excludes = ['**/*.less'] //Example Exclude GLOB pattern
 }
 ```
 
