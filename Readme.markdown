@@ -30,7 +30,7 @@ buildscript {
   dependencies {
     classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.0.7'
 	//Example additional LESS support
-	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.0.5'
+	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.0.7'
   }
 }
 
