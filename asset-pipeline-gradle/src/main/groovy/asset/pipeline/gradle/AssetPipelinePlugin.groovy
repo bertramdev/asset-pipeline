@@ -61,6 +61,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 includes = assetPipeline.includes
                 excludes = assetPipeline.excludes
                 excludesGzip = assetPipeline.excludesGzip
+				config = assetPipeline.config
             }
         }
 		def assembleTask = project.tasks.findByName('assemble')

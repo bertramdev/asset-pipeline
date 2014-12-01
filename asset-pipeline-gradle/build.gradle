@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.6'
+version = '2.0.7'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {
@@ -37,7 +37,7 @@ dependencies {
 	compile gradleApi()
 	compile localGroovy()
 
-	compile "com.bertramlabs.plugins:asset-pipeline-core:2.0.5"
+	compile "com.bertramlabs.plugins:asset-pipeline-core:${version}"
 
 	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }

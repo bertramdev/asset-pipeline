@@ -73,6 +73,16 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.minifyCss
     }
 
+    @Input
+    @Optional
+    Map getConfig() {
+        pipelineExtension.config
+    }
+
+    void setConfig() {
+        pipelineExtension.config = config
+    }
+
     void setMinifyCss(boolean minifyCss) {
         pipelineExtension.minifyCss = minifyCss
     }
@@ -91,7 +101,7 @@ class AssetCompile extends DefaultTask {
         println "Compiling assets in directory ${assetsDir}"
         def resolver = new FileSystemAssetResolver('application', assetsDir.canonicalPath)
         AssetPipelineConfigHolder.registerResolver(resolver)
-
+        AssetPipelineConfigHolder.config = config
         def assetCompiler = new AssetCompiler(pipelineExtension.toMap(),new GradleEventListener())
         assetCompiler.excludeRules.default = pipelineExtension.excludes
         assetCompiler.includeRules.default = pipelineExtension.includes

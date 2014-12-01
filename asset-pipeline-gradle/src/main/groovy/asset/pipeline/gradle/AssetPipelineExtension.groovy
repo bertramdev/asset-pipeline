@@ -29,6 +29,7 @@ class AssetPipelineExtension {
 	String  compileDir = 'build/assets'
 	String assetsPath = 'assets'
 	Map minifyOptions
+	Map config
 
 	List excludesGzip
 	List excludes = []
