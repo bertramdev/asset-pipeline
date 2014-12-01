@@ -1,7 +1,27 @@
 Spring Boot Asset Pipeline Gradle Adapter
 -----------------------------------------
 
-This is a preliminary test project for adding support to spring boot
+This is a preliminary test project for adding support to spring boot.
+
+It takes files stored in `assets/javascripts` , `assets/stylesheets`, `assets/images`, `assets/**/*`, and compiles them into the root jar `assets` folder.
+It supports both development mode where it compiles on the fly and production `gradle assemble`
+
+Note: Be Sure to add to your `@ComponentScan` annotation the class path `asset.pipeline.springboot`
+
+```groovy
+package demo
+
+@Configuration
+@ComponentScan(['demo','asset.pipeline.springboot'])
+@EnableAutoConfiguration
+class Application {
+
+    static void main(String[] args) {
+        SpringApplication.run Application, args
+    }
+}
+
+```
 
 Example Gradle File for Spring Boot:
 ```groovy
