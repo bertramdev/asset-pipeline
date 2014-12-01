@@ -7,6 +7,14 @@ group = 'com.bertramlabs.plugins'
 version = '2.0.7'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
+if(!project.hasProperty('bintrayUser')) {
+    bintrayUser = 'test'
+}
+if(!project.hasProperty('bintrayKey')) {
+    bintrayKey = 'empty'
+}
+
+
 buildscript {
     repositories {
         mavenLocal()
@@ -92,8 +100,8 @@ publishing {
 }
 
 bintray {
-    user = hasProperty('bintrayUser') ? bintrayUser: 'anonymous'
-    key = hasProperty('bintrayKey') ? bintrayKey : null
+    user = bintrayUser
+    key = bintrayKey
     publications = ['maven']
     pkg {
         repo = 'asset-pipeline'
