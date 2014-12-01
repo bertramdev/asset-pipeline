@@ -7,7 +7,7 @@ Overview
 The Asset-Pipeline is a plugin used for managing and processing static assets in JVM applications primarily via Gradle (however not mandatory). Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
 
 
-Basic Usage
+Gradle Usage
 -----------
 If using gradle, this plugin adds a series of tasks directly to your gradle plugin. All you have to do is `apply plugin:'asset-pipeline'` after confirming this is in the classpath of your `buildscript` block. i.e.:
 
