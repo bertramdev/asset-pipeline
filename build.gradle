@@ -1,0 +1,41 @@
+apply plugin: 'groovy'
+
+group = 'com.bertramlabs.plugins'
+version = '2.0.5'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+	}
+}
+
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
+
+dependencies {
+
+	compile 'org.codehaus.groovy:groovy:2.0.7'
+	compile 'org.codehaus.groovy:groovy-templates:2.0.7'
+	compile 'org.mozilla:rhino:1.7R4'
+	compile 'com.google.javascript:closure-compiler:v20141023'
+	compile("commons-logging:commons-logging:1.1.1")
+	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
+}
+
+
+
+test {
+	testLogging {
+		exceptionFormat = 'full'
+		showStandardStreams = true
+	}
+}
