@@ -1,6 +1,6 @@
 Asset Pipeline Core
 ===================
-[![Build Status](https://travis-ci.org/bertramdev/asset-pipeline.png?branch=master)](https://travis-ci.org/bertramdev/asset-pipeline)
+[![Build Status](https://travis-ci.org/bertramdev/asset-pipeline-core.svg?branch=master)](https://travis-ci.org/bertramdev/asset-pipeline-core)
 
 Overview
 --------
