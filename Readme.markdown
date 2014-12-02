@@ -84,7 +84,7 @@ Now we can take advantage of asset-pipeline endpoints to fetch files for develop
 To Fetch a File in Development mode simply use the following endpoint:
 
 ```groovy
-class AssetHelper {
+class AssetPipeline {
 	static byte[] serveAsset(uri, contentType = null, extension = null, encoding = null) {
 
 	//Returns a dependency list of your asset (based on require directives)
