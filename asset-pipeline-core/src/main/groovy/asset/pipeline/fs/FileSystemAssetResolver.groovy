@@ -140,13 +140,12 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
     @CompileStatic
 	protected String relativePathToResolver(File file, String scanDirectoryPath) {
 		def filePath = file.canonicalPath
-
 		if(filePath.startsWith(scanDirectoryPath)) {
-			return filePath.substring(scanDirectoryPath.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
+			return filePath.substring(scanDirectoryPath.size() + 1).replace(File.separator, DIRECTIVE_FILE_SEPARATOR)
 		} else {
 			for(scanDir in scanDirectories) {
 				if(filePath.startsWith(scanDir)) {
-					return filePath.substring(scanDir.size() + 1).replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
+					return filePath.substring(scanDir.size() + 1).replace(File.separator, DIRECTIVE_FILE_SEPARATOR)
 				}
 			}
 			throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
