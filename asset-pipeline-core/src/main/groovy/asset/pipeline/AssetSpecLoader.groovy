@@ -44,7 +44,7 @@ class AssetSpecLoader {
             specifications = []
 
             resources.each { URL res ->
-                def classNames = res.getText('UTF-8').split(System.getProperty('line.separator')).collect()  { String str -> str.trim() }
+                def classNames = res.getText('UTF-8').split(/\r?\n/).collect()  { String str -> str.trim() }
 
                 for(className in classNames) {
                     try {

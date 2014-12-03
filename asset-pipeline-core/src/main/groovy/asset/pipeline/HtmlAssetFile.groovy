@@ -18,7 +18,7 @@ package asset.pipeline
 import java.util.regex.Pattern
 
 
-class HtmlAssetFile extends  AbstractAssetFile {
+class HtmlAssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['text/html']
     static List<String> extensions = ['html']
     static String compiledExtension = 'html'

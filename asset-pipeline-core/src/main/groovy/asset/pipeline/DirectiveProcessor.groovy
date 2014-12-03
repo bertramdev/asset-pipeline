@@ -68,7 +68,7 @@ class DirectiveProcessor {
     */
     def getFlattenedRequireList(file) {
         if(file instanceof GenericAssetFile) {
-            return [path: file.path, encoding: null]
+            return [[path: file.path, encoding: null]]
         }
         def flattenedList = []
         def tree = getDependencyTree(file)
