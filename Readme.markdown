@@ -142,6 +142,25 @@ Contributions
 All contributions are of course welcome as this is an ACTIVE project. Any help with regards to reviewing platform compatibility, adding more tests, and general cleanup is most welcome.
 Thanks to several people for suggestions throughout development. Notably: Brian Wheeler (@bdwheeler), Rick Jensen (@cdeszaq), Bobby Warner (@bobbywarner), Ted Naleid (@tednaleid), Craig Burke (@craigburke1) and more to follow I'm sure...
 
+When creating custom binary plugins to extend this (details also in the grails documentation) You will want to use groovy but not directly export it from gradle. Here is an example of how to do that.
+
+```groovy
+configurations {
+    provided
+}
+ 
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+dependencies {
+  provided 'org.codehaus.groovy:groovy-all:2.0.7'
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.0.12"
+}
+```
+
 Additional Resources
 --------------------
 * [Coffeescript Asset-Pipeline Plugin](http://github.com/bertramdev/coffee-asset-pipeline)
