@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.0.10'
+version = '2.0.12'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 
@@ -25,10 +25,20 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    provided
+}
+ 
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
 dependencies {
 
-    compile 'org.codehaus.groovy:groovy:2.0.7'
-    compile 'org.codehaus.groovy:groovy-templates:2.0.7'
+    provided('org.codehaus.groovy:groovy:2.0.7')
+    provided('org.codehaus.groovy:groovy-templates:2.0.7')
     compile 'org.mozilla:rhino:1.7R4'
     compile 'com.google.javascript:closure-compiler:v20141023'
     compile("commons-logging:commons-logging:1.1.1")

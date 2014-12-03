@@ -28,7 +28,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.0.8'
+    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.0.12'
 	//Example additional LESS support
 	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.0.7'
   }
@@ -67,6 +67,7 @@ The recommended use case for this aspect of the plugin is to integrate with othe
 
 The core plugin provides interfaces for asset resolution, processing, and compiling into a target directory.
 You can register resolvers in the `AssetPipelineConfigHolder` to essentially add scan paths for your static assets. This includes both File System support as well as Jar file support (ClassPathResolver coming soonish)
+
 
 ```groovy
 import asset.pipeline.*
@@ -115,6 +116,20 @@ compiler.compile()
 
 This extraction is not yet 100% complete and is in active development. If you are interested in implementing the asset-pipeline for a jvm framework. Feel free to take a look to get an idea what you will need to do.
 
+
+
+Dependencies
+------------
+To accomodate varying uses of the groovy module (i.e. groovy-all vs. groovy) This library depends on groovy even though it does not directly export it. Make sure you add the following dependenices
+
+```groovy
+dependencies {
+  compile 'org.codehaus.groovy:groovy:2.0.7'
+  compile 'org.codehaus.groovy:groovy-templates:2.0.7'
+  //or
+  //compile 'org.codehaus.groovy:groovy-all:2.0.7'
+}
+```
 
 
 Grails Documentation
