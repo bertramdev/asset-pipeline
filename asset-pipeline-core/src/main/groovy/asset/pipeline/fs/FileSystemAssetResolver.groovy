@@ -36,6 +36,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
 	File baseDirectory
 	List<String> scanDirectories = []
+	List<FileSystemAssetResolver> resolvers = []
 
 	FileSystemAssetResolver(String name,String basePath, boolean flattenSubDirectories=true) {
 		super(name)
@@ -45,7 +46,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 				def scopedDirectories = baseDirectory.listFiles()
 				for(scopedDirectory in scopedDirectories) {
 					if(scopedDirectory.isDirectory() && scopedDirectory.getName() != "WEB-INF" && scopedDirectory.getName() != 'META-INF') {
-						scanDirectories << scopedDirectory.canonicalPath
+						resolvers << new FileSystemAssetResolver(name, scopedDirectory.canonicalPath, false)
 					}
 				}
 			} else {
@@ -74,6 +75,12 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
                 return assetFile
             }
 		}
+		for(resolver in resolvers) {
+			AssetFile assetFile = resolver.getAsset(relativePath, contentType, extension, baseFile)
+			if(assetFile) {
+				return assetFile
+			}
+		}
 		return null
 	}
 
@@ -98,21 +105,25 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	public List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile = null, AssetFile baseFile = null) {
 		//We are going absolute
         List<AssetFile> fileList = []
-
+        String translatedBasePath = basePath
 		if(!basePath.startsWith('/') && relativeFile != null) {
 			List<String> pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).toList() : new ArrayList<String>() //(path should be relative not canonical)
 			String[] basePathArgs = basePath.split(DIRECTIVE_FILE_SEPARATOR)
 			List<String> parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] as List<String> : [] as List<String>
 			parentPathArgs.addAll(basePathArgs.toList() as List<String>)
-			basePath = (parentPathArgs).join(File.separator)
+			translatedBasePath = (parentPathArgs).join(File.separator)
 		}
 
 		for(directoryPath in scanDirectories) {
-			File file = new File(directoryPath,basePath)
+			File file = new File(directoryPath,translatedBasePath)
 			if(file.exists() && file.isDirectory()) {
 				recursiveTreeAppend(file, fileList, contentType,baseFile,recursive, directoryPath)
 			}
 		}
+		for(resolver in resolvers) {
+			fileList += resolver.getAssets(basePath, contentType, extension, recursive, relativeFile, baseFile)
+		}
+
 		return fileList
 	}
 
@@ -166,6 +177,9 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		for(String scanDirectory in scanDirectories) {
 			def scanPath = new File(scanDirectory)
 			iterateOverFileSystem(scanPath,excludedPatternRegex,includedPatternRegex, fileList, scanDirectory)
+		}
+		for(resolver in resolvers) {
+			fileList += resolver.scanForFiles(excludePatterns, includePatterns)
 		}
 
 		return fileList.unique { AssetFile a, AssetFile b -> a.path <=> b.path }
