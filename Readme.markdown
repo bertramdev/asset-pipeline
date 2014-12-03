@@ -125,7 +125,7 @@ http://bertramdev.github.io/asset-pipeline
 Contributions
 -------------
 All contributions are of course welcome as this is an ACTIVE project. Any help with regards to reviewing platform compatibility, adding more tests, and general cleanup is most welcome.
-Thanks to several people for suggestions throughout development. Notably: Brian Wheeler (@bdwheeler), Rick Jensen (@cdeszaq), Bobby Warner (@bobbywarner), Ted Naleid (@tednaleid) and more to follow I'm sure...
+Thanks to several people for suggestions throughout development. Notably: Brian Wheeler (@bdwheeler), Rick Jensen (@cdeszaq), Bobby Warner (@bobbywarner), Ted Naleid (@tednaleid), Craig Burke (@craigburke1) and more to follow I'm sure...
 
 Additional Resources
 --------------------
@@ -134,4 +134,6 @@ Additional Resources
 * SASS Coming Soon
 * [Handlebars Asset-Pipeline Plugin](http://github.com/bertramdev/handlebars-asset-pipeline)
 * [Ember Asset-Pipeline Plugin](http://github.com/bertramdev/ember-asset-pipeline)
+* [AngularJS Template Asset-Pipeline Plugin](https://github.com/craigburke/angular-template-grails-asset-pipeline)
+* [AngularJS Annotate Asset-Pipeline Plugin](https://github.com/craigburke/angular-annotate-grails-asset-pipeline)
 * [Grails Asset Pipeline Guide](http://bertramdev.github.io/asset-pipeline/)
