@@ -35,7 +35,7 @@ class DirectiveProcessor {
     private def baseFile
     ClassLoader classLoader
 
-    DirectiveProcessor(String contentType, AssetCompiler precompiler = null, ClassLoader classLoader=null) {
+    DirectiveProcessor(String contentType, AssetCompiler precompiler = null, ClassLoader classLoader=Thread.currentThread().contextClassLoader) {
         this.classLoader = classLoader
         this.contentType = contentType
         this.precompiler = precompiler

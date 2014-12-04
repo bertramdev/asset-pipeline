@@ -58,7 +58,6 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	}
 
 
-	//TODO: WINDOWS SUPPORT USE QUOTED FILE SEPARATORS
 	public AssetFile getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
 		if(!relativePath) {
 			return null
@@ -159,7 +158,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 					return filePath.substring(scanDir.size() + 1).replace(File.separator, DIRECTIVE_FILE_SEPARATOR)
 				}
 			}
-			throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
+			throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath} scanDir: ${scanDirectoryPath}")
 		}
 	}
 

@@ -3,7 +3,7 @@ package asset.pipeline
 class AssetPipelineResponseBuilder {
 	String uri
 	String ifNoneMatchHeader
-	Integer statusCode
+	Integer statusCode = 200
 
 	def headers = [:]
 
@@ -18,9 +18,9 @@ class AssetPipelineResponseBuilder {
 	}
 
 	String getCurrentETag() {
-		def manifestPath = fileUri
-		if(fileUri.startsWith('/')) {
-			manifestPath = fileUri.substring(1) //Omit forward slash
+		def manifestPath = uri
+		if(uri.startsWith('/')) {
+			manifestPath = uri.substring(1) //Omit forward slash
 		}
 
 		def manifest = AssetPipelineConfigHolder.manifest

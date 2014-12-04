@@ -32,34 +32,32 @@ class CssProcessor extends AbstractProcessor {
     }
 
     String process(String inputText, AssetFile assetFile) {
-        Map cachedPaths = [:]
-        return inputText.replaceAll(/url\([\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?\)/) { fullMatch, assetPath ->
-            String replacementPath = assetPath.trim()
-            if(cachedPaths[assetPath]) {
-                replacementPath = cachedPaths[assetPath]
-            } else if(isRelativePath(assetPath)) {
-                def urlRep = new URL("http://hostname/${assetPath}") //Split out subcomponents
-                def relativeFileName = [assetFile.parentPath,urlRep.path].join("/")
-                def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
-
-                def cssFile = AssetHelper.fileForFullName(relativeFileName)
-                if(!cssFile) {
-                    cssFile = AssetHelper.fileForFullName(normalizedFileName)
-                }
-                if(cssFile) {
-                    replacementPath = relativePathToBaseFile(cssFile, assetFile.baseFile ?: assetFile, this.precompiler ? true : false)
-                    if(urlRep.query != null) {
-                        replacementPath += "?${urlRep.query}"
+            Map cachedPaths = [:]
+            return inputText.replaceAll(/url\((?:\s+)?[\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?(?:\s+)?\)/) { fullMatch, assetPath ->
+                String replacementPath = assetPath.trim()
+                if(cachedPaths[assetPath]) {
+                    replacementPath = cachedPaths[assetPath]
+                } else if(replacementPath.size() > 0 && isRelativePath(replacementPath)) {
+                    def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
+                    def relativeFileName = [assetFile.parentPath,urlRep.path.substring(1)].join("/")
+                    def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
+                    def cssFile = null
+                    if(!cssFile) {
+                        cssFile = AssetHelper.fileForFullName(normalizedFileName)
                     }
-                    if(urlRep.ref) {
-                        replacementPath += "#${urlRep.ref}"
+                    if(cssFile) {
+                        replacementPath = relativePathToBaseFile(cssFile, assetFile.baseFile ?: assetFile, this.precompiler ? true : false)
+                        if(urlRep.query != null) {
+                            replacementPath += "?${urlRep.query}"
+                        }
+                        if(urlRep.ref) {
+                            replacementPath += "#${urlRep.ref}"
+                        }
+                        cachedPaths[assetPath] = replacementPath
                     }
-                    cachedPaths[assetPath] = replacementPath
                 }
+                return "url('${replacementPath}')"
             }
-            return "url('${replacementPath}')"
-        }
-
     }
 
     private isRelativePath(assetPath) {

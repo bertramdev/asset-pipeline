@@ -247,7 +247,10 @@ class AssetHelper {
             def pathElement = pathArgs[counter]
             if(pathElement == '..') {
                 if(newPath.size() > 0) {
-                    newPath = newPath[0..(newPath.size() - 2)]
+                    newPath.pop()
+                } else if(counter < pathArgs.length + 2) {
+                    counter++
+                    continue;
                 }
             } else if(pathElement == '.') {
                 // do nothing
