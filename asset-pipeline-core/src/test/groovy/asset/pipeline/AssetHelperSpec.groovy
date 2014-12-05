@@ -36,9 +36,10 @@ class AssetHelperSpec extends Specification {
 	    	contentType                | fileSpecs
 	    	'application/javascript'   | [JsAssetFile]
 	    	'application/x-javascript' | [JsAssetFile]
+	    	'text/javascript'          | [JsAssetFile]
 	    	'text/css'                 | [CssAssetFile]
+	    	'text/html'                | [HtmlAssetFile]
 	    	'blob/text'                | []
-
     }
 
     void "Should Resolve asset:// URL Protocol Spec"() {
