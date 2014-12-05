@@ -26,7 +26,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class JsAssetFile extends AbstractAssetFile {
-    static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript','test2']
+    static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
     static List<String> extensions = ['js']
     static String compiledExtension = 'js'
     static processors = []
