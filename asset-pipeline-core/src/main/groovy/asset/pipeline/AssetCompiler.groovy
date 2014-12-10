@@ -90,9 +90,10 @@ class AssetCompiler {
 					def directiveProcessor = new DirectiveProcessor(contentType, this, options.classLoader)
 					fileData   = directiveProcessor.compile(assetFile)
 					digestName = AssetHelper.getByteDigest(fileData.bytes)
-
+					println "Checking if file was already generated"
 					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
 					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
+						println "Oh its unchanged!..."
 						isUnchanged=true
 					}
 					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
@@ -190,12 +191,14 @@ class AssetCompiler {
 		 // Check for existing Compiled Assets
 	  def assetDir = new File(options.compileDir)
 	  if(assetDir.exists()) {
+	  	println "Loading Compile Directory ${options.compileDir} ${options.manifestProperties}"
 		def manifestFile = new File(options.compileDir,"manifest.properties")
 		if(manifestFile.exists())
 			manifestProperties.load(manifestFile.newDataInputStream())
 	  } else {
 		assetDir.mkdirs()
 	  }
+	  println "Loaded Workspace..."
 	  return assetDir
   }
 
@@ -274,12 +277,12 @@ class AssetCompiler {
 
 		def propertiesToRemove = []
 		manifestProperties.keySet().each { compiledUri ->
-			def compiledName = 	compiledUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
+			def compiledName = 	compiledUri//.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
 
 			def fileFound = compiledFileNames.find{ it == compiledName.toString()}
 			if(!fileFound) {
 				def digestedUri = manifestProperties.getProperty(compiledName)
-				def digestedName = digestedUri.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
+				def digestedName = digestedUri//.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
 				def compiledFile = new File(options.compileDir, compiledName)
 				def digestedFile = new File(options.compileDir, digestedName)
 				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
