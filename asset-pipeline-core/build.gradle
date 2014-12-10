@@ -7,8 +7,6 @@ group = 'com.bertramlabs.plugins'
 version = '2.0.16'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-
-
 buildscript {
     repositories {
         mavenLocal()

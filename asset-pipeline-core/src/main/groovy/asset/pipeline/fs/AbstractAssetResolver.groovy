@@ -212,8 +212,14 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 		for(pattern in patterns) {
 			PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern}")
 
-			if(pathMatcher.matches(Paths.get("assets",filePath))) {
+			if(pathMatcher.matches(Paths.get(filePath))) {
 				return true
+			}
+			if(pattern.startsWith('**/')) {
+				pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern.substring(3)}")
+				if(pathMatcher.matches(Paths.get(filePath))) {
+					return true
+				}
 			}
 		}
 		return false
