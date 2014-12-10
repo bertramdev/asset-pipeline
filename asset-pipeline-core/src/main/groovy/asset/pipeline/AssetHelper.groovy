@@ -248,7 +248,7 @@ class AssetHelper {
             if(pathElement == '..') {
                 if(newPath.size() > 0) {
                     newPath.pop()
-                } else if(counter < pathArgs.length + 2) {
+                } else if(counter < pathArgs.length - 1) {
                     counter++
                     continue;
                 }

@@ -95,4 +95,15 @@ class AssetHelperSpec extends Specification {
     	then:
     		ext == 'js'
     }
+
+    void "should normalize paths"() {
+        when:
+        def result = AssetHelper.normalizePath(path)
+        then:
+        result == normalizedPath
+        where:
+        path                      | normalizedPath
+        'images/../test.png'      | 'test.png'
+        '../fonts/test.eot'       | 'test.eot'
+    }
 }

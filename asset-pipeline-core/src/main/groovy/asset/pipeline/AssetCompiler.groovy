@@ -90,10 +90,8 @@ class AssetCompiler {
 					def directiveProcessor = new DirectiveProcessor(contentType, this, options.classLoader)
 					fileData   = directiveProcessor.compile(assetFile)
 					digestName = AssetHelper.getByteDigest(fileData.bytes)
-					println "Checking if file was already generated"
 					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
 					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
-						println "Oh its unchanged!..."
 						isUnchanged=true
 					}
 					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
