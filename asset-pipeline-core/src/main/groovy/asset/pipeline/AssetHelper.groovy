@@ -112,10 +112,15 @@ class AssetHelper {
     static String extensionFromURI(String uri) {
         def uriComponents = uri.split("/")
         def lastUriComponent = uriComponents[uriComponents.length - 1]
+        def extensions = AssetHelper.assetSpecs.collect { it.extensions }.flatten().sort{a,b -> -(a.size()) <=> -(b.size())}
         String extension = null
-        if(lastUriComponent.lastIndexOf(".") >= 0) {
-            extension = uri.substring(uri.lastIndexOf(".") + 1)
+        extension = extensions.find { lastUriComponent.endsWith(".${it}")}
+        if(!extension) {
+            if(lastUriComponent.lastIndexOf(".") >= 0) {
+                extension = uri.substring(uri.lastIndexOf(".") + 1)
+            }    
         }
+        
         return extension
     }
 
@@ -128,11 +133,13 @@ class AssetHelper {
     static String nameWithoutExtension(String uri) {
         def uriComponents = uri.split("/")
         def lastUriComponent = uriComponents[uriComponents.length - 1]
-        if(lastUriComponent.lastIndexOf(".") >= 0) {
-            return uri.substring(0,uri.lastIndexOf("."))
+        def extension = extensionFromURI(lastUriComponent)
+        if(extension) {
+            return uri.substring(0,uri.lastIndexOf(".${extension}"))
         }
         return uri
     }
+
 
     static String fileNameWithoutExtensionFromArtefact(String filename, AssetFile assetFile) {
         if(assetFile == null) {
@@ -140,7 +147,7 @@ class AssetHelper {
         }
 
         def rootName = filename
-        assetFile.extensions.each { extension ->
+        assetFile.extensions.sort{a,b -> -(a.size()) <=> -(b.size())}.each { extension ->
 
             if(filename.endsWith(".${extension}")) {
                 def potentialName = filename.substring(0,filename.lastIndexOf(".${extension}"))
