@@ -90,7 +90,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
     @Override
     protected Closure<InputStream> createInputStreamClosure(File file) {
-        if(file.exists()) {
+        if(file.exists() && !file.isDirectory()) {
             return {-> file.newInputStream() }
         }
         return null
@@ -135,7 +135,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 			if(file.isDirectory() && recursive) {
 				recursiveTreeAppend(file,tree, contentType, baseFile, recursive, sourceDirectory)
 			}
-			else if(mimeType && contentType in mimeType) {
+			else if(!file.isDirectory() && mimeType && contentType in mimeType) {
 				tree << assetForFile(file,contentType, baseFile, sourceDirectory)
 			}
 		}
