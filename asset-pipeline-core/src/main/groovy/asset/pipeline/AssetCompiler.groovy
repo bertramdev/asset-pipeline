@@ -59,7 +59,7 @@ class AssetCompiler {
 
 	void compile() {
 		def assetDir           = initializeWorkspace()
-		def closureCompilerProcessor = new ClosureCompilerProcessor(this)
+		
 		def minifyCssProcessor = new CssMinifyPostProcessor()
 
 		filesToProcess = this.getAllAssets()
@@ -97,6 +97,7 @@ class AssetCompiler {
 					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
 						def newFileData = fileData
 						try {
+							def closureCompilerProcessor = new ClosureCompilerProcessor(this)
 							eventListener?.triggerEvent("StatusUpdate", "Uglifying File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 							newFileData = closureCompilerProcessor.process(fileName,fileData, options.minifyOptions ?: [:])
 						} catch(e) {
@@ -189,14 +190,12 @@ class AssetCompiler {
 		 // Check for existing Compiled Assets
 	  def assetDir = new File(options.compileDir)
 	  if(assetDir.exists()) {
-	  	println "Loading Compile Directory ${options.compileDir} ${options.manifestProperties}"
 		def manifestFile = new File(options.compileDir,"manifest.properties")
 		if(manifestFile.exists())
 			manifestProperties.load(manifestFile.newDataInputStream())
 	  } else {
 		assetDir.mkdirs()
 	  }
-	  println "Loaded Workspace..."
 	  return assetDir
   }
 
