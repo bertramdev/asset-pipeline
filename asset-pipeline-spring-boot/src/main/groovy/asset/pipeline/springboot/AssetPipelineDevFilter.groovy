@@ -26,14 +26,15 @@ class AssetPipelineDevFilter implements Filter {
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
-		def fileContents = AssetPipeline.serveAsset(fileUri, null, null, request.characterEncoding)
+		def format = servletContext.getMimeType(request.requestURI)
+
+		def fileContents = AssetPipeline.serveAsset(fileUri, format, null, request.characterEncoding)
 
 		if (fileContents) {
 
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 			response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 			response.setDateHeader("Expires", 0); // Proxies.
-			def format = servletContext.getMimeType(request.requestURI)
 			response.setContentType(format)
 			try {
 				response.outputStream << fileContents
