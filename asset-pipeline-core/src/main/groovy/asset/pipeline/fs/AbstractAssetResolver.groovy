@@ -67,19 +67,20 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
                     }
                 }
             }
-        } else {
-            def fileName = normalizedPath
-            if (extension) {
-                if (!fileName.endsWith(".${extension}")) {
-                    fileName += ".${extension}"
-                }
-            }
-            def file = getRelativeFile(prefixPath, fileName)
-            def inputStreamClosure = createInputStreamClosure(file)
-            if (inputStreamClosure && file != null) {
-                return new GenericAssetFile(inputStreamSource: inputStreamClosure, path: relativePathToResolver(file, prefixPath))
+        }
+        //If we cant find a processable entity we load it as Generic
+        def fileName = normalizedPath
+        if (extension) {
+            if (!fileName.endsWith(".${extension}")) {
+                fileName += ".${extension}"
             }
         }
+        def file = getRelativeFile(prefixPath, fileName)
+        def inputStreamClosure = createInputStreamClosure(file)
+        if (inputStreamClosure && file != null) {
+            return new GenericAssetFile(inputStreamSource: inputStreamClosure, path: relativePathToResolver(file, prefixPath))
+        }
+        
         return null
     }
 

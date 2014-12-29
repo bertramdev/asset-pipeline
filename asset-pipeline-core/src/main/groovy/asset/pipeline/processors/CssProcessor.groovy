@@ -91,7 +91,7 @@ class CssProcessor extends AbstractProcessor {
             def fileName  = AssetHelper.nameWithoutExtension(file.getName())
             def digestName
             if(!(file instanceof GenericAssetFile)) {
-                def directiveProcessor = new DirectiveProcessor(assetFile.contentType, precompiler)
+                def directiveProcessor = new DirectiveProcessor(baseFile.contentType, precompiler)
                 def fileData   = directiveProcessor.compile(file)
                 digestName = AssetHelper.getByteDigest(fileData.bytes)
             }

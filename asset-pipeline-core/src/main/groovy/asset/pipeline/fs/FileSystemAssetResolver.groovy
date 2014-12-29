@@ -66,6 +66,8 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		def specs
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
+		} else {
+			specs = AssetHelper.assetFileClasses()
 		}
 
 		for(directoryPath in scanDirectories) {
