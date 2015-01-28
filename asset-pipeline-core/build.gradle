@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bertramlabs.plugins'
-version = '2.1.0'
+version = '2.1.1'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 buildscript {

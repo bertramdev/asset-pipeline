@@ -212,7 +212,6 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 	protected boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
 		for(pattern in patterns) {
 			PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern}")
-
 			if(pathMatcher.matches(Paths.get(filePath))) {
 				return true
 			}

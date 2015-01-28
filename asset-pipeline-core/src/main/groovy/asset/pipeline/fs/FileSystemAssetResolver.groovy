@@ -182,18 +182,18 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		for(resolver in resolvers) {
 			fileList += resolver.scanForFiles(excludePatterns, includePatterns)
 		}
-
-		return fileList.unique { AssetFile a, AssetFile b -> a.path <=> b.path }
+		fileList.unique { AssetFile a, AssetFile b -> a.path <=> b.path }
+		return fileList
 	}
 
     @CompileStatic
 	protected iterateOverFileSystem(File dir, List<String> excludePatterns, List<String> includePatterns, List<AssetFile> fileList, String sourcePath) {
 		dir.listFiles()?.each { File file ->
 			def relativePath = relativePathToResolver(file, sourcePath)
-			if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
-				if(file.isDirectory()) {
+			if(file.isDirectory()) {
 					iterateOverFileSystem(file,excludePatterns, includePatterns, fileList, sourcePath)
-				} else {
+			} else if(!isFileMatchingPatterns(relativePath,excludePatterns) || isFileMatchingPatterns(relativePath,includePatterns)) {
+				if(!file.isDirectory()) {
 					def assetFileClass = AssetHelper.assetForFileName(relativePath)
 					if(assetFileClass) {
 						fileList.add(assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: null, path: relativePath, sourceResolver: this) as AssetFile)
