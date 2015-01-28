@@ -3,6 +3,7 @@ package asset.pipeline.gradle
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
+import asset.pipeline.fs.JarAssetResolver
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
@@ -12,6 +13,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.file.FileCollection
 
 /*
  * Copyright 2014 original authors
@@ -38,6 +40,7 @@ import org.gradle.api.tasks.TaskAction
 class AssetCompile extends DefaultTask {
 
     @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()
+    private FileCollection classpath;
 
     @OutputDirectory
     File getDestinationDir() {
@@ -87,6 +90,20 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.minifyCss = minifyCss
     }
 
+    @InputFiles
+    @Optional
+    public FileCollection getClasspath() {
+        try {
+            return getProject().configurations.getByName('runtime') as FileCollection
+        } catch(e) {
+            return null as FileCollection
+        }
+    }
+
+    // public void setClasspath(FileCollection configuration) {
+    //     this.classpath = configuration;
+    // }
+
 
     @InputFiles
     FileTree getSource() {
@@ -98,9 +115,18 @@ class AssetCompile extends DefaultTask {
     @TaskAction
     @CompileDynamic
     void compile() {
-        println "Compiling assets in directory ${assetsDir}"
+        // println "Compiling assets in directory ${assetsDir}"
         def resolver = new FileSystemAssetResolver('application', assetsDir.canonicalPath)
         AssetPipelineConfigHolder.registerResolver(resolver)
+        
+        //Time to register Jar Resolvers
+        this.getClasspath()?.files?.each { file ->
+            // println "Registering Jar Resolver ${file}"
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/assets"))
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/static"))
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/resources"))
+        }
+
         AssetPipelineConfigHolder.config = configOptions
         def assetCompiler = new AssetCompiler(pipelineExtension.toMap(),new GradleEventListener())
         assetCompiler.excludeRules.default = pipelineExtension.excludes

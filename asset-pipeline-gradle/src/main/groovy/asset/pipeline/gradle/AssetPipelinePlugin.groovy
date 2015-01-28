@@ -44,7 +44,9 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
 		project.tasks.create('assetCompile', AssetCompile)
 
+
         def assetPrecompileTask = project.tasks.getByName('assetCompile')
+        // assetPrecompileTask.dependsOn('classes')
         def assetCleanTask = project.tasks.create('assetClean', Delete)
 
         project.afterEvaluate {
