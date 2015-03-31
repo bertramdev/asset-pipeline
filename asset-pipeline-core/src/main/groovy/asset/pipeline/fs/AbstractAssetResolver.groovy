@@ -34,7 +34,7 @@ import java.util.zip.ZipEntry
 * @author David Estes
 */
 abstract class AbstractAssetResolver<T> implements AssetResolver {
-	String name
+    String name
 
     AbstractAssetResolver(String name) {
         this.name = name
@@ -49,23 +49,34 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 
     protected AssetFile resolveAsset(specs, String prefixPath, String normalizedPath, AssetFile baseFile, String extension) {
         if (specs) {
-            for (fileSpec in specs) {
+            def extensionMap = [:]
+            for(fileSpec in specs) {
+                for(ext in fileSpec.extensions) {
+                    if(extensionMap[ext] == null) {
+                        extensionMap[ext] = fileSpec
+                    }
+                }
+            }
+            def extensions = extensionMap.keySet().sort{a,b -> -(a.size()) <=> -(b.size())}
+
+            for (ext in extensions) {
+                def fileSpec = extensionMap[ext]
                 def fileName = normalizedPath
                 if (fileName.endsWith(".${fileSpec.compiledExtension}")) {
                     fileName = fileName.substring(0, fileName.lastIndexOf(".${fileSpec.compiledExtension}"))
                 }
-                for (ext in fileSpec.extensions) {
-                    def tmpFileName = fileName
-                    if (!tmpFileName.endsWith("." + ext)) {
-                        tmpFileName += "." + ext
-                    }
-                    def file = getRelativeFile(prefixPath, tmpFileName)
-                    def inputStreamClosure = createInputStreamClosure(file)
 
-                    if (inputStreamClosure && file != null) {
-                        return fileSpec.newInstance(inputStreamSource: inputStreamClosure, baseFile: baseFile, path: relativePathToResolver(file, prefixPath), sourceResolver: this)
-                    }
+                def tmpFileName = fileName
+                if (!tmpFileName.endsWith("." + ext)) {
+                    tmpFileName += "." + ext
                 }
+                def file = getRelativeFile(prefixPath, tmpFileName)
+                def inputStreamClosure = createInputStreamClosure(file)
+
+                if (inputStreamClosure && file != null) {
+                    return fileSpec.newInstance(inputStreamSource: inputStreamClosure, baseFile: baseFile, path: relativePathToResolver(file, prefixPath), sourceResolver: this)
+                }
+                
             }
         }
         //If we cant find a processable entity we load it as Generic
@@ -85,105 +96,105 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
     }
 
     @CompileStatic
-	public Pattern convertGlobToRegEx(String line)
-	{
-		line = line.trim();
-		int strLen = line.length();
-		StringBuilder sb = new StringBuilder(strLen);
-		// Remove beginning and ending * globs because they're useless
-		if (line.startsWith("*"))
-		{
-			line = line.substring(1);
-			strLen--;
-		}
-		if (line.endsWith("*"))
-		{
-			line = line.substring(0, strLen-1);
-			strLen--;
-		}
-		boolean escaping = false;
-		int inCurlies = 0;
-		for (char currentChar : line.toCharArray())
-		{
-			switch (currentChar)
-			{
-				case '*':
-				if (escaping)
-				sb.append("\\*");
-				else
-				sb.append(".*");
-				escaping = false;
-				break;
-				case '?':
-				if (escaping)
-				sb.append("\\?");
-				else
-				sb.append('.');
-				escaping = false;
-				break;
-				case '.':
-				case '(':
-				case ')':
-				case '+':
-				case '|':
-				case '^':
-				case '$':
-				case '@':
-				case '%':
-				sb.append('\\');
-				sb.append(currentChar);
-				escaping = false;
-				break;
-				case '\\':
-				if (escaping)
-				{
-					sb.append("\\\\");
-					escaping = false;
-				}
-				else
-				escaping = true;
-				break;
-				case '{':
-				if (escaping)
-				{
-					sb.append("\\{");
-				}
-				else
-				{
-					sb.append('(');
-					inCurlies++;
-				}
-				escaping = false;
-				break;
-				case '}':
-				if (inCurlies > 0 && !escaping)
-				{
-					sb.append(')');
-					inCurlies--;
-				}
-				else if (escaping)
-				sb.append("\\}");
-				else
-				sb.append("}");
-				escaping = false;
-				break;
-				case ',':
-				if (inCurlies > 0 && !escaping)
-				{
-					sb.append('|');
-				}
-				else if (escaping)
-				sb.append("\\,");
-				else
-				sb.append(",");
-				break;
-				default:
-				escaping = false;
-				sb.append(currentChar);
-			}
-		}
-		return Pattern.compile(sb.toString());
-	}
+    public Pattern convertGlobToRegEx(String line)
+    {
+        line = line.trim();
+        int strLen = line.length();
+        StringBuilder sb = new StringBuilder(strLen);
+        // Remove beginning and ending * globs because they're useless
+        if (line.startsWith("*"))
+        {
+            line = line.substring(1);
+            strLen--;
+        }
+        if (line.endsWith("*"))
+        {
+            line = line.substring(0, strLen-1);
+            strLen--;
+        }
+        boolean escaping = false;
+        int inCurlies = 0;
+        for (char currentChar : line.toCharArray())
+        {
+            switch (currentChar)
+            {
+                case '*':
+                if (escaping)
+                sb.append("\\*");
+                else
+                sb.append(".*");
+                escaping = false;
+                break;
+                case '?':
+                if (escaping)
+                sb.append("\\?");
+                else
+                sb.append('.');
+                escaping = false;
+                break;
+                case '.':
+                case '(':
+                case ')':
+                case '+':
+                case '|':
+                case '^':
+                case '$':
+                case '@':
+                case '%':
+                sb.append('\\');
+                sb.append(currentChar);
+                escaping = false;
+                break;
+                case '\\':
+                if (escaping)
+                {
+                    sb.append("\\\\");
+                    escaping = false;
+                }
+                else
+                escaping = true;
+                break;
+                case '{':
+                if (escaping)
+                {
+                    sb.append("\\{");
+                }
+                else
+                {
+                    sb.append('(');
+                    inCurlies++;
+                }
+                escaping = false;
+                break;
+                case '}':
+                if (inCurlies > 0 && !escaping)
+                {
+                    sb.append(')');
+                    inCurlies--;
+                }
+                else if (escaping)
+                sb.append("\\}");
+                else
+                sb.append("}");
+                escaping = false;
+                break;
+                case ',':
+                if (inCurlies > 0 && !escaping)
+                {
+                    sb.append('|');
+                }
+                else if (escaping)
+                sb.append("\\,");
+                else
+                sb.append(",");
+                break;
+                default:
+                escaping = false;
+                sb.append(currentChar);
+            }
+        }
+        return Pattern.compile(sb.toString());
+    }
 
     protected AssetFile assetForFile(T file, String contentType, AssetFile baseFile=null, String sourceDirectory) {
         if(file == null) {
@@ -195,34 +206,44 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
         }
 
         def possibleFileSpecs = AssetHelper.getPossibleFileSpecs(contentType)
+        def longestExtension = null
+        def matchingSpec = null
         for(fileSpec in possibleFileSpecs) {
             for(extension in fileSpec.extensions) {
-                def fileName = getFileName(file)
-                if(fileName.endsWith(".$extension" )) {
-                    return fileSpec.newInstance(inputStreamSource: createInputStreamClosure(file), baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
+                if(extension.size() > (longestExtension?.size() ?: 0)) {
+                    def fileName = getFileName(file)
+                    if(fileName.endsWith("." + extension)) {
+                        longestExtension = extension
+                        matchingSpec = fileSpec
+                    }    
                 }
             }
         }
+        
+        if(matchingSpec) {
+            return matchingSpec.newInstance(inputStreamSource: createInputStreamClosure(file), baseFile: baseFile, path: relativePathToResolver(file,sourceDirectory), sourceResolver: this)
+        }
+
         return new GenericAssetFile(inputStreamSource: createInputStreamClosure(file), path: relativePathToResolver(file,sourceDirectory))
     }
 
     protected abstract String getFileName(T file)
 
     @CompileStatic
-	protected boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
-		for(pattern in patterns) {
-			PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern}")
-			if(pathMatcher.matches(Paths.get(filePath))) {
-				return true
-			}
-			if(pattern.startsWith('**/')) {
-				pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern.substring(3)}")
-				if(pathMatcher.matches(Paths.get(filePath))) {
-					return true
-				}
-			}
-		}
-		return false
-	}
+    protected boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
+        for(pattern in patterns) {
+            PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern}")
+            if(pathMatcher.matches(Paths.get(filePath))) {
+                return true
+            }
+            if(pattern.startsWith('**/')) {
+                pathMatcher = FileSystems.getDefault().getPathMatcher("glob:${pattern.substring(3)}")
+                if(pathMatcher.matches(Paths.get(filePath))) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
 }

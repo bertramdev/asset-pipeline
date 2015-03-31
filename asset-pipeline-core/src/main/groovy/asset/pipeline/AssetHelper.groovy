@@ -59,31 +59,26 @@ class AssetHelper {
         return assetSpecs
     }
 
-    static AssetFile assetForFile(file, String contentType, AssetFile baseFile=null) {
-        if(contentType == null || file == null) {
-            return file
-        }
-
-        def possibleFileSpecs = getPossibleFileSpecs(contentType)
-        for(fileSpec in possibleFileSpecs) {
-            for(extension in fileSpec.extensions) {
-                def fileName = file.getAbsolutePath()
-                if(fileName.endsWith("." + extension)) {
-                    return fileSpec.newInstance(file: file, baseFile:baseFile)
-                }
-            }
-        }
-
-        return file
-    }
-
     /**
     * Finds the AssetFile definition for the specified file name based on its extension
     * @param filename String filename representation
     */
     static Class<AssetFile> assetForFileName(filename) {
-        return assetFileClasses().find{ fileClass ->
-            fileClass.extensions.find { filename.endsWith(".${it}") }
+        def extensionMap = [:]
+        for(fileSpec in assetFileClasses()) {
+            for(extension in fileSpec.extensions) {
+                if(extensionMap[extension] == null) {
+                    extensionMap[extension] = fileSpec
+                }
+            }
+        }
+
+        def extensions = extensionMap.keySet().sort{a,b -> -(a.size()) <=> -(b.size())}
+        def matchedExtension = extensions.find{filename.endsWith(".${it}") }
+        if(matchedExtension) {
+            return extensionMap[matchedExtension]
+        } else {
+            return null
         }
     }
 
@@ -176,30 +171,6 @@ class AssetHelper {
         return null
     }
 
-    /**
-     *
-     * @param uri the string of the asset uri.
-     * @param possibleFileSpecs is a list of possible file specs that the file for the uri can belong to.
-     * @return an AssetFile for the corresponding uri.
-     */
-    static AssetFile fileForUriIfHasAnyAssetType(String uri, Collection<Class<AssetFile>> possibleFileSpecs, baseFile=null) {
-        for(fileSpec in possibleFileSpecs) {
-            for(extension in fileSpec.extensions) {
-                def fullName = uri
-                if(fullName.endsWith(".${fileSpec.compiledExtension}")) {
-                    fullName = fullName.substring(0,fullName.lastIndexOf(".${fileSpec.compiledExtension}"))
-                }
-                if(!fullName.endsWith("." + extension)) {
-                    fullName += "." + extension
-                }
-
-                def file = fileForFullName(fullName)
-                if(file) {
-                    return fileSpec.newInstance(file: file, baseFile: baseFile)
-                }
-            }
-        }
-    }
 
     /**
      *

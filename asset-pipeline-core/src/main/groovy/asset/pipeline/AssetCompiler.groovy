@@ -47,6 +47,17 @@ class AssetCompiler {
 		} else {
 			options.excludesGzip += ['png', 'jpg','jpeg', 'gif', 'zip', 'gz']
 		}
+
+		if(!options.containsKey('enableGzip')) {
+			options.enableGzip = true
+		}
+
+		if(!options.containsKey('enableDigests')) {
+			options.enableDigests = true
+		}
+		if(!options.containsKey('skipNonDigests')) {
+			options.skipNonDigests = false
+		}
 		// Load in additional assetSpecs
 		options.specs?.each { spec ->
 			def specClass = this.class.classLoader.loadClass(spec)
@@ -55,6 +66,32 @@ class AssetCompiler {
 			}
 		}
 		manifestProperties = new Properties()
+	}
+
+
+	/**
+	* Main Target Endpoint for Launching The AssetCompile in a Forked Execution Environment
+	* Arguments
+	* -o compileDir
+	* -i sourceDir (List of SourceDirs)
+	* -j List of Source Jars (, delimited)
+	* -d Digests
+	* -z Compression
+	* -m SourceMaps
+	* -n Skip Non Digests
+	* -c Config Location
+	* command - compile,watch
+	*/
+	static void main(String[] args) {
+		def properties = new java.util.Properties()
+		System.properties.each { k,v ->
+			if(k.startsWith('asset.pipeline')) {
+				def newKey = k.substring('asset.pipeline'.size())
+				println "Key ${k} - ${v}"
+			}
+		}
+		// def properties = System.getProperties()
+		def assetCompiler = new AssetCompiler()
 	}
 
 	void compile() {
@@ -158,14 +195,18 @@ class AssetCompiler {
 
 					if(extension) {
 						try {
-							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
-							digestedFile.createNewFile()
-							digestedFile.bytes = outputBytes
-
+							def digestedFile
+							if(options.enableDigests) {
+								digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
+								digestedFile.createNewFile()
+								digestedFile.bytes = outputBytes
+								
+							}
 							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
+							
 
 							// Zip it Good!
-							if(!options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
+							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
 								eventListener?.triggerEvent("StatusUpdate","Compressing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 								createCompressedFiles(outputFile,outputBytes, digestedFile)
 							}
@@ -250,12 +291,15 @@ class AssetCompiler {
 		File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
 
 		zipStream.write(outputBytes)
-		zipFile.createNewFile()
-		zipFileDigest.createNewFile()
 		zipStream.finish()
 		byte[] zipBytes = targetStream.toByteArray()
+		zipFile.createNewFile()
 		zipFile.bytes = zipBytes
-		zipFileDigest.bytes = zipBytes
+		if(options.enableDigests as Boolean) {
+			zipFileDigest.createNewFile()
+			zipFileDigest.bytes = zipBytes	
+		}
+		
 		targetStream.close()
 	}
 
