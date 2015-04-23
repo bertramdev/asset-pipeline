@@ -39,12 +39,14 @@ class ClosureCompilerProcessor {
 		options.trustedStrings = true
 
 		translateMinifyOptions(options,minifyOptions)
+
 		if(assetCompiler.options.enableSourceMaps) {
 			setSourceMapOptions(options,minifyOptions, fileName)
 		}
 
+        String baseFileName = new File(fileName).name
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
-		SourceFile sourceFile = SourceFile.fromCode(fileName + ".unminified.js", inputText)
+		SourceFile sourceFile = SourceFile.fromCode(baseFileName + ".unminified.js", inputText)
 		// def sourceFile = new SourceFile.Preloaded(fileName + ".unminified.js",fileName, inputText)
 		// sourceFile.setCode(inputText)
 		def result = compiler.compile([] as List<SourceFile>,[sourceFile] as List<SourceFile>,options)
@@ -59,10 +61,10 @@ class ClosureCompilerProcessor {
 			unminifiedFile.text = inputText
 			mapFile.createNewFile()
 			FileWriter outputWriter = new FileWriter(mapFile)
-			compiler.sourceMap.setWrapperPrefix("//# sourceMappingURL=${fileName + '.js.map'}\n")
-			compiler.sourceMap.appendTo(outputWriter,fileName + ".js")
+			compiler.sourceMap.setWrapperPrefix("//# sourceMappingURL=${baseFileName + '.js.map'}\n")
+			compiler.sourceMap.appendTo(outputWriter,baseFileName + ".js")
 			outputWriter.close();
-			output = "//# sourceMappingURL=${fileName + '.js.map'}\n" + output
+			output = "//# sourceMappingURL=${baseFileName + '.js.map'}\n" + output
 		}
 		return output
 	}
