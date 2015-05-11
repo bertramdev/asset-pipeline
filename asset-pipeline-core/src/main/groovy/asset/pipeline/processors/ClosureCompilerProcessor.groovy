@@ -43,11 +43,15 @@ class ClosureCompilerProcessor {
 			setSourceMapOptions(options,minifyOptions, fileName)
 		}
 
+		List<SourceFile> externs = (minifyOptions.externs ?: []).collect { String file ->
+			SourceFile.fromFile(file)
+		}
+
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
 		SourceFile sourceFile = SourceFile.fromCode(fileName + ".unminified.js", inputText)
 		// def sourceFile = new SourceFile.Preloaded(fileName + ".unminified.js",fileName, inputText)
 		// sourceFile.setCode(inputText)
-		def result = compiler.compile([] as List<SourceFile>,[sourceFile] as List<SourceFile>,options)
+		def result = compiler.compile(externs,[sourceFile] as List<SourceFile>,options)
 		def output = compiler.toSource()
 		if(compiler.sourceMap) {
 			File mapFile = new File(assetCompiler.options.compileDir as String,fileName + ".js.map")
