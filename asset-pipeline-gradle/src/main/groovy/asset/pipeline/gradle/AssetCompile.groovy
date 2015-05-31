@@ -62,6 +62,37 @@ class AssetCompile extends DefaultTask {
 
     @Input
     @Optional
+    boolean getEnableDigests() {
+        pipelineExtension.enableDigests
+    }
+
+    void setEnableDigests(boolean enableDigests) {
+        pipelineExtension.enableDigests = enableDigests
+    }
+
+    @Input
+    @Optional
+    boolean getEnableGzip() {
+        pipelineExtension.enableGzip
+    }
+
+    void setEnableGzip(boolean enableGzip) {
+        pipelineExtension.enableGzip = enableGzip
+    }
+
+    @Input
+    @Optional
+    boolean getSkipNonDigests() {
+        pipelineExtension.skipNonDigests
+    }
+
+    void setSkipNonDigests(boolean skipNonDigests) {
+        pipelineExtension.skipNonDigests = skipNonDigests
+    }
+
+
+    @Input
+    @Optional
     boolean getMinifyJs() {
         pipelineExtension.minifyJs
     }
@@ -69,6 +100,7 @@ class AssetCompile extends DefaultTask {
     void setMinifyJs(boolean minifyJs) {
         pipelineExtension.minifyJs = minifyJs
     }
+
 
     @Input
     @Optional
@@ -94,7 +126,12 @@ class AssetCompile extends DefaultTask {
     @Optional
     public FileCollection getClasspath() {
         try {
-            return getProject().configurations.getByName('runtime') as FileCollection
+            FileCollection runtimeFiles = getProject().configurations.getByName('runtime') as FileCollection
+            FileCollection providedFiles = getProject().configurations.getByName('provided') as FileCollection
+            if(providedFiles) {
+                return runtimeFiles + providedFiles
+            }
+            return runtimeFiles
         } catch(e) {
             return null as FileCollection
         }
@@ -121,7 +158,6 @@ class AssetCompile extends DefaultTask {
         
         //Time to register Jar Resolvers
         this.getClasspath()?.files?.each { file ->
-            // println "Registering Jar Resolver ${file}"
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/assets"))
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/static"))
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/resources"))

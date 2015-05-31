@@ -26,6 +26,9 @@ class AssetPipelineExtension {
 	boolean minifyJs = true
 	boolean enableSourceMaps = true
 	boolean minifyCss = true
+	boolean enableDigests = true
+	boolean skipNonDigests = false
+	boolean enableGzip = true
 	String  compileDir = 'build/assets'
 	String assetsPath = 'assets'
 	Map minifyOptions
@@ -37,6 +40,6 @@ class AssetPipelineExtension {
 
 
 	Map toMap() {
-		return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir:compileDir, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
+		return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir:compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
 	}
 }

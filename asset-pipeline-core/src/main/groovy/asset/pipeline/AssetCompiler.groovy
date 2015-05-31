@@ -191,7 +191,10 @@ class AssetCompiler {
 							digestName = AssetHelper.getByteDigest(assetFile.inputStream.bytes)
 						}
 					}
-					outputFile.bytes = outputBytes
+					if(!options.skipNonDigests) {
+						outputFile.bytes = outputBytes	
+					}
+					
 
 					if(extension) {
 						try {
@@ -293,8 +296,11 @@ class AssetCompiler {
 		zipStream.write(outputBytes)
 		zipStream.finish()
 		byte[] zipBytes = targetStream.toByteArray()
-		zipFile.createNewFile()
-		zipFile.bytes = zipBytes
+		if(!options.skipNonDigests) {
+			zipFile.createNewFile()
+			zipFile.bytes = zipBytes	
+		}
+		
 		if(options.enableDigests as Boolean) {
 			zipFileDigest.createNewFile()
 			zipFileDigest.bytes = zipBytes	
