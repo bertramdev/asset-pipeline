@@ -177,7 +177,7 @@ class AssetCompiler {
 
 					def parentTree = new File(outputFile.parent)
 					parentTree.mkdirs()
-					outputFile.createNewFile()
+					
 
 					byte[] outputBytes
 					if(fileData) {
@@ -192,6 +192,7 @@ class AssetCompiler {
 						}
 					}
 					if(!options.skipNonDigests) {
+						outputFile.createNewFile()
 						outputFile.bytes = outputBytes	
 					}
 					
