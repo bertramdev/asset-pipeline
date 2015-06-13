@@ -1,25 +1,24 @@
-apply plugin: 'groovy'
-
-group = 'com.bertramlabs.plugins'
-version = '2.2.1'
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-
 buildscript {
 	repositories {
 		mavenLocal()
 		jcenter()
 	}
 	dependencies {
-		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
 	}
 }
 
+
+
+apply plugin: 'groovy'
+
+group = 'com.bertramlabs.plugins'
+version = '2.2.1'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 repositories {
 	jcenter()
 	mavenCentral()
 }
-
 
 dependencies {
 
