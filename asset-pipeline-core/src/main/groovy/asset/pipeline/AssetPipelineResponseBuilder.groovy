@@ -1,11 +1,11 @@
 package asset.pipeline
 
 class AssetPipelineResponseBuilder {
-	String uri
-	String ifNoneMatchHeader
-	Integer statusCode = 200
+	public String uri
+	public String ifNoneMatchHeader
+	public Integer statusCode = 200
 
-	def headers = [:]
+	public Map<String,String> headers = [:]
 
 	AssetPipelineResponseBuilder(String uri, String ifNoneMatchHeader=null) {
 		this.uri = uri

@@ -17,7 +17,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
 group = 'com.bertramlabs.plugins'
-version = '2.2.4'
+version = '2.2.5'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 
