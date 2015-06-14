@@ -158,9 +158,11 @@ class AssetCompile extends DefaultTask {
         
         //Time to register Jar Resolvers
         this.getClasspath()?.files?.each { file ->
-            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/assets"))
-            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/static"))
-            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/resources"))
+            if(file.exists()) {
+                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/assets"))
+                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/static"))
+                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/resources"))    
+            }
         }
 
         AssetPipelineConfigHolder.config = configOptions
