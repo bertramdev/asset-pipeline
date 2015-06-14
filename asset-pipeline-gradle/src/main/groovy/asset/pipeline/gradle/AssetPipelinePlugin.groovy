@@ -78,6 +78,32 @@ class AssetPipelinePlugin implements Plugin<Project> {
             cleanTask.dependsOn( assetCleanTask )
         }
 
+        def jarTask = project.tasks.findByName('jar')
+        if(jarTask) {
+            jarTask.dependsOn(assetPrecompileTask)
+        }
+
+        def shadowJarTask = project.tasks.findByName('shadowJar')
+        if(shadowJarTask) {
+            shadowJarTask.dependsOn(assetPrecompileTask)
+        }
+
+        def warTask = project.tasks.findByName('war')
+        if(warTask) {
+            warTask.dependsOn(assetPrecompileTask)
+        }
+
+        def processResourcesTask = project.tasks.findByName('processResources')
+        def classesTask = project.tasks.findByName('classes')
+
+        if(processResourcesTask) {
+            processResourcesTask.dependsOn(assetPrecompileTask)
+            // assetPrecompileTask.dependsOn(processResourcesTask)    
+        }
+        if(classesTask) {
+            // assetPrecompileTask.dependsOn(classesTask)       
+        }
+        
 
 		// project.task('asset-watch') << {
 		// 	//TODO: Implement live watcher to auto recompile assets as they change
