@@ -55,8 +55,14 @@ class AssetPipelinePlugin implements Plugin<Project> {
             assetCleanTask.configure {
                 delete project.file(assetPipeline.compileDir)
             }
+            def configDestinationDir = project.file(assetPipeline.compileDir)
+            // def processResourcesTask = project.tasks.findByName('processResources')
+            // if(processResourcesTask && assetPipeline.compileDir == 'build/assets') {
+            //     destinationDir = project.file('build/resources/main/assets')
+            // }
+            
             assetPrecompileTask.configure {
-                destinationDir = project.file(assetPipeline.compileDir)
+                destinationDir = configDestinationDir
                 assetsDir = project.file(assetPipeline.assetsPath)
                 minifyJs = assetPipeline.minifyJs
                 minifyCss = assetPipeline.minifyCss
@@ -93,16 +99,19 @@ class AssetPipelinePlugin implements Plugin<Project> {
             warTask.dependsOn(assetPrecompileTask)
         }
 
-        def processResourcesTask = project.tasks.findByName('processResources')
-        def classesTask = project.tasks.findByName('classes')
+        def installAppTask = project.tasks.findByName('installApp')
+        if(installAppTask) {
+            installAppTask.dependsOn(assetPrecompileTask)
+        }
 
-        if(processResourcesTask) {
-            processResourcesTask.dependsOn(assetPrecompileTask)
-            // assetPrecompileTask.dependsOn(processResourcesTask)    
+        def installDistTask = project.tasks.findByName('installDist')
+        if(installDistTask) {
+            installDistTask.dependsOn(assetPrecompileTask)
         }
-        if(classesTask) {
-            // assetPrecompileTask.dependsOn(classesTask)       
-        }
+
+        
+        // def resourcesTask = project.tasks.findByName('classes')
+
         
 
 		// project.task('asset-watch') << {
