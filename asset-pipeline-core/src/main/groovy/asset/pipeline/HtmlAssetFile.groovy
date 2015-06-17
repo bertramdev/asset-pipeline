@@ -16,13 +16,13 @@
 
 package asset.pipeline
 import java.util.regex.Pattern
-
+import asset.pipeline.processors.HtmlProcessor
 
 class HtmlAssetFile extends AbstractAssetFile {
+	static List<Class<Processor>> processors = [HtmlProcessor]
     static final List<String> contentType = ['text/html']
     static List<String> extensions = ['html']
     static String compiledExtension = 'html'
-    static processors = []
     public Pattern directivePattern = null
     
 }

@@ -20,20 +20,20 @@ import java.net.URL
 import java.net.URI
 import groovy.transform.CompileStatic
 /**
-* This Processor iterates over relative image paths in a CSS file and
+* This Processor iterates over relative image paths in an HTML file and
 * recalculates their path relative to the base file. In precompiler mode
 * the image urls are also cache digested.
 * @author David Estes
 */
-class CssProcessor extends AbstractProcessor {
+class HtmlProcessor extends AbstractProcessor {
 
-    CssProcessor(AssetCompiler precompiler) {
+    HtmlProcessor(AssetCompiler precompiler) {
         super(precompiler)
     }
 
     String process(String inputText, AssetFile assetFile) {
             Map cachedPaths = [:]
-            return inputText.replaceAll(/url\((?:\s+)?[\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?(?:\s+)?\)/) { fullMatch, assetPath ->
+            return inputText.replaceAll(/[\'\"]([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]/) { fullMatch, assetPath ->
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
                     replacementPath = cachedPaths[assetPath]
@@ -57,7 +57,7 @@ class CssProcessor extends AbstractProcessor {
                         cachedPaths[assetPath] = replacementPath
                     }
                 }
-                return "url('${replacementPath}')"
+                return "\"${replacementPath}\""
             }
     }
 
