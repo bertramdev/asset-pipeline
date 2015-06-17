@@ -33,7 +33,9 @@ class HtmlProcessor extends AbstractProcessor {
 
     String process(String inputText, AssetFile assetFile) {
             Map cachedPaths = [:]
-            return inputText.replaceAll(/[\'\"]([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]/) { fullMatch, assetPath ->
+            return inputText.replaceAll(/[\"]([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=\']+)[\"]|[\']([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=\"]+)[\']/) { fullMatch, assetDoublePath, assetSinglePath ->
+                def assetPath = assetDoublePath ?: assetSinglePath
+                def encapsulationString = assetDoublePath ? '"' : '\''
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
                     replacementPath = cachedPaths[assetPath]
@@ -57,7 +59,7 @@ class HtmlProcessor extends AbstractProcessor {
                         cachedPaths[assetPath] = replacementPath
                     }
                 }
-                return "\"${replacementPath}\""
+                return "${encapsulationString}${replacementPath}${encapsulationString}"
             }
     }
 
@@ -90,7 +92,7 @@ class HtmlProcessor extends AbstractProcessor {
             def extension = AssetHelper.extensionFromURI(file.getName())
             def fileName  = AssetHelper.nameWithoutExtension(file.getName())
             def digestName
-            if(!(file instanceof GenericAssetFile)) {
+            if(!(file instanceof GenericAssetFile) && file.compiledExtension != 'html') {
                 extension = file.compiledExtension
                 def directiveProcessor = new DirectiveProcessor(baseFile.contentType[0], precompiler)
                 def fileData   = directiveProcessor.compile(file)

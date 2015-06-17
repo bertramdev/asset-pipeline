@@ -50,6 +50,9 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 		if(!relativePath) {
 			return null
 		}
+		if(relativePath.startsWith('/')) {
+			relativePath = relativePath.substring(1)
+		}
 		def normalizedPath = AssetHelper.normalizePath(relativePath)
 		def specs
 

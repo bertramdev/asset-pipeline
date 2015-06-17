@@ -33,4 +33,14 @@ class JarAssetResolverSpec extends Specification {
 			println file?.inputStream?.text
 			file instanceof JsAssetFile
 	}
+
+	void "should be able to fetch files from a jar file if root path given"() {
+		given:
+			def resolver = new JarAssetResolver('application','lib/test-lib.zip','META-INF/assets')
+		when:
+			def file = resolver.getAsset('/jartest','application/javascript')
+		then:
+			println file?.inputStream?.text
+			file instanceof JsAssetFile
+	}
 }
