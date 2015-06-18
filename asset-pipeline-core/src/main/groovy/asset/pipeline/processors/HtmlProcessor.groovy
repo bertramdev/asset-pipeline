@@ -38,7 +38,7 @@ class HtmlProcessor extends AbstractProcessor {
                 def encapsulationString = assetDoublePath ? '"' : '\''
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
-                    replacementPath = cachedPaths[assetPath]
+                    replacementPath = cachedPaths[assetPath].path
                 } else if(replacementPath.size() > 0 && isRelativePath(replacementPath)) {
                     def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
                     def relativeFileName = assetFile.parentPath ? [assetFile.parentPath,urlRep.path.substring(1)].join("/") : urlRep.path.substring(1)
@@ -56,7 +56,9 @@ class HtmlProcessor extends AbstractProcessor {
                         if(urlRep.ref) {
                             replacementPath += "#${urlRep.ref}"
                         }
-                        cachedPaths[assetPath] = replacementPath
+                        cachedPaths[assetPath] = [path:replacementPath]
+                    } else {
+                        cachedPaths[assetPath] = [path: replacementPath]
                     }
                 }
                 return "${encapsulationString}${replacementPath}${encapsulationString}"

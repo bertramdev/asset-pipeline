@@ -36,7 +36,7 @@ class CssProcessor extends AbstractProcessor {
             return inputText.replaceAll(/url\((?:\s+)?[\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?(?:\s+)?\)/) { fullMatch, assetPath ->
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
-                    replacementPath = cachedPaths[assetPath]
+                    replacementPath = cachedPaths[assetPath].path
                 } else if(replacementPath.size() > 0 && isRelativePath(replacementPath)) {
                     def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
                     def relativeFileName = assetFile.parentPath ? [assetFile.parentPath,urlRep.path.substring(1)].join("/") : urlRep.path.substring(1)
@@ -54,7 +54,9 @@ class CssProcessor extends AbstractProcessor {
                         if(urlRep.ref) {
                             replacementPath += "#${urlRep.ref}"
                         }
-                        cachedPaths[assetPath] = replacementPath
+                        cachedPaths[assetPath] = [path:replacementPath]
+                    } else {
+                        cachedPaths[assetPath] = [path:replacementPath]
                     }
                 }
                 return "url('${replacementPath}')"
@@ -113,29 +115,4 @@ class CssProcessor extends AbstractProcessor {
         return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
     }
 
-    private relativePath(file, includeFileName=false) {
-        def path
-        if(includeFileName) {
-            path = file.class.name == 'java.io.File' ? file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR) : file.file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-        } else {
-            path = file.class.name == 'java.io.File' ? new File(file.getParent()).getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR) : new File(file.file.getParent()).getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-        }
-
-        def startPosition = path.findLastIndexOf{ it == "grails-app" }
-        if(startPosition == -1) {
-            startPosition = path.findLastIndexOf{ it == 'web-app' }
-            if(startPosition+2 >= path.length) {
-                return ""
-            }
-            path = path[(startPosition+2)..-1]
-        }
-        else {
-            if(startPosition+3 >= path.length) {
-                return ""
-            }
-            path = path[(startPosition+3)..-1]
-        }
-
-        return path.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-    }
 }
