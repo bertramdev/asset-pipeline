@@ -82,6 +82,16 @@ class AssetCompile extends DefaultTask {
 
     @Input
     @Optional
+    boolean getEnableSourceMaps() {
+        pipelineExtension.enableSourceMaps
+    }
+
+    void setEnableSourceMaps(boolean enableGzip) {
+        pipelineExtension.enableSourceMaps = enableSourceMaps
+    }
+
+    @Input
+    @Optional
     boolean getSkipNonDigests() {
         pipelineExtension.skipNonDigests
     }

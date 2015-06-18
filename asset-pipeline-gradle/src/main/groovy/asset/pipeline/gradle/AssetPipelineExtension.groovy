@@ -30,7 +30,7 @@ class AssetPipelineExtension {
 	boolean skipNonDigests = false
 	boolean enableGzip = true
 	String  compileDir = 'build/assets'
-	String assetsPath = 'assets'
+	String assetsPath = 'src/assets'
 	Map minifyOptions
 	Map configOptions
 

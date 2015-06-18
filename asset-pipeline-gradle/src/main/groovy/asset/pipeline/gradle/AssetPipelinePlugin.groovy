@@ -22,7 +22,7 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
 import org.gradle.api.tasks.Delete
-
+import org.gradle.api.tasks.bundling.Jar
 /**
  * This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
  *
@@ -40,7 +40,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
         if(project.extensions.findByName('grails')) {
             defaultConfiguration.assetsPath = 'grails-app/assets'
-            defaultConfiguration.compileDir = 'build/assetCompile/assets'
+            // defaultConfiguration.compileDir = "${project.buildDir}/assetCompile/assets"
         }
 
 		project.tasks.create('assetCompile', AssetCompile)
@@ -56,10 +56,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 delete project.file(assetPipeline.compileDir)
             }
             def configDestinationDir = project.file(assetPipeline.compileDir)
-            // def processResourcesTask = project.tasks.findByName('processResources')
-            // if(processResourcesTask && assetPipeline.compileDir == 'build/assets') {
-            //     destinationDir = project.file('build/resources/main/assets')
-            // }
+            
             
             assetPrecompileTask.configure {
                 destinationDir = configDestinationDir
@@ -71,49 +68,62 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 excludes = assetPipeline.excludes
                 excludesGzip = assetPipeline.excludesGzip
 				configOptions = assetPipeline.configOptions
+                skipNonDigests = assetPipeline.skipNonDigests
+                enableDigests = assetPipeline.enableDigests
+                enableSourceMaps = assetPipeline.enableSourceMaps
             }
+
+            project.tasks.withType(Jar) { Jar bundleTask ->
+                bundleTask.dependsOn assetPrecompileTask
+                bundleTask.from "${project.buildDir}/assets", {
+                    into "assets"
+                    // if(!(bundleTask instanceof War)) {
+                    //     into "META-INF"
+                    // }
+                }
+            }
+
         }
 
-		def assembleTask = project.tasks.findByName('assemble')
-		if(assembleTask) {
-			assembleTask.dependsOn( assetPrecompileTask )
-		}
+		// def assembleTask = project.tasks.findByName('assemble')
+		// if(assembleTask) {
+		// 	assembleTask.dependsOn( assetPrecompileTask )
+		// }
 
-        def cleanTask = project.tasks.findByName('clean')
-        if(cleanTask) {
-            cleanTask.dependsOn( assetCleanTask )
-        }
+  //       def cleanTask = project.tasks.findByName('clean')
+  //       if(cleanTask) {
+  //           cleanTask.dependsOn( assetCleanTask )
+  //       }
 
-        def jarTask = project.tasks.findByName('jar')
-        if(jarTask) {
-            jarTask.dependsOn(assetPrecompileTask)
-        }
+  //       def jarTask = project.tasks.findByName('jar')
+  //       if(jarTask) {
+  //           jarTask.dependsOn(assetPrecompileTask)
+  //       }
 
-        def shadowJarTask = project.tasks.findByName('shadowJar')
-        if(shadowJarTask) {
-            shadowJarTask.dependsOn(assetPrecompileTask)
-        }
+  //       def shadowJarTask = project.tasks.findByName('shadowJar')
+  //       if(shadowJarTask) {
+  //           shadowJarTask.dependsOn(assetPrecompileTask)
+  //       }
 
-        def warTask = project.tasks.findByName('war')
-        if(warTask) {
-            warTask.dependsOn(assetPrecompileTask)
-        }
+  //       def warTask = project.tasks.findByName('war')
+  //       if(warTask) {
+  //           warTask.dependsOn(assetPrecompileTask)
+  //       }
 
-        def installAppTask = project.tasks.findByName('installApp')
-        if(installAppTask) {
-            installAppTask.dependsOn(assetPrecompileTask)
-        }
+  //       def installAppTask = project.tasks.findByName('installApp')
+  //       if(installAppTask) {
+  //           installAppTask.dependsOn(assetPrecompileTask)
+  //       }
 
-        def installDistTask = project.tasks.findByName('installDist')
-        if(installDistTask) {
-            installDistTask.dependsOn(assetPrecompileTask)
-        }
+  //       def installDistTask = project.tasks.findByName('installDist')
+  //       if(installDistTask) {
+  //           installDistTask.dependsOn(assetPrecompileTask)
+  //       }
 
         
         // def resourcesTask = project.tasks.findByName('classes')
 
-        
-
+               
 		// project.task('asset-watch') << {
 		// 	//TODO: Implement live watcher to auto recompile assets as they change
 		// }
