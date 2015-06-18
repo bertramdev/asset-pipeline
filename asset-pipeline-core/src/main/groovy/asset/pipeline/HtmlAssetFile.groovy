@@ -17,7 +17,9 @@
 package asset.pipeline
 import java.util.regex.Pattern
 import asset.pipeline.processors.HtmlProcessor
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class HtmlAssetFile extends AbstractAssetFile {
 	static List<Class<Processor>> processors = [HtmlProcessor]
     static final List<String> contentType = ['text/html']

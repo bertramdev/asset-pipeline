@@ -92,16 +92,23 @@ class HtmlProcessor extends AbstractProcessor {
             def extension = AssetHelper.extensionFromURI(file.getName())
             def fileName  = AssetHelper.nameWithoutExtension(file.getName())
             def digestName
-            if(!(file instanceof GenericAssetFile) && file.compiledExtension != 'html') {
-                extension = file.compiledExtension
-                def directiveProcessor = new DirectiveProcessor(baseFile.contentType[0], precompiler)
-                def fileData   = directiveProcessor.compile(file)
-                digestName = AssetHelper.getByteDigest(fileData.bytes)
+            if(!(file instanceof GenericAssetFile)) {
+                if(file.compiledExtension != 'html') {
+                    extension = file.compiledExtension
+                    def directiveProcessor = new DirectiveProcessor(baseFile.contentType[0], precompiler)
+                    def fileData   = directiveProcessor.compile(file)
+                    digestName = AssetHelper.getByteDigest(fileData.bytes)
+                    calculatedPath << "${fileName}-${digestName}.${extension}"
+                } else {
+                    extension = file.compiledExtension
+                    calculatedPath << "${fileName}.${extension}"
+                }
             }
             else {
                 digestName = AssetHelper.getByteDigest(file.bytes)
+                calculatedPath << "${fileName}-${digestName}.${extension}"
             }
-            calculatedPath << "${fileName}-${digestName}.${extension}"
+            
         } else {
             if(!(file instanceof GenericAssetFile)) {
                 def fileName  = AssetHelper.nameWithoutExtension(file.getName())

@@ -82,10 +82,13 @@ abstract class AbstractAssetFile implements AssetFile {
 				return cache
 			}
 		}
-	    for(Class<Processor> processor in processors) {
-			Processor processInstance = processor.newInstance(precompiler) as Processor
-			fileText = processInstance.process(fileText, this)
+		if(processors != null) {
+			for(Class<Processor> processor in processors) {
+				Processor processInstance = processor.newInstance(precompiler) as Processor
+				fileText = processInstance.process(fileText, this)
+			}	
 		}
+	    
 
 		if(!skipCache) {
 			CacheManager.createCache(path, md5, fileText, baseFile?.path)
