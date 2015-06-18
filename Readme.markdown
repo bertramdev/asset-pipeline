@@ -28,9 +28,9 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.0.12'
+    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.3.0'
 	//Example additional LESS support
-	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.0.7'
+	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
   }
 }
 
@@ -53,7 +53,7 @@ assets {
 }
 ```
 
-Now that you have your build.gradle files. All you need to do is put files in your projects `assets/javascripts`, `assets/stylesheets`, `assets/images`, or whatever subdirectory you want.
+Now that you have your build.gradle files. All you need to do is put files in your projects `src/assets/javascripts`, `src/assets/stylesheets`, `src/assets/images`, or whatever subdirectory you want.
 When you run `gradle assetCompile` these files will be processed and output into your `build/assets` folder by default.
 
 You can also configure custom resolution paths for your project (STILL WORKING ON IT).
@@ -157,7 +157,7 @@ sourceSets {
 
 dependencies {
   provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "com.bertramlabs.plugins:asset-pipeline-core:2.0.12"
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.3.0"
 }
 ```
 
