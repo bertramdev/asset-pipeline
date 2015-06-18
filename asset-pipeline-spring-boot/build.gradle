@@ -1,3 +1,16 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+	}
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.2"
+}
+
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
@@ -14,16 +27,8 @@ if(!project.hasProperty('bintrayKey')) {
 	bintrayKey = 'empty'
 }
 
-buildscript {
-	repositories {
-		mavenLocal()
-		jcenter()
-	}
-	dependencies {
-		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
-	}
-}
-
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 repositories {
 	jcenter()
