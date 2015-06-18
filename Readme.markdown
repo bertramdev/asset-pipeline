@@ -8,7 +8,7 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 
 **Features:**
 * Asset Bundling
-* Extensible Modules (Supports LESS,Handlebars,Coffeescript, Ember-Handlebars, SASS(Soon)) via other modules.
+* Extensible Modules (Supports LESS,Handlebars,Coffeescript, Ember-Handlebars, SASS) via other modules.
 * Cache Digest Names (Creates cache digested names and stores aliases in a manifest.properties)
 * Js Minification
 * Js SourceMap Generation
