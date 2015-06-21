@@ -292,7 +292,7 @@ class AssetCompiler {
 		java.io.ByteArrayOutputStream targetStream  = new java.io.ByteArrayOutputStream()
 		java.util.zip.GZIPOutputStream zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
 		File zipFile       = new File("${outputFile.getAbsolutePath()}.gz")
-		File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
+		File zipFileDigest = new File("${digestedFile?.getAbsolutePath()}.gz")
 
 		zipStream.write(outputBytes)
 		zipStream.finish()
