@@ -27,7 +27,6 @@ import groovy.transform.CompileStatic
  * @author David Estes
  * @author Graeme Rocher
  */
-@CompileStatic
 public class AssetHelper {
     static final Collection<Class<AssetFile>> assetSpecs = AssetSpecLoader.loadSpecifications()
     static final String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)

@@ -40,8 +40,10 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
         if(project.extensions.findByName('grails')) {
             defaultConfiguration.assetsPath = 'grails-app/assets'
-            // defaultConfiguration.compileDir = "${project.buildDir}/assetCompile/assets"
+        } else {
+          defaultConfiguration.assetsPath = "${project.projectDir}/src/assets"
         }
+        defaultConfiguration.compileDir = "${project.buildDir}/assets"
 
 		project.tasks.create('assetCompile', AssetCompile)
 
