@@ -16,99 +16,110 @@
 package asset.pipeline.processors
 
 
-import asset.pipeline.*
+import asset.pipeline.AbstractProcessor
+import asset.pipeline.AssetCompiler
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.DirectiveProcessor
+import asset.pipeline.GenericAssetFile
+import java.util.regex.Pattern
 
 import static asset.pipeline.utils.net.Urls.isRelative
 
 
 /**
-* This Processor iterates over relative image paths in a CSS file and
-* recalculates their path relative to the base file. In precompiler mode
-* the image urls are also cache digested.
-* @author David Estes
-*/
+ * This Processor iterates over relative image paths in a CSS file and
+ * recalculates their path relative to the base file. In precompiler mode
+ * the image URLs are also cache digested.
+ *
+ * @author David Estes
+ * @author Ross Goldberg
+ */
 class CssProcessor extends AbstractProcessor {
 
-    CssProcessor(AssetCompiler precompiler) {
+    private static final Pattern URL_CALL_PATTERN = ~/url\((?:\s*)['"]?([a-zA-Z0-9\-_.\/@#? &+%=]+)['"]?(?:\s*)\)/
+
+
+    CssProcessor(final AssetCompiler precompiler) {
         super(precompiler)
     }
 
-    String process(String inputText, AssetFile assetFile) {
-            Map cachedPaths = [:]
-            return inputText.replaceAll(/url\((?:\s+)?[\'\"]?([a-zA-Z0-9\-\_\.\/\@\#\?\ \&\+\%\=]+)[\'\"]?(?:\s+)?\)/) { fullMatch, assetPath ->
-                String replacementPath = assetPath.trim()
-                if(cachedPaths[assetPath]) {
-                    replacementPath = cachedPaths[assetPath].path
-                } else if(replacementPath.size() > 0 && isRelative(replacementPath)) {
-                    def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
-                    def relativeFileName = assetFile.parentPath ? [assetFile.parentPath,urlRep.path.substring(1)].join("/") : urlRep.path.substring(1)
-                    def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
-                    def cssFile = null
 
-                    if(!cssFile) {
-                        cssFile = AssetHelper.fileForFullName(normalizedFileName)
-                    }
-                    if(cssFile) {
-                        replacementPath = relativePathToBaseFile(cssFile, assetFile.baseFile ?: assetFile, this.precompiler && this.precompiler.options.enableDigests ? true : false)
-                        if(urlRep.query != null) {
-                            replacementPath += "?${urlRep.query}"
-                        }
-                        if(urlRep.ref) {
-                            replacementPath += "#${urlRep.ref}"
-                        }
-                        cachedPaths[assetPath] = [path:replacementPath]
-                    } else {
-                        cachedPaths[assetPath] = [path:replacementPath]
-                    }
+    String process(final String inputText, final AssetFile assetFile) {
+        final Map<String, String> cachedPaths = [:]
+        return \
+            inputText.replaceAll(URL_CALL_PATTERN) {
+                final String urlCall,
+                final String assetPath
+            ->
+                final String cachedPath      = cachedPaths[assetPath]
+                final String replacementPath
+                if (cachedPath) {
+                    replacementPath = cachedPath
                 }
+                else if (assetPath.size() > 0 && isRelative(assetPath)) {
+                    final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
+                    final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
+                    final AssetFile file             = AssetHelper.fileForFullName(AssetHelper.normalizePath(relativeFileName))
+
+                    if (file) {
+                        final StringBuilder replacementPathSb = new StringBuilder()
+                        replacementPathSb.append(relativePathToBaseFile(file, assetFile.baseFile ?: assetFile, precompiler && precompiler.options.enableDigests))
+                        if (url.query != null) {
+                            replacementPathSb.append('?').append(url.query)
+                        }
+                        if (url.ref) {
+                            replacementPathSb.append('#').append(url.ref)
+                        }
+                        replacementPath = replacementPathSb.toString()
+                    }
+                    else {
+                        replacementPath = assetPath
+                    }
+
+                    cachedPaths[assetPath] = replacementPath
+                }
+                else {
+                    replacementPath = assetPath
+                }
+
                 return "url('${replacementPath}')"
             }
     }
 
-    private relativePathToBaseFile(file, baseFile, useDigest=false) {
-        def baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll{it}.reverse() : []
-        def currentRelativePath = file.parentPath ? file.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll({it}).reverse() : []
-        def filePathIndex=currentRelativePath.size()- 1
-        def baseFileIndex=baseRelativePath.size() - 1
+    private String relativePathToBaseFile(final AssetFile file, final AssetFile baseFile, final boolean useDigest = false) {
+        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
-        while(filePathIndex > 0 && baseFileIndex > 0 && baseRelativePath[baseFileIndex] == currentRelativePath[filePathIndex]) {
+        int filePathIndex = currRelativePath.size() - 1
+        int baseFileIndex = baseRelativePath.size() - 1
+
+        while (filePathIndex > 0 && baseFileIndex > 0 && baseRelativePath[baseFileIndex] == currRelativePath[filePathIndex]) {
             filePathIndex--
             baseFileIndex--
         }
 
-        def calculatedPath = []
+        final List<String> calculatedPath = new ArrayList<>(baseFileIndex + filePathIndex + 3)
 
         // for each remaining level in the home path, add a ..
-        for(;baseFileIndex>=0;baseFileIndex--) {
-            calculatedPath << ".."
+        for (; baseFileIndex >= 0; baseFileIndex--) {
+            calculatedPath << '..'
         }
 
-        for(;filePathIndex>=0;filePathIndex--) {
-            calculatedPath << currentRelativePath[filePathIndex]
+        for (; filePathIndex >= 0; filePathIndex--) {
+            calculatedPath << currRelativePath[filePathIndex]
         }
-        if(useDigest) {
-            def extension = AssetHelper.extensionFromURI(file.getName())
-            def fileName  = AssetHelper.nameWithoutExtension(file.getName())
-            def digestName
-            if(!(file instanceof GenericAssetFile)) {
-                extension = file.compiledExtension
-                def directiveProcessor = new DirectiveProcessor(baseFile.contentType[0], precompiler)
-                def fileData   = directiveProcessor.compile(file)
-                digestName = AssetHelper.getByteDigest(fileData.bytes)
-            }
-            else {
-                digestName = AssetHelper.getByteDigest(file.bytes)
-            }
-            calculatedPath << "${fileName}-${digestName}.${extension}"
-        } else {
-            if(!(file instanceof GenericAssetFile)) {
-                def fileName  = AssetHelper.nameWithoutExtension(file.getName())
-                def extension = file.compiledExtension
-                calculatedPath << "${fileName}.${extension}"
-            } else {
-                calculatedPath << file.getName()
-            }
-        }
+
+        final String fileName = AssetHelper.nameWithoutExtension(file.name)
+        calculatedPath << (
+            useDigest
+                ? file instanceof GenericAssetFile
+                    ? "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
+                    : "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(baseFile.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+                : file instanceof GenericAssetFile
+                    ? file.name
+                    : fileName + '.' + file.compiledExtension
+        )
 
         return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
     }
