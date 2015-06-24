@@ -37,7 +37,7 @@ import static asset.pipeline.utils.net.Urls.isRelative
  */
 class HtmlProcessor extends AbstractProcessor {
 
-    private static final Pattern QUOTED_ASSET_PATH_PATTERN = ~/"([a-zA-Z0-9\-_.\/@#? &+%=']+)"|'([a-zA-Z0-9\-_.\/@#? &+%="]+)'/
+    private static final Pattern QUOTED_ASSET_PATH_PATTERN = ~/"([a-zA-Z0-9\-_.\/@#? &+%=']++)"|'([a-zA-Z0-9\-_.\/@#? &+%="]++)'/
 
 
     HtmlProcessor(final AssetCompiler precompiler) {
@@ -49,18 +49,20 @@ class HtmlProcessor extends AbstractProcessor {
         final Map<String, String> cachedPaths = [:]
         return \
             inputText.replaceAll(QUOTED_ASSET_PATH_PATTERN) {
-                final String quotedAssetPath,
+                final String quotedAssetPathWithQuotes,
                 final String doubleQuotedAssetPath,
                 final String singleQuotedAssetPath
             ->
-                final String assetPath       = (doubleQuotedAssetPath ?: singleQuotedAssetPath).trim()
-                final String cachedPath      = cachedPaths[assetPath]
+                final String assetPath   = doubleQuotedAssetPath ?: singleQuotedAssetPath
+                final String trimmedPath = assetPath.trim()
+
                 final String replacementPath
-                if (cachedPath) {
-                    replacementPath = cachedPath
+                if (cachedPaths.containsKey(trimmedPath)) {
+                    // cachedPaths[trimmedPath] == null // means use the incoming assetPath to preserve trim spacing
+                    replacementPath = cachedPaths[trimmedPath] ?: assetPath
                 }
-                else if (assetPath.size() > 0 && isRelative(assetPath)) {
-                    final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
+                else if (trimmedPath.size() > 0 && isRelative(trimmedPath)) {
+                    final URL       url              = new URL("http://hostname/${trimmedPath}") // Split out subcomponents
                     final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
                     final AssetFile file             = AssetHelper.fileForFullName(AssetHelper.normalizePath(relativeFileName))
 
@@ -73,16 +75,17 @@ class HtmlProcessor extends AbstractProcessor {
                         if (url.ref) {
                             replacementPathSb.append('#').append(url.ref)
                         }
-                        replacementPath = replacementPathSb.toString()
+                        replacementPath          = replacementPathSb.toString()
+                        cachedPaths[trimmedPath] = replacementPath
                     }
                     else {
-                        replacementPath = assetPath
+                        cachedPaths[trimmedPath] = null
+                        return quotedAssetPathWithQuotes
                     }
-
-                    cachedPaths[assetPath] = replacementPath
                 }
                 else {
-                    replacementPath = assetPath
+                    //TODO? cachedPaths[trimmedPath] = null
+                    return quotedAssetPathWithQuotes
                 }
 
                 final String quote = doubleQuotedAssetPath ? '"' : /'/

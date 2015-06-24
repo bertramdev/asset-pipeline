@@ -37,7 +37,7 @@ import static asset.pipeline.utils.net.Urls.isRelative
  */
 class CssProcessor extends AbstractProcessor {
 
-    private static final Pattern URL_CALL_PATTERN = ~/url\((?:\s*)['"]?([a-zA-Z0-9\-_.\/@#? &+%=]+)['"]?(?:\s*)\)/
+    private static final Pattern URL_CALL_PATTERN = ~/url\((?:\s*)(['"]?)([a-zA-Z0-9\-_.\/@#? &+%=]++)\1?(?:\s*)\)/
 
 
     CssProcessor(final AssetCompiler precompiler) {
@@ -50,11 +50,13 @@ class CssProcessor extends AbstractProcessor {
         return \
             inputText.replaceAll(URL_CALL_PATTERN) {
                 final String urlCall,
+                final String quote,
                 final String assetPath
             ->
-                final String cachedPath      = cachedPaths[assetPath]
+                final String cachedPath = cachedPaths[assetPath]
+
                 final String replacementPath
-                if (cachedPath) {
+                if (cachedPath != null) {
                     replacementPath = cachedPath
                 }
                 else if (assetPath.size() > 0 && isRelative(assetPath)) {
@@ -71,19 +73,19 @@ class CssProcessor extends AbstractProcessor {
                         if (url.ref) {
                             replacementPathSb.append('#').append(url.ref)
                         }
-                        replacementPath = replacementPathSb.toString()
+                        replacementPath        = replacementPathSb.toString()
+                        cachedPaths[assetPath] = replacementPath
                     }
                     else {
-                        replacementPath = assetPath
+                        cachedPaths[assetPath] = assetPath
+                        return urlCall
                     }
-
-                    cachedPaths[assetPath] = replacementPath
                 }
                 else {
-                    replacementPath = assetPath
+                    return urlCall
                 }
 
-                return "url('${replacementPath}')"
+                return "url(${quote}${replacementPath}${quote})"
             }
     }
 
