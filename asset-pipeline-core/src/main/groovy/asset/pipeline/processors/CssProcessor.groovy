@@ -15,10 +15,12 @@
  */
 package asset.pipeline.processors
 
+
 import asset.pipeline.*
-import java.net.URL
-import java.net.URI
-import groovy.transform.CompileStatic
+
+import static asset.pipeline.utils.net.Urls.isRelative
+
+
 /**
 * This Processor iterates over relative image paths in a CSS file and
 * recalculates their path relative to the base file. In precompiler mode
@@ -37,12 +39,12 @@ class CssProcessor extends AbstractProcessor {
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
                     replacementPath = cachedPaths[assetPath].path
-                } else if(replacementPath.size() > 0 && isRelativePath(replacementPath)) {
+                } else if(replacementPath.size() > 0 && isRelative(replacementPath)) {
                     def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
                     def relativeFileName = assetFile.parentPath ? [assetFile.parentPath,urlRep.path.substring(1)].join("/") : urlRep.path.substring(1)
                     def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
                     def cssFile = null
-        
+
                     if(!cssFile) {
                         cssFile = AssetHelper.fileForFullName(normalizedFileName)
                     }
@@ -61,10 +63,6 @@ class CssProcessor extends AbstractProcessor {
                 }
                 return "url('${replacementPath}')"
             }
-    }
-
-    private isRelativePath(assetPath) {
-        return !assetPath.startsWith("/") && !assetPath.startsWith("http")
     }
 
     private relativePathToBaseFile(file, baseFile, useDigest=false) {
@@ -114,5 +112,4 @@ class CssProcessor extends AbstractProcessor {
 
         return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
     }
-
 }

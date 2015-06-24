@@ -15,10 +15,12 @@
  */
 package asset.pipeline.processors
 
+
 import asset.pipeline.*
-import java.net.URL
-import java.net.URI
-import groovy.transform.CompileStatic
+
+import static asset.pipeline.utils.net.Urls.isRelative
+
+
 /**
 * This Processor iterates over relative image paths in an HTML file and
 * recalculates their path relative to the base file. In precompiler mode
@@ -39,12 +41,12 @@ class HtmlProcessor extends AbstractProcessor {
                 String replacementPath = assetPath.trim()
                 if(cachedPaths[assetPath]) {
                     replacementPath = cachedPaths[assetPath].path
-                } else if(replacementPath.size() > 0 && isRelativePath(replacementPath)) {
+                } else if(replacementPath.size() > 0 && isRelative(replacementPath)) {
                     def urlRep = new URL("http://hostname/${replacementPath}") //Split out subcomponents
                     def relativeFileName = assetFile.parentPath ? [assetFile.parentPath,urlRep.path.substring(1)].join("/") : urlRep.path.substring(1)
                     def normalizedFileName = AssetHelper.normalizePath(relativeFileName)
                     def cssFile = null
-        
+
                     if(!cssFile) {
                         cssFile = AssetHelper.fileForFullName(normalizedFileName)
                     }
@@ -63,10 +65,6 @@ class HtmlProcessor extends AbstractProcessor {
                 }
                 return "${encapsulationString}${replacementPath}${encapsulationString}"
             }
-    }
-
-    private isRelativePath(assetPath) {
-        return !assetPath.startsWith("/") && !assetPath.startsWith("http")
     }
 
     private relativePathToBaseFile(file, baseFile, useDigest=false) {
@@ -110,7 +108,7 @@ class HtmlProcessor extends AbstractProcessor {
                 digestName = AssetHelper.getByteDigest(file.bytes)
                 calculatedPath << "${fileName}-${digestName}.${extension}"
             }
-            
+
         } else {
             if(!(file instanceof GenericAssetFile)) {
                 def fileName  = AssetHelper.nameWithoutExtension(file.getName())
@@ -122,31 +120,5 @@ class HtmlProcessor extends AbstractProcessor {
         }
 
         return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-    }
-
-    private relativePath(file, includeFileName=false) {
-        def path
-        if(includeFileName) {
-            path = file.class.name == 'java.io.File' ? file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR) : file.file.getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-        } else {
-            path = file.class.name == 'java.io.File' ? new File(file.getParent()).getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR) : new File(file.file.getParent()).getCanonicalPath().split(AssetHelper.QUOTED_FILE_SEPARATOR)
-        }
-
-        def startPosition = path.findLastIndexOf{ it == "grails-app" }
-        if(startPosition == -1) {
-            startPosition = path.findLastIndexOf{ it == 'web-app' }
-            if(startPosition+2 >= path.length) {
-                return ""
-            }
-            path = path[(startPosition+2)..-1]
-        }
-        else {
-            if(startPosition+3 >= path.length) {
-                return ""
-            }
-            path = path[(startPosition+3)..-1]
-        }
-
-        return path.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
     }
 }
