@@ -7,13 +7,14 @@ buildscript {
 	}
 }
 
+subprojects {
+	version = '2.3.6'
+}
 
 
 apply plugin: 'groovy'
 
 group = 'com.bertramlabs.plugins'
-version = '2.2.1'
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 repositories {
 	jcenter()

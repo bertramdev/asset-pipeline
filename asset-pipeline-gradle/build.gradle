@@ -15,10 +15,10 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
+group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
-group = 'com.bertramlabs.plugins'
-version = '2.3.4'
+
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 repositories {
@@ -27,21 +27,11 @@ repositories {
 	mavenCentral()
 }
 
-// configurations.all {
-// 	resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-// 		if (details.requested.name == 'groovy-all') {
-// 			details.useTarget group: details.requested.group, name: 'groovy', version:'2.3.0'
-// 		}
-// 	}
-// }
-
-
-
 dependencies {
 	compile gradleApi()
 	compile localGroovy()
 
-	compile "com.bertramlabs.plugins:asset-pipeline-core:2.3.4"
+	compile project(':asset-pipeline-core')
 
 	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }

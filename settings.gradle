@@ -1,1 +1,1 @@
-include 'asset-pipeline-core'
+include 'asset-pipeline-core', 'asset-pipeline-gradle', 'asset-pipeline-spring-boot'
