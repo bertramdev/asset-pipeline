@@ -45,7 +45,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 			if(flattenSubDirectories) {
 				def scopedDirectories = baseDirectory.listFiles()
 				for(scopedDirectory in scopedDirectories) {
-					if(scopedDirectory.isDirectory() && scopedDirectory.getName() != "WEB-INF" && scopedDirectory.getName() != 'META-INF') {
+					if(scopedDirectory.isDirectory() && !scopedDirectory.getName().startsWith('.') && scopedDirectory.getName() != "WEB-INF" && scopedDirectory.getName() != 'META-INF') {
 						resolvers << new FileSystemAssetResolver(name, scopedDirectory.canonicalPath, false)
 					}
 				}
