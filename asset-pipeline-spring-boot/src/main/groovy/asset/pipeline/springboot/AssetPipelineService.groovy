@@ -23,8 +23,8 @@ class AssetPipelineService {
 		def manifestFile = applicationContext.getResource("classpath:assets/manifest.properties")
 
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-		if(new File('assets').exists()) {
-			def applicationResolver= new FileSystemAssetResolver('application','assets')
+		if(!manifestFile.exists()) {
+			def applicationResolver= new FileSystemAssetResolver('application','src/assets')
 			AssetPipelineConfigHolder.registerResolver(applicationResolver)
 			AssetPipelineDevFilter filter = new AssetPipelineDevFilter();
 			registrationBean.setFilter(filter);
