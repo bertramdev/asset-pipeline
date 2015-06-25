@@ -96,7 +96,7 @@ class AssetCompiler {
 
 	void compile() {
 		def assetDir           = initializeWorkspace()
-		
+
 		def minifyCssProcessor = new CssMinifyPostProcessor()
 
 		filesToProcess = this.getAllAssets()
@@ -177,7 +177,6 @@ class AssetCompiler {
 
 					def parentTree = new File(outputFile.parent)
 					parentTree.mkdirs()
-					
 
 					byte[] outputBytes
 					if(fileData) {
@@ -193,9 +192,8 @@ class AssetCompiler {
 					}
 					if(!options.skipNonDigests) {
 						outputFile.createNewFile()
-						outputFile.bytes = outputBytes	
+						outputFile.bytes = outputBytes
 					}
-					
 
 					if(extension) {
 						try {
@@ -204,18 +202,14 @@ class AssetCompiler {
 								digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 								digestedFile.createNewFile()
 								digestedFile.bytes = outputBytes
-								
 							}
 							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
-							
 
 							// Zip it Good!
 							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
 								eventListener?.triggerEvent("StatusUpdate","Compressing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 								createCompressedFiles(outputFile,outputBytes, digestedFile)
 							}
-
-
 						} catch(ex) {
 							log.error("Error Compiling File ${fileName}.${extension}",ex)
 						}
@@ -228,7 +222,6 @@ class AssetCompiler {
 
 		saveManifest()
 		eventListener?.triggerEvent("StatusUpdate","Finished Precompiling Assets")
-
   }
 
   private initializeWorkspace() {
@@ -291,22 +284,22 @@ class AssetCompiler {
 	private void createCompressedFiles(File outputFile, byte[] outputBytes, File digestedFile) {
 		java.io.ByteArrayOutputStream targetStream  = new java.io.ByteArrayOutputStream()
 		java.util.zip.GZIPOutputStream zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
-		File zipFile       = new File("${outputFile.getAbsolutePath()}.gz")
-		File zipFileDigest = new File("${digestedFile?.getAbsolutePath()}.gz")
 
 		zipStream.write(outputBytes)
 		zipStream.finish()
 		byte[] zipBytes = targetStream.toByteArray()
 		if(!options.skipNonDigests) {
+			File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
 			zipFile.createNewFile()
-			zipFile.bytes = zipBytes	
+			zipFile.bytes = zipBytes
 		}
-		
+
 		if(options.enableDigests as Boolean) {
+			File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
 			zipFileDigest.createNewFile()
-			zipFileDigest.bytes = zipBytes	
+			zipFileDigest.bytes = zipBytes
 		}
-		
+
 		targetStream.close()
 	}
 
@@ -355,5 +348,4 @@ class AssetCompiler {
 			manifestProperties.remove(it)
 		}
 	}
-
 }
