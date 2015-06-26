@@ -37,7 +37,7 @@ abstract class AbstractAssetFile implements AssetFile {
 	Pattern directivePattern = null
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 	byte[] byteCache
-
+	List<String> matchedDirectives = []
 
 	// @CompileStatic
 	InputStream getInputStream() {
