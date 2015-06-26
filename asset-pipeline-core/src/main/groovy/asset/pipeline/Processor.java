@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package asset.pipeline
+package asset.pipeline;
 
 /**
  * Processor for an {@link AssetFile}
@@ -22,6 +22,6 @@ package asset.pipeline
  * @author Graeme Rocher
  *
  */
-interface Processor {
-	String process(String inputText, AssetFile assetFile)
+public interface Processor {
+	String process(String inputText, AssetFile assetFile);
 }

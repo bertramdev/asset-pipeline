@@ -195,7 +195,7 @@ public class AssetHelper {
      * @return The {@link AssetFile} classes
      */
     static Collection<Class<AssetFile>> getPossibleFileSpecs(String contentType) {
-        return assetFileClasses().findAll {Class<AssetFile> it -> (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
+        return assetFileClasses().findAll {Class<AssetFile> it -> contentType in it.contentType }
     }
 
     /**

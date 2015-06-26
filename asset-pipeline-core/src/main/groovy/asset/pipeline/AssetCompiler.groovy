@@ -27,7 +27,7 @@ import asset.pipeline.processors.CssMinifyPostProcessor
  * @author Graeme Rocher
  */
 @Commons
-class AssetCompiler {
+public class AssetCompiler {
 	def includeRules = [:]
 	def excludeRules = [:]
 
