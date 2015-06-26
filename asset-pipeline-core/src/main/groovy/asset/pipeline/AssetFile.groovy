@@ -66,6 +66,14 @@ interface AssetFile {
      */
     String getName()
     /**
+     * @return the list of matched directive options
+     */
+    List<String> getMatchedDirectives()
+    /**
+     * set the matched directives list
+     */
+    void setMatchedDirectives(List<String> matchedDirectives)
+    /**
      * The AssetResolver used to resolve the asset file
      */
     AssetResolver getSourceResolver()

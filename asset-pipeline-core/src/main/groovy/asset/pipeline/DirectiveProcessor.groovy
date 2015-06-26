@@ -163,6 +163,10 @@ class DirectiveProcessor {
                 directiveArguments[0] = directiveArguments[0].toLowerCase()
                 callDirective(processor,directiveArguments, fileSpec, tree)
             }
+            else {
+                // No matching processor means its a matched directive
+                fileSpec.matchedDirectives += unprocessedArgs[0]
+            }
         }
     }
 

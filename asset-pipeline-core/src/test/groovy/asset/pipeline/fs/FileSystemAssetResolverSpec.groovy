@@ -79,4 +79,5 @@ class FileSystemAssetResolverSpec extends Specification {
 		then:
 			files?.size() == 4
 	}
+	
 }
