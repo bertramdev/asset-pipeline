@@ -21,21 +21,11 @@ group = 'com.bertramlabs.plugins'
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-if(!project.hasProperty('bintrayUser')) {
-	bintrayUser = 'test'
-}
-if(!project.hasProperty('bintrayKey')) {
-	bintrayKey = 'empty'
-}
-
-
-
 repositories {
 	jcenter()
 	mavenLocal()
 	mavenCentral()
 }
-
 
 dependencies {
 	compile gradleApi()
@@ -95,8 +85,8 @@ publishing {
 }
 
 bintray {
-	user = bintrayUser
-	key = bintrayKey
+	user = project.hasProperty('bintrayUsername') ? project.bintrayUsername : 'test'
+        key = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : 'empty'
 	publications = ['maven']
 	pkg {
 		repo = 'asset-pipeline'

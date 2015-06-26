@@ -11,7 +11,6 @@ subprojects {
 	version = '2.3.6'
 }
 
-
 apply plugin: 'groovy'
 
 group = 'com.bertramlabs.plugins'
@@ -31,11 +30,13 @@ dependencies {
 	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
 }
 
-
-
 test {
 	testLogging {
 		exceptionFormat = 'full'
 		showStandardStreams = true
 	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.4'
 }
