@@ -84,6 +84,9 @@ class ClosureCompilerProcessor {
 			compilerOptions.setLanguage(languageIn)
 		}
 		setCompilationLevelOptions(compilerOptions, minifyOptions.get('optimizationLevel') as String)
+		if (minifyOptions.angularPass) {
+			compilerOptions.setAngularPass(true)
+		}
 	}
 
 
