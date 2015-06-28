@@ -45,7 +45,8 @@ assets {
   minifyOptions = [
     languageMode: 'ES5',
     targetLanguage: 'ES5', //Can go from ES6 to ES5 for those bleeding edgers
-    optimizationLevel: 'SIMPLE'
+    optimizationLevel: 'SIMPLE',
+    angularPass: true // Can use @ngInject annotation for Angular Apps
   ]
   
   includes = []

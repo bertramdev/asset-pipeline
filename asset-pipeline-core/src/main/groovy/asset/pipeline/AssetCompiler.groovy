@@ -217,7 +217,6 @@ class AssetCompiler {
 				}
 
 			}
-			// eventListener?.triggerEvent("StatusUpdate","...Finished Processing File ${new Date().time - startTime}ms")
 		}
 
 		saveManifest()

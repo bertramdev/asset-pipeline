@@ -48,18 +48,13 @@ class CssProcessor extends AbstractProcessor {
     String process(final String inputText, final AssetFile assetFile) {
         final Map<String, String> cachedPaths = [:]
         return \
-            inputText.replaceAll(URL_CALL_PATTERN) {
-                final String urlCall,
-                final String quote,
-                final String assetPath
-            ->
+            inputText.replaceAll(URL_CALL_PATTERN) { final String urlCall, final String quote, final String assetPath ->
                 final String cachedPath = cachedPaths[assetPath]
 
                 final String replacementPath
                 if (cachedPath != null) {
                     replacementPath = cachedPath
-                }
-                else if (assetPath.size() > 0 && isRelative(assetPath)) {
+                } else if (assetPath.size() > 0 && isRelative(assetPath)) {
                     final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
                     final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
                     final AssetFile file             = AssetHelper.fileForFullName(AssetHelper.normalizePath(relativeFileName))
@@ -75,13 +70,11 @@ class CssProcessor extends AbstractProcessor {
                         }
                         replacementPath        = replacementPathSb.toString()
                         cachedPaths[assetPath] = replacementPath
-                    }
-                    else {
+                    } else {
                         cachedPaths[assetPath] = assetPath
                         return urlCall
                     }
-                }
-                else {
+                } else {
                     return urlCall
                 }
 

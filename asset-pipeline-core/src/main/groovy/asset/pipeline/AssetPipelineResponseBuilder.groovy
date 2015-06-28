@@ -1,6 +1,6 @@
 package asset.pipeline
 
-class AssetPipelineResponseBuilder {
+public class AssetPipelineResponseBuilder {
 	public String uri
 	public String ifNoneMatchHeader
 	public Integer statusCode = 200
@@ -17,7 +17,15 @@ class AssetPipelineResponseBuilder {
 		}
 	}
 
-	String getCurrentETag() {
+	public Map<String,String> getHeaders() {
+		return headers;
+	}
+
+	public Integer getStatusCode() {
+		return statusCode;
+	}
+
+	public String getCurrentETag() {
 		def manifestPath = uri
 		if(uri.startsWith('/')) {
 			manifestPath = uri.substring(1) //Omit forward slash
@@ -28,7 +36,7 @@ class AssetPipelineResponseBuilder {
 		return manifest?.getProperty(manifestPath) ?: manifestPath
 	}
 
-	Boolean checkETag() {
+	public Boolean checkETag() {
 		String etagName = getCurrentETag()
 		if(ifNoneMatchHeader && ifNoneMatchHeader == etagName) {
 			statusCode = 304
