@@ -113,7 +113,7 @@ class ClosureCompilerProcessor {
 				CompilationLevel.WHITESPACE_ONLY.setOptionsForCompilationLevel(options);
 				break;
 			case 'ADVANCED':
-				// CompilationLevel.ADVANCED.setOptionsForCompilationLevel(options);
+				CompilationLevel.ADVANCED_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
 				break;
 			case 'SIMPLE':
 			default:
