@@ -4,8 +4,12 @@ package asset.pipeline.processors
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
-import asset.pipeline.AssetHelper
 import asset.pipeline.GenericAssetFile
+
+import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
+import static asset.pipeline.AssetHelper.extensionFromURI
+import static asset.pipeline.AssetHelper.getByteDigest
+import static asset.pipeline.AssetHelper.nameWithoutExtension
 
 
 /**
@@ -24,8 +28,8 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String relativePathFromBaseFile(final AssetFile file, final AssetFile baseFile, final boolean useDigest = false) {
-        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
         int filePathIndex = currRelativePath.size() - 1
         int baseFileIndex = baseRelativePath.size() - 1
@@ -46,18 +50,18 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             calculatedPath << currRelativePath[filePathIndex]
         }
 
-        final String fileName = AssetHelper.nameWithoutExtension(file.name)
+        final String fileName = nameWithoutExtension(file.name)
         calculatedPath << (
             useDigest
                 ? file instanceof GenericAssetFile
-                    ? "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
-                    : digestedNonGenericAssetFileName()
+                    ? "${fileName}-${getByteDigest(file.bytes)}.${extensionFromURI(file.name)}"
+                    : digestedNonGenericAssetFileName(file, baseFile, fileName)
                 : file instanceof GenericAssetFile
                     ? file.name
                     : fileName + '.' + file.compiledExtension
         )
 
-        return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
+        return calculatedPath.join(DIRECTIVE_FILE_SEPARATOR)
     }
 
 
