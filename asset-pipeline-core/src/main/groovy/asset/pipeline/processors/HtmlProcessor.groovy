@@ -35,7 +35,7 @@ import static asset.pipeline.utils.net.Urls.isRelative
  */
 class HtmlProcessor extends AbstractUrlRewritingProcessor {
 
-    private static final Pattern QUOTED_ASSET_PATH_PATTERN = ~/"([a-zA-Z0-9\-_.\/@#? &+%=']++)"|'([a-zA-Z0-9\-_.\/@#? &+%="]++)'/
+    private static final Pattern QUOTED_ASSET_PATH_PATTERN = ~/"([a-zA-Z0-9\-_.:\/@#? &+%=']++)"|'([a-zA-Z0-9\-_.:\/@#? &+%="]++)'/
 
 
     HtmlProcessor(final AssetCompiler precompiler) {

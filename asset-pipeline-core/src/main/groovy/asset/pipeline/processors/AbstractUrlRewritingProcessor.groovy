@@ -5,6 +5,7 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import asset.pipeline.GenericAssetFile
+import java.util.regex.Matcher
 
 import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
 import static asset.pipeline.AssetHelper.extensionFromURI
@@ -12,6 +13,7 @@ import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
 import static asset.pipeline.AssetHelper.nameWithoutExtension
 import static asset.pipeline.AssetHelper.normalizePath
+import static asset.pipeline.utils.net.Urls.URL_SCHEME_WITH_COLON_PATTERN
 
 
 /**
@@ -31,7 +33,20 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String replacementUrl(final AssetFile assetFile, final String url) {
-        final URL urlSplitter = new URL("http://hostname/${url}")
+        final Matcher m = URL_SCHEME_WITH_COLON_PATTERN.matcher(url)
+
+        final String schemeWithColon
+        final String path
+        if (m.find()) {
+            schemeWithColon = m.group()
+            path            = url.substring(m.end())
+        }
+        else {
+            schemeWithColon = null
+            path            = url
+        }
+
+        final URL urlSplitter = new URL("http://hostname/${path}")
 
         final AssetFile currFile =
             fileForFullName(
@@ -60,6 +75,10 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         }
 
         final StringBuilder replacementPathSb = new StringBuilder()
+
+        if (schemeWithColon) {
+            replacementPathSb.append(schemeWithColon)
+        }
 
         // for each remaining level in the base path, add a ..
         for (; baseIndex >= 0; baseIndex--) {

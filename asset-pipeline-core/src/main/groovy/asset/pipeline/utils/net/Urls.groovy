@@ -14,6 +14,16 @@ final class Urls {
      */
     static final Pattern ABSOLUTE_URL_PATTERN = ~/^(?:\p{L}[\p{L}\d+-.]*:)?\//
 
+    /**
+     * URL starts with a <a href="https://tools.ietf.org/html/std66">URI scheme</a>
+     */
+    static final Pattern URL_SCHEME_WITH_COLON_PATTERN = ~/^\p{L}[\p{L}\d+-.]*:/
+
+    /**
+     * URL starts with a <a href="https://tools.ietf.org/html/std66">URI scheme</a>
+     */
+    static final Pattern URL_SCHEME_SANS_COLON_PATTERN = ~/^\p{L}[\p{L}\d+-.]*(?=:)/
+
 
     /**
      * URL starts with either {@code "/"} or a <a href="https://tools.ietf.org/html/std66">URI scheme</a> followed by {@code "/"}
