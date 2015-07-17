@@ -21,9 +21,7 @@ import asset.pipeline.AssetFile
 import asset.pipeline.DirectiveProcessor
 import java.util.regex.Pattern
 
-import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
-import static asset.pipeline.AssetHelper.normalizePath
 import static asset.pipeline.utils.net.Urls.isRelative
 
 
@@ -48,33 +46,28 @@ class CssProcessor extends AbstractUrlRewritingProcessor {
     String process(final String inputText, final AssetFile assetFile) {
         final Map<String, String> cachedPaths = [:]
         return \
-            inputText.replaceAll(URL_CALL_PATTERN) {final String urlCall, final String quote, final String assetPath ->
+            inputText.replaceAll(URL_CALL_PATTERN) {
+                final String urlCall,
+                final String quote,
+                final String assetPath
+            ->
                 final String cachedPath = cachedPaths[assetPath]
 
                 final String replacementPath
                 if (cachedPath != null) {
                     replacementPath = cachedPath
-                } else if (assetPath.length() > 0 && isRelative(assetPath)) {
-                    final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
-                    final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
-                    final AssetFile file             = fileForFullName(normalizePath(relativeFileName))
-
-                    if (file) {
-                        final StringBuilder replacementPathSb = new StringBuilder()
-                        replacementPathSb.append(relativePathFromBaseFile(file, assetFile.baseFile ?: assetFile, precompiler && precompiler.options.enableDigests))
-                        if (url.query != null) {
-                            replacementPathSb.append('?').append(url.query)
-                        }
-                        if (url.ref) {
-                            replacementPathSb.append('#').append(url.ref)
-                        }
-                        replacementPath        = replacementPathSb.toString()
+                }
+                else if (assetPath.length() > 0 && isRelative(assetPath)) {
+                    replacementPath  = replacementUrl(assetFile, assetPath)
+                    if (replacementPath) {
                         cachedPaths[assetPath] = replacementPath
-                    } else {
+                    }
+                    else {
                         cachedPaths[assetPath] = assetPath
                         return urlCall
                     }
-                } else {
+                }
+                else {
                     return urlCall
                 }
 

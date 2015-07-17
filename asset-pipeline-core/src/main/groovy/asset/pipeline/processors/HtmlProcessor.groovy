@@ -21,9 +21,7 @@ import asset.pipeline.AssetFile
 import asset.pipeline.DirectiveProcessor
 import java.util.regex.Pattern
 
-import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
-import static asset.pipeline.AssetHelper.normalizePath
 import static asset.pipeline.utils.net.Urls.isRelative
 
 
@@ -62,20 +60,8 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     replacementPath = cachedPaths[trimmedPath] ?: assetPath
                 }
                 else if (trimmedPath.length() > 0 && isRelative(trimmedPath)) {
-                    final URL       url              = new URL("http://hostname/${trimmedPath}") // Split out subcomponents
-                    final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
-                    final AssetFile file             = fileForFullName(normalizePath(relativeFileName))
-
-                    if (file) {
-                        final StringBuilder replacementPathSb = new StringBuilder()
-                        replacementPathSb.append(relativePathFromBaseFile(file, assetFile.baseFile ?: assetFile, precompiler && precompiler.options.enableDigests))
-                        if (url.query != null) {
-                            replacementPathSb.append('?').append(url.query)
-                        }
-                        if (url.ref) {
-                            replacementPathSb.append('#').append(url.ref)
-                        }
-                        replacementPath          = replacementPathSb.toString()
+                    replacementPath  = replacementUrl(assetFile, trimmedPath)
+                    if (replacementPath) {
                         cachedPaths[trimmedPath] = replacementPath
                     }
                     else {
@@ -88,7 +74,7 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     return quotedAssetPathWithQuotes
                 }
 
-                final String quote = doubleQuotedAssetPath ? '"' : /'/
+                final String quote = doubleQuotedAssetPath ? '"' : "'"
                 return "${quote}${replacementPath}${quote}"
             }
     }
