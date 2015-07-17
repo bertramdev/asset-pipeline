@@ -31,7 +31,8 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String replacementUrl(final AssetFile assetFile, final String path) {
-        final URL       url      = new URL("http://hostname/${path}") // used to split path subcomponents
+        final URL url = new URL("http://hostname/${path}") // used to split path subcomponents
+
         final AssetFile currFile =
             fileForFullName(
                 normalizePath(
@@ -45,11 +46,10 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             return null
         }
 
-        final AssetFile     baseFile          = assetFile.baseFile ?: assetFile
-        final boolean       useDigest         = precompiler && precompiler.options.enableDigests
-        final StringBuilder replacementPathSb = new StringBuilder()
-        final List<String>  baseRelativePath  = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String>  currRelativePath  = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final AssetFile baseFile = assetFile.baseFile ?: assetFile
+
+        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
         int baseIndex = baseRelativePath.size() - 1
         int currIndex = currRelativePath.size() - 1
@@ -58,6 +58,8 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             baseIndex--
             currIndex--
         }
+
+        final StringBuilder replacementPathSb = new StringBuilder()
 
         // for each remaining level in the base path, add a ..
         for (; baseIndex >= 0; baseIndex--) {
@@ -71,7 +73,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
         final String fileName = nameWithoutExtension(currFile.name)
         replacementPathSb.append(
-            useDigest
+            precompiler?.options.enableDigests
                 ? currFile instanceof GenericAssetFile
                     ? "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
                     : digestedNonGenericAssetFileName(currFile, baseFile, fileName)
