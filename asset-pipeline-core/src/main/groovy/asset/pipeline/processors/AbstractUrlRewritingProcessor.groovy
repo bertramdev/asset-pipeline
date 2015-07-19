@@ -61,7 +61,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         }
 
         // relative parent path
-        final String baseFileParentPath = assetFile.baseFile?.parentPath ?: assetFile.parentPath
+        final String baseFileParentPath = (assetFile.baseFile ?: assetFile).parentPath
         final String currFileParentPath = currFile.parentPath
 
         final List<String> baseRelativePath = baseFileParentPath ? baseFileParentPath.split('/').findAll {it}.reverse() : []
