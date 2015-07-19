@@ -60,7 +60,7 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     replacementPath = cachedPaths[trimmedPath] ?: assetPath
                 }
                 else if (trimmedPath.length() > 0 && isRelative(trimmedPath)) {
-                    replacementPath  = replacementUrl(assetFile, trimmedPath)
+                    replacementPath = replacementUrl(assetFile, trimmedPath)
                     if (replacementPath) {
                         cachedPaths[trimmedPath] = replacementPath
                     }
@@ -80,10 +80,10 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
     }
 
     @Override
-    protected String digestedNonGenericAssetFileName(final AssetFile file, final AssetFile baseFile, final String fileName) {
+    protected String digestedNonGenericAssetFileName(final AssetFile assetFile, final String fileNameSansExt) {
         return \
-            file.compiledExtension != 'html' \
-                ? "${fileName}-${getByteDigest(new DirectiveProcessor(baseFile.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
-                : "${fileName}.${file.compiledExtension}"
+            assetFile.compiledExtension != 'html' \
+                ? "${fileNameSansExt}-${getByteDigest(new DirectiveProcessor(null, precompiler).compile(assetFile).bytes)}.${assetFile.compiledExtension}"
+                : "${fileNameSansExt}.${assetFile.compiledExtension}"
     }
 }

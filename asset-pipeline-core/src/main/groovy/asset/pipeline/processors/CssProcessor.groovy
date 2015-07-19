@@ -76,7 +76,7 @@ class CssProcessor extends AbstractUrlRewritingProcessor {
     }
 
     @Override
-    protected String digestedNonGenericAssetFileName(final AssetFile file, final AssetFile baseFile, final String fileName) {
-        return "${fileName}-${getByteDigest(new DirectiveProcessor(baseFile.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+    protected String digestedNonGenericAssetFileName(final AssetFile assetFile, final String fileNameSansExt) {
+        return "${fileNameSansExt}-${getByteDigest(new DirectiveProcessor(null, precompiler).compile(assetFile).bytes)}.${assetFile.compiledExtension}"
     }
 }

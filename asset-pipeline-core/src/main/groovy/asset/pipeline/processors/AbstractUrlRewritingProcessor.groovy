@@ -5,15 +5,13 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import asset.pipeline.GenericAssetFile
-import java.util.regex.Matcher
 
-import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
 import static asset.pipeline.AssetHelper.extensionFromURI
 import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
 import static asset.pipeline.AssetHelper.nameWithoutExtension
 import static asset.pipeline.AssetHelper.normalizePath
-import static asset.pipeline.utils.net.Urls.URL_SCHEME_WITH_COLON_PATTERN
+import static asset.pipeline.utils.net.Urls.getSchemeWithColon
 
 
 /**
@@ -33,27 +31,21 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String replacementUrl(final AssetFile assetFile, final String url) {
-        final Matcher m = URL_SCHEME_WITH_COLON_PATTERN.matcher(url)
+        final String schemeWithColon = getSchemeWithColon(url)
 
-        final String schemeWithColon
-        final String path
-        if (m.find()) {
-            schemeWithColon = m.group()
-            path            = url.substring(m.end())
-        }
-        else {
-            schemeWithColon = null
-            path            = url
-        }
+        final String urlSansScheme =
+            schemeWithColon \
+                ? url.substring(schemeWithColon.length())
+                : url
 
-        final URL urlSplitter = new URL("http://hostname/${path}")
-
-        final AssetFile currFile =
+        final URL       urlSplitter = new URL('http', 'hostname', urlSansScheme)
+        final String    parentPath  = assetFile.parentPath
+        final AssetFile currFile    =
             fileForFullName(
                 normalizePath(
-                    assetFile.parentPath
-                        ? assetFile.parentPath + urlSplitter.path
-                        : urlSplitter.path.substring(1)
+                    parentPath
+                        ? parentPath + '/' + urlSplitter.path
+                        : urlSplitter.path
                 )
             )
 
@@ -61,10 +53,19 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             return null
         }
 
-        final AssetFile baseFile = assetFile.baseFile ?: assetFile
+        final StringBuilder replacementPathSb = new StringBuilder()
 
-        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String> currRelativePath = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        // scheme (aka protocol)
+        if (schemeWithColon) {
+            replacementPathSb << schemeWithColon
+        }
+
+        // relative parent path
+        final String baseFileParentPath = assetFile.baseFile?.parentPath ?: assetFile.parentPath
+        final String currFileParentPath = currFile.parentPath
+
+        final List<String> baseRelativePath = baseFileParentPath ? baseFileParentPath.split('/').findAll {it}.reverse() : []
+        final List<String> currRelativePath = currFileParentPath ? currFileParentPath.split('/').findAll {it}.reverse() : []
 
         int baseIndex = baseRelativePath.size() - 1
         int currIndex = currRelativePath.size() - 1
@@ -74,44 +75,46 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             currIndex--
         }
 
-        final StringBuilder replacementPathSb = new StringBuilder()
-
-        if (schemeWithColon) {
-            replacementPathSb.append(schemeWithColon)
-        }
-
-        // for each remaining level in the base path, add a ..
-        for (; baseIndex >= 0; baseIndex--) {
-            replacementPathSb.append('../')
+        for (; baseIndex >= 0; baseIndex--) { // for each remaining level in the base path, add a ..
+            replacementPathSb << '../'
         }
 
         for (; currIndex >= 0; currIndex--) {
-            replacementPathSb.append(currRelativePath[currIndex])
-            replacementPathSb.append('/' as char)
+            replacementPathSb << currRelativePath[currIndex] << ('/' as char)
         }
 
-        final String fileName = nameWithoutExtension(currFile.name)
-        replacementPathSb.append(
-            precompiler?.options.enableDigests
+        // file
+        final Map     options       = precompiler?.options
+        final boolean enableDigests =
+            options \
+                ? options.containsKey('enableDigests') \
+                    ? options.enableDigests
+                    : true
+                : true
+
+        replacementPathSb << (
+            enableDigests \
                 ? currFile instanceof GenericAssetFile
-                    ? "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
-                    : digestedNonGenericAssetFileName(currFile, baseFile, fileName)
+                    ? "${nameWithoutExtension(currFile.name)}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
+                    : digestedNonGenericAssetFileName(currFile, nameWithoutExtension(currFile.name))
                 : currFile instanceof GenericAssetFile
                     ? currFile.name
-                    : fileName + '.' + currFile.compiledExtension
+                    : nameWithoutExtension(currFile.name) + '.' + currFile.compiledExtension
         )
 
+        // query
         if (urlSplitter.query != null) {
-            replacementPathSb.append('?').append(urlSplitter.query)
+            replacementPathSb << '?' << urlSplitter.query
         }
 
+        // fragment (aka reference; aka anchor)
         if (urlSplitter.ref) {
-            replacementPathSb.append('#').append(urlSplitter.ref)
+            replacementPathSb << '#' << urlSplitter.ref
         }
 
         return replacementPathSb.toString()
     }
 
 
-    protected abstract String digestedNonGenericAssetFileName(AssetFile file, AssetFile baseFile, String fileName)
+    protected abstract String digestedNonGenericAssetFileName(AssetFile assetFile, String fileNameSansExt)
 }

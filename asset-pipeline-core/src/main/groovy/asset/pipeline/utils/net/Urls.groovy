@@ -1,6 +1,7 @@
 package asset.pipeline.utils.net
 
 
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
@@ -37,6 +38,18 @@ final class Urls {
      */
     static boolean isRelative(final String url) {
         ! isAbsolute(url)
+    }
+
+
+    /**
+     * @returns <a href="https://tools.ietf.org/html/std66">URI scheme</a>, including trailing colon, if present;
+     * otherwise, returns {@code defaultScheme}, which defaults to {@code null}
+     */
+    static String getSchemeWithColon(final String url, final String defaultScheme = null) {
+        final Matcher m = URL_SCHEME_WITH_COLON_PATTERN.matcher(url)
+        m.find() \
+            ? m.group()
+            : defaultScheme
     }
 
 
