@@ -202,8 +202,8 @@ class AssetCompiler {
 								digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 								digestedFile.createNewFile()
 								digestedFile.bytes = outputBytes
+								manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 							}
-							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 
 							// Zip it Good!
 							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
