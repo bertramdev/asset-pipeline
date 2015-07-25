@@ -85,12 +85,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
         // file
         final Map     options       = precompiler?.options
-        final boolean enableDigests =
-            options \
-                ? options.containsKey('enableDigests') \
-                    ? options.enableDigests
-                    : true
-                : true
+        final boolean enableDigests = ! options?.containsKey('enableDigests') || options.enableDigests
 
         replacementPathSb << (
             enableDigests \
