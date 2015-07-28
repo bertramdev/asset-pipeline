@@ -77,7 +77,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
             project.tasks.withType(Jar) { Jar bundleTask ->
                 bundleTask.dependsOn assetPrecompileTask
-                bundleTask.from "${project.buildDir}/assets", {
+                bundleTask.from assetPipeline.compileDir, {
                     into "assets"
                     // if(!(bundleTask instanceof War)) {
                     //     into "META-INF"
