@@ -33,6 +33,15 @@ class FileSystemAssetResolverSpec extends Specification {
 			file instanceof GenericAssetFile
 	}
 
+	void "should not resolve an asset if no extension or content type is specified"() {
+		given:
+			def resolver = new FileSystemAssetResolver('application','assets')
+		when:
+			def file = resolver.getAsset('asset-pipeline/test/test')
+		then:
+			file == null
+	}
+
 	void "should be able to fetch generic files without seperated extension"() {
 		given:
 			def resolver = new FileSystemAssetResolver('application','assets')

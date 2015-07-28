@@ -59,7 +59,10 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		} else {
-			specs = AssetHelper.assetFileClasses()
+			if(!extension) {
+				extension = AssetHelper.extensionFromURI(relativePath)
+			}
+			specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
 		}
 
         if(!specs) return null
