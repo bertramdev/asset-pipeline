@@ -8,7 +8,11 @@ buildscript {
 }
 
 subprojects {
+<<<<<<< HEAD
 	version = '2.4.0'
+=======
+	version = '2.3.8'
+>>>>>>> 90d6da455796fcc9dbd0b97dc176dcf0e626ac84
 }
 
 apply plugin: 'groovy'
