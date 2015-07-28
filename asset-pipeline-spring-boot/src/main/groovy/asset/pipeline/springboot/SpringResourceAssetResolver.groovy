@@ -35,25 +35,24 @@ class SpringResourceAssetResolver extends AbstractAssetResolver<Resource> {
 	}
 
 	AssetFile getAsset(String relativePath, String contentType = null, String extension = null, AssetFile baseFile=null) {
-		if(!relativePath) {
-			return null
-		}
-		if(relativePath.startsWith('/')) {
-			relativePath = relativePath.substring(1)
-		}
-		
-		def normalizedPath = AssetHelper.normalizePath(relativePath)
-		def specs
+        if(!relativePath) {
+            return null
+        }
+        def normalizedPath = AssetHelper.normalizePath(relativePath)
+        def specs
 
-		if(contentType) {
-			specs = AssetHelper.getPossibleFileSpecs(contentType)
-		}
+        if(contentType) {
+            specs = AssetHelper.getPossibleFileSpecs(contentType)
+        } else {
+            if(!extension) {
+                extension = AssetHelper.extensionFromURI(relativePath)
+            }
+            specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
+        }
 
-		if(!specs) return null
+        AssetFile assetFile = resolveAsset(specs, prefixPath, normalizedPath, baseFile, extension)
 
-		AssetFile assetFile = resolveAsset(specs, prefixPath, normalizedPath, baseFile, extension)
-
-		return assetFile
+        return assetFile
 	}
 
 	String relativePathToResolver(Resource file, String scanDirectoryPath) {
