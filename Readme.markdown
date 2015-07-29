@@ -25,12 +25,15 @@ If using gradle, this plugin adds a series of tasks directly to your gradle plug
 //Example build.gradle file
 buildscript {
   repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
     mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.3.0'
-	//Example additional LESS support
-	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
+    classpath "gradle.plugin.com.bertramlabs.plugins:asset-pipeline-gradle:2.4.2"
+  	//Example additional LESS support
+  	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
   }
 }
 
