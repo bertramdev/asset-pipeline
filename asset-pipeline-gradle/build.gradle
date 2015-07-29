@@ -138,7 +138,7 @@ pluginBundle {
 
   plugins {
     assetPipelinePlugin {
-      id = 'com.bertramlabs.plugins.asset-pipeline'
+      id = 'com.bertramlabs.asset-pipeline'
       displayName = 'Asset-Pipeline Plugin'
     }
   }
