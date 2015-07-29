@@ -34,7 +34,7 @@ buildscript {
   }
 }
 
-apply plugin: 'asset-pipeline'
+apply plugin: 'com.bertramlabs.plugins.asset-pipeline'
 
 assets {
   minifyJs = true
