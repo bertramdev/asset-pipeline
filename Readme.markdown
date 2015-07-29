@@ -31,13 +31,13 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "gradle.plugin.com.bertramlabs.plugins:asset-pipeline-gradle:2.4.2"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.4.3"
   	//Example additional LESS support
   	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
   }
 }
 
-apply plugin: 'com.bertramlabs.plugins.asset-pipeline'
+apply plugin: 'com.bertramlabs.asset-pipeline'
 
 assets {
   minifyJs = true
@@ -161,7 +161,7 @@ sourceSets {
 
 dependencies {
   provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "com.bertramlabs.plugins:asset-pipeline-core:2.3.0"
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.4.3"
 }
 ```
 

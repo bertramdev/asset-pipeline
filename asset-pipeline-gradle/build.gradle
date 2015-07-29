@@ -142,6 +142,9 @@ pluginBundle {
       displayName = 'Asset-Pipeline Plugin'
     }
   }
+  mavenCoordinates {
+    groupId = "com.bertramlabs.plugins"
+  }
 }
 
 
