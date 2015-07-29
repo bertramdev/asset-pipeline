@@ -110,7 +110,8 @@ class CssProcessor extends AbstractProcessor {
             if(file instanceof GenericAssetFile) {
                 calculatedPath << "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
             } else {
-                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(baseFile.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+
+                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(file.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
             }
         } else {
             if(file instanceof GenericAssetFile) {

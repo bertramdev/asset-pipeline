@@ -117,17 +117,20 @@ class HtmlProcessor extends AbstractProcessor {
         }
 
         final String fileName = AssetHelper.nameWithoutExtension(file.name)
-        calculatedPath << (
-            useDigest
-                ? file instanceof GenericAssetFile
-                    ? "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
-                    : file.compiledExtension != 'html' \
-                        ? "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(baseFile.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
-                        : "${fileName}.${file.compiledExtension}"
-                : file instanceof GenericAssetFile
-                    ? file.name
-                    : fileName + '.' + file.compiledExtension
-        )
+        if(useDigest) {
+            if(file instanceof GenericAssetFile) {
+                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
+            } else {
+
+                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(file.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+            }
+        } else {
+            if(file instanceof GenericAssetFile) {
+                calculatedPath << file.name
+            } else {
+                calculatedPath << "${fileName}.${file.compiledExtension}"
+            }
+        }
 
         return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
     }
