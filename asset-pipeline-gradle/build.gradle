@@ -2,8 +2,10 @@ buildscript {
 	repositories {
 		mavenLocal()
 		jcenter()
+		url "https://plugins.gradle.org/m2/"
 	}
 	dependencies {
+		classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
 	}
 }
 
@@ -11,6 +13,7 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
+apply plugin: "com.gradle.plugin-publish"
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
@@ -119,6 +122,22 @@ test {
 		exceptionFormat = 'full'
 		showStandardStreams = true
 	}
+}
+
+// The configuration example below shows the minimum required properties
+// configured to publish your plugin to the plugin portal
+pluginBundle {
+  website = 'https://github.com/bertramdev/asset-pipeline-core/'
+  vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core/'
+  description = 'JVM Asset Pipeline Gradle Adapter.'
+  tags = ['assets', 'resources', 'asset-pipeline']
+
+  plugins {
+    assetPipelinePlugin {
+      id = 'asset-pipeline'
+      displayName = 'Asset-Pipeline Plugin'
+    }
+  }
 }
 
 
