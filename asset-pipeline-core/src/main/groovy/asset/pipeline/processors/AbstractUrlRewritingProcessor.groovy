@@ -30,6 +30,8 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String relativePathToBaseFile(final AssetFile currFile, final AssetFile baseFile, final boolean useDigest = false) {
+        final StringBuilder replacementPathSb = new StringBuilder()
+
         final String baseFileParentPath = baseFile.parentPath
         final String currFileParentPath = currFile.parentPath
 
@@ -44,32 +46,30 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             currPathIndex--
         }
 
-        final List<String> calculatedPath = new ArrayList<>(basePathIndex + currPathIndex + 3)
-
         // for each remaining level in the base path, add a ..
         for (; basePathIndex >= 0; basePathIndex--) {
-            calculatedPath << '..'
+            replacementPathSb << '..' << DIRECTIVE_FILE_SEPARATOR
         }
 
         for (; currPathIndex >= 0; currPathIndex--) {
-            calculatedPath << currRelativePath[currPathIndex]
+            replacementPathSb << currRelativePath[currPathIndex] << DIRECTIVE_FILE_SEPARATOR
         }
 
         final String fileName = nameWithoutExtension(currFile.name)
         if(useDigest) {
             if(currFile instanceof GenericAssetFile) {
-                calculatedPath << "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
+                replacementPathSb << "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
             } else {
-                calculatedPath << "${fileName}-${getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes)}.${currFile.compiledExtension}"
+                replacementPathSb << "${fileName}-${getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes)}.${currFile.compiledExtension}"
             }
         } else {
             if(currFile instanceof GenericAssetFile) {
-                calculatedPath << currFile.name
+                replacementPathSb << currFile.name
             } else {
-                calculatedPath << "${fileName}.${currFile.compiledExtension}"
+                replacementPathSb << "${fileName}.${currFile.compiledExtension}"
             }
         }
 
-        return calculatedPath.join(DIRECTIVE_FILE_SEPARATOR)
+        return replacementPathSb.toString()
     }
 }
