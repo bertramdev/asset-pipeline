@@ -13,6 +13,7 @@ import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
 import static asset.pipeline.AssetHelper.nameWithoutExtension
 import static asset.pipeline.AssetHelper.normalizePath
+import static asset.pipeline.utils.net.Urls.getSchemeWithColon
 
 
 /**
@@ -32,7 +33,14 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String replacementUrl(final AssetFile assetFile, final String url) {
-        final URL urlSplitter = new URL('http', 'hostname', url)
+        final String schemeWithColon = getSchemeWithColon(url)
+
+        final String urlSansScheme =
+            schemeWithColon \
+                ? url.substring(schemeWithColon.length())
+                : url
+
+        final URL urlSplitter = new URL('http', 'hostname', urlSansScheme)
 
         final AssetFile baseFile = assetFile.baseFile ?: assetFile
         final AssetFile currFile =
@@ -49,6 +57,11 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         }
 
         final StringBuilder replacementPathSb = new StringBuilder()
+
+        // scheme (aka protocol)
+        if (schemeWithColon) {
+            replacementPathSb << schemeWithColon
+        }
 
         // relative parent path
         final String baseFileParentPath = baseFile.parentPath
