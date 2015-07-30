@@ -58,15 +58,15 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         final String fileName = nameWithoutExtension(currFile.name)
         if(useDigest) {
             if(currFile instanceof GenericAssetFile) {
-                replacementPathSb << "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
+                replacementPathSb << fileName << '-' << getByteDigest(currFile.bytes) << '.' << extensionFromURI(currFile.name)
             } else {
-                replacementPathSb << "${fileName}-${getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes)}.${currFile.compiledExtension}"
+                replacementPathSb << fileName << '-' << getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes) << '.' << currFile.compiledExtension
             }
         } else {
             if(currFile instanceof GenericAssetFile) {
                 replacementPathSb << currFile.name
             } else {
-                replacementPathSb << "${fileName}.${currFile.compiledExtension}"
+                replacementPathSb << fileName << '.' << currFile.compiledExtension
             }
         }
 
