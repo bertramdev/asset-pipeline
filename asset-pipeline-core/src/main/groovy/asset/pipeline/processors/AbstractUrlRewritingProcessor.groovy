@@ -32,6 +32,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
     protected String relativePathToBaseFile(final AssetFile currFile, final AssetFile baseFile, final boolean useDigest = false) {
         final StringBuilder replacementPathSb = new StringBuilder()
 
+        // relative parent path
         final String baseFileParentPath = baseFile.parentPath
         final String currFileParentPath = currFile.parentPath
 
@@ -55,6 +56,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             replacementPathSb << currRelativePath[currPathIndex] << DIRECTIVE_FILE_SEPARATOR
         }
 
+        // file
         final String fileName = nameWithoutExtension(currFile.name)
         if(useDigest) {
             if(currFile instanceof GenericAssetFile) {
