@@ -29,41 +29,41 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
     }
 
 
-    protected String relativePathToBaseFile(final AssetFile file, final AssetFile baseFile, final boolean useDigest = false) {
+    protected String relativePathToBaseFile(final AssetFile currFile, final AssetFile baseFile, final boolean useDigest = false) {
         final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
-        int filePathIndex = currRelativePath.size() - 1
-        int baseFileIndex = baseRelativePath.size() - 1
+        int currPathIndex = currRelativePath.size() - 1
+        int basePathIndex = baseRelativePath.size() - 1
 
-        while (filePathIndex >= 0 && baseFileIndex >= 0 && baseRelativePath[baseFileIndex] == currRelativePath[filePathIndex]) {
-            filePathIndex--
-            baseFileIndex--
+        while (currPathIndex >= 0 && basePathIndex >= 0 && baseRelativePath[basePathIndex] == currRelativePath[currPathIndex]) {
+            currPathIndex--
+            basePathIndex--
         }
 
-        final List<String> calculatedPath = new ArrayList<>(baseFileIndex + filePathIndex + 3)
+        final List<String> calculatedPath = new ArrayList<>(basePathIndex + currPathIndex + 3)
 
-        // for each remaining level in the home path, add a ..
-        for (; baseFileIndex >= 0; baseFileIndex--) {
+        // for each remaining level in the base path, add a ..
+        for (; basePathIndex >= 0; basePathIndex--) {
             calculatedPath << '..'
         }
 
-        for (; filePathIndex >= 0; filePathIndex--) {
-            calculatedPath << currRelativePath[filePathIndex]
+        for (; currPathIndex >= 0; currPathIndex--) {
+            calculatedPath << currRelativePath[currPathIndex]
         }
 
-        final String fileName = nameWithoutExtension(file.name)
+        final String fileName = nameWithoutExtension(currFile.name)
         if(useDigest) {
-            if(file instanceof GenericAssetFile) {
-                calculatedPath << "${fileName}-${getByteDigest(file.bytes)}.${extensionFromURI(file.name)}"
+            if(currFile instanceof GenericAssetFile) {
+                calculatedPath << "${fileName}-${getByteDigest(currFile.bytes)}.${extensionFromURI(currFile.name)}"
             } else {
-                calculatedPath << "${fileName}-${getByteDigest(new DirectiveProcessor(file.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+                calculatedPath << "${fileName}-${getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes)}.${currFile.compiledExtension}"
             }
         } else {
-            if(file instanceof GenericAssetFile) {
-                calculatedPath << file.name
+            if(currFile instanceof GenericAssetFile) {
+                calculatedPath << currFile.name
             } else {
-                calculatedPath << "${fileName}.${file.compiledExtension}"
+                calculatedPath << "${fileName}.${currFile.compiledExtension}"
             }
         }
 
