@@ -12,20 +12,20 @@ final class Urls {
     /**
      * URL starts with either {@code "/"} or a <a href="https://tools.ietf.org/html/std66">URI scheme</a> followed by {@code "/"}
      */
-    static final Pattern ABSOLUTE_URL_PATTERN = ~/(?:\/|\p{L}[\p{L}\d+-.]*:[\/]).*/
+    static final Pattern ABSOLUTE_URL_PATTERN = ~/^(?:\p{L}[\p{L}\d+-.]*:)?\//
 
 
     /**
      * URL starts with either {@code "/"} or a <a href="https://tools.ietf.org/html/std66">URI scheme</a> followed by {@code "/"}
      */
-    static isAbsolute(final String url) {
-        ABSOLUTE_URL_PATTERN.matcher(url).matches()
+    static boolean isAbsolute(final String url) {
+        ABSOLUTE_URL_PATTERN.matcher(url).find()
     }
 
     /**
      * URL does not start with either {@code "/"} or a <a href="https://tools.ietf.org/html/std66">URI scheme</a> followed by {@code "/"}
      */
-    static isRelative(final String url) {
+    static boolean isRelative(final String url) {
         ! isAbsolute(url)
     }
 
