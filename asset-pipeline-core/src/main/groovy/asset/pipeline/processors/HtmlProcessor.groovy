@@ -50,16 +50,15 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                 final String doubleQuotedAssetPath,
                 final String singleQuotedAssetPath
             ->
-                final String assetPath   = doubleQuotedAssetPath ?: singleQuotedAssetPath
-                final String trimmedPath = assetPath.trim()
+                final String untrimmedAssetPath = doubleQuotedAssetPath ?: singleQuotedAssetPath
+                final String assetPath          = untrimmedAssetPath.trim()
 
                 final String replacementPath
-                if (cachedPaths.containsKey(trimmedPath)) {
-                    // cachedPaths[trimmedPath] == null // means use the incoming assetPath to preserve trim spacing
-                    replacementPath = cachedPaths[trimmedPath] ?: assetPath
-                }
-                else if (trimmedPath.size() > 0 && isRelative(trimmedPath)) {
-                    final URL       url              = new URL("http://hostname/${trimmedPath}") // Split out subcomponents
+                if (cachedPaths.containsKey(assetPath)) {
+                    // cachedPaths[assetPath] == null // means use the incoming untrimmedAssetPath to preserve trim spacing
+                    replacementPath = cachedPaths[assetPath] ?: untrimmedAssetPath
+                } else if (assetPath.size() > 0 && isRelative(assetPath)) {
+                    final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
                     final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
                     final AssetFile file             = AssetHelper.fileForFullName(AssetHelper.normalizePath(relativeFileName))
 
@@ -72,16 +71,14 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                         if (url.ref) {
                             replacementPathSb.append('#').append(url.ref)
                         }
-                        replacementPath          = replacementPathSb.toString()
-                        cachedPaths[trimmedPath] = replacementPath
-                    }
-                    else {
-                        cachedPaths[trimmedPath] = null
+                        replacementPath        = replacementPathSb.toString()
+                        cachedPaths[assetPath] = replacementPath
+                    } else {
+                        cachedPaths[assetPath] = null
                         return quotedAssetPathWithQuotes
                     }
-                }
-                else {
-                    //TODO? cachedPaths[trimmedPath] = null
+                } else {
+                    //TODO? cachedPaths[assetPath] = null
                     return quotedAssetPathWithQuotes
                 }
 
