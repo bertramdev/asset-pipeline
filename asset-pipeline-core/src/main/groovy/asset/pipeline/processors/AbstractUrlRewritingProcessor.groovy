@@ -32,15 +32,15 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String replacementUrl(final AssetFile assetFile, final String url) {
-        final URL urlSplitter = new URL("http://hostname/${url}") // Split out subcomponents
+        final URL urlSplitter = new URL('http', 'hostname', url)
 
         final AssetFile baseFile = assetFile.baseFile ?: assetFile
         final AssetFile currFile =
             fileForFullName(
                 normalizePath(
                     assetFile.parentPath
-                        ? assetFile.parentPath + urlSplitter.path
-                        : urlSplitter.path.substring(1)
+                        ? assetFile.parentPath + DIRECTIVE_FILE_SEPARATOR + urlSplitter.path
+                        : urlSplitter.path
                 )
             )
 
