@@ -18,9 +18,10 @@ package asset.pipeline.processors
 
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
-import asset.pipeline.AssetHelper
 import java.util.regex.Pattern
 
+import static asset.pipeline.AssetHelper.fileForFullName
+import static asset.pipeline.AssetHelper.normalizePath
 import static asset.pipeline.utils.net.Urls.isRelative
 
 
@@ -58,18 +59,20 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     // cachedPaths[assetPath] == null // means use the incoming untrimmedAssetPath to preserve trim spacing
                     replacementPath = cachedPaths[assetPath] ?: untrimmedAssetPath
                 } else if (assetPath.size() > 0 && isRelative(assetPath)) {
-                    final URL       url              = new URL("http://hostname/${assetPath}") // Split out subcomponents
-                    final String    relativeFileName = assetFile.parentPath ? assetFile.parentPath + url.path : url.path.substring(1)
-                    final AssetFile file             = AssetHelper.fileForFullName(AssetHelper.normalizePath(relativeFileName))
+                    final URL urlSplitter = new URL("http://hostname/${assetPath}") // Split out subcomponents
+
+                    final String relativeFileName = assetFile.parentPath ? assetFile.parentPath + urlSplitter.path : urlSplitter.path.substring(1)
+
+                    final AssetFile file = fileForFullName(normalizePath(relativeFileName))
 
                     if (file) {
                         final StringBuilder replacementPathSb = new StringBuilder()
                         replacementPathSb.append(relativePathToBaseFile(file, assetFile.baseFile ?: assetFile, precompiler && precompiler.options.enableDigests))
-                        if (url.query != null) {
-                            replacementPathSb.append('?').append(url.query)
+                        if (urlSplitter.query != null) {
+                            replacementPathSb.append('?').append(urlSplitter.query)
                         }
-                        if (url.ref) {
-                            replacementPathSb.append('#').append(url.ref)
+                        if (urlSplitter.ref) {
+                            replacementPathSb.append('#').append(urlSplitter.ref)
                         }
                         replacementPath        = replacementPathSb.toString()
                         cachedPaths[assetPath] = replacementPath
