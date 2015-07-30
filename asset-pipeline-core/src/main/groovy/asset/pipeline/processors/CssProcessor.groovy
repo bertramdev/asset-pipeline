@@ -89,7 +89,7 @@ class CssProcessor extends AbstractProcessor {
         int filePathIndex = currRelativePath.size() - 1
         int baseFileIndex = baseRelativePath.size() - 1
 
-        while (filePathIndex > 0 && baseFileIndex > 0 && baseRelativePath[baseFileIndex] == currRelativePath[filePathIndex]) {
+        while (filePathIndex >= 0 && baseFileIndex >= 0 && baseRelativePath[baseFileIndex] == currRelativePath[filePathIndex]) {
             filePathIndex--
             baseFileIndex--
         }
