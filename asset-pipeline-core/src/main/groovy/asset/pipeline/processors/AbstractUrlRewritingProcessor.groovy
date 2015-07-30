@@ -30,8 +30,11 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String relativePathToBaseFile(final AssetFile currFile, final AssetFile baseFile, final boolean useDigest = false) {
-        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String> currRelativePath = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final String baseFileParentPath = baseFile.parentPath
+        final String currFileParentPath = currFile.parentPath
+
+        final List<String> baseRelativePath = baseFileParentPath ? baseFileParentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath = currFileParentPath ? currFileParentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
         int basePathIndex = baseRelativePath.size() - 1
         int currPathIndex = currRelativePath.size() - 1
