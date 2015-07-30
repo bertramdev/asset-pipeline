@@ -4,9 +4,13 @@ package asset.pipeline.processors
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
-import asset.pipeline.AssetHelper
 import asset.pipeline.DirectiveProcessor
 import asset.pipeline.GenericAssetFile
+
+import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
+import static asset.pipeline.AssetHelper.extensionFromURI
+import static asset.pipeline.AssetHelper.getByteDigest
+import static asset.pipeline.AssetHelper.nameWithoutExtension
 
 
 /**
@@ -26,8 +30,8 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
 
     protected String relativePathToBaseFile(final AssetFile file, final AssetFile baseFile, final boolean useDigest = false) {
-        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
-        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(AssetHelper.DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
+        final List<String> currRelativePath =     file.parentPath ?     file.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
         int filePathIndex = currRelativePath.size() - 1
         int baseFileIndex = baseRelativePath.size() - 1
@@ -48,13 +52,12 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             calculatedPath << currRelativePath[filePathIndex]
         }
 
-        final String fileName = AssetHelper.nameWithoutExtension(file.name)
+        final String fileName = nameWithoutExtension(file.name)
         if(useDigest) {
             if(file instanceof GenericAssetFile) {
-                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(file.bytes)}.${AssetHelper.extensionFromURI(file.name)}"
+                calculatedPath << "${fileName}-${getByteDigest(file.bytes)}.${extensionFromURI(file.name)}"
             } else {
-
-                calculatedPath << "${fileName}-${AssetHelper.getByteDigest(new DirectiveProcessor(file.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
+                calculatedPath << "${fileName}-${getByteDigest(new DirectiveProcessor(file.contentType[0], precompiler).compile(file).bytes)}.${file.compiledExtension}"
             }
         } else {
             if(file instanceof GenericAssetFile) {
@@ -63,6 +66,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
                 calculatedPath << "${fileName}.${file.compiledExtension}"
             }
         }
-        return calculatedPath.join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
+
+        return calculatedPath.join(DIRECTIVE_FILE_SEPARATOR)
     }
 }
