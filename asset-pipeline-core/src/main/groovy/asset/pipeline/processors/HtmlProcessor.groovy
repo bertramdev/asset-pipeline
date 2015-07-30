@@ -20,8 +20,6 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import java.util.regex.Pattern
 
-import static asset.pipeline.AssetHelper.fileForFullName
-import static asset.pipeline.AssetHelper.normalizePath
 import static asset.pipeline.utils.net.Urls.isRelative
 
 
@@ -59,27 +57,8 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     // cachedPaths[assetPath] == null // means use the incoming untrimmedAssetPath to preserve trim spacing
                     replacementPath = cachedPaths[assetPath] ?: untrimmedAssetPath
                 } else if (assetPath.size() > 0 && isRelative(assetPath)) {
-                    final URL urlSplitter = new URL("http://hostname/${assetPath}") // Split out subcomponents
-
-                    final AssetFile currFile =
-                        fileForFullName(
-                            normalizePath(
-                                assetFile.parentPath
-                                    ? assetFile.parentPath + urlSplitter.path
-                                    : urlSplitter.path.substring(1)
-                            )
-                        )
-
-                    if (currFile) {
-                        final StringBuilder replacementPathSb = new StringBuilder()
-                        replacementPathSb.append(relativePathToBaseFile(currFile, assetFile.baseFile ?: assetFile, precompiler && precompiler.options.enableDigests))
-                        if (urlSplitter.query != null) {
-                            replacementPathSb.append('?').append(urlSplitter.query)
-                        }
-                        if (urlSplitter.ref) {
-                            replacementPathSb.append('#').append(urlSplitter.ref)
-                        }
-                        replacementPath        = replacementPathSb.toString()
+                    replacementPath = replacementUrl(assetFile, assetPath)
+                    if (replacementPath) {
                         cachedPaths[assetPath] = replacementPath
                     } else {
                         cachedPaths[assetPath] = null
@@ -90,7 +69,7 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                     return quotedAssetPathWithQuotes
                 }
 
-                final String quote = doubleQuotedAssetPath ? '"' : /'/
+                final String quote = doubleQuotedAssetPath ? '"' : "'"
                 return "${quote}${replacementPath}${quote}"
             }
     }

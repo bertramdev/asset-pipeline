@@ -9,8 +9,10 @@ import asset.pipeline.GenericAssetFile
 
 import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
 import static asset.pipeline.AssetHelper.extensionFromURI
+import static asset.pipeline.AssetHelper.fileForFullName
 import static asset.pipeline.AssetHelper.getByteDigest
 import static asset.pipeline.AssetHelper.nameWithoutExtension
+import static asset.pipeline.AssetHelper.normalizePath
 
 
 /**
@@ -29,7 +31,23 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
     }
 
 
-    protected String relativePathToBaseFile(final AssetFile currFile, final AssetFile baseFile, final boolean useDigest = false) {
+    protected String replacementUrl(final AssetFile assetFile, final String url) {
+        final URL urlSplitter = new URL("http://hostname/${url}") // Split out subcomponents
+
+        final AssetFile baseFile = assetFile.baseFile ?: assetFile
+        final AssetFile currFile =
+            fileForFullName(
+                normalizePath(
+                    assetFile.parentPath
+                        ? assetFile.parentPath + urlSplitter.path
+                        : urlSplitter.path.substring(1)
+                )
+            )
+
+        if (! currFile) {
+            return null
+        }
+
         final StringBuilder replacementPathSb = new StringBuilder()
 
         // relative parent path
@@ -58,7 +76,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
         // file
         final String fileName = nameWithoutExtension(currFile.name)
-        if(useDigest) {
+        if(precompiler?.options.enableDigests) {
             if(currFile instanceof GenericAssetFile) {
                 replacementPathSb << fileName << '-' << getByteDigest(currFile.bytes) << '.' << extensionFromURI(currFile.name)
             } else {
@@ -70,6 +88,16 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             } else {
                 replacementPathSb << fileName << '.' << currFile.compiledExtension
             }
+        }
+
+        // query
+        if (urlSplitter.query != null) {
+            replacementPathSb << '?' << urlSplitter.query
+        }
+
+        // fragment (aka reference; aka anchor)
+        if (urlSplitter.ref) {
+            replacementPathSb << '#' << urlSplitter.ref
         }
 
         return replacementPathSb.toString()
