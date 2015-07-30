@@ -55,9 +55,14 @@ class CssProcessor extends AbstractUrlRewritingProcessor {
                 } else if (assetPath.size() > 0 && isRelative(assetPath)) {
                     final URL urlSplitter = new URL("http://hostname/${assetPath}") // Split out subcomponents
 
-                    final String relativeFileName = assetFile.parentPath ? assetFile.parentPath + urlSplitter.path : urlSplitter.path.substring(1)
-
-                    final AssetFile file = fileForFullName(normalizePath(relativeFileName))
+                    final AssetFile file =
+                        fileForFullName(
+                            normalizePath(
+                                assetFile.parentPath
+                                    ? assetFile.parentPath + urlSplitter.path
+                                    : urlSplitter.path.substring(1)
+                            )
+                        )
 
                     if (file) {
                         final StringBuilder replacementPathSb = new StringBuilder()
