@@ -33,12 +33,12 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         final List<String> baseRelativePath = baseFile.parentPath ? baseFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
         final List<String> currRelativePath = currFile.parentPath ? currFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).findAll {it}.reverse() : []
 
-        int currPathIndex = currRelativePath.size() - 1
         int basePathIndex = baseRelativePath.size() - 1
+        int currPathIndex = currRelativePath.size() - 1
 
-        while (currPathIndex >= 0 && basePathIndex >= 0 && baseRelativePath[basePathIndex] == currRelativePath[currPathIndex]) {
-            currPathIndex--
+        while (basePathIndex >= 0 && currPathIndex >= 0 && baseRelativePath[basePathIndex] == currRelativePath[currPathIndex]) {
             basePathIndex--
+            currPathIndex--
         }
 
         final List<String> calculatedPath = new ArrayList<>(basePathIndex + currPathIndex + 3)
