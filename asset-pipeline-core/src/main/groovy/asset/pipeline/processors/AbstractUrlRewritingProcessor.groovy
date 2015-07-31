@@ -27,6 +27,14 @@ import static asset.pipeline.utils.net.Urls.getSchemeWithColon
  */
 abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
 
+    private static final Set<String> NO_CACHE_DIGEST_FOR_COMPILED_EXTENSION_SET = []
+
+
+    protected static boolean doNotInsertCacheDigestIntoUrlForCompiledExtension(final String compiledExtension) {
+        NO_CACHE_DIGEST_FOR_COMPILED_EXTENSION_SET.add(compiledExtension)
+    }
+
+
     AbstractUrlRewritingProcessor(final AssetCompiler precompiler) {
         super(precompiler)
     }
@@ -93,7 +101,12 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             if(currFile instanceof GenericAssetFile) {
                 replacementPathSb << fileName << '-' << getByteDigest(currFile.bytes) << '.' << extensionFromURI(currFile.name)
             } else {
-                replacementPathSb << fileName << '-' << getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes) << '.' << currFile.compiledExtension
+                final String compiledExtension = currFile.compiledExtension
+                if (NO_CACHE_DIGEST_FOR_COMPILED_EXTENSION_SET.contains(compiledExtension)) {
+                    replacementPathSb << fileName << '.' << compiledExtension
+                } else {
+                    replacementPathSb << fileName << '-' << getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes) << '.' << compiledExtension
+                }
             }
         } else {
             if(currFile instanceof GenericAssetFile) {

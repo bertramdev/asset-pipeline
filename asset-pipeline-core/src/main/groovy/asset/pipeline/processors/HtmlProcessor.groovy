@@ -35,6 +35,10 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
 
     private static final Pattern QUOTED_ASSET_PATH_PATTERN = ~/"([a-zA-Z0-9\-_.:\/@#? &+%=']++)"|'([a-zA-Z0-9\-_.:\/@#? &+%="]++)'/
 
+    static {
+        doNotInsertCacheDigestIntoUrlForCompiledExtension('html')
+    }
+
 
     HtmlProcessor(final AssetCompiler precompiler) {
         super(precompiler)
