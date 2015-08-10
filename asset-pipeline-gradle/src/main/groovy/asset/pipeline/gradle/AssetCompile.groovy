@@ -1,12 +1,15 @@
 package asset.pipeline.gradle
 
 import asset.pipeline.AssetCompiler
+import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.AssetSpecLoader
 import asset.pipeline.fs.FileSystemAssetResolver
 import asset.pipeline.fs.JarAssetResolver
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -176,9 +179,24 @@ class AssetCompile extends DefaultTask {
         }
 
         AssetPipelineConfigHolder.config = configOptions
+        loadAssetSpecifications()
         def assetCompiler = new AssetCompiler(pipelineExtension.toMap(),new GradleEventListener())
         assetCompiler.excludeRules.default = pipelineExtension.excludes
         assetCompiler.includeRules.default = pipelineExtension.includes
         assetCompiler.compile()
     }
+
+    void loadAssetSpecifications() {
+        Set<File> processorFiles = project.configurations.getByName(AssetPipelinePlugin.ASSET_CONFIGURATION_NAME)?.files
+        
+        if (processorFiles) {
+            URL[] urls = processorFiles.collect { it.toURI().toURL() }
+            ClassLoader classLoader = new URLClassLoader(urls as URL[], getClass().classLoader)            
+            AssetSpecLoader.loadSpecifications(classLoader)
+        }
+        else {
+            AssetSpecLoader.loadSpecifications()
+        }
+    }
+
 }

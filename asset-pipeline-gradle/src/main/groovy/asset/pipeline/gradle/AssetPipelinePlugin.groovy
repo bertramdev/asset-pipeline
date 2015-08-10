@@ -21,6 +21,8 @@ import org.gradle.api.Project
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.bundling.Jar
 /**
@@ -31,12 +33,16 @@ import org.gradle.api.tasks.bundling.Jar
  *
  * @author David Estes
  * @author Graeme Rocher
+ * @author Craig Burke 
 */
 class AssetPipelinePlugin implements Plugin<Project> {
 
+    static final String ASSET_CONFIGURATION_NAME = 'assets'
+    
 	void apply(Project project) {
+        createGradleConfiguration(project)
+        
         def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtension)
-
 
         if(project.extensions.findByName('grails')) {
             defaultConfiguration.assetsPath = 'grails-app/assets'
@@ -127,4 +133,13 @@ class AssetPipelinePlugin implements Plugin<Project> {
 		// 	//TODO: Implement live watcher to auto recompile assets as they change
 		// }
 	}
+    
+    private void createGradleConfiguration(Project project) {
+        Configuration configuration = project.configurations.create(ASSET_CONFIGURATION_NAME)
+        project.plugins.withType(JavaPlugin) {
+            Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
+            runtimeConfiguration.extendsFrom configuration
+        }
+    }
+    
 }
