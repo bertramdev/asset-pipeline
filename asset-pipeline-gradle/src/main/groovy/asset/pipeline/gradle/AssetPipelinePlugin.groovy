@@ -140,9 +140,6 @@ class AssetPipelinePlugin implements Plugin<Project> {
         project.plugins.withType(JavaPlugin) {
             Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
             runtimeConfiguration.extendsFrom configuration
-        
-            Configuration compileConfiguration = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
-            compileConfiguration.add(project.files())
         }
     }
     
