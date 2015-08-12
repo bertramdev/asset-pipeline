@@ -16,16 +16,24 @@
 
 package asset.pipeline
 
+import java.util.concurrent.ConcurrentHashMap;
+import groovy.json.JsonSlurper;
+import groovy.json.JsonOutput;
+
 /**
  * Simple cache manager for Asset Pipeline
  *
  * @author David Estes
  * @author Graeme Rocher
  */
-class CacheManager {
-	static Map<String, Map<String, Object>> cache = [:]
+public class CacheManager {
+	static final String CACHE_LOCATION = ".asset-cache"
+	static final Integer CACHE_DEBOUNCE_MS = 5000 // Debounce 5 seconds
+	static Map<String, Map<String, Object>> cache = new ConcurrentHashMap<String, Map<String, Object>>()
+	static final Object LOCK_OBJECT = new Object()
+	static CachePersister cachePersister
 
-	static String findCache(String fileName, String md5, String originalFileName = null) {
+	public static String findCache(String fileName, String md5, String originalFileName = null) {
 		def cacheRecord = cache[fileName]
 
 		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
@@ -43,16 +51,18 @@ class CacheManager {
 
 			if(expiredCacheFound) {
 				cache.remove(fileName)
+				asyncCacheSave()
 				return null
 			}
 			return cacheRecord.processedFileText
 		} else if (cacheRecord) {
 			cache.remove(fileName)
+			asyncCacheSave()
 			return null
 		}
 	}
 
-	static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
+	public static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
         def thisCache = cache
         def cacheRecord = thisCache[fileName]
 		if(cacheRecord) {
@@ -69,10 +79,10 @@ class CacheManager {
 				dependencies: [:]
 			]
 		}
-
+		asyncCacheSave()
 	}
 
-	static void addCacheDependency(String fileName, AssetFile dependentFile) {
+	public static void addCacheDependency(String fileName, AssetFile dependentFile) {
 		def cacheRecord = cache[fileName]
 		if(!cacheRecord) {
 			createCache(fileName, null, null)
@@ -80,5 +90,49 @@ class CacheManager {
 		}
 		def newMd5 = AssetHelper.getByteDigest(dependentFile.inputStream.bytes)
 		cacheRecord.dependencies[dependentFile.path] = newMd5
+		asyncCacheSave()
+	}
+
+
+	public static void asyncCacheSave() {
+		synchronized(LOCK_OBJECT) {
+			if(!cachePersister) {
+				cachePersister = new CachePersister()
+				cachePersister.start()
+			}	
+		}
+		cachePersister.debounceSave(CACHE_DEBOUNCE_MS);
+	}
+
+
+	public static void save() {
+		String jsonCache = JsonOutput.toJson(cache)
+		File assetFile = new File(CACHE_LOCATION)
+		assetFile.text = jsonCache
+	}
+
+	/**
+	* Loads an Asset Cache dependency graph for asset-pipeline.
+	* This is currently encoded in JSON
+	* TODO: Change this potentially to be a file per key for quicker access
+	* If the asset cache file does not exist or a cache is already loaded, the cache store is not parsed.
+	*/
+	public static void loadPersistedCache() {
+		if(cache) {
+			return;
+		}
+		File assetFile = new File(CACHE_LOCATION)
+		if(!file.exists()) {
+			return;
+		}
+		try {
+			def jsonCache = new JsonSlurper().parse(assetFile)
+			jsonCache?.each{ entry ->
+				cache[entry.key] = entry.value
+			}
+		} catch(ex) {
+			// If there is a parser error from a previous bad cache flush ignore it and move on
+		}
+		
 	}
 }
