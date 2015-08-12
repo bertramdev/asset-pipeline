@@ -17,8 +17,6 @@
 package asset.pipeline
 
 import java.util.concurrent.ConcurrentHashMap;
-import groovy.json.JsonSlurper;
-import groovy.json.JsonOutput;
 
 /**
  * Simple cache manager for Asset Pipeline
@@ -27,13 +25,14 @@ import groovy.json.JsonOutput;
  * @author Graeme Rocher
  */
 public class CacheManager {
-	static final String CACHE_LOCATION = ".asset-cache"
+	static final String CACHE_LOCATION = ".asscache"
 	static final Integer CACHE_DEBOUNCE_MS = 5000 // Debounce 5 seconds
-	static Map<String, Map<String, Object>> cache = new ConcurrentHashMap<String, Map<String, Object>>()
+	static Map<String, Map<String, Object>> cache = [:]
 	static final Object LOCK_OBJECT = new Object()
 	static CachePersister cachePersister
 
 	public static String findCache(String fileName, String md5, String originalFileName = null) {
+		loadPersistedCache()
 		def cacheRecord = cache[fileName]
 
 		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
@@ -106,9 +105,10 @@ public class CacheManager {
 
 
 	public static void save() {
-		String jsonCache = JsonOutput.toJson(cache)
-		File assetFile = new File(CACHE_LOCATION)
-		assetFile.text = jsonCache
+		FileOutputStream fos = new FileOutputStream(CACHE_LOCATION);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(cache)
+		oos.close()
 	}
 
 	/**
@@ -122,12 +122,15 @@ public class CacheManager {
 			return;
 		}
 		File assetFile = new File(CACHE_LOCATION)
-		if(!file.exists()) {
+		if(!assetFile.exists()) {
 			return;
 		}
+
 		try {
-			def jsonCache = new JsonSlurper().parse(assetFile)
-			jsonCache?.each{ entry ->
+			FileInputStream fis = new FileInputStream(CACHE_LOCATION);
+		    ObjectInputStream ois = new ObjectInputStream(fis);
+		    def fileCache = ois.readObject()
+			fileCache?.each{ entry ->
 				cache[entry.key] = entry.value
 			}
 		} catch(ex) {

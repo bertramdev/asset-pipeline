@@ -11,7 +11,7 @@ public class CachePersister extends Thread {
 	public void run() {
 		while(true) {
 			sleep(RUN_DELAY)
-			if(ran = false) {
+			if(ran == false) {
 				delay -= RUN_DELAY
 				if(delay <= 0) {
 					CacheManager.save()
