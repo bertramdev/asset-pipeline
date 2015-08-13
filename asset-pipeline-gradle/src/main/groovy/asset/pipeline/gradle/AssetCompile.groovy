@@ -1,7 +1,6 @@
 package asset.pipeline.gradle
 
 import asset.pipeline.AssetCompiler
-import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetSpecLoader
 import asset.pipeline.fs.FileSystemAssetResolver
@@ -9,7 +8,6 @@ import asset.pipeline.fs.JarAssetResolver
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
-import org.gradle.api.artifacts.Configuration
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -43,7 +41,7 @@ import org.gradle.api.file.FileCollection
 class AssetCompile extends DefaultTask {
 
     @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()
-    private FileCollection classpath;
+    //private FileCollection classpath;
 
     @OutputDirectory
     File getDestinationDir() {
@@ -89,7 +87,7 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.enableSourceMaps
     }
 
-    void setEnableSourceMaps(boolean enableGzip) {
+    void setEnableSourceMaps(boolean enableSourceMaps) {
         pipelineExtension.enableSourceMaps = enableSourceMaps
     }
 
@@ -121,6 +119,11 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.minifyCss
     }
 
+    void setMinifyCss(boolean minifyCss) {
+        pipelineExtension.minifyCss = minifyCss
+    }
+
+
     @Input
     @Optional
     Map getConfigOptions() {
@@ -131,9 +134,6 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.configOptions = configOptions
     }
 
-    void setMinifyCss(boolean minifyCss) {
-        pipelineExtension.minifyCss = minifyCss
-    }
 
     @InputFiles
     @Optional
@@ -206,15 +206,14 @@ class AssetCompile extends DefaultTask {
     
     void loadAssetSpecifications() {
         Set<File> processorFiles = project.configurations.getByName(AssetPipelinePlugin.ASSET_CONFIGURATION_NAME)?.files
-        
+
         if (processorFiles) {
             URL[] urls = processorFiles.collect { it.toURI().toURL() }
-            ClassLoader classLoader = new URLClassLoader(urls as URL[], getClass().classLoader)            
+            ClassLoader classLoader = new URLClassLoader(urls as URL[], getClass().classLoader)
             AssetSpecLoader.loadSpecifications(classLoader)
         }
         else {
             AssetSpecLoader.loadSpecifications()
         }
     }
-
 }
