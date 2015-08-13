@@ -79,6 +79,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 skipNonDigests = assetPipeline.skipNonDigests
                 enableDigests = assetPipeline.enableDigests
                 enableSourceMaps = assetPipeline.enableSourceMaps
+                resolvers = assetPipeline.resolvers
             }
 
             project.tasks.withType(Jar) { Jar bundleTask ->

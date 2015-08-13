@@ -165,27 +165,45 @@ class AssetCompile extends DefaultTask {
     @TaskAction
     @CompileDynamic
     void compile() {
-        // println "Compiling assets in directory ${assetsDir}"
-        def resolver = new FileSystemAssetResolver('application', assetsDir.canonicalPath)
-        AssetPipelineConfigHolder.registerResolver(resolver)
-        
-        //Time to register Jar Resolvers
-        this.getClasspath()?.files?.each { file ->
-            if(file.exists()) {
-                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/assets"))
-                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/static"))
-                AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(file.name,file.canonicalPath,"META-INF/resources"))    
-            }
-        }
-
         AssetPipelineConfigHolder.config = configOptions
+
+        registerResolvers()     
         loadAssetSpecifications()
+        
         def assetCompiler = new AssetCompiler(pipelineExtension.toMap(),new GradleEventListener())
         assetCompiler.excludeRules.default = pipelineExtension.excludes
         assetCompiler.includeRules.default = pipelineExtension.includes
         assetCompiler.compile()
     }
 
+    void registerResolvers() {
+        def mainFileResolver = new FileSystemAssetResolver('application', assetsDir.canonicalPath)
+        AssetPipelineConfigHolder.registerResolver(mainFileResolver)
+
+        pipelineExtension.resolvers.each { String path ->
+            File resolverFile = project.file(path)
+            boolean isJarFile = resolverFile.exists() && resolverFile.file && resolverFile.name.endsWith('.jar')
+            boolean isAssetFolder = resolverFile.exists() && resolverFile.directory
+            if (isJarFile) {
+                registerJarResolvers(resolverFile)
+            }
+            else if (isAssetFolder) {
+                def fileResolver = new FileSystemAssetResolver(path, path, false)
+                AssetPipelineConfigHolder.registerResolver(fileResolver)
+            }
+        }
+
+        this.getClasspath()?.files?.each { registerJarResolvers(it) }
+    }
+    
+    void registerJarResolvers(File jarFile) {
+        if (jarFile.exists()) {
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/assets'))
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/static'))
+            AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/resources'))
+        }
+    }
+    
     void loadAssetSpecifications() {
         Set<File> processorFiles = project.configurations.getByName(AssetPipelinePlugin.ASSET_CONFIGURATION_NAME)?.files
         

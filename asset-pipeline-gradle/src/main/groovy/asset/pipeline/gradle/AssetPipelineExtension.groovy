@@ -23,23 +23,27 @@ package asset.pipeline.gradle
  * @author Graeme Rocher
  */
 class AssetPipelineExtension {
-	boolean minifyJs = true
-	boolean enableSourceMaps = true
-	boolean minifyCss = true
-	boolean enableDigests = true
-	boolean skipNonDigests = false
-	boolean enableGzip = true
-	String  compileDir = 'build/assets'
-	String assetsPath = 'src/assets'
-	Map minifyOptions
-	Map configOptions
+    boolean minifyJs = true
+    boolean enableSourceMaps = true
+    boolean minifyCss = true
+    boolean enableDigests = true
+    boolean skipNonDigests = false
+    boolean enableGzip = true
+    String compileDir = 'build/assets'
+    String assetsPath = 'src/assets'
+    Map minifyOptions
+    Map configOptions
 
-	List excludesGzip
-	List excludes = []
-	List includes = []
+    List excludesGzip
+    List excludes = []
+    List includes = []
+    List<String> resolvers = []
 
-
-	Map toMap() {
-		return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir:compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
-	}
+    void from(String resolverPath) {
+        resolvers += resolverPath
+    }
+    
+    Map toMap() {
+        return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir: compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
+    }
 }

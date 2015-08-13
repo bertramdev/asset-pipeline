@@ -32,8 +32,6 @@ buildscript {
   }
   dependencies {
     classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.4.3"
-  	//Example additional LESS support
-  	//classpath 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
   }
 }
 
@@ -54,7 +52,17 @@ assets {
   
   includes = []
   excludes = ['**/*.less'] //Example Exclude GLOB pattern
+  
+  // Can add custom asset locations (directories or individual jar files)
+  from '/vendor/lib'
+  from '/path/to/file.jar'
 }
+
+dependencies {
+  // Example additional LESS support
+  // assets 'com.bertramlabs.plugins:less-asset-pipeline:2.3.0'
+}
+
 ```
 
 Now that you have your build.gradle files. All you need to do is put files in your projects `src/assets/javascripts`, `src/assets/stylesheets`, `src/assets/images`, or whatever subdirectory you want.
