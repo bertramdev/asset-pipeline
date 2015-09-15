@@ -35,6 +35,8 @@ configurations {
 sourceSets {
 	main {
 		compileClasspath += configurations.provided
+		groovy.srcDirs   += ['src/main/java']
+		java.srcDirs      = []
 	}
 }
 
