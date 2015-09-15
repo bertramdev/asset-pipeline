@@ -3,21 +3,19 @@ buildscript {
 		mavenLocal()
 		jcenter()
 		maven {
-			url "https://plugins.gradle.org/m2/"
+			url 'https://plugins.gradle.org/m2/'
 		}
-
-		
 	}
 	dependencies {
-		classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
+		classpath 'com.gradle.publish:plugin-publish-plugin:0.9.1'
 	}
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.2"
+	id 'com.jfrog.bintray' version '1.2'
 }
 
-apply plugin: "com.gradle.plugin-publish"
+apply plugin: 'com.gradle.plugin-publish'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
@@ -26,7 +24,7 @@ group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 repositories {
 	jcenter()
@@ -40,7 +38,7 @@ dependencies {
 
 	compile project(':asset-pipeline-core')
 
-	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
+	testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
 }
 
 publishing {
@@ -86,15 +84,15 @@ publishing {
 				username project.properties.get('artifactoryPublishUsername')
 				password project.properties.get('artifactoryPublishPassword')
 			}
-			url "https://repo.grails.org/grails/libs-snapshots-local/"
+			url 'https://repo.grails.org/grails/libs-snapshots-local/'
 		}
 	}
 }
 
 bintray {
 	if(project.hasProperty('bintrayUser')) {
-	  user = bintrayUser
-	  key = bintrayKey
+		user = bintrayUser
+		key = bintrayKey
 	}
 
 	publications = ['maven']
@@ -131,26 +129,26 @@ test {
 // The configuration example below shows the minimum required properties
 // configured to publish your plugin to the plugin portal
 pluginBundle {
-  website = 'https://github.com/bertramdev/asset-pipeline-core/'
-  vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core/'
-  description = 'JVM Asset Pipeline Gradle Adapter.'
-  tags = ['assets', 'resources', 'asset-pipeline']
+	website = 'https://github.com/bertramdev/asset-pipeline-core/'
+	vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core/'
+	description = 'JVM Asset Pipeline Gradle Adapter.'
+	tags = ['assets', 'resources', 'asset-pipeline']
 
-  plugins {
-    assetPipelinePlugin {
-      id = 'com.bertramlabs.asset-pipeline'
-      displayName = 'Asset-Pipeline Plugin'
-    }
-  }
-  mavenCoordinates {
-    groupId = "com.bertramlabs.plugins"
-  }
+	plugins {
+		assetPipelinePlugin {
+			id = 'com.bertramlabs.asset-pipeline'
+			displayName = 'Asset-Pipeline Plugin'
+		}
+	}
+	mavenCoordinates {
+		groupId = 'com.bertramlabs.plugins'
+	}
 }
 
 
-// task('runtimeFiles') {
-// 	println project.configurations.runtime.files.collect{ it.class.name}
-// }
+//task('runtimeFiles') {
+//	println project.configurations.runtime.files.collect{ it.class.name}
+//}
 
 
 bintrayUpload.dependsOn build, sourcesJar, javadocJar

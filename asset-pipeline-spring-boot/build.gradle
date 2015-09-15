@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.2"
+	id 'com.jfrog.bintray' version '1.2'
 }
 
 apply plugin: 'groovy'
@@ -20,7 +20,7 @@ group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 repositories {
 	jcenter()
@@ -29,12 +29,11 @@ repositories {
 }
 
 dependencies {
-	compile gradleApi()
-	compile localGroovy()
-	compile project(':asset-pipeline-core')
-	compile "org.springframework.boot:spring-boot-starter-web:1.1.9.RELEASE"
-
-	testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
+	compile     gradleApi()
+	compile     localGroovy()
+	compile     project(':asset-pipeline-core')
+	compile     'org.springframework.boot:spring-boot-starter-web:1.1.9.RELEASE'
+	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
 
 publishing {
@@ -80,16 +79,16 @@ publishing {
 				username project.properties.get('artifactoryPublishUsername')
 				password project.properties.get('artifactoryPublishPassword')
 			}
-			url "https://repo.grails.org/grails/libs-snapshots-local/"
+			url 'https://repo.grails.org/grails/libs-snapshots-local/'
 		}
 	}
 }
 
 bintray {
-    if(project.hasProperty('bintrayUser')) {
-        user = bintrayUser
-        key = bintrayKey
-    }
+	if(project.hasProperty('bintrayUser')) {
+		user = bintrayUser
+		key = bintrayKey
+	}
 	publications = ['maven']
 	pkg {
 		repo = 'asset-pipeline'
@@ -110,8 +109,8 @@ task sourcesJar(type: Jar) {
 }
 
 task(console, dependsOn: 'classes', type: JavaExec) {
-main = 'groovy.ui.Console'
-classpath = sourceSets.main.runtimeClasspath
+	main = 'groovy.ui.Console'
+	classpath = sourceSets.main.runtimeClasspath
 }
 
 test {
