@@ -84,7 +84,33 @@ public final class Urls {
 		final String query,
 		final String fragment
 	) {
-		final StringBuilder urlSb = new StringBuilder();
+		return concatenateUrl(scheme, user, password, host, port, path, query, fragment, 0);
+	}
+
+	public static StringBuilder concatenateUrl(
+		final String scheme,
+		final String user,
+		final String password,
+		final String host,
+		final String port,
+		final String path,
+		final String query,
+		final String fragment,
+		final int    extraLength
+	) {
+		final StringBuilder urlSb =
+			new StringBuilder(
+				length(scheme,   1) +
+				length(user,     3) +
+				length(password, 4) +
+				length(host,     2) +
+				length(port,     3) +
+				length(path,     1) +
+				length(query,    1) +
+				length(fragment, 1) +
+				extraLength
+			)
+		;
 		if (scheme != null) {
 			urlSb.append(scheme).append(":");
 		}
@@ -118,6 +144,14 @@ public final class Urls {
 		append(urlSb, '?', query);
 		append(urlSb, '#', fragment);
 		return urlSb;
+	}
+
+	private static int length(final CharSequence cs, final int extraLength) {
+		return
+			cs == null
+				? 0
+				: cs.length() + extraLength
+			;
 	}
 
 	private static StringBuilder append(final StringBuilder sb, final String s) {
