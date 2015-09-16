@@ -3,8 +3,8 @@ package asset.pipeline.utils.net;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public final class Urls {
 
-	private static final Map<String, Integer> DEFAULT_PORT_BY_SCHEME = new HashMap<>();
+	private static final Map<String, Integer> DEFAULT_PORT_BY_SCHEME = new ConcurrentHashMap<>();
 
 	public static final String  URL_SCHEME_SANS_COLON_REGEX   = "\\p{L}[\\p{L}\\d+-.]*+";
 
