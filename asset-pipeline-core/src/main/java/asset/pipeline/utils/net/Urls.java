@@ -121,17 +121,19 @@ public final class Urls {
 	}
 
 	private static StringBuilder append(final StringBuilder sb, final String s) {
-		if (s != null) {
-			sb.append(s);
-		}
-		return sb;
+		return
+			s == null
+				? sb
+				: sb.append(s)
+		;
 	}
 
 	private static StringBuilder append(final StringBuilder sb, final char prefix, final String s) {
-		if (s != null) {
-			sb.append(prefix).append(s);
-		}
-		return sb;
+		return
+			s == null
+				? sb
+				: sb.append(prefix).append(s)
+		;
 	}
 
 
