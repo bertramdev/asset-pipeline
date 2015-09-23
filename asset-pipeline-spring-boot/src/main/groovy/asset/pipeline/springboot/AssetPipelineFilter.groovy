@@ -7,7 +7,8 @@ import groovy.util.logging.Log4j
 
 @Log4j
 class AssetPipelineFilter implements Filter {
-	def applicationContext
+    public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    def applicationContext
 	def servletContext
 	void init(FilterConfig config) throws ServletException {
 		applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
@@ -27,6 +28,8 @@ class AssetPipelineFilter implements Filter {
 		}
 		def file = applicationContext.getResource("classpath:assets${fileUri}")
 		if (file.exists()) {
+            //Do this early so a 304 will still contain 'Last-Modified' in the case that there is a CDN in between client and server
+            response.setHeader('Last-Modified', new Date(file.lastModified()).format(HTTP_DATE_FORMAT))
 			if(checkETag(request, response, fileUri)) {
 				// Check for GZip
 				def acceptsEncoding = request.getHeader("Accept-Encoding")
