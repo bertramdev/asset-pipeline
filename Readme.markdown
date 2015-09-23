@@ -15,6 +15,7 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 * Css Minification / Relative Path assertion
 * File Encoding Support
 * GZIP File Generation
+* Last-Modified Header
 
 
 Gradle Usage
@@ -128,6 +129,10 @@ compiler.compile()
 
 This extraction is not yet 100% complete and is in active development. If you are interested in implementing the asset-pipeline for a jvm framework. Feel free to take a look to get an idea what you will need to do.
 
+
+CDN Notes (Last-Modified Header)
+---------
+Some CDN providers rely on the existence of a `Last-Modified` header to successfully use the `If-None-Match` request header.  This will be served up in production mode for assets served locally from asset-pipeline.
 
 
 Dependencies
