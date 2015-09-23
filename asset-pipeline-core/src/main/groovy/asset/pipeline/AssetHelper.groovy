@@ -73,7 +73,7 @@ public class AssetHelper {
             }
         }
 
-        List<String> extensions = extensionMap.keySet().sort{String a, String b -> -(a.size()) <=> -(b.size())}
+        List<String> extensions = extensionMap.keySet().sort(false){String a, String b -> -(a.size()) <=> -(b.size())}
         String matchedExtension = extensions.find{ filename.endsWith(".${it}".toString()) }
         if(matchedExtension) {
             return extensionMap[matchedExtension]
@@ -107,7 +107,7 @@ public class AssetHelper {
     static String extensionFromURI(String uri) {
         String[] uriComponents = uri.split("/")
         String lastUriComponent = uriComponents[uriComponents.length - 1]
-        List<String> extensions = (List<String>)(AssetHelper.assetSpecs.collect { Class<AssetFile> it -> it.extensions }.flatten().sort{String a, String b -> -(a.size()) <=> -(b.size())})
+        List<String> extensions = (List<String>)(AssetHelper.assetSpecs.collect { Class<AssetFile> it -> it.extensions }.flatten().sort(false){String a, String b -> -(a.size()) <=> -(b.size())})
         String extension = null
         extension = extensions.find { lastUriComponent.endsWith(".${it}".toString())}
         if(!extension) {
@@ -142,7 +142,7 @@ public class AssetHelper {
         }
 
         String rootName = filename
-        assetFile.extensions.sort{String a, String b -> -(a.size()) <=> -(b.size())}.each { extension ->
+        assetFile.extensions.sort(false) {String a, String b -> -(a.size()) <=> -(b.size())}.each { extension ->
             if(filename.endsWith(".${extension}")) {
                 String potentialName = filename.substring(0,filename.lastIndexOf(".${extension}"))
                 if(potentialName.length() < rootName.length()) {
