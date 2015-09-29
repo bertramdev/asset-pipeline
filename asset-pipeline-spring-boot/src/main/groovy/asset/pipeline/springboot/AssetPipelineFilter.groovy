@@ -1,7 +1,7 @@
 package asset.pipeline.springboot
 
 import asset.pipeline.AssetPipelineConfigHolder
-import groovy.transform.CompileStatic
+import asset.pipeline.AssetPipelineResponseBuilder
 import groovy.util.logging.Log4j
 import org.springframework.web.context.support.WebApplicationContextUtils
 
@@ -11,10 +11,13 @@ import java.text.SimpleDateFormat
 @Log4j
 class AssetPipelineFilter implements Filter {
     public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    private final SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT);
+
     def applicationContext
     def servletContext
 
     void init(FilterConfig config) throws ServletException {
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
         applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
         servletContext = config.servletContext
     }
@@ -34,7 +37,7 @@ class AssetPipelineFilter implements Filter {
         if (file.exists()) {
             //Do this early so a 304 will still contain 'Last-Modified' in the case that there is a CDN in between client and server
             response.setHeader('Last-Modified', getLastModifiedDate(file))
-            if (checkETag(request, response, fileUri)) {
+            if (checkETag(request, response, fileUri) && checkIfModifiedSince(request, file)) {
                 // Check for GZip
                 def acceptsEncoding = request.getHeader("Accept-Encoding")
                 if (acceptsEncoding?.split(",")?.contains("gzip")) {
@@ -82,8 +85,30 @@ class AssetPipelineFilter implements Filter {
             response.flushBuffer()
             return false
         }
-        response.setHeader('ETag', etagName)
+        response.setHeader('ETag', "$etagName")
         return true
+    }
+
+    Boolean checkIfModifiedSince(ServletRequest request, file) {
+        String ifNoneMatchHeader = request.getHeader('If-Modified-Since')
+        if (ifNoneMatchHeader && hasNotChanged(ifNoneMatchHeader, file)) {
+            response.status = 304
+            response.flushBuffer()
+            return false
+        }
+        return true
+    }
+
+    boolean hasNotChanged(String ifModifiedSince, file) {
+        boolean hasNotChanged = false
+        if (ifModifiedSince) {
+            try {
+                hasNotChanged = new Date(file?.lastModified()) <= sdf.parse(ifModifiedSince)
+            } catch (Exception e) {
+                log.debug("Could not parse date time or file modified date", e)
+            }
+        }
+        return hasNotChanged
     }
 
     String getCurrentETag(String fileUri) {
@@ -97,14 +122,14 @@ class AssetPipelineFilter implements Filter {
         return manifest?.getProperty(manifestPath) ?: manifestPath
     }
 
-    @CompileStatic
-    public static String getLastModifiedDate(File file) {
-        final SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date currentTime = new Date()
-        if (file) {
-            currentTime = new Date(file.lastModified());
+    private String getLastModifiedDate(file) {
+        String lastModifiedDateTimeString = sdf.format(new Date())
+        try {
+            lastModifiedDateTimeString = sdf.format(new Date(file?.lastModified()))
+        } catch (Exception e) {
+            log.debug("Could not get last modified date time for file", e)
         }
-        return sdf.format(currentTime)
+
+        return lastModifiedDateTimeString
     }
 }
