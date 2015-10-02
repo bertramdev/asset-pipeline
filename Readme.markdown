@@ -32,7 +32,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.5.3"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.5.4"
   }
 }
 
@@ -61,7 +61,7 @@ assets {
 
 dependencies {
   // Example additional LESS support
-  // assets 'com.bertramlabs.plugins:less-asset-pipeline:2.5.3'
+  // assets 'com.bertramlabs.plugins:less-asset-pipeline:2.5.4'
 }
 
 ```
@@ -174,7 +174,7 @@ sourceSets {
 
 dependencies {
   provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "com.bertramlabs.plugins:asset-pipeline-core:2.5.3"
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.5.4"
 }
 ```
 
