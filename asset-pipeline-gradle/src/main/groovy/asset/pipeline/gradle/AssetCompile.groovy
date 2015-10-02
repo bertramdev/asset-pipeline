@@ -197,7 +197,8 @@ class AssetCompile extends DefaultTask {
     }
     
     void registerJarResolvers(File jarFile) {
-        if (jarFile.exists()) {
+        def isJarFile = jarFile.name.endsWith('.jar') || jarFile.name.endsWith('.zip')
+        if (jarFile.exists() && isJarFile) {
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/assets'))
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/static'))
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/resources'))
