@@ -44,7 +44,7 @@ public class AssetPipelineResponseBuilder {
             statusCode = 304
             return false
         }
-        headers["ETag"] = "$etagName"
+        headers["ETag"] = "\"$etagName\""
         return true
     }
 }
