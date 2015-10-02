@@ -24,6 +24,7 @@ import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.jar.JarFile
 import java.util.zip.ZipEntry
+import java.util.zip.ZipException
 
 
 /**
@@ -42,7 +43,12 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
 	JarAssetResolver(String name,String jarPath, String prefixPath) {
 		super(name)
-		baseJar = new JarFile(jarPath)
+		try {
+			baseJar = new JarFile(jarPath)
+		} catch (ZipException x) {
+			log.error "ERROR: Jar file is corrupted ${jarPath}"
+			throw x
+		}
 		this.prefixPath = prefixPath
 	}
 
