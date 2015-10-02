@@ -32,7 +32,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.4.3"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.5.2"
   }
 }
 
@@ -174,7 +174,7 @@ sourceSets {
 
 dependencies {
   provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "com.bertramlabs.plugins:asset-pipeline-core:2.4.3"
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.5.2"
 }
 ```
 
