@@ -40,6 +40,8 @@ interface AssetFile {
      */
     String getEncoding()
 
+    String getByteDigest()
+
     /**
      * Sets the encoding to use
      */

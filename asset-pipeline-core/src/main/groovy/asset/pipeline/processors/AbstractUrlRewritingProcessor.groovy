@@ -99,7 +99,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         final String fileName = nameWithoutExtension(currFile.name)
         if(precompiler && precompiler.options.enableDigests) {
             if(currFile instanceof GenericAssetFile) {
-                replacementPathSb << fileName << '-' << getByteDigest(currFile.bytes) << '.' << extensionFromURI(currFile.name)
+                replacementPathSb << fileName << '-' << currFile.getByteDigest() << '.' << extensionFromURI(currFile.name)
             } else {
                 final String compiledExtension = currFile.compiledExtension
                 if (NO_CACHE_DIGEST_FOR_COMPILED_EXTENSION_SET.contains(compiledExtension)) {

@@ -19,6 +19,8 @@ package asset.pipeline
 import asset.pipeline.fs.AssetResolver
 import groovy.transform.CompileStatic
 import java.util.regex.Pattern
+import java.security.MessageDigest
+import java.security.DigestInputStream
 
 /**
 * This is the base Asset File specification class. An AssetFile object should extend this abstract base class.
@@ -38,13 +40,31 @@ abstract class AbstractAssetFile implements AssetFile {
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 	byte[] byteCache
 	List<String> matchedDirectives = []
+	DigestInputStream digestStream
+	MessageDigest digest
 
 	// @CompileStatic
 	InputStream getInputStream() {
 		if(byteCache == null) {
-			byteCache = (inputStreamSource() as InputStream).bytes
+			digest = MessageDigest.getInstance("MD5")
+			digestStream = new DigestInputStream((InputStream)inputStreamSource(),digest)
+			byteCache = digestStream.bytes
 		}
 		return new ByteArrayInputStream(byteCache)
+	}
+
+	public String getByteDigest() {
+		if(!digestStream) {
+			getInputStream()
+		}
+
+		byte[] buffer = new byte[1024]
+		int nRead
+		while ((nRead = digestStream.read(buffer, 0, buffer.length)) != -1) {
+		  // noop (just to complete the stream)
+		}
+
+		return digest.digest().encodeHex().toString()
 	}
 
     String getCanonicalPath() {

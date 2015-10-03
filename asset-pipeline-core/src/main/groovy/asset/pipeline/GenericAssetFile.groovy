@@ -17,6 +17,8 @@
 package asset.pipeline
 
 import groovy.transform.CompileStatic
+import java.security.MessageDigest
+import java.security.DigestInputStream
 
 /**
  * Generic implementation of the {@link AssetFile} interface
@@ -29,7 +31,23 @@ class GenericAssetFile extends AbstractAssetFile {
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 
 	InputStream getInputStream() {
-		return (InputStream)inputStreamSource()
+		this.digest = MessageDigest.getInstance("MD5")
+		this.digestStream = new DigestInputStream((InputStream)inputStreamSource(),digest)
+		return digestStream
+	}
+
+	public String getByteDigest() {
+		if(!digestStream) {
+			getInputStream()
+		}
+
+		byte[] buffer = new byte[1024]
+		int nRead
+		while ((nRead = digestStream.read(buffer, 0, buffer.length)) != -1) {
+		  // noop (just to complete the stream)
+		}
+
+		return digest.digest().encodeHex().toString()
 	}
 
 	public String getParentPath() {

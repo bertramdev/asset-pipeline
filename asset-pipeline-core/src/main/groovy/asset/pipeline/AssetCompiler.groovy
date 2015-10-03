@@ -17,7 +17,9 @@ package asset.pipeline
 
 import groovy.util.logging.Commons
 import asset.pipeline.processors.ClosureCompilerProcessor
+import asset.pipeline.utils.MultiOutputStream
 import asset.pipeline.processors.CssMinifyPostProcessor
+import java.util.zip.GZIPOutputStream
 
 
 /**
@@ -161,7 +163,7 @@ class AssetCompiler {
 					}
 
 				} else {
-					digestName = AssetHelper.getByteDigest(assetFile.bytes)
+					digestName = assetFile.getByteDigest()
 					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
 					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
 						isUnchanged=true
@@ -179,41 +181,80 @@ class AssetCompiler {
 					parentTree.mkdirs()
 
 					byte[] outputBytes
+					InputStream writeInputStream;
 					if(fileData) {
-						outputBytes = fileData
+						writeInputStream = new ByteArrayInputStream(fileData)
+						// outputBytes = fileData
 
 					} else {
 						if(assetFile instanceof GenericAssetFile) {
+							writeInputStream = assetFile.inputStream
 							outputBytes = assetFile.bytes
 						} else {
+							writeInputStream = assetFile.inputStream
 							outputBytes = assetFile.inputStream.bytes
-							digestName = AssetHelper.getByteDigest(assetFile.inputStream.bytes)
+							digestName = assetFile.getByteDigest()
 						}
 					}
+					// TODO: Streamify!
+					eventListener?.triggerEvent("StatusUpdate","Writing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
+
+					byte[] buffer = new byte[4096]
+					int nRead
+					def outputFileStream
+					def digestFileStream
+					def gzipFileStream
+					def gzipStreamCollection = []
+
 					if(!options.skipNonDigests) {
 						outputFile.createNewFile()
-						outputFile.bytes = outputBytes
-					}
-
-					if(extension) {
-						try {
-							def digestedFile
-							if(options.enableDigests) {
-								digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
-								digestedFile.createNewFile()
-								digestedFile.bytes = outputBytes
-							}
-							manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
-
-							// Zip it Good!
-							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
-								eventListener?.triggerEvent("StatusUpdate","Compressing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
-								createCompressedFiles(outputFile,outputBytes, digestedFile)
-							}
-						} catch(ex) {
-							log.error("Error Compiling File ${fileName}.${extension}",ex)
+						outputFileStream = outputFile.newOutputStream()
+						if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
+							File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
+							zipFile.createNewFile()
+							gzipStreamCollection << zipFile.newOutputStream()
 						}
 					}
+					if(extension) {
+						if(options.enableDigests) {
+							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
+							digestedFile.createNewFile()
+							digestFileStream = digestedFile.newOutputStream()
+							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
+								File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
+								zipFileDigest.createNewFile()
+								gzipStreamCollection << zipFileDigest.newOutputStream()
+							}
+
+						}
+						manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
+
+					}
+
+					if(gzipStreamCollection) {
+						MultiOutputStream targetStream = new MultiOutputStream(gzipStreamCollection)
+						gzipFileStream = new GZIPOutputStream(targetStream,true)
+					}
+					while ((nRead = writeInputStream.read(buffer, 0, buffer.length)) != -1) {
+					  // noop (just to complete the stream)
+					  outputFileStream?.write(buffer, 0, nRead);
+					  digestFileStream?.write(buffer, 0, nRead);
+					  gzipFileStream?.write(buffer, 0, nRead);
+					}
+					if(gzipFileStream) {
+						gzipFileStream.finish()
+						gzipFileStream.flush()
+						gzipFileStream.close()
+						gzipStreamCollection.each { stream ->
+							stream.flush()
+							stream.close()
+						}
+					}
+					digestFileStream?.flush()
+					outputFileStream?.flush()
+					digestFileStream?.close()
+					outputFileStream?.close()
+
 				}
 
 			}
@@ -279,28 +320,28 @@ class AssetCompiler {
 		manifestProperties.store(manifestFile.newWriter(),"")
 	}
 
-	@groovy.transform.CompileStatic
-	private void createCompressedFiles(File outputFile, byte[] outputBytes, File digestedFile) {
-		java.io.ByteArrayOutputStream targetStream  = new java.io.ByteArrayOutputStream()
-		java.util.zip.GZIPOutputStream zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
+	// @groovy.transform.CompileStatic
+	// private void createCompressedFiles(File outputFile, byte[] outputBytes, File digestedFile) {
+	// 	java.io.ByteArrayOutputStream targetStream  = new java.io.ByteArrayOutputStream()
+	// 	java.util.zip.GZIPOutputStream zipStream     = new java.util.zip.GZIPOutputStream(targetStream)
 
-		zipStream.write(outputBytes)
-		zipStream.finish()
-		byte[] zipBytes = targetStream.toByteArray()
-		if(!options.skipNonDigests) {
-			File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
-			zipFile.createNewFile()
-			zipFile.bytes = zipBytes
-		}
+	// 	zipStream.write(outputBytes)
+	// 	zipStream.finish()
+	// 	byte[] zipBytes = targetStream.toByteArray()
+	// 	if(!options.skipNonDigests) {
+	// 		File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
+	// 		zipFile.createNewFile()
+	// 		zipFile.bytes = zipBytes
+	// 	}
 
-		if(options.enableDigests as Boolean) {
-			File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
-			zipFileDigest.createNewFile()
-			zipFileDigest.bytes = zipBytes
-		}
+	// 	if(options.enableDigests as Boolean) {
+	// 		File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
+	// 		zipFileDigest.createNewFile()
+	// 		zipFileDigest.bytes = zipBytes
+	// 	}
 
-		targetStream.close()
-	}
+	// 	targetStream.close()
+	// }
 
 	private removeDeletedFiles(filesToProcess) {
 		def compiledFileNames = filesToProcess.collect { assetFile ->
