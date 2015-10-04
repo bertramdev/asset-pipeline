@@ -1,15 +1,14 @@
 buildscript {
-    repositories {
-        mavenLocal()
-        jcenter()
-    }
-    dependencies {
-        
-    }
+	repositories {
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+	}
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.2"
+	id 'com.jfrog.bintray' version '1.2'
 }
 
 apply plugin: 'groovy'
@@ -20,113 +19,114 @@ group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 
 repositories {
-    jcenter()
-    mavenCentral()
+	jcenter()
+	mavenCentral()
 }
 
 configurations {
-    provided
-    doc
+	provided
+	doc
 }
- 
+
 sourceSets {
-    main {
-        compileClasspath += configurations.provided
-    }
+	main {
+		compileClasspath += configurations.provided
+		groovy.srcDirs   += ['src/main/java']
+		java.srcDirs      = []
+	}
 }
 
 groovydoc {
-    groovyClasspath = configurations.doc
+	groovyClasspath = configurations.doc
 }
 
 dependencies {
-
-    provided('org.codehaus.groovy:groovy:2.0.7')
-    provided('org.codehaus.groovy:groovy-templates:2.0.7')
-    doc('org.codehaus.groovy:groovy-all:2.4.3')
-    compile 'org.mozilla:rhino:1.7R4'
-    compile 'com.google.javascript:closure-compiler:v20141023'
-    compile("commons-logging:commons-logging:1.1.1")
-    // compile 'log4j:log4j:1.2.16'
-    testCompile("org.spockframework:spock-core:0.7-groovy-2.0")
+	provided    'org.codehaus.groovy:groovy:2.0.7'
+	provided    'org.codehaus.groovy:groovy-templates:2.0.7'
+	doc         'org.codehaus.groovy:groovy-all:2.4.3'
+	compile     'org.mozilla:rhino:1.7R4'
+	compile     'com.google.javascript:closure-compiler:v20141023'
+	compile     'commons-logging:commons-logging:1.1.1'
+	//compile   'log4j:log4j:1.2.16'
+	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
 
 publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId 'asset-pipeline-core'
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'asset-pipeline-core'
-                    description 'JVM Asset Pipeline library for serving static web assets, bundling, minifying, and extensibility for transpiling.'
-                    url 'https://github.com/bertramdev/asset-pipeline-core'
-                    scm {
-                        url 'https://github.com/bertramdev/asset-pipeline-core'
-                        connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
-                        developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
-                    }
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id 'davydotcom'
-                            name 'David Estes'
-                            email 'davydotcom@gmail.com'
-                        }
-                    }
-                }
-            }
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
+	publications {
+		maven(MavenPublication) {
+			artifactId 'asset-pipeline-core'
+			pom.withXml {
+				asNode().children().last() + {
+					resolveStrategy = Closure.DELEGATE_FIRST
+					name 'asset-pipeline-core'
+					description 'JVM Asset Pipeline library for serving static web assets, bundling, minifying, and extensibility for transpiling.'
+					url 'https://github.com/bertramdev/asset-pipeline-core'
+					scm {
+						url 'https://github.com/bertramdev/asset-pipeline-core'
+						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
+						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
+					}
+					licenses {
+						license {
+							name 'The Apache Software License, Version 2.0'
+							url 'http://www.apache.org/license/LICENSE-2.0.txt'
+							distribution 'repo'
+						}
+					}
+					developers {
+						developer {
+							id 'davydotcom'
+							name 'David Estes'
+							email 'davydotcom@gmail.com'
+						}
+					}
+				}
+			}
+			from components.java
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
 
-    repositories {
-        maven {
-            credentials {
-                username project.properties.get('artifactoryPublishUsername')
-                password project.properties.get('artifactoryPublishPassword')
-            }
-            url "https://repo.grails.org/grails/libs-snapshots-local/"
-        }
-    }
+	repositories {
+		maven {
+			credentials {
+				username project.properties.get('artifactoryPublishUsername')
+				password project.properties.get('artifactoryPublishPassword')
+			}
+			url 'https://repo.grails.org/grails/libs-snapshots-local/'
+		}
+	}
 }
 
 bintray {
-    if(project.hasProperty('bintrayUser')) {
-        user = bintrayUser
-        key = bintrayKey
-    }
+	if(project.hasProperty('bintrayUser')) {
+		user = bintrayUser
+		key = bintrayKey
+	}
 
-    publications = ['maven']
-    pkg {
-        repo = 'asset-pipeline'
-        userOrg = 'bertramlabs'
-        name = 'asset-pipeline-core'
-        licenses = ['Apache-2.0']
-    }
+	publications = ['maven']
+	pkg {
+		repo = 'asset-pipeline'
+		userOrg = 'bertramlabs'
+		name = 'asset-pipeline-core'
+		licenses = ['Apache-2.0']
+	}
 }
 
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from 'build/docs/javadoc'
+	classifier = 'javadoc'
+	from 'build/docs/javadoc'
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+	classifier = 'sources'
+	from sourceSets.main.allSource
 }
 
 task(console, dependsOn: 'classes', type: JavaExec) {
@@ -134,11 +134,12 @@ task(console, dependsOn: 'classes', type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
 }
 
+
 test {
-    testLogging {
-        exceptionFormat = 'full'
-        showStandardStreams = true
-    }
+	testLogging {
+		exceptionFormat = 'full'
+		showStandardStreams = true
+	}
 }
 
 
