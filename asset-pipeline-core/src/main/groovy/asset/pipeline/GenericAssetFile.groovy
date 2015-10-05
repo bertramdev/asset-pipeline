@@ -36,20 +36,6 @@ class GenericAssetFile extends AbstractAssetFile {
 		return digestStream
 	}
 
-	public String getByteDigest() {
-		if(!digestStream) {
-			getInputStream()
-		}
-
-		byte[] buffer = new byte[1024]
-		int nRead
-		while ((nRead = digestStream.read(buffer, 0, buffer.length)) != -1) {
-		  // noop (just to complete the stream)
-		}
-
-		return digest.digest().encodeHex().toString()
-	}
-
 	public String getParentPath() {
 		List<String> pathArgs = path.tokenize("/")
 		if(pathArgs.size() == 1) {

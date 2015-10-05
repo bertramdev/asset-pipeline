@@ -54,14 +54,18 @@ abstract class AbstractAssetFile implements AssetFile {
 	}
 
 	public String getByteDigest() {
-		if(!digestStream) {
+		if(!digestStream || !digest) {
 			getInputStream()
 		}
 
-		byte[] buffer = new byte[1024]
-		int nRead
-		while ((nRead = digestStream.read(buffer, 0, buffer.length)) != -1) {
-		  // noop (just to complete the stream)
+		try {
+			byte[] buffer = new byte[1024]
+			int nRead
+			while((nRead = digestStream.read(buffer, 0, buffer.length)) != -1) {
+				// noop (just to complete the stream)
+			}
+		} catch(IOException ioe) {
+			// Its ok if the stream is already closed so ignore error
 		}
 
 		return digest.digest().encodeHex().toString()
