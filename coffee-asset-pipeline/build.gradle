@@ -1,0 +1,123 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.2"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'com.bertramlabs.plugins'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+repositories {
+	mavenLocal()
+    jcenter()
+    mavenCentral()
+
+}
+
+configurations {
+    provided
+}
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+dependencies {
+	compile project(':asset-pipeline-core')
+	provided 'org.codehaus.groovy:groovy:2.0.7'
+    compile 'org.mozilla:rhino:1.7R4'
+    compile 'log4j:log4j:1.2.17'
+
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'coffee-asset-pipeline'
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'coffee-asset-pipeline'
+                    description 'Coffeescript Transpiler Extension for the JVM Based Asset-Pipeline.'
+                    url 'https://github.com/bertramdev/coffee-asset-pipeline'
+                    scm {
+                        url 'https://github.com/bertramdev/coffee-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/coffee-asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/coffee-asset-pipeline.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+     if(project.hasProperty('bintrayUser')) {
+        user = bintrayUser
+        key = bintrayKey
+    }
+    publications = ['maven']
+    pkg {
+        repo = 'asset-pipeline'
+        userOrg = 'bertramlabs'
+        name = 'coffee-asset-pipeline'
+        licenses = ['Apache-2.0']
+    }
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+
+bintrayUpload.dependsOn build, sourcesJar, javadocJar

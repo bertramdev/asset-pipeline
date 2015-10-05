@@ -19,6 +19,13 @@ import java.util.regex.Pattern
 import asset.pipeline.processors.HtmlProcessor
 import groovy.transform.CompileStatic
 
+/**
+ * An {@link AssetFile} implementation for Html
+ * This currently applies a {@link asset.pipeline.processors.HtmlProcessor} onto the Html that does relative url replacement with  digest named files
+ *
+ * @author David Estes
+ * @author Graeme Rocher
+ */
 @CompileStatic
 class HtmlAssetFile extends AbstractAssetFile {
 	static List<Class<Processor>> processors = [HtmlProcessor]

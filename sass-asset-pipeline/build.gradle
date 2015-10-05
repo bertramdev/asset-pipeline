@@ -1,0 +1,128 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.2"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
+group = 'com.bertramlabs.plugins'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+repositories {
+	mavenLocal()
+    jcenter()
+    mavenCentral()
+
+}
+
+configurations {
+    provided
+}
+ 
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+        resources{
+            srcDir 'src/main/resources'
+            srcDir 'src/main/ruby'
+        }
+    }
+}
+
+dependencies {
+    provided 'org.codehaus.groovy:groovy-all:2.0.7'
+	compile project(':asset-pipeline-core')
+    
+    compile 'log4j:log4j:1.2.17'
+	compile 'org.jruby:jruby-complete:1.7.11'
+    compile 'com.bertramlabs.plugins:jruby-container:0.6.1'
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'sass-asset-pipeline'
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'sass-asset-pipeline'
+                    description 'Provides SASS Compiling support for the Asset-Pipeline library.'
+                    url 'https://github.com/bertramdev/sass-asset-pipeline'
+                    scm {
+                        url 'https://github.com/bertramdev/sass-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+    if(project.hasProperty('bintrayUser')) {
+        user = bintrayUser
+        key = bintrayKey
+    }
+    publications = ['maven']
+    pkg {
+        repo = 'asset-pipeline'
+        userOrg = 'bertramlabs'
+        name = 'sass-asset-pipeline'
+        licenses = ['Apache-2.0']
+    }
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+
+bintrayUpload.dependsOn build, sourcesJar, javadocJar

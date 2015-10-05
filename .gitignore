@@ -3,3 +3,6 @@ build/
 .gradle
 .idea/
 gradle.properties
+.jruby-container
+.sass-cache
+.sass-work

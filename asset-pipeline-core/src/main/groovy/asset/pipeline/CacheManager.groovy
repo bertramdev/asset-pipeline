@@ -114,7 +114,7 @@ public class CacheManager {
 	/**
 	* Loads an Asset Cache dependency graph for asset-pipeline.
 	* This is currently encoded in JSON
-	* TODO: Change this potentially to be a file per key for quicker access
+	*
 	* If the asset cache file does not exist or a cache is already loaded, the cache store is not parsed.
 	*/
 	public static void loadPersistedCache() {

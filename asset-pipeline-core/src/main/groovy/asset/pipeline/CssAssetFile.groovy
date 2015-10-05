@@ -21,6 +21,7 @@ import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 /**
  * An {@link AssetFile} implementation for CSS
+ * This currently applies a {@link asset.pipeline.processors.CssProcessor} onto the css that does relative url replacement with  digest named files
  *
  * @author David Estes
  * @author Graeme Rocher

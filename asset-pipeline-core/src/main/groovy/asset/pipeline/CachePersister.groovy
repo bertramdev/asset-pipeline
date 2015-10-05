@@ -1,9 +1,11 @@
 package asset.pipeline
 
 /**
-* Receives asynchronous cache persistance requests and executes them.
-* Also acts as a debouncer
-*/
+ * Receives asynchronous cache persistance requests and executes them.
+ * Also acts as a debouncer
+ *
+ * @author David Estes
+ */
 public class CachePersister extends Thread {
 	public Integer delay = 0
 	public Boolean ran = true
@@ -22,6 +24,10 @@ public class CachePersister extends Thread {
 		}
 	}
 
+	/**
+	 * Asynchronously triggers a save with a debounce delay to reduce excessive persistence calls
+	 * @param delay (milliseconds) between debounce save
+	 */
 	public void debounceSave(Integer delay) {
 		this.delay = delay
 		ran = false
