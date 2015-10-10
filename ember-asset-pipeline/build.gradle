@@ -4,6 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+        
     }
 }
 
@@ -11,12 +12,15 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
+
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
+
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 
 repositories {
 	mavenLocal()
@@ -25,43 +29,30 @@ repositories {
 
 }
 
-configurations {
-    provided
-}
- 
-sourceSets {
-    main {
-        compileClasspath += configurations.provided
-        resources{
-            srcDir 'src/main/resources'
-            srcDir 'src/main/ruby'
-        }
-    }
-}
 
 dependencies {
-    provided 'org.codehaus.groovy:groovy-all:2.0.7'
 	compile project(':asset-pipeline-core')
+	compile 'org.codehaus.groovy:groovy:2.0.7'
+    compile 'org.mozilla:rhino:1.7R4'
     compile 'log4j:log4j:1.2.17'
-	compile 'org.jruby:jruby-complete:9.0.1.0'
-    compile 'com.bertramlabs.plugins:jruby-container:0.6.1'
+
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId 'sass-asset-pipeline'
+            artifactId 'ember-asset-pipeline'
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'sass-asset-pipeline'
-                    description 'Provides SASS Compiling support for the Asset-Pipeline library.'
-                    url 'https://github.com/bertramdev/sass-asset-pipeline'
+                    name 'ember-asset-pipeline'
+                    description 'Ember.js Template Compiler (Handlebars.js) for JVM Asset Pipeline.'
+                    url 'https://github.com/bertramdev/ember-asset-pipeline'
                     scm {
-                        url 'https://github.com/bertramdev/sass-asset-pipeline'
-                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
-                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
+                        url 'https://github.com/bertramdev/ember-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/ember-asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/ember-asset-pipeline.git'
                     }
                     licenses {
                         license {
@@ -95,7 +86,7 @@ bintray {
     pkg {
         repo = 'asset-pipeline'
         userOrg = 'bertramlabs'
-        name = 'sass-asset-pipeline'
+        name = 'ember-asset-pipeline'
         licenses = ['Apache-2.0']
     }
 }

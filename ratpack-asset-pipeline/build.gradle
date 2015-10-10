@@ -1,0 +1,139 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+  }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.2"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'com.bertramlabs.plugins'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+    maven { url "http://oss.jfrog.org/artifactory/repo" }
+}
+
+configurations {
+    provided
+}
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+ext {
+  isReleaseVersion = !version.endsWith("SNAPSHOT")
+  slf4jVersion = "1.7.10"
+  ratpackVersion = "1.0.0"
+  spockVersion = "1.0-groovy-2.4"
+  cglibVersion = "2.2.2"
+  objenesisVersion = "2.1"
+  groovyVersion = "2.4.3"
+}
+
+dependencies {
+  compile project(':asset-pipeline-core')
+  compile "io.ratpack:ratpack-guice:${ratpackVersion}"
+  compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+  runtime "org.slf4j:slf4j-simple:${slf4jVersion}"
+  testCompile "org.spockframework:spock-core:${spockVersion}"
+  testCompile "cglib:cglib:${cglibVersion}"
+  testCompile "org.objenesis:objenesis:${objenesisVersion}"
+  testCompile "io.ratpack:ratpack-test:${ratpackVersion}"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'ratpack-asset-pipeline'
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'ratpack-asset-pipeline'
+                    description 'Provides asset-pipeline integration with the ratpack framework.'
+                    url 'https://github.com/bertramdev/ratpack-asset-pipeline'
+                    scm {
+                        url 'https://github.com/bertramdev/ratpack-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/ratpack-asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/ratpack-asset-pipeline.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                username project.properties.get('artifactoryPublishUsername')
+                password project.properties.get('artifactoryPublishPassword')
+            }
+            url "https://repo.grails.org/grails/libs-snapshots-local/"
+        }
+    }
+}
+
+bintray {
+    if(project.hasProperty('bintrayUser')) {
+        user = bintrayUser
+        key = bintrayKey
+    }
+
+    publications = ['maven']
+    pkg {
+        repo = 'asset-pipeline'
+        userOrg = 'bertramlabs'
+        name = 'ratpack-asset-pipeline'
+        licenses = ['Apache-2.0']
+        websiteUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline'
+        issueTrackerUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline/issues'
+        vcsUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline.git'
+    }
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}

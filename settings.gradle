@@ -1,1 +1,1 @@
-include 'asset-pipeline-core', 'asset-pipeline-gradle', 'asset-pipeline-spring-boot', 'less-asset-pipeline', 'coffee-asset-pipeline', 'sass-asset-pipeline', 'handlebars-asset-pipeline'
+include 'asset-pipeline-core', 'asset-pipeline-gradle', 'asset-pipeline-spring-boot', 'less-asset-pipeline', 'coffee-asset-pipeline', 'sass-asset-pipeline', 'handlebars-asset-pipeline', 'ratpack-asset-pipeline','ember-asset-pipeline'
