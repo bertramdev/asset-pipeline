@@ -49,7 +49,7 @@ class SassProcessor extends AbstractProcessor {
                     
 
                     if(AssetPipelineConfigHolder.config?.sass?.resolveGems != false || AssetPipelineConfigHolder.config?.sass?.resolveGems == true) {
-                        def gemSet = [compass: '1.0.3', chunky_png: '1.3.4', 'compass-core':'1.0.3', sass: '3.4.11',fssm: '0.2.10', ffi:'1.9.10']
+                        def gemSet = [compass: '1.0.3', chunky_png: '1.3.4', 'compass-core':'1.0.3', sass: '3.4.19',fssm: '0.2.10', ffi:'1.9.10']
                         if(AssetPipelineConfigHolder.config?.sass?.gems) {
                             gemSet += AssetPipelineConfigHolder.config?.sass?.gems
                         }

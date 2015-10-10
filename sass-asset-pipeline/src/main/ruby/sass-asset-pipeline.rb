@@ -121,7 +121,7 @@ Sass::Importers::Filesystem.class_eval do
           ret = [["#{dirname}#{basename}.#{extensions.invert[syntax]}", syntax],["#{dirname}_#{basename}.#{extensions.invert[syntax]}", syntax]]
         else
           ret = sorted_exts.map {|ext, syn| [["#{dirname}#{basename}.#{ext}", syn],["#{dirname}_#{basename}.#{ext}", syn]]}
-          ret = Sass::Util.flatten(ret,1)
+          ret = ret.flatten(1)
         end
         # JRuby chokes when trying to import files from JARs when the path starts with './'.
         ret.map {|f, s| [f.sub(%r{^\./}, ''), s]}
@@ -147,8 +147,7 @@ Sass::Importers::Filesystem.class_eval do
           # This is where we override default behavior
           asset_file = Java::AssetPipeline::AssetHelper.fileForFullName(path)
           asset_file ? [[asset_file.getPath(),s]] : []
-        end
-        found = Sass::Util.flatten(found, 1)
+        end.flatten(1)
 
         return if found.empty?
 
