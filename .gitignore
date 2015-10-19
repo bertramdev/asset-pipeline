@@ -1,0 +1,9 @@
+build/
+.asscache
+.DS_Store
+.gradle
+.idea/
+gradle.properties
+.jruby-container
+.sass-cache
+.sass-work
