@@ -28,13 +28,13 @@ public class AssetPipelineResponseBuilder {
     }
 
     public String getCurrentETag() {
+
         def manifestPath = uri
         if (uri.startsWith('/')) {
             manifestPath = uri.substring(1) //Omit forward slash
         }
 
         def manifest = AssetPipelineConfigHolder.manifest
-
         return "\"" + (manifest?.getProperty(manifestPath) ?: manifestPath) + "\""
     }
 
