@@ -17,6 +17,14 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 * GZIP File Generation
 * Last-Modified Header
 
+Documenation
+------------
+
+We are in the middle of revamping the documentation:
+
+* [API Doc](http://bertramdev.github.io/asset-pipeline)
+* [Grails Doc](http://bertramdev.github.io/grails-asset-pipeline)
+
 
 Gradle Usage
 -----------
