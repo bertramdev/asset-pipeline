@@ -1,0 +1,5 @@
+asset.pipeline
+asset.pipeline.fs
+asset.pipeline.processors
+asset.pipeline.utils
+sun.net.www.protocol.asset
