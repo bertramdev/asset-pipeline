@@ -29,10 +29,10 @@ import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 
 /**
-* The abstract class for any helper methods in resolving files
+ * The abstract class for any helper methods in resolving files
  *
-* @author David Estes
-*/
+ * @author David Estes
+ */
 abstract class AbstractAssetResolver<T> implements AssetResolver {
     String name
 
@@ -95,6 +95,10 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
         return null
     }
 
+    /**
+     * A method for converting glob patterns into regex. Not used anymore as Java 7 Path patterns are now used
+     * @deprecated
+     */
     @CompileStatic
     public Pattern convertGlobToRegEx(String line)
     {

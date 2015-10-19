@@ -16,6 +16,14 @@
 
 package asset.pipeline.processors
 import java.util.regex.Pattern
+
+/**
+ * Minifies CSS as a PostProcessor.
+ * Currently the most minification this class performs is a removal of whitespace and comments
+ * Duplicate match patterns are not currently combined.
+ *
+ * @author David Estes
+ */
 class CssMinifyPostProcessor {
     static contentTypes = ['text/css']
 

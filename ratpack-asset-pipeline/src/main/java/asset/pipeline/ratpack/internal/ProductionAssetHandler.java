@@ -25,13 +25,17 @@ import ratpack.handling.Context;
 import ratpack.handling.Handler;
 import ratpack.http.Response;
 import ratpack.http.internal.HttpHeaderConstants;
-
+import ratpack.func.Factory;
+import ratpack.func.Action;
+import ratpack.exec.Blocking;
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Map;
 import java.util.Properties;
 
-import static ratpack.file.internal.DefaultFileRenderer.readAttributes;
 import static ratpack.registry.Registry.single;
 
 public class ProductionAssetHandler implements Handler {
@@ -144,5 +148,19 @@ public class ProductionAssetHandler implements Handler {
   private boolean acceptsGzip(Context ctx) {
     String acceptsEncoding = ctx.getRequest().getHeaders().get(HttpHeaderNames.ACCEPT_ENCODING);
     return acceptsEncoding != null && Arrays.asList(acceptsEncoding.split(",")).contains("gzip");
+  }
+
+  public static void readAttributes(Path file, Action<? super BasicFileAttributes> then) throws Exception {
+      Blocking.get(getter(file)).then(then);
+  }
+
+  private static Factory<BasicFileAttributes> getter(Path file) {
+    return () -> {
+      if (Files.exists(file)) {
+        return Files.readAttributes(file, BasicFileAttributes.class);
+      } else {
+        return null;
+      }
+    };
   }
 }

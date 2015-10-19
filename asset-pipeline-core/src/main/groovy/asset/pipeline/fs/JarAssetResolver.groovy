@@ -28,7 +28,7 @@ import java.util.zip.ZipException
 
 
 /**
- * Implementation of the {@link AssetResolver} interface for resolving from JAR files
+ * Implementation of the {@link AssetResolver} interface for resolving from JAR files or ZIP files
  *
  * @author David Estes
  * @author Graeme Rocher

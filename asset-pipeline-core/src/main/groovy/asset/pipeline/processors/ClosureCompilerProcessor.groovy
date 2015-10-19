@@ -22,6 +22,13 @@ import com.google.javascript.jscomp.CompilerOptions.LanguageMode
 import java.util.logging.Level
 import groovy.transform.CompileStatic
 
+/**
+ * A PostProcessor designed to minify javascript utilizing the Google Closure javascript compiler
+ * Under the hood this leverages Rhino AST Trees to process the file (but not the Rhino runtime) which makes this
+ * significantly faster than the UglifyJs or UglifyJs2 library.
+ *
+ * @author David Estes
+ */
 @CompileStatic
 class ClosureCompilerProcessor {
 	static contentTypes = ['application/javascript']

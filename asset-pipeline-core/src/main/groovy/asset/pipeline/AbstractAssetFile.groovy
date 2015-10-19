@@ -32,10 +32,26 @@ import java.security.DigestInputStream
 */
 @CompileStatic
 abstract class AbstractAssetFile implements AssetFile {
+
 	String path
+
+    /**
+     * If this file was loaded as a sub dependency of a parent file this property will contain that baseFile reference
+     * This is useful for recalculating base path relative uri patterns within the file.
+     */
 	AssetFile baseFile
+    /**
+     * The relevant {@link asset.pipeline.fs.AssetResolver} that was used to find the instance of this file
+     */
 	AssetResolver sourceResolver
+
+    /**
+     * The encoding of the file, typically injected by the {@link DirectiveProcessor}
+     * If unspecified, the OS default is assumed
+     */
 	String encoding
+
+
 	Pattern directivePattern = null
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 	byte[] byteCache
@@ -43,7 +59,12 @@ abstract class AbstractAssetFile implements AssetFile {
 	DigestInputStream digestStream
 	MessageDigest digest
 
-	// @CompileStatic
+    /**
+     * Executes the inputStreamSource() closure to fetch a new inputStream object
+     * In the case of a standard asset file this result is cached into a Byte Array and also wrapped
+     * in a DigestInputStream for efficient md5 digest generation
+     * @return InputStream object of files contents (before processing)
+     */
 	InputStream getInputStream() {
 		if(byteCache == null) {
 			digest = MessageDigest.getInstance("MD5")
@@ -53,6 +74,12 @@ abstract class AbstractAssetFile implements AssetFile {
 		return new ByteArrayInputStream(byteCache)
 	}
 
+    /**
+     * Returns a HEX encoded byte digest of the file contents (preprocessed)
+     * This leverages the DigestStream wrapping the files inputStream for efficient calculation
+     * If the stream is not fully read yet it will consume the rest of the stream
+     * @return String hexDigest
+     */
 	public String getByteDigest() {
 		if(!digestStream || !digest) {
 			getInputStream()
@@ -71,10 +98,20 @@ abstract class AbstractAssetFile implements AssetFile {
 		return digest.digest().encodeHex().toString()
 	}
 
+    /**
+     * Returns the canonicalPath in the context of the AssetResolver file path structure.
+     * (this is not the real filesystem canonical path)
+     * @return absolute path representation within an AssetResolver context
+     */
     String getCanonicalPath() {
         return path
     }
 
+    /**
+     * Gets the parent path of the file
+     * Behaves similarly to a File.getParent() method
+     * @return
+     */
 	public String getParentPath() {
 		String[] pathArgs = path.split("/")
 		if(pathArgs.size() == 1) {
@@ -83,11 +120,22 @@ abstract class AbstractAssetFile implements AssetFile {
 		return (Arrays.copyOfRange(pathArgs,0,pathArgs.size() - 1) as String[]).join("/")
 	}
 
+    /**
+     * Returns the name of the file without the path elements
+     * @return Name of the file
+     */
 	public String getName() {
 		path.split("/")[-1]
 	}
 
-
+    /**
+     * Returns a Processed String of the files contents
+     * This includes a run through of all Processors in the {@link #processors} List.
+     * The precompiler object is passed to all processors as well as determines the behavior of the runtime cache
+     * manager.
+     * @param precompiler reference to the active compiler being used (If NULL development mode is assumed)
+     * @return the final processed contents of the file
+     */
 	String processedStream(AssetCompiler precompiler) {
 		String fileText
 		Boolean skipCache = precompiler ?: (!processors || processors.size() == 0)
@@ -121,10 +169,19 @@ abstract class AbstractAssetFile implements AssetFile {
 		return fileText
 	}
 
+    /**
+     * String representation of the object defaults to the full path of the file
+     * @return
+     */
 	public String toString() {
 		return path
 	}
 
+    /**
+     * Returns the directive pattern used to perform bundling in the comments of the file
+     * it is possible for the pattern to be NULL if this file type does not support it
+     * @return multi-line regex Pattern for finding //=require like directives
+     */
 	public Pattern getDirectivePattern() {
 		return this.directivePattern
 	}

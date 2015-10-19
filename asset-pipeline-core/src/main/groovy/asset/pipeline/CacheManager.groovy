@@ -16,21 +16,30 @@
 
 package asset.pipeline
 
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Simple cache manager for Asset Pipeline
+ * A Cache Manager for the Asset-Pipeline runtime. This reduces repeat processing
+ * of files that have already been processed during the runtime of the asset-pipeline.
+ * It also is capable of persisting this cache as an ObjectStream to the '.asscache' file
+ * Private API Class
  *
  * @author David Estes
  * @author Graeme Rocher
  */
 public class CacheManager {
 	static final String CACHE_LOCATION = ".asscache"
-	static final Integer CACHE_DEBOUNCE_MS = 5000 // Debounce 5 seconds
+	static final Integer CACHE_DEBOUNCE_MS = 5000 // De-bounce 5 seconds
 	static Map<String, Map<String, Object>> cache = [:]
 	static final Object LOCK_OBJECT = new Object()
 	static CachePersister cachePersister
 
+    /**
+     * Returns the cache string value of a file if it exists in the cache and is unmodified since last checked
+     * @param fileName The name of the file also known as the cache key
+     * @param md5 The current md5 digest of the file. This is compared against the original file
+     * @param originalFileName - Original file name of the file. This is for cache busting bundled assets
+     * @return A String value of the cache
+     */
 	public static String findCache(String fileName, String md5, String originalFileName = null) {
 		loadPersistedCache()
 		def cacheRecord = cache[fileName]
@@ -61,6 +70,13 @@ public class CacheManager {
 		}
 	}
 
+    /**
+     * Creates a cache entry for a file. This includes a name, md5Hash and  processed file text
+     * @param fileName The file name of the file to be cached (cache key)
+     * @param md5Hash The current md5 hash of the file
+     * @param processedFileText The processed text of the file being cached
+     * @param originalFileName The original file name of the base file being persisted
+     */
 	public static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
         def thisCache = cache
         def cacheRecord = thisCache[fileName]
@@ -81,18 +97,27 @@ public class CacheManager {
 		asyncCacheSave()
 	}
 
+    /**
+     * Called during asset processing to add a dependent file to another file cache. This allows for cache busting on
+     * things like imported less files or sass files.
+     * @param fileName The name of the file we are adding a dependency to
+     * @param dependentFile the AssetFile object we are adding as a dependency
+     */
 	public static void addCacheDependency(String fileName, AssetFile dependentFile) {
 		def cacheRecord = cache[fileName]
 		if(!cacheRecord) {
 			createCache(fileName, null, null)
 			cacheRecord = cache[fileName]
 		}
-		def newMd5 = AssetHelper.getByteDigest(dependentFile.inputStream.bytes)
+		def newMd5 = dependentFile.getByteDigest()
 		cacheRecord.dependencies[dependentFile.path] = newMd5
 		asyncCacheSave()
 	}
 
-
+    /**
+     * Asynchronously starts a thread used to persist the cache to disk
+     * It also performs a debounce behavior so rapid calls to the save do not cause repeat saves
+     */
 	public static void asyncCacheSave() {
 		synchronized(LOCK_OBJECT) {
 			if(!cachePersister) {
@@ -103,9 +128,12 @@ public class CacheManager {
 		cachePersister.debounceSave(CACHE_DEBOUNCE_MS);
 	}
 
-
+    /**
+     * Called by the async {@link CachePersister} class to save the cache map to disk
+     */
 	public static void save() {
-		FileOutputStream fos = new FileOutputStream(CACHE_LOCATION);
+        String cacheLocation = AssetPipelineConfigHolder.config?.cacheLocation ?: CACHE_LOCATION
+		FileOutputStream fos = new FileOutputStream(cacheLocation);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(cache)
 		oos.close()
@@ -121,13 +149,14 @@ public class CacheManager {
 		if(cache) {
 			return;
 		}
-		File assetFile = new File(CACHE_LOCATION)
+        String cacheLocation = AssetPipelineConfigHolder.config?.cacheLocation ?: CACHE_LOCATION
+		File assetFile = new File(cacheLocation)
 		if(!assetFile.exists()) {
 			return;
 		}
 
 		try {
-			FileInputStream fis = new FileInputStream(CACHE_LOCATION);
+			FileInputStream fis = new FileInputStream(cacheLocation);
 		    ObjectInputStream ois = new ObjectInputStream(fis);
 		    def fileCache = ois.readObject()
 			fileCache?.each{ entry ->

@@ -17,6 +17,8 @@ package asset.pipeline
 
 /**
  * Abstract implementation of the {@link Processor} interface
+ *
+ * @author David Estes
  */
 abstract class AbstractProcessor implements Processor {
 	AssetCompiler precompiler

@@ -29,7 +29,7 @@ repositories {
 
 configurations {
 	provided
-	doc
+	doc.extendsFrom(runtime)
 }
 
 sourceSets {
@@ -41,13 +41,20 @@ sourceSets {
 }
 
 groovydoc {
+	docTitle "Asset Pipeline Core"
+	windowTitle "Asset Pipeline For the JVM API Doc"
 	groovyClasspath = configurations.doc
+	classpath = configurations.runtime
+	// Links to external Javadoc, currently only the J2SE links are working properly 
+  	link('http://download.oracle.com/javase/8/docs/api/', 'java.', 'org.xml', 'javax.', 'org.xml.') 
+  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.codehaus.groovy.') 
 }
 
 dependencies {
 	provided    'org.codehaus.groovy:groovy:2.0.7'
 	provided    'org.codehaus.groovy:groovy-templates:2.0.7'
 	doc         'org.codehaus.groovy:groovy-all:2.4.3'
+	doc         'org.fusesource.jansi:jansi:1.11'
 	compile     'org.mozilla:rhino:1.7R4'
 	compile     'com.google.javascript:closure-compiler:v20141023'
 	compile     'commons-logging:commons-logging:1.1.1'

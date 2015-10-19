@@ -21,6 +21,7 @@ import java.util.regex.Pattern
 import java.security.MessageDigest
 import java.nio.channels.FileChannel
 import groovy.transform.CompileStatic
+
 /**
  * Helper class for resolving assets
  *
@@ -41,11 +42,11 @@ public class AssetHelper {
      * @param baseFile The base file
      * @return
      */
-    static AssetFile fileForUri(String uri, String contentType=null, String ext=null, AssetFile baseFile=null) {
+    static AssetFile fileForUri(String uri, String contentType = null, String ext = null, AssetFile baseFile = null) {
         AssetFile file
-        for(resolver in AssetPipelineConfigHolder.resolvers) {
-            file = resolver.getAsset(uri,contentType,ext,baseFile)
-            if(file) {
+        for (resolver in AssetPipelineConfigHolder.resolvers) {
+            file = resolver.getAsset(uri, contentType, ext, baseFile)
+            if (file) {
                 return file
             }
         }
@@ -60,22 +61,22 @@ public class AssetHelper {
     }
 
     /**
-    * Finds the AssetFile definition for the specified file name based on its extension
-    * @param filename String filename representation
-    */
+     * Finds the AssetFile definition for the specified file name based on its extension
+     * @param filename String filename representation
+     */
     static Class<AssetFile> assetForFileName(String filename) {
         Map<String, Class<AssetFile>> extensionMap = [:]
-        for(fileSpec in assetFileClasses()) {
-            for(extension in fileSpec.extensions) {
-                if(extensionMap[extension] == null) {
+        for (fileSpec in assetFileClasses()) {
+            for (extension in fileSpec.extensions) {
+                if (extensionMap[extension] == null) {
                     extensionMap[extension] = fileSpec
                 }
             }
         }
 
-        List<String> extensions = extensionMap.keySet().sort(false){String a, String b -> -(a.size()) <=> -(b.size())}
-        String matchedExtension = extensions.find{ filename.endsWith(".${it}".toString()) }
-        if(matchedExtension) {
+        List<String> extensions = extensionMap.keySet().sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) }
+        String matchedExtension = extensions.find { filename.endsWith(".${it}".toString()) }
+        if (matchedExtension) {
             return extensionMap[matchedExtension]
         } else {
             return null
@@ -89,9 +90,9 @@ public class AssetHelper {
      * @return The AssetFile instance or null if non exists
      */
     static AssetFile fileForFullName(String uri) {
-        for(resolver in AssetPipelineConfigHolder.resolvers) {
+        for (resolver in AssetPipelineConfigHolder.resolvers) {
             AssetFile file = resolver.getAsset(uri)
-            if(file) {
+            if (file) {
                 return file
             }
         }
@@ -107,15 +108,15 @@ public class AssetHelper {
     static String extensionFromURI(String uri) {
         String[] uriComponents = uri.split("/")
         String lastUriComponent = uriComponents[uriComponents.length - 1]
-        List<String> extensions = (List<String>)(AssetHelper.assetSpecs.collect { Class<AssetFile> it -> it.extensions }.flatten().sort(false){String a, String b -> -(a.size()) <=> -(b.size())})
+        List<String> extensions = (List<String>) (AssetHelper.assetSpecs.collect { Class<AssetFile> it -> it.extensions }.flatten().sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) })
         String extension = null
-        extension = extensions.find { lastUriComponent.endsWith(".${it}".toString())}
-        if(!extension) {
-            if(lastUriComponent.lastIndexOf(".") >= 0) {
+        extension = extensions.find { lastUriComponent.endsWith(".${it}".toString()) }
+        if (!extension) {
+            if (lastUriComponent.lastIndexOf(".") >= 0) {
                 extension = uri.substring(uri.lastIndexOf(".") + 1)
-            }    
+            }
         }
-        
+
         return extension
     }
 
@@ -129,23 +130,23 @@ public class AssetHelper {
         String[] uriComponents = uri.split("/")
         String lastUriComponent = uriComponents[uriComponents.length - 1]
         String extension = extensionFromURI(lastUriComponent)
-        if(extension) {
-            return uri.substring(0,uri.lastIndexOf(".${extension}"))
+        if (extension) {
+            return uri.substring(0, uri.lastIndexOf(".${extension}"))
         }
         return uri
     }
 
 
     static String fileNameWithoutExtensionFromArtefact(String filename, AssetFile assetFile) {
-        if(assetFile == null) {
+        if (assetFile == null) {
             return null
         }
 
         String rootName = filename
-        assetFile.extensions.sort(false) {String a, String b -> -(a.size()) <=> -(b.size())}.each { extension ->
-            if(filename.endsWith(".${extension}")) {
-                String potentialName = filename.substring(0,filename.lastIndexOf(".${extension}"))
-                if(potentialName.length() < rootName.length()) {
+        assetFile.extensions.sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) }.each { extension ->
+            if (filename.endsWith(".${extension}")) {
+                String potentialName = filename.substring(0, filename.lastIndexOf(".${extension}"))
+                if (potentialName.length() < rootName.length()) {
                     rootName = potentialName
                 }
             }
@@ -161,15 +162,14 @@ public class AssetHelper {
      */
     static List<String> assetMimeTypeForURI(String uri) {
         Class<AssetFile> fileSpec = assetForFileName(uri)
-        if(fileSpec) {
-            if(fileSpec.contentType instanceof String) {
+        if (fileSpec) {
+            if (fileSpec.contentType instanceof String) {
                 return [fileSpec.contentType]
             }
             return fileSpec.contentType
         }
         return null
     }
-
 
     /**
      *
@@ -179,11 +179,11 @@ public class AssetHelper {
      */
     static AssetFile getAssetFileWithExtension(String uri, String ext) {
         String fullName = uri
-        if(ext) {
-           fullName = uri + "." + ext
+        if (ext) {
+            fullName = uri + "." + ext
         }
         AssetFile assetFile = AssetHelper.fileForFullName(fullName)
-        if(assetFile) {
+        if (assetFile) {
             return assetFile
         }
     }
@@ -195,14 +195,14 @@ public class AssetHelper {
      * @return The {@link AssetFile} classes
      */
     static Collection<Class<AssetFile>> getPossibleFileSpecs(String contentType) {
-        return assetFileClasses().findAll {Class<AssetFile> it -> (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
+        return assetFileClasses().findAll { Class<AssetFile> it -> (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
     }
 
     /**
-    * Generates an MD5 Byte Digest from a byte array
-    * @param fileBytes byte[] array of the contents of a file
-    * @return md5 String
-    */
+     * Generates an MD5 Byte Digest from a byte array
+     * @param fileBytes byte[] array of the contents of a file
+     * @return md5 String
+     */
     static String getByteDigest(byte[] fileBytes) {
         // Generate Checksum based on the file contents and the configuration settings
         MessageDigest md = MessageDigest.getInstance("MD5")
@@ -211,25 +211,24 @@ public class AssetHelper {
         return checksum.encodeHex().toString()
     }
 
-
     /**
      * Normalizes a path into a standard path, stripping out all path elements that walk the path (i.e. '..' and '.')
      * @param path String path (i.e. '/path/to/../file.js')
      * @return normalied path String (i.e. '/path/file.js')
-    */
+     */
     static String normalizePath(String path) {
         String[] pathArgs = path.split("/")
         List newPath = []
-        for(int counter=0;counter < pathArgs.length; counter++) {
+        for (int counter = 0; counter < pathArgs.length; counter++) {
             String pathElement = pathArgs[counter]
-            if(pathElement == '..') {
-                if(newPath.size() > 0) {
+            if (pathElement == '..') {
+                if (newPath.size() > 0) {
                     newPath.pop()
-                } else if(counter < pathArgs.length - 1) {
+                } else if (counter < pathArgs.length - 1) {
                     counter++
                     continue;
                 }
-            } else if(pathElement == '.') {
+            } else if (pathElement == '.') {
                 // do nothing
             } else {
                 newPath << pathElement

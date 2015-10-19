@@ -23,5 +23,11 @@ package asset.pipeline
  *
  */
 interface Processor {
+    /**
+     * Takes a String input and runs the relevant processor of the file contents. The result is then returned as a String
+     * @param inputText the input text to be processed
+     * @param assetFile a reference to the current {@link AssetFile} being processed
+     * @return the results
+     */
 	String process(String inputText, AssetFile assetFile)
 }

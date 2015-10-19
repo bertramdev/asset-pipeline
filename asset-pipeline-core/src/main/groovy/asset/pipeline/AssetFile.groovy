@@ -88,6 +88,11 @@ interface AssetFile {
      */
     String processedStream(AssetCompiler precompiler)
 
+    /**
+     * Returns the directive pattern used for bundling directive matching.
+     * Note this pattern should be multi-line capable.
+     * @return
+     */
     Pattern getDirectivePattern()
 
 }

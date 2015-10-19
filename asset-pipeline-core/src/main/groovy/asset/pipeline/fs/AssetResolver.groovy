@@ -26,11 +26,34 @@ import asset.pipeline.*
 public interface AssetResolver {
 
 	public String getName()
-	/**
-	* Resolves a file given a relative path to this particular resolver
-	*/
+
+    /**
+     * Resolves a file given a relative path to this particular resolver
+     * @param relativePath The relative path to resolve the file from
+     * @param contentType Optional contentType filter
+     * @param extension The extension of the file if not in the relativePath
+     * @param baseFile baseFile to be appended to resultant AssetFile object
+     * @return The matched AssetFile instance (if not found null is returned)
+     */
 	public AssetFile getAsset(String relativePath, String contentType, String extension, AssetFile baseFile)
+
+    /**
+     * Resolves a file given a relative path to this particular resolver
+     * @param relativePath The relative path to resolve the file from
+     * @param contentType Optional contentType filter
+     * @return The matched AssetFile instance (if not found null is returned)
+     *
+     * @see AssetResolver#getAsset(String,String,String,AssetFile)
+     */
 	public AssetFile getAsset(String relativePath, String contentType)
+
+    /**
+     * * Resolves a file given a relative path to this particular resolver
+     * @param relativePath The relative path to resolve the file from
+     * @return The matched AssetFile instance (if not found null is returned)
+     *
+     * * @see AssetResolver#getAsset(String,String,String,AssetFile)
+     */
 	public AssetFile getAsset(String relativePath)
 
 	/**

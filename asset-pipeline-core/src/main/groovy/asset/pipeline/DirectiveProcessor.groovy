@@ -20,6 +20,13 @@ import groovy.util.logging.Commons
 import java.nio.charset.Charset
 import groovy.transform.CompileStatic
 
+/**
+ * This processor is a base processor put in front of most asset processing. It is responsible for parsing directives
+ * like '//=require file' or '//=require_tree .' or '//=require_self'. It is capable of creating a dependency graph
+ * of all files needed to be bundled together from these directives. Duplicate requires are ignored.
+ *
+ * @author David Estes
+ */
 @Commons
 class DirectiveProcessor {
 
@@ -276,6 +283,11 @@ class DirectiveProcessor {
         }
     }
 
+    /**
+     * Checks if a file reference is already in the dependency graph
+     * @param file The file being checked for within the dependency graph
+     * @return true/false depending on wether or not the file has already been included
+     */
     @CompileStatic
     protected boolean isFileInTree(AssetFile file) {
         AssetFile result = files[file.path] as AssetFile

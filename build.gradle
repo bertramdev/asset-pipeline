@@ -12,6 +12,7 @@ subprojects {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
 
@@ -19,6 +20,10 @@ repositories {
 	jcenter()
 	mavenCentral()
 }
+
+// groovydoc {
+// 	groovyClasspath = configurations.doc
+// }
 
 dependencies {
 	compile 'org.codehaus.groovy:groovy:2.0.7'

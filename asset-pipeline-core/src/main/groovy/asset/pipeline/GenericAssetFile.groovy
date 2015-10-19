@@ -22,6 +22,10 @@ import java.security.DigestInputStream
 
 /**
  * Generic implementation of the {@link AssetFile} interface
+ * This is used to reference objects that do not get otherwise processed. It could be an image,
+ * or even a generic file not interpreted by the asset-pipeline system.
+ *
+ * @author David Estes
  */
 @CompileStatic
 class GenericAssetFile extends AbstractAssetFile {
@@ -30,12 +34,21 @@ class GenericAssetFile extends AbstractAssetFile {
 
 	Closure inputStreamSource = {} //Implemented by AssetResolver
 
+    /**
+     * Returns an inputStream reference to the file. Since it is not a processed file this content is not saved in
+     * memory. This allows for digesting and inclusion of large unprocessed files without causing memory overhead.
+     * @return inputStream of file being read
+     */
 	InputStream getInputStream() {
 		this.digest = MessageDigest.getInstance("MD5")
 		this.digestStream = new DigestInputStream((InputStream)inputStreamSource(),digest)
 		return digestStream
 	}
 
+    /**
+     * Returns the parent path or directory with which this file belongs
+     * @return the parent path of the file being read (paths without name)
+     */
 	public String getParentPath() {
 		List<String> pathArgs = path.tokenize("/")
 		if(pathArgs.size() == 1) {
@@ -44,10 +57,19 @@ class GenericAssetFile extends AbstractAssetFile {
 		return (pathArgs[0..(pathArgs.size()-2)]).join("/")
 	}
 
+    /**
+     * Returns a byte array of the inputStream contents
+     * NOTE: For large files this could result in large memory issues. Not recommended to use anymore.
+     * @return
+     */
 	public Byte[] getBytes() {
 		return inputStream.bytes
 	}
 
+    /**
+     * The name of the file without all path elements
+     * @return
+     */
 	public String getName() {
 		path.split("/")[-1]
 	}

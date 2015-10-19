@@ -19,7 +19,14 @@ import groovy.util.logging.Commons
  */
 
 /**
- * Loads asset specification
+ * Loads asset specification. The asset-pipeline determines what processors and file types are processible via addon
+ * plugins by scanning the classpath for "META-INF/asset-pipeline/asset.specs" files and "META-INF/asset-pipeline/processor.specs"
+ * files. The 'asset.specs' file is a line by line list of classes that implement the {@link AssetFile} interface.
+ * These are automatically added to the list of known specs and are what facilitate clean extensibility of the asset-pipeline.
+ *
+ * The 'processor.specs' file allows for adding additional {@link Processor} implementations to existing {@link AssetFile} classes.
+ * It is a properties file with the key being the full class name of the {@link Processor} implementation and the value being
+ * a comma delimited list of full class names of {@link AssetFile} implementations to be appended to
  *
  * @author Graeme Rocher
  */
@@ -66,7 +73,11 @@ class AssetSpecLoader {
         return specifications
     }
 
-
+    /**
+     * Loads processor.specs files and appends {@link Processor} implementations to matching {@link AssetFile} implementations.
+     *
+     * @param classLoader The classloader
+     */
     static void applyProcessors(ClassLoader classLoader = Thread.currentThread().contextClassLoader) {
         def resources = classLoader.getResources(PROCESSORS_RESOURCE_LOCATION)
         resources.each { URL res ->
