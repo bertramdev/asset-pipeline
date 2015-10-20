@@ -39,7 +39,7 @@ import static asset.pipeline.ratpack.TestConstants.PROD_BASE_DIR
 class ProductionFunctionalSpec extends Specification {
 
   @Shared
-  ProductionAssetCache fileCache = new ProductionAssetCache()
+  ProductionAssetCache fileCache = new ProductionAssetCache(16,1.0f,1)
 
   @AutoCleanup
   @Delegate

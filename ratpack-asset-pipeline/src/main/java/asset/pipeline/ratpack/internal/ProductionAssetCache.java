@@ -21,4 +21,11 @@ import asset.pipeline.ratpack.AssetAttributes;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProductionAssetCache extends ConcurrentHashMap<String, AssetAttributes> {
+	ProductionAssetCache() {
+		super();
+	}
+
+	ProductionAssetCache(int initialCapacity, float loadFactor, int concurrencyLevel) {
+		super(initialCapacity,loadFactor, concurrencyLevel);
+	}
 }
