@@ -98,7 +98,7 @@ class ProductionFunctionalSpec extends Specification {
     httpClient.get()
 
     then:
-    fileCache.containsKey("/index.html")
+    fileCache.containsKey("/index.html".toString())
   }
 
   void "client error handler should be delegated to when requesting a non existing path"() {
