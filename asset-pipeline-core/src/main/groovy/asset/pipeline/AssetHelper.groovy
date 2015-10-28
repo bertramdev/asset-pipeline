@@ -29,6 +29,7 @@ import groovy.transform.CompileStatic
  *
  * @author David Estes
  * @author Graeme Rocher
+ * @author Falk Meyer -- falk.meyer@it2media.de
  */
 public class AssetHelper {
     static final Collection<Class<AssetFile>> assetSpecs = AssetSpecLoader.loadSpecifications()
@@ -209,11 +210,25 @@ public class AssetHelper {
      * @return md5 String
      */
     static String getByteDigest(byte[] fileBytes) {
+        def hashConfig = AssetPipelineConfigHolder.getConfig()?.url?.hash
+
+        def hashAlgorithm = hashConfig?.algorithm ?: 'MD5' as String
+        def salt = hashConfig?.salt ?: '' as String
+
         // Generate Checksum based on the file contents and the configuration settings
-        MessageDigest md = MessageDigest.getInstance("MD5")
-        md.update(fileBytes)
-        byte[] checksum = md.digest()
-        return checksum.encodeHex().toString()
+        MessageDigest md = MessageDigest.getInstance(hashAlgorithm)
+
+        byte[] hashBytes = fileBytes
+
+        if(salt){
+            def saltBytes = salt.bytes
+            hashBytes = new byte[fileBytes.length + saltBytes.length]
+            System.arraycopy(fileBytes, 0, hashBytes, 0, fileBytes.length)
+            System.arraycopy(saltBytes, 0, hashBytes, fileBytes.length, saltBytes.length)
+        }
+
+        md.update(hashBytes)
+        return md.digest().encodeHex().toString()
     }
 
     /**
