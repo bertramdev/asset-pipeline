@@ -159,8 +159,36 @@ dependencies {
 
 Grails Documentation
 -------------
-http://bertramdev.github.io/asset-pipeline
 
+* [API Doc](http://bertramdev.github.io/asset-pipeline)
+* [Grails Doc](http://bertramdev.github.io/grails-asset-pipeline)
+
+
+For Grails 3 asset-pipeline has to be provided both for Grails and Gradle. An example configuration could be: 
+
+```groovy
+// Add the Gradle plugin to the build dependencies and apply it to the build process
+buildscript {
+    dependencies {        
+        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.6.2'
+    }
+}
+apply plugin: 'asset-pipeline'
+
+// The plugin could also be applied with the newer syntax 
+// plugins {
+//     id "com.bertramlabs.asset-pipeline" version "2.6.1"
+// }
+
+dependencies {        
+    // Add the Grails Plugin to the runtime dependencies
+    runtime 'org.grails.plugins:asset-pipeline:3.0.10'
+    
+    // Define needed asset-pipeline plugins with the special assets-scope 
+    assets 'com.bertramlabs.plugins:less-asset-pipeline:2.6.2'
+    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.6.2'
+}
+```
 
 Contributions
 -------------
