@@ -158,6 +158,12 @@ class AssetCompile extends DefaultTask {
     @InputFiles
     FileTree getSource() {
         FileTree src = getProject().files(this.assetsDir).getAsFileTree();
+        pipelineExtension.resolvers.each { String path ->
+            def resolverFile = project.file(path)
+            if(resolverFile.exists() && resolverFile.directory) {
+                src += getProject().files(path).getAsFileTree()
+            }
+        }
         return src
     }
 
