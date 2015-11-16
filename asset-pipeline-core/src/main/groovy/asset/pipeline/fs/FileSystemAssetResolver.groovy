@@ -19,7 +19,7 @@ package asset.pipeline.fs
 import asset.pipeline.*
 import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
-
+import java.io.BufferedInputStream
 import java.util.regex.Pattern
 
 /**
@@ -199,9 +199,9 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 				if(!file.isDirectory()) {
 					def assetFileClass = AssetHelper.assetForFileName(relativePath)
 					if(assetFileClass) {
-						fileList.add(assetFileClass.newInstance(inputStreamSource: { file.newInputStream() }, baseFile: null, path: relativePath, sourceResolver: this) as AssetFile)
+						fileList.add(assetFileClass.newInstance(inputStreamSource: { new BufferedInputStream(file.newInputStream(),512) }, baseFile: null, path: relativePath, sourceResolver: this) as AssetFile)
 					} else {
-						fileList.add(new GenericAssetFile(inputStreamSource: { file.newInputStream() }, path: relativePath))
+						fileList.add(new GenericAssetFile(inputStreamSource: { new BufferedInputStream(file.newInputStream(),512) }, path: relativePath))
 					}
 				}
 

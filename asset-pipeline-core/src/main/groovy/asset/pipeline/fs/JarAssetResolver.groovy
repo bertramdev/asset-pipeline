@@ -25,7 +25,7 @@ import java.util.regex.Pattern
 import java.util.jar.JarFile
 import java.util.zip.ZipEntry
 import java.util.zip.ZipException
-
+import java.io.BufferedInputStream
 
 /**
  * Implementation of the {@link AssetResolver} interface for resolving from JAR files or ZIP files
@@ -81,7 +81,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
     protected Closure<InputStream> createInputStreamClosure(ZipEntry file) {
         if(file) {
-			return {-> baseJar.getInputStream(file) }
+			return {-> new BufferedInputStream(baseJar.getInputStream(file),512) }
 		}
 		return null
     }

@@ -216,7 +216,7 @@ class AssetCompiler {
 					// TODO: Streamify!
 					eventListener?.triggerEvent("StatusUpdate","Writing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
 
-					byte[] buffer = new byte[4096]
+					byte[] buffer = new byte[8192]
 					int nRead
 					def outputFileStream
 					def digestFileStream
