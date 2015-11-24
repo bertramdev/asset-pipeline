@@ -20,8 +20,8 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.1.1'
-    classpath 'com.bertramlabs.plugins:coffee-asset-pipeline:2.0.6'
+    classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.6.7'
+    classpath 'com.bertramlabs.plugins:coffee-asset-pipeline:2.6.7'
   }
 }
 ```

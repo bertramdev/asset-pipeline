@@ -36,10 +36,10 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         //Asset Pipeline Dependencies
-        classpath("com.bertramlabs.plugins:asset-pipeline-gradle:2.3.0")
+        classpath("com.bertramlabs.plugins:asset-pipeline-gradle:2.6.7")
         //optional
-        //compile "com.bertramlabs.plugins.less-asset-pipeline:2.3.0"
-        //compile "com.bertramlabs.plugins.coffee-asset-pipeline:2.0.6"
+        //compile "com.bertramlabs.plugins.less-asset-pipeline:2.6.7"
+        //compile "com.bertramlabs.plugins.coffee-asset-pipeline:2.6.7"
     }
 }
 
@@ -64,10 +64,10 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
     //Asset Pipeline Dependencies
-    compile("com.bertramlabs.plugins:asset-pipeline-spring-boot:2.3.0")
+    compile("com.bertramlabs.plugins:asset-pipeline-spring-boot:2.6.7")
     //optional
-    //compile "com.bertramlabs.plugins.less-asset-pipeline:2.3.0"
-    //compile "com.bertramlabs.plugins.coffee-asset-pipeline:2.0.6"
+    //compile "com.bertramlabs.plugins.less-asset-pipeline:2.6.7"
+    //compile "com.bertramlabs.plugins.coffee-asset-pipeline:2.6.7"
 }
 
 

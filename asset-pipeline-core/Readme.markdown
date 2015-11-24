@@ -18,9 +18,9 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins.asset-pipeline-core:2.0.1'
+    classpath 'com.bertramlabs.plugins.asset-pipeline-core:2.6.7'
 	//Example additional LESS support
-	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.0.1'
+	//classpath 'com.bertramlabs.plugins.less-asset-pipeline:2.6.7'
   }
 }
 

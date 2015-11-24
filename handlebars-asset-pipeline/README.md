@@ -20,8 +20,8 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.bertramlabs.plugins.asset-pipeline-gradle:2.0.13'
-    classpath 'com.bertramlabs.plugins.handlebars-asset-pipeline:2.0.13'
+    classpath 'com.bertramlabs.plugins.asset-pipeline-gradle:2.6.7'
+    classpath 'com.bertramlabs.plugins.handlebars-asset-pipeline:2.6.7'
   }
 }
 ```
