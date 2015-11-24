@@ -223,4 +223,4 @@ Additional Resources
 * [Ember Asset-Pipeline Plugin](http://github.com/bertramdev/ember-asset-pipeline)
 * [AngularJS Template Asset-Pipeline Plugin](https://github.com/craigburke/angular-template-grails-asset-pipeline)
 * [AngularJS Annotate Asset-Pipeline Plugin](https://github.com/craigburke/angular-annotate-grails-asset-pipeline)
-* [Grails Asset Pipeline Guide](http://bertramdev.github.io/asset-pipeline/)
+* [Grails Asset Pipeline Guide](http://bertramdev.github.io/grails-asset-pipeline/)
