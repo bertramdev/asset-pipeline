@@ -59,9 +59,7 @@ public class AssetPropertiesHandler implements Handler {
   }
 
   private static String getPath(Context context, String baseAssetUrl) {
-    String path = normalizePath(context.maybeGet(PathBinding.class)
-        .map(PathBinding::getPastBinding)
-        .orElse(context.getRequest().getPath()));
+    String path = normalizePath(context.get(PathBinding.class).getPastBinding());
 
     if (path.startsWith(baseAssetUrl) && path.length() > baseAssetUrl.length()) {
       return path.substring(baseAssetUrl.length());
