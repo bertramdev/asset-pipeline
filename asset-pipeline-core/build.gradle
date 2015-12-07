@@ -56,7 +56,7 @@ dependencies {
 	doc         'org.codehaus.groovy:groovy-all:2.4.3'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	compile     'org.mozilla:rhino:1.7R4'
-	compile     'com.google.javascript:closure-compiler:v20141023'
+	compile     'com.google.javascript:closure-compiler:v20151015'
 	compile     'commons-logging:commons-logging:1.1.1'
 	//compile   'log4j:log4j:1.2.16'
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
