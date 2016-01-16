@@ -32,6 +32,7 @@ dependencies {
 	compile     gradleApi()
 	compile     localGroovy()
 	compile     project(':asset-pipeline-core')
+	compile     project(':asset-pipeline-servlet')
 	compile     'org.springframework.boot:spring-boot-starter-web:1.1.9.RELEASE'
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
