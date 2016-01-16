@@ -1,0 +1,28 @@
+apply plugin: 'groovy'
+
+group = 'com.bertramlabs.plugins'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile     localGroovy()
+	compile     project(':asset-pipeline-core')
+	compile 'javax.servlet:javax.servlet-api:3.1.0'
+
+    testCompile 'org.eclipse.jetty:jetty-server:9.2.10.v20150310'
+    testCompile 'org.eclipse.jetty:jetty-servlet:9.2.10.v20150310'
+    testCompile 'org.eclipse.jetty:jetty-webapp:9.2.10.v20150310'
+    testCompile "org.apache.httpcomponents:httpclient:4.3.4"
+    testCompile "org.apache.httpcomponents:fluent-hc:4.3.4"
+    testCompile 'junit:junit:4.10'
+}
+
+test {
+	testLogging {
+		exceptionFormat = 'full'
+		showStandardStreams = true
+	}
+}
