@@ -146,8 +146,8 @@ class AssetCompiler {
 					def directiveProcessor = new DirectiveProcessor(contentType, this, options.classLoader)
 					fileData   = directiveProcessor.compile(assetFile)
 					digestName = AssetHelper.getByteDigest(fileData.bytes)
-					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
-					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
+					def existingDigestFile = manifestProperties.getProperty("${fileName}${extension ? ('.' + extension) : ''}")
+					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}${extension ? ('.' + extension) : ''}") {
 						isUnchanged=true
 					}
 					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
@@ -181,14 +181,14 @@ class AssetCompiler {
 
 				} else {
 					digestName = assetFile.getByteDigest()
-					def existingDigestFile = manifestProperties.getProperty("${fileName}.${extension}")
-					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}.${extension}") {
+					def existingDigestFile = manifestProperties.getProperty("${fileName}${extension ? ('.' + extension) : ''}")
+					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}${extension ? ('.' + extension) : ''}") {
 						isUnchanged=true
 					}
 				}
 
 				if(!isUnchanged) {
-					def outputFileName = fileName
+					def outputFileName = fileSystemName
 					if(extension) {
 						outputFileName = "${fileSystemName}.${extension}"
 					}
@@ -226,7 +226,7 @@ class AssetCompiler {
 					if(!options.skipNonDigests) {
 						outputFile.createNewFile()
 						outputFileStream = outputFile.newOutputStream()
-						if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
+						if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension?.toLowerCase()}) {
 							File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
 							zipFile.createNewFile()
 							gzipStreamCollection << zipFile.newOutputStream()
@@ -237,15 +237,15 @@ class AssetCompiler {
 							def digestedFile = new File(options.compileDir,"${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 							digestedFile.createNewFile()
 							digestFileStream = digestedFile.newOutputStream()
-							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension.toLowerCase()}) {
+							if(options.enableGzip == true && !options.excludesGzip.find{ it.toLowerCase() == extension?.toLowerCase()}) {
 								File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
 								zipFileDigest.createNewFile()
 								gzipStreamCollection << zipFileDigest.newOutputStream()
 							}
-
+							manifestProperties.setProperty("${fileName}${extension ? ('.' + extension) : ''}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
+						} else {
+							manifestProperties.setProperty("${fileName}${extension ? ('.' + extension) : ''}", "${fileName}${extension ? ('.' + extension) : ''}")
 						}
-						manifestProperties.setProperty("${fileName}.${extension}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
-
 					}
 
 					if(gzipStreamCollection) {
@@ -348,7 +348,7 @@ class AssetCompiler {
 				extension = assetFile.compiledExtension
 				fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(fileName,assetFile)
 			}
-			return "${fileName}.${extension}"
+			return "${fileName}${extension ? ('.' + extension) : ''}"
 		}
 
 		def propertiesToRemove = []
