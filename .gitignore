@@ -2,6 +2,7 @@ build/
 .asscache
 .DS_Store
 .gradle
+*.iml
 .idea/
 gradle.properties
 .jruby-container

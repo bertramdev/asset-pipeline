@@ -22,6 +22,19 @@ targetCompatibility = '1.7'
 
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
+configurations {
+	provided
+	doc.extendsFrom(runtime)
+}
+
+sourceSets {
+	main {
+		compileClasspath += configurations.provided
+		groovy.srcDirs   += ['src/main/java']
+		java.srcDirs      = []
+	}
+}
+
 repositories {
 	jcenter()
 	mavenLocal()
@@ -29,8 +42,7 @@ repositories {
 }
 
 dependencies {
-	compile     gradleApi()
-	compile     localGroovy()
+	provided    'org.codehaus.groovy:groovy:2.0.7'
 	compile     project(':asset-pipeline-core')
 	compile     project(':asset-pipeline-servlet')
 	compile     'org.springframework.boot:spring-boot-starter-web:1.1.9.RELEASE'
