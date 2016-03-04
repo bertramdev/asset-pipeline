@@ -35,7 +35,7 @@ public class AssetPropertiesHandler implements Handler {
     String indexedPath = getIndexedPath(path, config.getIndexFile());
     String format = indexedPath == null ? getFormat(ctx, path) : getFormat(ctx, indexedPath);
     String encoding = getEncoding(ctx);
-    ctx.next(single(new AssetProperties(path, indexedPath, format, encoding)));
+    ctx.next(single(new AssetProperties(path, indexedPath, format, encoding, null)));
   }
 
   private static String getIndexedPath(String path, String indexFile) {

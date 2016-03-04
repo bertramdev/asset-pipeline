@@ -16,32 +16,38 @@
 
 package asset.pipeline.ratpack.internal;
 
+import java.util.Date;
+
 public class AssetProperties {
-  private final String path;
-  private final String indexedPath;
-  private final String format;
-  private final String encoding;
+	private final String path;
+	private final String indexedPath;
+	private final String format;
+	private final String encoding;
+	private final Date lastModified;
 
-  public AssetProperties(String path, String indexedPath, String format, String encoding) {
-    this.encoding = encoding;
-    this.indexedPath = indexedPath;
-    this.format = format;
-    this.path = path;
-  }
+	public AssetProperties(String path, String indexedPath, String format, String encoding, Date lastModified) {
+		this.encoding = encoding;
+		this.indexedPath = indexedPath;
+		this.format = format;
+		this.path = path;
+		this.lastModified = lastModified;
+	}
 
-  public String getPath() {
-    return path;
-  }
+	public String getPath() {
+		return path;
+	}
 
-  public String getIndexedPath() {
-    return indexedPath;
-  }
+	public String getIndexedPath() {
+		return indexedPath;
+	}
 
-  public String getFormat() {
-    return format;
-  }
+	public String getFormat() {
+		return format;
+	}
 
-  public String getEncoding() {
-    return encoding;
-  }
+	public String getEncoding() {
+		return encoding;
+	}
+
+	public Date getLastModified() { return lastModified; }
 }

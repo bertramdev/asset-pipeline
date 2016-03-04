@@ -267,11 +267,12 @@ class AssetCompiler {
 							stream.close()
 						}
 					}
+
 					digestFileStream?.flush()
 					outputFileStream?.flush()
 					digestFileStream?.close()
 					outputFileStream?.close()
-
+					writeInputStream.close()
 				}
 
 			}

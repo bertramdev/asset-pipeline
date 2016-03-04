@@ -142,7 +142,7 @@ public class ProductionAssetHandler implements Handler {
   }
 
   private void doIndexFileNext(Context ctx, AssetProperties props) {
-    ctx.insert(single(new AssetProperties(props.getIndexedPath(), null, props.getFormat(), props.getEncoding())), this);
+    ctx.insert(single(new AssetProperties(props.getIndexedPath(), null, props.getFormat(), props.getEncoding(), null)), this);
   }
 
   private boolean acceptsGzip(Context ctx) {

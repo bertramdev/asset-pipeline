@@ -40,7 +40,7 @@ public class DevelopmentAssetHandler implements Handler {
       ctx.getResponse().contentTypeIfNotSet(props.getFormat());
       ctx.getResponse().send(fileContents);
     } else if (props.getIndexedPath() != null) {
-      ctx.insert(single(new AssetProperties(props.getIndexedPath(), null, props.getFormat(), props.getEncoding())), this);
+      ctx.insert(single(new AssetProperties(props.getIndexedPath(), null, props.getFormat(), props.getEncoding(),null)), this);
     } else {
       ctx.next();
     }
