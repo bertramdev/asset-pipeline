@@ -114,9 +114,9 @@ bintray {
         userOrg = 'bertramlabs'
         name = 'ratpack-asset-pipeline'
         licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline'
-        issueTrackerUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline/issues'
-        vcsUrl = 'https://github.com/bertramdev/ratpack-asset-pipeline.git'
+        websiteUrl = 'https://github.com/bertramdev/asset-pipeline-core'
+        issueTrackerUrl = 'https://github.com/bertramdev/asset-pipeline-core/issues'
+        vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core.git'
     }
 }
 
