@@ -116,6 +116,9 @@ bintray {
 		userOrg = 'bertramlabs'
 		name = 'asset-pipeline-servlet'
 		licenses = ['Apache-2.0']
+		websiteUrl = 'https://github.com/bertramdev/asset-pipeline-core'
+        issueTrackerUrl = 'https://github.com/bertramdev/asset-pipeline-core/issues'
+        vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core.git'
 	}
 }
 
