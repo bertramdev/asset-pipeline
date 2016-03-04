@@ -12,6 +12,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils
 
 import javax.servlet.*
 import java.text.SimpleDateFormat
+import org.springframework.web.context.WebApplicationContext
 
 @Log4j
 class AssetPipelineFilter implements Filter {

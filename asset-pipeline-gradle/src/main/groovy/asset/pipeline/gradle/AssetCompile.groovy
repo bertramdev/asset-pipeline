@@ -140,11 +140,27 @@ class AssetCompile extends DefaultTask {
     public FileCollection getClasspath() {
         try {
             FileCollection runtimeFiles = getProject().configurations.getByName('runtime') as FileCollection
-            FileCollection providedFiles = getProject().configurations.getByName('provided') as FileCollection
-            if(providedFiles) {
-                return runtimeFiles + providedFiles
+            
+            
+            FileCollection totalFiles = runtimeFiles
+            try {
+                FileCollection providedFiles = getProject().configurations.getByName('provided') as FileCollection
+                if(providedFiles) {
+                    totalFiles += providedFiles
+                }    
+            } catch(ex) {
+                //no biggie if not there
             }
-            return runtimeFiles
+            
+            try {
+                FileCollection assetsFiles = getProject().configurations.getByName('assets') as FileCollection
+                if(assetsFiles) {
+                    totalFiles += assetsFiles 
+                }
+            } catch(ex2) {
+                //no biggie if not there
+            }
+            return totalFiles
         } catch(e) {
             return null as FileCollection
         }
