@@ -51,7 +51,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
         }
         defaultConfiguration.compileDir = "${project.buildDir}/assets"
 
-		project.tasks.create('assetCompile', AssetCompile)
+		    project.tasks.create('assetCompile', AssetCompile)
 
 
         def assetPrecompileTask = project.tasks.getByName('assetCompile')
@@ -75,11 +75,12 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 includes = assetPipeline.includes
                 excludes = assetPipeline.excludes
                 excludesGzip = assetPipeline.excludesGzip
-				configOptions = assetPipeline.configOptions
+				        configOptions = assetPipeline.configOptions
                 skipNonDigests = assetPipeline.skipNonDigests
                 enableDigests = assetPipeline.enableDigests
                 enableSourceMaps = assetPipeline.enableSourceMaps
                 resolvers = assetPipeline.resolvers
+                enableGzip = assetPipeline.enableGzip
             }
 
             project.tasks.withType(Jar) { Jar bundleTask ->
