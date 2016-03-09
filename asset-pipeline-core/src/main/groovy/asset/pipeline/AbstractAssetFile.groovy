@@ -94,7 +94,7 @@ abstract class AbstractAssetFile implements AssetFile {
 		} catch(IOException ioe) {
 			// Its ok if the stream is already closed so ignore error
 		} finally {
-			try { digestStream?.close() } catch(Exception ex) { //ignore if already closed this reduces open file handles }
+			try { digestStream?.close() } catch(Exception ex) { /*ignore if already closed this reduces open file handles*/ }
 		}
 
 		return digest.digest().encodeHex().toString()
@@ -142,30 +142,35 @@ abstract class AbstractAssetFile implements AssetFile {
 		String fileText
 		Boolean skipCache = precompiler ?: (!processors || processors.size() == 0)
 		String cacheKey
-		if(baseFile?.encoding || encoding) {
-			fileText = inputStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
-		} else {
-			fileText = inputStream?.text
-		}
-
-		String md5 = null
-		if(!skipCache) {
-			md5 = AssetHelper.getByteDigest(fileText.bytes)
-			String cache = CacheManager.findCache(path, md5, baseFile?.path)
-			if(cache) {
-				return cache
+		def sourceStream = getInputStream()
+		try {
+			if(baseFile?.encoding || encoding) {
+				fileText = sourceStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
+			} else {
+				fileText = sourceStream?.text
 			}
-		}
-		if(processors != null) {
-			for(Class<Processor> processor in processors) {
-				Processor processInstance = processor.newInstance(precompiler) as Processor
-				fileText = processInstance.process(fileText, this)
-			}	
-		}
-	    
 
-		if(!skipCache) {
-			CacheManager.createCache(path, md5, fileText, baseFile?.path)
+			String md5 = null
+			if(!skipCache) {
+				md5 = getByteDigest()
+				String cache = CacheManager.findCache(path, md5, baseFile?.path)
+				if(cache) {
+					return cache
+				}
+			}
+			if(processors != null) {
+				for(Class<Processor> processor in processors) {
+					Processor processInstance = processor.newInstance(precompiler) as Processor
+					fileText = processInstance.process(fileText, this)
+				}	
+			}
+		    
+
+			if(!skipCache) {
+				CacheManager.createCache(path, md5, fileText, baseFile?.path)
+			}
+		} finally {
+		try { sourceStream?.close() } catch(Exception ex) { /*doesnt matter this just ensures it closes at the end*/}
 		}
 
 		return fileText
