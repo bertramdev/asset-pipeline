@@ -18,36 +18,42 @@ class LessAssetFile extends AbstractAssetFile {
     String processedStream(AssetCompiler precompiler) {
         def fileText
 		def skipCache = precompiler ?: (!processors || processors.size() == 0)
-		if(baseFile?.encoding || encoding) {
-			fileText = inputStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
-		} else {
-			fileText = inputStream?.text
-		}
-
-		def md5 = AssetHelper.getByteDigest(fileText.bytes)
-		if(!skipCache) {
-			def cache = CacheManager.findCache(path, md5, baseFile?.path)
-			if(cache) {
-				return cache
+		InputStream sourceStream = getInputStream()
+		try {
+			if(baseFile?.encoding || encoding) {
+				fileText = sourceStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
+			} else {
+				fileText = sourceStream?.text
 			}
-		}
 
-        def lessProcessor
-        def compilerMode = AssetPipelineConfigHolder.config?.less?.compiler ?: 'less4j'
-        if (compilerMode != 'standard') {
-            lessProcessor = new Less4jProcessor(precompiler)
-        } else {
-            lessProcessor = new LessProcessor(precompiler)
-        }
-        fileText = lessProcessor.process(fileText, this)
+			String md5 = null
+			if(!skipCache) {
+				md5 = getByteDigest()
+				def cache = CacheManager.findCache(path, md5, baseFile?.path)
+				if(cache) {
+					return cache
+				}
+			}
 
-		for(processor in processors) {
-			def processInstance = processor.newInstance(precompiler)
-			fileText = processInstance.process(fileText, this)
-		}
+	        def lessProcessor
+	        def compilerMode = AssetPipelineConfigHolder.config?.less?.compiler ?: 'less4j'
+	        if (compilerMode != 'standard') {
+	            lessProcessor = new Less4jProcessor(precompiler)
+	        } else {
+	            lessProcessor = new LessProcessor(precompiler)
+	        }
+	        fileText = lessProcessor.process(fileText, this)
 
-		if(!skipCache) {
-			CacheManager.createCache(path, md5, fileText, baseFile?.path)
+			for(processor in processors) {
+				def processInstance = processor.newInstance(precompiler)
+				fileText = processInstance.process(fileText, this)
+			}
+
+			if(!skipCache) {
+				CacheManager.createCache(path, md5, fileText, baseFile?.path)
+			}
+		} finally {
+			try { sourceStream?.close() } catch(Exception ex) {/*doesnt matter just tries to ensure close */}
 		}
 
 		return fileText

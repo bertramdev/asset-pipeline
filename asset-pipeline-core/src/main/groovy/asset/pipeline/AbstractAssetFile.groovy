@@ -142,7 +142,7 @@ abstract class AbstractAssetFile implements AssetFile {
 		String fileText
 		Boolean skipCache = precompiler ?: (!processors || processors.size() == 0)
 		String cacheKey
-		def sourceStream = getInputStream()
+		InputStream sourceStream = getInputStream()
 		try {
 			if(baseFile?.encoding || encoding) {
 				fileText = sourceStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
@@ -170,7 +170,7 @@ abstract class AbstractAssetFile implements AssetFile {
 				CacheManager.createCache(path, md5, fileText, baseFile?.path)
 			}
 		} finally {
-		try { sourceStream?.close() } catch(Exception ex) { /*doesnt matter this just ensures it closes at the end*/}
+			try { sourceStream?.close() } catch(Exception ex) { /*doesnt matter this just ensures it closes at the end*/}
 		}
 
 		return fileText
