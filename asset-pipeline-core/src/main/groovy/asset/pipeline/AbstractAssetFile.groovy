@@ -93,6 +93,8 @@ abstract class AbstractAssetFile implements AssetFile {
 			}
 		} catch(IOException ioe) {
 			// Its ok if the stream is already closed so ignore error
+		} finally {
+			try { digestStream?.close() } catch(Exception ex) { //ignore if already closed this reduces open file handles }
 		}
 
 		return digest.digest().encodeHex().toString()
