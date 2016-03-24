@@ -67,11 +67,11 @@ class AssetPipelineFilterCore {
                     response.setCharacterEncoding(encoding)
                 }
                 response.setContentType(format)
-
+                def inputStream
                 try {
 					byte[] buffer = new byte[102400];
 					int len;
-					def inputStream = resource.inputStream
+					inputStream = resource.inputStream
 					def out = response.outputStream
 					while ((len = inputStream.read(buffer)) != -1) {
 						out.write(buffer, 0, len);
@@ -79,6 +79,8 @@ class AssetPipelineFilterCore {
                     response.flushBuffer()
                 } catch (e) {
                     log.fine("File Transfer Aborted (Probably by the user): ${e.getMessage()}")
+                } finally {
+                    try { inputStream?.close() } catch(ie) { /* silent fail*/} 
                 }
             } else {
 				response.flushBuffer()
