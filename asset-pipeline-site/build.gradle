@@ -34,8 +34,8 @@ dependencies {
 }
 
 assets {
-  excludes ["**/*.less"]
-  includes ["application.less"]
+  excludes = ["**/*.less"]
+  includes = ["application.less"]
 }
 // project(':common:shared').projectDir
 
