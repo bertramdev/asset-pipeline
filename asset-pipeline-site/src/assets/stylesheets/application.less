@@ -5,6 +5,7 @@
 
 body {
 	margin-top:50px;
+	// z-index:-101;
 }
 
 .navbar-brand {
@@ -18,15 +19,22 @@ body {
 
 .main-container {
 	box-shadow: rgba(30,30,30,.25) 0px -3px 2px;
-
+	position:relative;
+	z-index: 100;
 }
-
+.pipe-hero {
+	margin-top:25px;
+}
 .asspipe-hero {
-	z-index: -100;
+	z-index: 0;
 	position:relative;
 	background: @brand-primary;
-	min-height:400px;
+	min-height:375px;
 	color: #fff;
+	form {
+		position:relative;
+		z-index:100;
+	}
 
 
 }

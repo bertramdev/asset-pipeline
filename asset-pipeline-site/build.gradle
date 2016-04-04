@@ -33,6 +33,10 @@ dependencies {
   testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 
+assets {
+  excludes ["**/*.less"]
+  includes ["application.less"]
+}
 // project(':common:shared').projectDir
 
 task copyManual(type: Copy, dependsOn: ':asset-pipeline-core:groovydoc') {
