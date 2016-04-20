@@ -67,9 +67,20 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.enableDigests
     }
 
+
     void setEnableDigests(boolean enableDigests) {
         pipelineExtension.enableDigests = enableDigests
     }
+
+	@Input
+	@Optional
+	String getJarTaskName() {
+		pipelineExtension.jarTaskName
+	}
+
+	void setJarTaskName(String jarTaskName) {
+		pipelineExtension.jarTaskName = jarTaskName
+	}
 
     @Input
     @Optional

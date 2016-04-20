@@ -19,6 +19,7 @@ apply plugin: 'com.gradle.plugin-publish'
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
+apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.7'

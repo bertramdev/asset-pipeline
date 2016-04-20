@@ -83,57 +83,42 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 enableGzip = assetPipeline.enableGzip
             }
 
-            project.tasks.withType(Jar) { Jar bundleTask ->
-                bundleTask.dependsOn assetPrecompileTask
-                bundleTask.from assetPipeline.compileDir, {
-                    into "assets"
-                }
-            }
+//            project.tasks.withType(Jar) { Jar bundleTask ->
+//                bundleTask.dependsOn assetPrecompileTask
+//                bundleTask.from assetPipeline.compileDir, {
+//                    into "assets"
+//                }
+//            }
+
+			if(assetPipeline.jarTaskName) {
+				Jar jarTask = project.tasks.findByName('jarTaskName')
+				if(jarTask) {
+					jarTask.dependsOn assetPrecompileTask
+					jarTask.from assetPipeline.compileDir, {
+						into "assets"
+					}
+				}
+			} else { //no jar task name specified we need to try and infer
+				def assetTasks = ['war','shadowJar','jar']
+
+				assetTasks?.each { taskName ->
+					Jar jarTask = project.tasks.findByName(taskName)
+					if(jarTask) {
+						jarTask.dependsOn assetPrecompileTask
+						jarTask.from assetPipeline.compileDir, {
+							into "assets"
+						}
+					}
+				}
+
+
+			}
+
 
         }
 
-		// def assembleTask = project.tasks.findByName('assemble')
-		// if(assembleTask) {
-		// 	assembleTask.dependsOn( assetPrecompileTask )
-		// }
 
-  //       def cleanTask = project.tasks.findByName('clean')
-  //       if(cleanTask) {
-  //           cleanTask.dependsOn( assetCleanTask )
-  //       }
 
-  //       def jarTask = project.tasks.findByName('jar')
-  //       if(jarTask) {
-  //           jarTask.dependsOn(assetPrecompileTask)
-  //       }
-
-  //       def shadowJarTask = project.tasks.findByName('shadowJar')
-  //       if(shadowJarTask) {
-  //           shadowJarTask.dependsOn(assetPrecompileTask)
-  //       }
-
-  //       def warTask = project.tasks.findByName('war')
-  //       if(warTask) {
-  //           warTask.dependsOn(assetPrecompileTask)
-  //       }
-
-  //       def installAppTask = project.tasks.findByName('installApp')
-  //       if(installAppTask) {
-  //           installAppTask.dependsOn(assetPrecompileTask)
-  //       }
-
-  //       def installDistTask = project.tasks.findByName('installDist')
-  //       if(installDistTask) {
-  //           installDistTask.dependsOn(assetPrecompileTask)
-  //       }
-
-        
-        // def resourcesTask = project.tasks.findByName('classes')
-
-               
-		// project.task('asset-watch') << {
-		// 	//TODO: Implement live watcher to auto recompile assets as they change
-		// }
 	}
     
     private void createGradleConfiguration(Project project) {
