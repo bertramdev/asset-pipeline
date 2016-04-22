@@ -23,6 +23,7 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
 import org.gradle.api.UnknownTaskException
+import org.gradle.api.UnknownDomainObjectException
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.distribution.DistributionContainer
 import org.gradle.api.plugins.JavaPlugin
@@ -78,7 +79,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
             }
             try {
                 distributionContainer = project.extensions.getByType(DistributionContainer)
-            } catch(UnknownTaskException ex) {
+            } catch(UnknownDomainObjectException ex) {
                 //we dont care this is just to see if it exists
             }
 
