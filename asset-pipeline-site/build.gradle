@@ -6,13 +6,13 @@ buildscript {
   dependencies {
     classpath "io.ratpack:ratpack-gradle:1.2.0"
     classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.7.5" 
+//    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.7.5"
   }
 }
 
-// plugins {
-//   id "com.bertramlabs.asset-pipeline" version "2.7.2"
-// }
+ plugins {
+   id "com.bertramlabs.asset-pipeline" version "2.7.2"
+ }
 
 
 apply plugin: "io.ratpack.ratpack-groovy"
