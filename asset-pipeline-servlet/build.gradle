@@ -112,6 +112,7 @@ bintray {
 		key = bintrayKey
 	}
 	publications = ['maven']
+    publish=true
 	pkg {
 		repo = 'asset-pipeline'
 		userOrg = 'bertramlabs'
@@ -120,6 +121,17 @@ bintray {
 		websiteUrl = 'https://github.com/bertramdev/asset-pipeline-core'
         issueTrackerUrl = 'https://github.com/bertramdev/asset-pipeline-core/issues'
         vcsUrl = 'https://github.com/bertramdev/asset-pipeline-core.git'
+        version {
+            if (project.hasProperty('mavenUser')) {
+                mavenCentralSync {
+                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    user = mavenUser //OSS user token
+                    password = mavenPassword //OSS user password
+                    close = '1'
+                    //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                }
+            }
+        }
 	}
 }
 

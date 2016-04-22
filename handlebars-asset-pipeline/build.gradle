@@ -90,11 +90,23 @@ bintray {
     user = project.hasProperty('bintrayUser') ? bintrayUser: 'anonymous'
     key = project.hasProperty('bintrayKey') ? bintrayKey : null
     publications = ['maven']
+    publish=true
     pkg {
         repo = 'asset-pipeline'
         userOrg = 'bertramlabs'
         name = 'handlebars-asset-pipeline'
         licenses = ['Apache-2.0']
+        version {
+            if (project.hasProperty('mavenUser')) {
+                mavenCentralSync {
+                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    user = mavenUser //OSS user token
+                    password = mavenPassword //OSS user password
+                    close = '1'
+                    //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                }
+            }
+        }
     }
 }
 
