@@ -150,21 +150,21 @@ class AssetCompiler {
 					if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}${extension ? ('.' + extension) : ''}") {
 						isUnchanged=true
 					}
-					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged) {
+					if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
 						def newFileData = fileData
 						try {
 							def closureCompilerProcessor = new ClosureCompilerProcessor(this)
-							eventListener?.triggerEvent("StatusUpdate", "Uglifying File ${index+1} of ${filesToProcess.size()} - ${fileName}")
+							eventListener?.triggerEvent("StatusUpdate", "- Minifying File")
 							newFileData = closureCompilerProcessor.process(fileName,fileData, options.minifyOptions ?: [:])
 						} catch(e) {
-							log.error("Uglify JS Exception", e)
+							log.error("Closure uglify JS Exception", e)
 							newFileData = fileData
 						}
 						fileData = newFileData
-					} else if(fileName.indexOf(".min") == -1 && contentType == 'text/css' && options.minifyCss && !isUnchanged) {
+					} else if(fileName.indexOf(".min") == -1 && contentType == 'text/css' && options.minifyCss && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
 						def newFileData = fileData
 						try {
-							eventListener?.triggerEvent("StatusUpdate", "Minifying File ${index+1} of ${filesToProcess.size()} - ${fileName}")
+							eventListener?.triggerEvent("StatusUpdate", "- Minifying File")
 							newFileData = minifyCssProcessor.process(fileData)
 						} catch(e) {
 							log.error("Minify CSS Exception", e)
@@ -214,7 +214,7 @@ class AssetCompiler {
 						}
 					}
 					// TODO: Streamify!
-					eventListener?.triggerEvent("StatusUpdate","Writing File ${index+1} of ${filesToProcess.size()} - ${fileName}")
+					eventListener?.triggerEvent("StatusUpdate","- Writing File")
 
 					byte[] buffer = new byte[8192]
 					int nRead
@@ -294,6 +294,19 @@ class AssetCompiler {
 	  }
 	  return assetDir
   }
+
+    /**
+     * Checks any user passed minification exclude patterns at (minifyOptions.excludes=['blah.js'])
+     * Exclude patterns can use glob patterns by default or regular expressions by prefixing the pattern with 'regex:'
+     * @param filePath the file path being tested against
+     * @return true if the file should be excluded from minification
+     */
+    private boolean isMinifyExcluded(String filePath) {
+        if(options.minifyOptions?.excludes) {
+            return AssetHelper.isFileMatchingPatterns(filePath, options.minifyOptions.excludes)
+        }
+        return false
+    }
 
 	def getIncludesForPathKey(String key) {
 		def includes = []

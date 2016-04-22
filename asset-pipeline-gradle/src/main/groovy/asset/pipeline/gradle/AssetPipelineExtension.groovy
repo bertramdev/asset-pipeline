@@ -29,6 +29,8 @@ class AssetPipelineExtension {
     boolean enableDigests = true
     boolean skipNonDigests = false
     boolean enableGzip = true
+    boolean packagePlugin=false
+    boolean developmentRuntime=true
     String compileDir = 'build/assets'
     String assetsPath = 'src/assets'
 	String jarTaskName

@@ -12,6 +12,10 @@ class AssetPipelineConfigHolder {
 	public static Properties manifest
 	public static Map config = [:]
 
+    private static Integer configHashCode
+    private static Integer resolverHashCode
+    private static String digestString
+
 	public static registerResolver(AssetResolver resolver) {
 		resolvers << resolver
 	}
@@ -40,4 +44,13 @@ class AssetPipelineConfigHolder {
 		this.resolvers = resolvers
 	}
 
+    public static String getDigestString() {
+        //check if the maps or arrays have changed to reset the digest
+        if(resolvers?.hashCode() != resolverHashCode || config?.hashCode() != configHashCode) {
+            digestString = AssetHelper.getByteDigest([config: config?.sort(),resolvers: resolvers?.collect{AssetResolver resolver -> resolver.name}?.sort()].sort().toString().bytes)
+            resolverHashCode = resolvers?.hashCode()
+            configHashCode = config?.hashCode()
+        }
+        return digestString
+    }
 }

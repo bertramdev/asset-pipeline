@@ -1,0 +1,36 @@
+buildscript {
+ repositories {
+        mavenLocal()
+    }
+    dependencies {
+
+    }
+}
+group = 'com.bertramlabs.plugins'
+
+apply plugin: 'groovy'
+// apply plugin: 'asset-pipeline'
+
+
+version "0.1"
+
+// assets {
+// 	packagePlugin = true
+// }
+
+configurations {
+	provided
+}
+
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
+
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
+
+dependencies {
+	provided localGroovy()
+}

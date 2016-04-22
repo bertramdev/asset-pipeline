@@ -11,6 +11,18 @@
       <entry name="!?*.groovy"/>
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true"/>
+    <bytecodeTargetLevel target="1.8">
+      <module name="asset-pipeline-core-asset-pipeline-core" target="1.7"/>
+      <module name="asset-pipeline-gradle" target="1.7"/>
+      <module name="asset-pipeline-servlet" target="1.7"/>
+      <module name="asset-pipeline-core-asset-pipeline-core" target="1.7"/>
+      <module name="asset-pipeline-gradle" target="1.7"/>
+      <module name="asset-pipeline-servlet" target="1.7"/>
+      <module name="asset-pipeline-core-asset-pipeline-core" target="1.7"/>
+      <module name="asset-pipeline-gradle" target="1.7"/>
+      <module name="asset-pipeline-servlet" target="1.7"/>
+      <module name="asset-pipeline-spring-boot" target="1.7"/>
+    </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="">
     <module2copyright/>
@@ -46,6 +58,17 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-core.iml" filepath="$PROJECT_DIR$/asset-pipeline-core.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-core/asset-pipeline-core-asset-pipeline-core.iml" filepath="$PROJECT_DIR$/asset-pipeline-core/asset-pipeline-core-asset-pipeline-core.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-gradle/asset-pipeline-gradle.iml" filepath="$PROJECT_DIR$/asset-pipeline-gradle/asset-pipeline-gradle.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-servlet/asset-pipeline-servlet.iml" filepath="$PROJECT_DIR$/asset-pipeline-servlet/asset-pipeline-servlet.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-site/asset-pipeline-site.iml" filepath="$PROJECT_DIR$/asset-pipeline-site/asset-pipeline-site.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/coffee-asset-pipeline/coffee-asset-pipeline.iml" filepath="$PROJECT_DIR$/coffee-asset-pipeline/coffee-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/ember-asset-pipeline/ember-asset-pipeline.iml" filepath="$PROJECT_DIR$/ember-asset-pipeline/ember-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/handlebars-asset-pipeline/handlebars-asset-pipeline.iml" filepath="$PROJECT_DIR$/handlebars-asset-pipeline/handlebars-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/less-asset-pipeline/less-asset-pipeline.iml" filepath="$PROJECT_DIR$/less-asset-pipeline/less-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/ratpack-asset-pipeline/ratpack-asset-pipeline.iml" filepath="$PROJECT_DIR$/ratpack-asset-pipeline/ratpack-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/sass-asset-pipeline/sass-asset-pipeline.iml" filepath="$PROJECT_DIR$/sass-asset-pipeline/sass-asset-pipeline.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml" filepath="$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="1.8">

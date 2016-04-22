@@ -4,6 +4,7 @@ build/
 .gradle
 *.iml
 *.ipr
+*.iws
 .idea/
 gradle.properties
 .jruby-container

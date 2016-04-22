@@ -1,0 +1,5 @@
+asset-test/lib.js
+asset-test/nested/filea.js
+asset-test/nested/fileb.js
+asset-test/nested/filec.css
+asset-test/grails_logo.png

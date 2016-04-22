@@ -16,6 +16,8 @@
 
 package asset.pipeline
 
+import java.util.concurrent.ConcurrentHashMap
+
 
 /**
  * A Cache Manager for the Asset-Pipeline runtime. This reduces repeat processing
@@ -30,6 +32,7 @@ public class CacheManager {
 	static final String CACHE_LOCATION = ".asscache"
 	static final Integer CACHE_DEBOUNCE_MS = 5000 // De-bounce 5 seconds
 	static Map<String, Map<String, Object>> cache = [:]
+    static String configCacheBustDigest
 	static final Object LOCK_OBJECT = new Object()
 	static CachePersister cachePersister
 
@@ -42,6 +45,7 @@ public class CacheManager {
      */
 	public static String findCache(String fileName, String md5, String originalFileName = null) {
 		loadPersistedCache()
+        checkCacheValidity()
 		def cacheRecord = cache[fileName]
 
 		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
@@ -78,6 +82,8 @@ public class CacheManager {
      * @param originalFileName The original file name of the base file being persisted
      */
 	public static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
+        loadPersistedCache()
+        checkCacheValidity()
         def thisCache = cache
         def cacheRecord = thisCache[fileName]
 		if(cacheRecord) {
@@ -134,8 +140,9 @@ public class CacheManager {
 	public static void save() {
         String cacheLocation = AssetPipelineConfigHolder.config?.cacheLocation ?: CACHE_LOCATION
 		FileOutputStream fos = new FileOutputStream(cacheLocation);
+        Map<String, Map<String, Object>> cacheSaveData = [configCacheBustDigest: configCacheBustDigest, cache: cache]
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(cache)
+		oos.writeObject(cacheSaveData)
 		oos.close()
 	}
 
@@ -159,12 +166,29 @@ public class CacheManager {
 			FileInputStream fis = new FileInputStream(cacheLocation);
 		    ObjectInputStream ois = new ObjectInputStream(fis);
 		    def fileCache = ois.readObject()
-			fileCache?.each{ entry ->
-				cache[entry.key] = entry.value
-			}
+            if(fileCache?.configCacheBustDigest) {
+                configCacheBustDigest = fileCache.configCacheBustDigest
+            }
+            if(fileCache?.cache) {
+                fileCache.cache.each{ entry ->
+                    cache[entry.key] = entry.value
+                }
+            }
+
 		} catch(ex) {
 			// If there is a parser error from a previous bad cache flush ignore it and move on
 		}
 		
 	}
+
+    /**
+     * Checks the config digest name to see if any configurations have changed.
+     * If they have the cache needs to be reset and marked as expired
+     */
+    private static void checkCacheValidity() {
+        if(configCacheBustDigest != AssetPipelineConfigHolder.getDigestString()) {
+            cache.clear()
+            configCacheBustDigest = AssetPipelineConfigHolder.getDigestString()
+        }
+    }
 }

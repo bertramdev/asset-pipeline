@@ -1,25 +1,29 @@
 buildscript {
   repositories {
+    mavenLocal()
     jcenter()
   }
   dependencies {
     classpath "io.ratpack:ratpack-gradle:1.2.0"
     classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
-    
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.7.5" 
   }
 }
 
-plugins {
-  id "com.bertramlabs.asset-pipeline" version "2.7.2"
-}
+// plugins {
+//   id "com.bertramlabs.asset-pipeline" version "2.7.2"
+// }
+
 
 apply plugin: "io.ratpack.ratpack-groovy"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "idea"
+apply plugin: 'asset-pipeline'
 
 repositories {
   jcenter()
 }
+
 
 dependencies {
   // Default SLF4J binding.  Note that this is a blocking implementation.
@@ -29,7 +33,7 @@ dependencies {
   assets project(':asset-pipeline-core')
   assets project(':ratpack-asset-pipeline')
   assets project(':less-asset-pipeline')
-
+  runtime 'org.webjars:d3js:3.5.16'
   testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 

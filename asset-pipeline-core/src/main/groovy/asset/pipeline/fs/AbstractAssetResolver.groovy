@@ -235,26 +235,7 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 
     @CompileStatic
     protected boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
-        for(pattern in patterns) {
-            String syntax = "glob"
-            if(pattern.startsWith('regex:')) {
-                syntax = "regex"
-                pattern = pattern.substring(6)
-            } else if(pattern.startsWith('glob:')) {
-                pattern = pattern.substring(5)
-            }
-            PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern}")
-            if(pathMatcher.matches(Paths.get(filePath))) {
-                return true
-            }
-            if(syntax == "glob" && pattern.startsWith('**/')) {
-                pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern.substring(3)}")
-                if(pathMatcher.matches(Paths.get(filePath))) {
-                    return true
-                }
-            }
-        }
-        return false
+        return AssetHelper.isFileMatchingPatterns(filePath,patterns)
     }
 
 }

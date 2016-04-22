@@ -8,6 +8,7 @@ import groovy.util.logging.Log4j
 import javax.servlet.ServletContext
 import org.springframework.web.context.support.WebApplicationContextUtils
 import org.springframework.web.context.WebApplicationContext
+import asset.pipeline.fs.ClasspathAssetResolver
 import org.springframework.core.io.ResourceLoader
 
 @Log4j
@@ -28,9 +29,9 @@ class AssetPipelineService {
 		if(!manifestFile.exists()) {
 			def applicationResolver= new FileSystemAssetResolver('application','src/assets')
 			AssetPipelineConfigHolder.registerResolver(applicationResolver)
-			AssetPipelineConfigHolder.registerResolver(new SpringResourceAssetResolver('classpath',applicationContext, 'META-INF/assets'))
-            AssetPipelineConfigHolder.registerResolver(new SpringResourceAssetResolver('classpath',applicationContext, 'META-INF/static'))
-            AssetPipelineConfigHolder.registerResolver(new SpringResourceAssetResolver('classpath',applicationContext, 'META-INF/resources'))
+			AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/assets', "META-INF/assets.list"))
+            AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/static'))
+            AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/resources'))
 			AssetPipelineDevFilter filter = new AssetPipelineDevFilter();
 			registrationBean.setFilter(filter);
 		}

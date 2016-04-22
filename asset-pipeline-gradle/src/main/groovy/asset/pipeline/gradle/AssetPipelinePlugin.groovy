@@ -16,15 +16,21 @@
 
 package asset.pipeline.gradle
 
+import asset.pipeline.AssetFile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
+import org.gradle.api.UnknownTaskException
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.distribution.DistributionContainer
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Delete
+import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.language.jvm.tasks.ProcessResources
+
 /**
  * This is the Gradle Plugin implementation of asset-pipeline-core. It provides a set of tasks useful for working with your assets directly
  *
@@ -34,38 +40,60 @@ import org.gradle.api.tasks.bundling.Jar
  * @author David Estes
  * @author Graeme Rocher
  * @author Craig Burke 
-*/
+ */
 class AssetPipelinePlugin implements Plugin<Project> {
 
     static final String ASSET_CONFIGURATION_NAME = 'assets'
-    
-	void apply(Project project) {
+
+    void apply(Project project) {
         createGradleConfiguration(project)
-        
+
         def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtension)
 
-        if(project.extensions.findByName('grails')) {
+        if (project.extensions.findByName('grails')) {
             defaultConfiguration.assetsPath = 'grails-app/assets'
         } else {
-          defaultConfiguration.assetsPath = "${project.projectDir}/src/assets"
+            defaultConfiguration.assetsPath = "${project.projectDir}/src/assets"
         }
         defaultConfiguration.compileDir = "${project.buildDir}/assets"
 
-		    project.tasks.create('assetCompile', AssetCompile)
+        project.tasks.create('assetCompile', AssetCompile)
+        project.tasks.create('assetPluginPackage', AssetPluginPackage)
 
 
         def assetPrecompileTask = project.tasks.getByName('assetCompile')
+        def assetPluginTask = project.tasks.getByName('assetPluginPackage')
         // assetPrecompileTask.dependsOn('classes')
         def assetCleanTask = project.tasks.create('assetClean', Delete)
 
+
         project.afterEvaluate {
             def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
+            ProcessResources processResources
+            DistributionContainer distributionContainer
+            try {
+                processResources = (ProcessResources) project.tasks.processResources
+            } catch(UnknownTaskException ex) {
+                //we dont care this is just to see if it exists
+            }
+            try {
+                distributionContainer = project.extensions.getByType(DistributionContainer)
+            } catch(UnknownTaskException ex) {
+                //we dont care this is just to see if it exists
+            }
+
             assetCleanTask.configure {
                 delete project.file(assetPipeline.compileDir)
             }
             def configDestinationDir = project.file(assetPipeline.compileDir)
-            
-            
+
+
+
+            assetPluginTask.configure {
+                assetsDir = project.file(assetPipeline.assetsPath)
+                destinationDir = project.file("${processResources?.destinationDir}/META-INF")
+            }
+
             assetPrecompileTask.configure {
                 destinationDir = configDestinationDir
                 assetsDir = project.file(assetPipeline.assetsPath)
@@ -75,7 +103,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 includes = assetPipeline.includes
                 excludes = assetPipeline.excludes
                 excludesGzip = assetPipeline.excludesGzip
-				        configOptions = assetPipeline.configOptions
+                configOptions = assetPipeline.configOptions
                 skipNonDigests = assetPipeline.skipNonDigests
                 enableDigests = assetPipeline.enableDigests
                 enableSourceMaps = assetPipeline.enableSourceMaps
@@ -83,50 +111,59 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 enableGzip = assetPipeline.enableGzip
             }
 
-//            project.tasks.withType(Jar) { Jar bundleTask ->
-//                bundleTask.dependsOn assetPrecompileTask
-//                bundleTask.from assetPipeline.compileDir, {
-//                    into "assets"
-//                }
-//            }
+            if(distributionContainer) {
+                distributionContainer.getByName("main").contents.from(assetPipeline.compileDir) {
+                    into "app/assets"
+                }
+            }
 
-			if(assetPipeline.jarTaskName) {
-				Jar jarTask = project.tasks.findByName('jarTaskName')
-				if(jarTask) {
-					jarTask.dependsOn assetPrecompileTask
-					jarTask.from assetPipeline.compileDir, {
-						into "assets"
-					}
-				}
-			} else { //no jar task name specified we need to try and infer
-				def assetTasks = ['war','shadowJar','jar']
+            if (assetPipeline.packagePlugin) { //this is just a lib we dont want to do assetCompile
+                processResources.dependsOn(assetPluginTask)
+            } else if(assetPipeline.developmentRuntime == false && processResources) {
+                processResources.dependsOn(assetPrecompileTask)
+                processResources.from assetPipeline.compileDir, {
+                    into "assets"
+                }
+            } else {
+                if (assetPipeline.jarTaskName) {
+                    Jar jarTask = project.tasks.findByName(assetPipeline.jarTaskName)
+                    if (jarTask) {
+                        jarTask.dependsOn assetPrecompileTask
+                        jarTask.from assetPipeline.compileDir, {
+                            into "assets"
+                        }
+                    }
+                } else { //no jar task name specified we need to try and infer
+                    def assetTasks = ['war', 'shadowJar', 'jar']
 
-				assetTasks?.each { taskName ->
-					Jar jarTask = project.tasks.findByName(taskName)
-					if(jarTask) {
-						jarTask.dependsOn assetPrecompileTask
-						jarTask.from assetPipeline.compileDir, {
-							into "assets"
-						}
-					}
-				}
+                    assetTasks?.each { taskName ->
+                        try {
+                            Jar jarTask = project.tasks.findByName(taskName)
+                            if (jarTask) {
+                                jarTask.dependsOn assetPrecompileTask
+                                jarTask.from assetPipeline.compileDir, {
+                                    into "assets"
+                                }
+                            }
+                        } catch(UnknownTaskException ex) {
+                            // if task doesnt exist no worries
+                        }
 
-
-			}
-
-
+                    }
+                }
+            }
         }
 
 
+    }
 
-	}
-    
     private void createGradleConfiguration(Project project) {
         Configuration configuration = project.configurations.create(ASSET_CONFIGURATION_NAME)
         project.plugins.withType(JavaPlugin) {
             Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
+
             runtimeConfiguration.extendsFrom configuration
         }
     }
-    
+
 }

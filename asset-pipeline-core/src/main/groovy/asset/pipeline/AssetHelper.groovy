@@ -16,7 +16,9 @@
 
 package asset.pipeline
 
-
+import java.nio.file.FileSystems
+import java.nio.file.PathMatcher
+import java.nio.file.Paths
 import java.util.regex.Pattern
 import java.security.MessageDigest
 import java.nio.channels.FileChannel
@@ -237,5 +239,35 @@ public class AssetHelper {
         return newPath.join("/")
     }
 
+    /**
+     * Checks if a file path matches any pattern provided. These default to glob format but can be changed to use
+     * regular expressions by prefixing the pattern string with 'regex:'
+     * @param filePath String the fully qualified asset path we are checking
+     * @param patterns a List<String> of patterns either GLOB or regex (to use regex prefix the string with 'regex:')
+     * @return boolean true/false depending on wether or not the file path matches any patterns
+     */
+    @CompileStatic
+    static boolean isFileMatchingPatterns(String filePath, List<String> patterns) {
+        for(pattern in patterns) {
+            String syntax = "glob"
+            if(pattern.startsWith('regex:')) {
+                syntax = "regex"
+                pattern = pattern.substring(6)
+            } else if(pattern.startsWith('glob:')) {
+                pattern = pattern.substring(5)
+            }
+            PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern}")
+            if(pathMatcher.matches(Paths.get(filePath))) {
+                return true
+            }
+            if(syntax == "glob" && pattern.startsWith('**/')) {
+                pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern.substring(3)}")
+                if(pathMatcher.matches(Paths.get(filePath))) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
 }

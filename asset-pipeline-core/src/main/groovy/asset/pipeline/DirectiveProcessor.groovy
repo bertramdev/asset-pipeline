@@ -152,7 +152,7 @@ class DirectiveProcessor {
     @CompileStatic
     protected findDirectives(AssetFile fileSpec, Map tree) {
 
-        String line = fileSpec.inputStream.text
+        String line = fileSpec.inputStream.getText("UTF-8")
         List directives = []
         if(fileSpec.directivePattern) {
             directives = (line =~ fileSpec.directivePattern)?.collect { List it -> it[1] as String }

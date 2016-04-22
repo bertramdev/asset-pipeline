@@ -31,7 +31,7 @@ class JsAssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
     static List<String> extensions = ['js']
     static String compiledExtension = 'js'
-    static processors = [JsRequireProcessor]
+    static processors = []
     Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

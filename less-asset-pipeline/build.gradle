@@ -45,7 +45,7 @@ dependencies {
     compile project(':asset-pipeline-core')
     compile 'org.mozilla:rhino:1.7R4'
     compile 'log4j:log4j:1.2.17'
-	compile "com.github.sommeri:less4j:1.17.0"
+	compile "com.github.sommeri:less4j:1.17.2"
     compile "com.github.sommeri:less4j-javascript:0.0.1"
 
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"

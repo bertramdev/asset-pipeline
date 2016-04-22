@@ -23,7 +23,7 @@ class LessAssetFile extends AbstractAssetFile {
 			if(baseFile?.encoding || encoding) {
 				fileText = sourceStream?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
 			} else {
-				fileText = sourceStream?.text
+				fileText = sourceStream?.getText("UTF-8")
 			}
 
 			String md5 = null

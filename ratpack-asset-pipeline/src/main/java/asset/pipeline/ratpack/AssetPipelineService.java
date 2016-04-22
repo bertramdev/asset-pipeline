@@ -17,6 +17,7 @@
 package asset.pipeline.ratpack;
 
 import asset.pipeline.AssetPipelineConfigHolder;
+import asset.pipeline.fs.ClasspathAssetResolver;
 import asset.pipeline.fs.FileSystemAssetResolver;
 import ratpack.file.FileSystemBinding;
 import ratpack.server.Service;
@@ -34,25 +35,28 @@ import java.util.Properties;
  */
 public class AssetPipelineService implements Service {
 
-  public void onStart(StartEvent startEvent) throws Exception {
-    FileSystemBinding fileSystemBinding = startEvent.getRegistry().get(FileSystemBinding.class);
-    AssetPipelineModule.Config config = startEvent.getRegistry().get(AssetPipelineModule.Config.class);
+    public void onStart(StartEvent startEvent) throws Exception {
+        FileSystemBinding fileSystemBinding = startEvent.getRegistry().get(FileSystemBinding.class);
+        AssetPipelineModule.Config config = startEvent.getRegistry().get(AssetPipelineModule.Config.class);
 
-    if (config.getAssets() != null) {
-      AssetPipelineConfigHolder.config = config.getAssets();
+        if (config.getAssets() != null) {
+            AssetPipelineConfigHolder.config = config.getAssets();
+        }
+        Path path = fileSystemBinding.getFile();
+        Path manifest = fileSystemBinding.file("assets/manifest.properties");
+        if (manifest != null && Files.exists(manifest)) {
+            // We are in production mode
+            AssetPipelineConfigHolder.config.put("precompiled", true);
+            Properties manifestProps = new Properties();
+            InputStream manIs = Files.newInputStream(manifest);
+            manifestProps.load(manIs);
+            manIs.close();
+            AssetPipelineConfigHolder.manifest = manifestProps;
+        } else {
+            AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver("application", path.resolve(config.getSourcePath()).toFile().getCanonicalPath()));
+            AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/assets", "META-INF/assets.list"));
+            AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/static"));
+            AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/resources"));
+        }
     }
-    Path path = fileSystemBinding.getFile();
-    Path manifest = fileSystemBinding.file("assets/manifest.properties");
-    if (manifest != null && Files.exists(manifest)) {
-      // We are in production mode
-      AssetPipelineConfigHolder.config.put("precompiled", true);
-      Properties manifestProps = new Properties();
-      InputStream manIs = Files.newInputStream(manifest);
-      manifestProps.load(manIs);
-      manIs.close();
-      AssetPipelineConfigHolder.manifest = manifestProps;
-    } else {
-      AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver("application", path.resolve(config.getSourcePath()).toFile().getCanonicalPath()));
-    }
-  }
 }

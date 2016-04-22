@@ -60,6 +60,7 @@ dependencies {
 	compile     'com.google.javascript:closure-compiler:v20151015'
 	compile     'commons-logging:commons-logging:1.1.1'
 	//compile   'log4j:log4j:1.2.16'
+	testCompile project(':asset-pipeline-classpath-test')
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
 
