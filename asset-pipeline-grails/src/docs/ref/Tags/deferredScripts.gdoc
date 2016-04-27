@@ -1,0 +1,6 @@
+h1. asset:deferredScripts
+
+h2. Description
+
+Indicates the point in a page where inline JavaScript blocks (created by @<asset:script>@) should be rendered. Typically
+this is at the bottom of a layout GSP.

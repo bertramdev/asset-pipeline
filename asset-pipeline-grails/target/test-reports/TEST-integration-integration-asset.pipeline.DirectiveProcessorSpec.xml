@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="davids-macbook.local" name="asset.pipeline.DirectiveProcessorSpec" skipped="0" tests="8" time="0.415" timestamp="2016-04-22T16:46:21">
+  <properties />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets entire tree when required" time="0.127" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list flattened with all files" time="0.014" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list flattened with all files from require_full_tree" time="0.062" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="evaluates GString directives if detected" time="0.042" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list order correct" time="0.029" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list order correct when multiple dependencies are defined in one directive" time="0.09" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list with tree directive that has an absolute and relative path" time="0.008" />
+  <testcase classname="asset.pipeline.DirectiveProcessorSpec" name="gets dependency list with full_tree directive that has an absolute and relative path" time="0.034" />
+  <system-out><![CDATA[--Output from gets entire tree when required--
+--Output from gets dependency list flattened with all files--
+[[path:asset-pipeline/test/test.js, encoding:null], [path:asset-pipeline/test/libs/file_a.js, encoding:null], [path:asset-pipeline/test/libs/file_c.js, encoding:null], [path:asset-pipeline/test/libs/file_b.js, encoding:null], [path:asset-pipeline/test/libs/subset/subset_a.js, encoding:null]]
+--Output from gets dependency list flattened with all files from require_full_tree--
+[[path:asset-pipeline/test/test_full_tree.js, encoding:null], [path:asset-pipeline/test/libs/file_a.js, encoding:null], [path:asset-pipeline/test/libs/file_c.js, encoding:null], [path:asset-pipeline/test/libs/file_b.js, encoding:null], [path:asset-pipeline/test/libs/subset/subset_a.js, encoding:null]]
+--Output from evaluates GString directives if detected--
+[[path:asset-pipeline/test/gstringtest2.js, encoding:null], [path:asset-pipeline/test/gstringtest.js, encoding:null]]
+--Output from gets dependency list order correct--
+--Output from gets dependency list order correct when multiple dependencies are defined in one directive--
+--Output from gets dependency list with tree directive that has an absolute and relative path--
+--Output from gets dependency list with full_tree directive that has an absolute and relative path--
+]]></system-out>
+  <system-err><![CDATA[--Output from gets entire tree when required--
+--Output from gets dependency list flattened with all files--
+--Output from gets dependency list flattened with all files from require_full_tree--
+--Output from evaluates GString directives if detected--
+--Output from gets dependency list order correct--
+--Output from gets dependency list order correct when multiple dependencies are defined in one directive--
+--Output from gets dependency list with tree directive that has an absolute and relative path--
+--Output from gets dependency list with full_tree directive that has an absolute and relative path--
+]]></system-err>
+</testsuite>

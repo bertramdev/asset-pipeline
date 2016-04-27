@@ -1,0 +1,19 @@
+Testsuite: asset.pipeline.grails.AssetProcessorServiceSpec
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.626 sec
+------------- Standard Output ---------------
+--Output from asset mapping can be configured--
+--Output from can get flattened dependency list--
+--Output from can serve unprocessed asset for dev debug--
+--Output from can serve compiled assets--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from asset mapping can be configured--
+--Output from can get flattened dependency list--
+--Output from can serve unprocessed asset for dev debug--
+--Output from can serve compiled assets--
+------------- ---------------- ---------------
+
+Testcase: asset mapping can be configured took 0.374 sec
+Testcase: can get flattened dependency list took 0.204 sec
+Testcase: can serve unprocessed asset for dev debug took 0.009 sec
+Testcase: can serve compiled assets took 0.017 sec

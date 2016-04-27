@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="davids-macbook.local" name="asset.pipeline.grails.AssetProcessorServiceSpec" skipped="0" tests="4" time="0.626" timestamp="2016-04-22T16:46:13">
+  <properties />
+  <testcase classname="asset.pipeline.grails.AssetProcessorServiceSpec" name="asset mapping can be configured" time="0.374" />
+  <testcase classname="asset.pipeline.grails.AssetProcessorServiceSpec" name="can get flattened dependency list" time="0.204" />
+  <testcase classname="asset.pipeline.grails.AssetProcessorServiceSpec" name="can serve unprocessed asset for dev debug" time="0.009" />
+  <testcase classname="asset.pipeline.grails.AssetProcessorServiceSpec" name="can serve compiled assets" time="0.017" />
+  <system-out><![CDATA[--Output from asset mapping can be configured--
+--Output from can get flattened dependency list--
+--Output from can serve unprocessed asset for dev debug--
+--Output from can serve compiled assets--
+]]></system-out>
+  <system-err><![CDATA[--Output from asset mapping can be configured--
+--Output from can get flattened dependency list--
+--Output from can serve unprocessed asset for dev debug--
+--Output from can serve compiled assets--
+]]></system-err>
+</testsuite>

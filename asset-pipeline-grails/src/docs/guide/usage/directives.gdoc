@@ -1,0 +1,66 @@
+Asset Pipeline controls asset depdencency by using a custom syntax with commands called "directives". These directives give more fine grained control over what needs included as well as load order.
+
+h3. Manifest Files
+
+In the Grails asset pipeline, the concept of a manifest file exists. This is typically the root/parent JavaScript or CSS file which requires all of your application code. This file is then included into your application with a taglib.  Another comparison that can be made here is to the 'Resources Plugin' modules; the difference being, your manifest is kept within the source code of your JavaScript or CSS rather than within a separate file you keep having to jump back to.
+
+An example JavaScript manifest called 'application.js' might look like this:
+
+{code}
+//= require jquery/jquery
+//= require_self
+//= require_tree .
+//= require_full_tree .
+{code}
+
+Or an example stylesheet syntax may look like this:
+
+{code}
+/*
+*= require_self
+*= require header
+*= require navigation
+*= require_tree .
+*= require_full_tree .
+*= encoding UTF-8
+*/
+{code}
+
+h3. Directives
+
+{table}
+*Directive* | *Meaning*
+require | Includes a single file into the manifest
+require_tree | Recursively includes all files and subdirectories in the path
+require_self | Inserts the body of the current file
+require_full_tree | Include files from all plugins that contain the relative base path
+encoding | Set the processor encoding for this bundle (i.e. UTF-8 or ANSI or Latin1)
+{table}
+
+In JavaScript files, the directive begins with '//='. These directives tell us which files should be injected into this JavaScript file and in what order.
+
+The @require_tree@ directive will tell asset-pipeline to recursively include all JavaScript in the specified directory. This will include JavaScript sorted in alphabetical order, but the ordering of this type of require should not be relied upon. You can adjust the require order of the @require_tree@ directive by using directives within any sub-JavaScript file. For example, lets say we have a folder called 'models' with a Book and an Author. Let's go further and say we want to ensure the Book model requires author first in a require_tree. This can be done by simply adding "//=require author" at the top of book.js file.
+
+The @require_full_tree@ directive is an additional directive similar to @require_tree@ except that it will include files from all plugins that contain the relative base path. This is helpful when developing an application that is split into multiple plugins.
+
+The @require_self@ directive allows you to control where in the manifest the contents of the current file should reside. If the @require_self@ directive is not specified, the contents of the current file are appended to the end of the manifest.
+
+{note}
+In the examples above, 2 different directive prefixes were shown, one for CSS, and one for JavaScript. It is important to note that the syntax of these directives can vary based on the file type and preprocessor definition. For example, CoffeeScript files begin with "#=".
+{note}
+
+h3. Dynamic Directives
+
+The asset-pipeline require directives also support the use of the Groovy Templates via the @GStringTemplateEngine@. This means you can use some conditional require situations based, for example, on the grails Environment.
+
+{code}
+//= require ${grails.util.Environment.currentEnvironment.toString() == 'DEVELOPMENT' ? 'ember.debug.js' : 'ember.prod.js'}
+{code}
+or
+{code}
+//= require ${grails.util.Environment.currentEnvironment == grails.util.Environment.DEVELOPMENT ? 'ember.debug.js' : 'ember.prod.js'}
+{code}
+
+{note}
+It is important to note that when prepping for a production release these conditionals are only evaluated in dev runtime and in war build. If you build a war in prod environment but start it up in staging, the evaluation will have already occurred in prod.
+{note}

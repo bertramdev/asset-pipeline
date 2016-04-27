@@ -1,0 +1,18 @@
+--Output from should return assetPath--
+--Output from should return javascript link tag when debugMode is off--
+--Output from should always return javascript link tag when bundle attr is 'true'--
+--Output from should return javascript link tag with seperated files when debugMode is on--
+--Output from should return stylesheet link tag when debugMode is off--
+--Output from should always return stylesheet link tag when bundle attr is 'true'--
+--Output from should return stylesheet link tag with seperated files when debugMode is on--
+--Output from should return image tag--
+--Output from should return image tag with absolute path--
+--Output from should return link tag--
+--Output from test if asset path exists in dev mode--
+--Output from test if asset path is missing in dev mode--
+--Output from test if asset path exists in dev mode and closure renders the body--
+--Output from test if asset path is missing in dev mode and closure doesn't render the body--
+--Output from test if asset path exists in prod mode--
+--Output from asset path should not exist in dev mode--
+--Output from should render deferred scripts--
+--Output from should render deferred scripts and evaluate nested groovy expressions--

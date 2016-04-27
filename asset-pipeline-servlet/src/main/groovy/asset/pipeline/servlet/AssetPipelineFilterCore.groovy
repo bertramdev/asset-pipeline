@@ -42,7 +42,8 @@ class AssetPipelineFilterCore {
 
         AssetPipelineServletResource resource = assetPipelineServletResourceRepository.getResource(fileUri)
         if (resource) {
-			def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), new Date(resource.getLastModified()))
+            Date lastModifiedDate = resource.getLastModified() ? new Date(resource.getLastModified()) : null
+			def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), lastModifiedDate)
 			responseBuilder.headers.each { header ->
 				response.setHeader(header.key,header.value)
 			}

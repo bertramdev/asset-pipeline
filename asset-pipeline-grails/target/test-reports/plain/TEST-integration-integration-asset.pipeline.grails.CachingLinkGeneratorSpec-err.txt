@@ -1,0 +1,4 @@
+--Output from finds assets when calling for resource in dev mode--
+--Output from finds assets with absolute path when calling for resource in dev mode--
+--Output from finds asset in precompiled (prod) mode--
+--Output from falls back to standard resource lookup if not found in asset pipeline--

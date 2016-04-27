@@ -1,0 +1,1 @@
+--Output from should return assetPath--

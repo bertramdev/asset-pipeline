@@ -1,0 +1,126 @@
+h3. Release History
+
+* April 22, 2016
+** 2.8.0 Release - Bug fixes, New classpath resolver for binary plugin require_tree support. New asset-defer option for javascript taglib.
+** 3.2.0 Release - Exploded plugin support, and jarTaskName support. Bug fixes, New classpath resolver for binary plugin require_tree support. New asset-defer option for javascript taglib.
+** April 5, 2016
+** 3.1.3 , 2.7.4 Release - Fixes for webjar asset resolution or any binary dependency
+** March 24, 2016
+** 3.1.2 Release - More aggressive closing of open file handles in Servlet filter for more efficient use of resources
+** 2.7.2 Release - More aggressive closing of open file handles in Servlet filter for more efficient use of resources
+** March 9, 2016
+** 3.1.1 Release - Improvements to compile time performance,fixed bootstrap bug, reducing open file handles
+** 2.7.2 Release - Improvements to compile time performance, fixed bootstrap bug, and moving of .asscache to target folder
+** March 4, 2016
+** 2.7.0 Release - Fixes bugs in filter and compiler
+** 3.1.0 Release - 2.7.0 release of core for grails 3.1
+* Nobember 24, 2015
+** 2.6.7 Release - Core version bump with fixes for less4j and regex excludes support
+** 3.0.15 (grails3) Release - Core version bump with fixes for less4j and regex excludes support
+* November 16, 2015
+** 3.0.14 (grails3) Release - Fixes a bug in SpringClassPath Resolver related to require_tree
+** 2.6.6 Release - Fixes a bug in SpringClassPath resolver related to require_tree
+** 3.0.12 (grails3) Release - Fixes to compile time performance and runtime using stream buffers
+** 2.6.4 Release - Improved compile time performance
+* November 11, 2015
+** 3.0.11 (grails3) Release - Fixes to thread safety, and compile static fixes.
+* October 22, 2015
+** 3.0.10 (grails3) Release - Cleaned up debug output
+** 3.0.9 (grails3) Release - Asset Compiler is now streaming for binary files. Lower memory usage, faster builds. Production asset serving now caches resources for more speed. Fixed AssetResourceLocator in production mode
+* October 21, 2015
+** 2.6.2 Release - less4j dependency updates for less Module
+* October 6, 2015
+** 2.5.9 Release - More fixes to AssetResourceLocator
+* October 5, 2015
+** 2.5.8 Release - More features for Last Modified date and If-Last-Modified headers. Also core bump with fixes for build phase
+* October 3, 2015
+** 2.5.6 Release - Fixing bug in asset filter for cache
+** 2.5.6 Release - Fixing bug in asset filter for cache
+** 2.5.5 Release - Asset Compiler is now streaming for binary files. Lower memory usage, faster builds. Production asset serving now caches resources for more speed. Fixed AssetResourceLocator in production mode
+* October 2, 2015
+** 2.5.4 Release - More enhancements to Last Modified headers, also fixes for jar resolution.
+* September 29, 2015
+** 2.5.2 Release - Add Last Modified Header as well as fixes to assetPathExists taglib
+* August 21, 2015
+** 3.0.8 Release - Added bundle=true attribute option to javascript and stylesheet taglib.
+** 2.5.1 Release - Added bundle=true attribute option to javascript and stylesheet taglib.
+* August 13, 2015
+** 2.5.0 Release - Development Runtime cache is now persisted for faster load times! Gradle enhancements for resolvers and deduplicated plugins. Can also now include non digested files in war if needed. Added skipNonDigests config option.
+* July 30, 2015
+** 3.0.6 Grails3 Release - Fixes issues with extracted WAR containers
+* July 29, 2015
+** 2.4.3 Release - Fixes for gradle plugin portal only
+** 2.4.2 Release - Fixes bug in CSS and HTML Relative URL digest replacement being inaccurate
+* July 28, 2015
+** 2.4.0 Release - Fixes bug in asset resolvers being overly aggressive about matching files with wrong extension type.
+* July 2, 2015
+** 2.3.9 Release - Fix in _AssetCompile gant script for buildDir, bad quotation used around string
+* June 30, 2015
+** 2.3.8 Release - Fixes Jar asset injection for gradle and grails 3.x when assets.compileDir is non standard.
+** 3.0.2 Grails 3 Module - Updated to work with changes to public class directives in core.
+* June 27, 2015 
+** 2.3.7 Release - Fixes to relative path replacement in css/html. Improvements in Angular @ngInject minification. Support for custom directives on files (i.e. //=wrapped)
+* June 19, 2015
+** 2.3.2 Release - Fixes for html processor and performance improvements in css processor
+* June 18, 2015
+** 2.3.0 Release - HtmlProcessor can now recalculate relative urls with digests on processing of static html. Fixed issues with classpath file resolution and cache. Better gradle support, boot support, and ratpack support.
+* June 16, 2015
+** 2.2.5 Release - Fixing classpath resolution bug with cache.
+* May 31, 2015
+** 2.2.3 Release - No longer storing non digest versions in war file, cutting overhead in half. Also removed Commons i/o dependency. Faster byte stream.
+* May 29, 2015
+** 2.2.2 Release - Also now scans 'provided' jar dependencies
+** 2.2.1 Release - Fixed issue with binary plugins in war build not including assets
+* March 5, 2015
+** 2.1.4 Release - Removed some debug printlns. Whoops!
+* February 25, 2015
+** 2.1.3 Release - Fixed bug preventing images / non processable entities from being loaded from binary plugins.
+** 2.1.2 Release - Performance Improvement on scanning classpath for binary plugin assets
+* January 28, 2015
+** 2.1.1 Release - Fixed Binary / Classpath Resolver Support. Now scans META-INF/assets, META-INF/static, and META-INF/resources (yes that means webjars).
+* January 5, 2015
+** 2.1.0 Release - Fixed bug in CSS Processor breaking asset compile
+* December 31, 2014
+** 2.0.21 Release - Nested Grails related asset-pipeline classes into the asset.pipeline.grails package so that the asset.pipeline package does not get marked reloadable
+* December 29, 2014
+** 2.0.20 Release - Fixed bug in CSSProcessor and cache digest names, Fixed absolute path issue, documentation improvements, resolver improvements
+* December 10, 2014
+** 2.0.17 Release - Fixed bug in CSSProcessor for recalculating relative paths
+** 2.0.16 Release - Fixed bug on 2nd war compile with Windows Platforms
+* December 5, 2014
+** 2.0.14 Release - Fixed compileDir for maven based builds
+* December 3, 2014
+** 2.0.13 Release - Faster Dev Mode, Fixed bug in war build, Fixed Css Processor with image paths. Fixed files with spaces.
+** 2.0.11 Release - We no longer export groovy,groovy-templates dependency since grails uses groovy-all
+** 2.0.10 Release - Fixed a bug in require_tree directive being a little too grabby. Also fixed windows platform support.
+* December 2, 2014
+** 2.0.8 Release - Moved to the new Asset-Pipeline-Core library with 2x faster compiling, binary plugin support, sourcemaps and more.
+* July 29, 2014
+** 1.9.6 Release - Whoops I had a typo. Thanks Travis.ci
+* July 29, 2014
+** 1.9.5 Release - Fixed Windows Platform Bug in CSS. Upgraded to UglifyJS2.0
+* July 11, 2014
+** 1.9.3 Release - Fixed ETag Headers for non-digested files, and updated project docs.
+* July 10, 2014
+** 1.9.2 Release - Fixed bug in cache manager, updated docs.
+** 1.9.1 Release - Added commons-io dependency for more recent versions of grails.
+* June 28, 2014
+** 1.9.0 Release - Added Absolute Image Support, Various bug fixes. Documentation Improvements.
+* June 6, 2014
+** 1.8.11 Release - require_tree directive now falls back to absolute references if path doesn't exist relatively
+* June 1, 2014
+** 1.8.10 Release - Added Support for comma delimited require lists
+* April 30, 2014
+** 1.8.7 Release - ETag Header Support and Vary: Accept-Encoding
+* April 29, 2014
+** 1.8.6 Release - AssetResourceLocator fix
+* April 28, 2014
+** 1.8.5 Release - GGTS and STS Eclipse Groovy Compiler Fixes
+** 1.8.4 Release - GGTS and STS Eclipse Groovy Compiler Fixes
+* October 13, 2013
+** 1.0.1 release
+* October 28, 2013
+** 1.0.2 release
+* November 22, 2013
+** 1.1.2 Release
+** 1.1.3 Release

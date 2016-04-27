@@ -1,0 +1,11 @@
+h1. asset:assetPathExists
+
+h2. Description
+
+If an asset with the specified path exists, the body of this tag will be rendered, e.g.
+
+{code}
+<asset:assetPathExists src="foo/test.js">
+This will only be displayed if there is an asset at foo/test.js
+</asset:assetPathExists>
+{code}

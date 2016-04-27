@@ -1,0 +1,18 @@
+The new asset-pipeline brings with it a host of new features and improvements. The plugin is no longer restricted to the grails Framework but can be adapted and extended to work with any framework that runs on the JVM. This can provide a more consistent workspace for dealing with many applications on your stack.
+
+h3. New Features
+
+* UglifyJs Replaced by Closure Compiler
+* Sourcemaps Generated on Minification of Js (Easier debugging in Production)
+* Custom Asset Resolvers adds support for Binary Grails Plugins
+* Up to 2x Compiling speed improvements
+* Transpiling ES6 to ES5 support
+* Cleaner Extensibility
+
+h3. Upgrading to 2.0
+
+It is important to note that the asset-pipeline plugins that were created before 2.0 will not be immediately compatible. While the updates are minor, third party plugins will have to update to be compatible with 2.0. If possible they should publish gradle builds to maven central so their plugin works with more than just the Grails web stack.
+
+Another important change is the backwards compatibility. Asset-Pipeline 2.0 is designed to support Grails all the way back to 2.2.0. Anything less than this will more than likely not work correctly. Also the asset-pipeline minimum JVM version has moved up to version 7. This had to be done to facilitate requirements for the new minification library as well as the java nio helpers for file pattern matching.
+
+Some configuration syntax has changed with relation to minification. Please see the Configuration section of the docs for more information on this. The section on extending the asset-pipeline has also been updated to provide information on how this might be accomplished now. 

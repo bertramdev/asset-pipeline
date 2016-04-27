@@ -1,0 +1,2 @@
+--Output from finds assets when calling for resource in dev mode--
+--Output from finds asset of image type when calling for resource in dev mode--

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="davids-macbook.local" name="asset.pipeline.grails.AssetsTagLibSpec" skipped="0" tests="18" time="2.081" timestamp="2016-04-22T16:46:14">
+  <properties />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return assetPath" time="0.379" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return javascript link tag when debugMode is off" time="0.108" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should always return javascript link tag when bundle attr is &apos;true&apos;" time="0.022" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return javascript link tag with seperated files when debugMode is on" time="0.048" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return stylesheet link tag when debugMode is off" time="0.024" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should always return stylesheet link tag when bundle attr is &apos;true&apos;" time="0.013" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return stylesheet link tag with seperated files when debugMode is on" time="0.022" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return image tag" time="0.022" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return image tag with absolute path" time="0.017" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should return link tag" time="0.014" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="test if asset path exists in dev mode" time="0.03" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="test if asset path is missing in dev mode" time="0.017" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="test if asset path exists in dev mode and closure renders the body" time="0.259" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="test if asset path is missing in dev mode and closure doesn&apos;t render the body" time="0.254" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="test if asset path exists in prod mode" time="0.018" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="asset path should not exist in dev mode" time="0.027" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should render deferred scripts" time="0.48" />
+  <testcase classname="asset.pipeline.grails.AssetsTagLibSpec" name="should render deferred scripts and evaluate nested groovy expressions" time="0.306" />
+  <system-out><![CDATA[--Output from should return assetPath--
+--Output from should return javascript link tag when debugMode is off--
+--Output from should always return javascript link tag when bundle attr is 'true'--
+--Output from should return javascript link tag with seperated files when debugMode is on--
+--Output from should return stylesheet link tag when debugMode is off--
+--Output from should always return stylesheet link tag when bundle attr is 'true'--
+--Output from should return stylesheet link tag with seperated files when debugMode is on--
+--Output from should return image tag--
+--Output from should return image tag with absolute path--
+--Output from should return link tag--
+--Output from test if asset path exists in dev mode--
+--Output from test if asset path is missing in dev mode--
+--Output from test if asset path exists in dev mode and closure renders the body--
+--Output from test if asset path is missing in dev mode and closure doesn't render the body--
+--Output from test if asset path exists in prod mode--
+--Output from asset path should not exist in dev mode--
+--Output from should render deferred scripts--
+--Output from should render deferred scripts and evaluate nested groovy expressions--
+]]></system-out>
+  <system-err><![CDATA[--Output from should return assetPath--
+--Output from should return javascript link tag when debugMode is off--
+--Output from should always return javascript link tag when bundle attr is 'true'--
+--Output from should return javascript link tag with seperated files when debugMode is on--
+--Output from should return stylesheet link tag when debugMode is off--
+--Output from should always return stylesheet link tag when bundle attr is 'true'--
+--Output from should return stylesheet link tag with seperated files when debugMode is on--
+--Output from should return image tag--
+--Output from should return image tag with absolute path--
+--Output from should return link tag--
+--Output from test if asset path exists in dev mode--
+--Output from test if asset path is missing in dev mode--
+--Output from test if asset path exists in dev mode and closure renders the body--
+--Output from test if asset path is missing in dev mode and closure doesn't render the body--
+--Output from test if asset path exists in prod mode--
+--Output from asset path should not exist in dev mode--
+--Output from should render deferred scripts--
+--Output from should render deferred scripts and evaluate nested groovy expressions--
+]]></system-err>
+</testsuite>

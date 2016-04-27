@@ -6,6 +6,8 @@ build/
 *.ipr
 *.iws
 .idea/
+asset-pipeline-site/src/assets/html/manual/
+asset-pipeline-site/src/assets/html/apidoc/
 gradle.properties
 .jruby-container
 .sass-cache

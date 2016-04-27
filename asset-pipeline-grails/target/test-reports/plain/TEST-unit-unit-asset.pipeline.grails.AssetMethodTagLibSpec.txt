@@ -1,0 +1,10 @@
+Testsuite: asset.pipeline.grails.AssetMethodTagLibSpec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.907 sec
+------------- Standard Output ---------------
+--Output from should return assetPath--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from should return assetPath--
+------------- ---------------- ---------------
+
+Testcase: should return assetPath took 3.782 sec

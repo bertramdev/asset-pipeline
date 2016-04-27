@@ -1,0 +1,8 @@
+--Output from gets entire tree when required--
+--Output from gets dependency list flattened with all files--
+--Output from gets dependency list flattened with all files from require_full_tree--
+--Output from evaluates GString directives if detected--
+--Output from gets dependency list order correct--
+--Output from gets dependency list order correct when multiple dependencies are defined in one directive--
+--Output from gets dependency list with tree directive that has an absolute and relative path--
+--Output from gets dependency list with full_tree directive that has an absolute and relative path--

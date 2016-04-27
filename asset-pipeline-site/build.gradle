@@ -43,10 +43,16 @@ assets {
 }
 // project(':common:shared').projectDir
 
-task copyManual(type: Copy, dependsOn: ':asset-pipeline-core:groovydoc') {
+task copyApiDoc(type: Copy, dependsOn: ':asset-pipeline-core:groovydoc') {
     from new File(project(':asset-pipeline-core').buildDir,'/docs/groovydoc')
     into 'src/assets/html/apidoc/'
 }
 
+task copyManual(type: Copy, dependsOn: ':asset-pipeline-grails:docs') {
+    from new File(project(':asset-pipeline-grails').buildDir,'/docs/manual')
+    into 'src/assets/html/manual/'
+}
+
+tasks.processResources.dependsOn copyApiDoc
 tasks.processResources.dependsOn copyManual
 // tasks.assetCompile.dependsOn copyManual

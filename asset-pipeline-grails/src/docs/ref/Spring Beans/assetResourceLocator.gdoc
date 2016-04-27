@@ -1,0 +1,17 @@
+h1. assetResourceLocator
+
+h2. Description
+
+This bean implements the [ResourceLocator|http://grails.org/doc/latest/api/org/codehaus/groovy/grails/core/io/ResourceLocator.html] interface,
+adding one additional method that returns a [Resource|http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/core/io/Resource.html] instance,
+given an asset's URI
+
+{code}
+class ExampleService {
+  def assetResourceLocator
+
+  def someMethod() {
+    Resource testCssResource = assetResourceLocator.findAssetForURI('test.css')
+  }
+}
+{code}

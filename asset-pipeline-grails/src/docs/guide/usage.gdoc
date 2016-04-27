@@ -1,0 +1,123 @@
+Asset-Pipeline automatically creates a series of folders within your @grails-app@ directory:
+
+{code}
+grails-app/assets/javascripts
+grails-app/assets/images
+grails-app/assets/stylesheets
+{code}
+
+Place your static assets in those directories and simply include them in your layouts.
+
+h3. Setting up Manifests
+
+Example @grails-app/assets/javascripts/application.js@:
+
+{code}
+//This is a JavaScript file with its top level require directives
+//= require jquery
+//= require app/models.js
+//= require_tree views
+//= require_self
+
+console.log("This is my javascript manifest");
+{code}
+
+The above is an example of some of the require directives that can be used. Custom directives can be created and overridden into the @DirectiveProcessor@ class.
+
+{note}
+These directives can be used across ALL of your files. A dependency graph is built from the recursive require tree and a proper order is determined.
+{note}
+
+Optionally, assets can be excluded from processing if included by your require tree. This can dramatically reduce compile time for your assets. To do so, simply leverage the excludes configuration option:
+
+{code}
+grails.assets.excludes = ["tiny_mce/src/*.js"]
+{code}
+
+Or Exclude at the plugin level:
+
+{code}
+grails.assets.plugin."twitter-bootstrap".excludes = ["**/*.less"]
+grails.assets.plugin."twitter-bootstrap".includes = ["bootstrap.less"]
+{code}
+
+The above will tell asset-pipeline not to precompile less files individually within the twitter-bootstrap plugin, but will compile bootstrap.less.
+
+It is also possible to exclude files from minification
+
+{code}
+grails.assets.minifyOptions.excludes = ["**/*.min.js"]
+{code}
+
+h4. Partials
+
+Another piece of information to know is that files that are prefixed with @_@ Are not compiled individually by the asset-pipeline. These files are considered partials and should be required into another manifest file for compilation.
+If, in the event, you need to add these files back to the precompile phase you can define a global includes property like so.
+
+{code}
+grails.assets.includes = ["**/_*.*"]
+{code}
+
+h3. Including Assets in Views
+
+Asset pipeline provides several new tag libs for including JavaScript and CSS into your GSP files. For example:
+
+{code}
+<head>
+    <asset:stylesheet href="application.css"/>
+    <asset:javascript src="application.js"/>
+    <asset:link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+</head>
+{code}
+
+These helpers will automatically adjust to point to the cache-digested versions of the files when running in a non-development environment.
+
+{note}
+In development mode your stylesheets and scripts will be included as individual script tags. This is intended to make it easier for debugging. Bundling is enabled in all other environments and can be forced in development mode by adding @grails.assets.bundle=true@ to your @Config.groovy@ or setting the @bundle="true"@ attribute on the taglib.
+{note}
+
+h3. Using with Plugins
+
+Asset pipeline makes it easy to serve assets from within plugins. It's actually quite simple. The @grails-app/assets@, and @web-app@ (for legacy plugin support) folders from all plugins are considered include paths. Essentially, when a file is requested (e.g. @jquery.js@), the Asset-Pipeline first will check the local applications assets folder. If not found there, it will scan through all the installed plugins and serve the requested file. This has the added benefit of allowing you to override a plugins copy of a JavaScript file in your local project.
+
+h3. Using with Stylesheets
+
+Asset Pipeline now automatically tries to convert relative URLs specified in your CSS files to absolute paths. This makes it easier to use third party libraries within the Asset-Pipeline stack.
+
+h3. Precompiling for Production
+
+Assets are now automatically precompiled into @target/assets@ when you create a war file. This should further simplify the deployment process. During WAR creation, only the changed assets are compiled making your precompiler phase a bit quicker. If, for any reason, you want to ensure a clean assets folder, feel free to run @grails asset-clean@.
+
+During WAR build your assets are also minified using Closure Compiler. To disable this feature, you can add the following option to your config:
+
+{code}
+grails.assets.minifyJs = false
+{code}
+
+h3. Serving Assets from External Storage Directory
+
+Asset Pipeline can be configured to copy your assets files out to an external storage path. This can be useful for setting up your web server (e.g. nginx) to directly serve your static assets. To do so, simply define a config variable in your @Config.groovy@ environment block.
+
+{code}
+environments {
+    production {
+        grails.assets.storagePath = "/full/path/to/storage"
+    }
+}
+{code}
+
+It is also possible to configure a custom CDN asset URL for serving these assets:
+
+{code}
+environments {
+    production {
+        grails.assets.url = "http://s3.amazonaws.com/asset-pipe/assets/"
+    }
+}
+{code}
+
+h3. Custom Files
+
+Asset Pipeline uses classes of type @AssetFile@. By default, this plugin comes with a @JsAssetFile@, and @CssAssetFile@. These define the match pattern syntax for understanding requires directives, known extensions, processors, and content-type. The application bases its file look-up on content-type of the request rather than extension. This allows the user to maybe define a @CoffeeAssetFile@ with the JavaScript content type and a request to @localhost/assets/app.js@ would be able to find @assets/app.coffee@. To add custom file definitions you must add the definition in 2 locations:
+
+Create a @META-INF/asset-pipeline/asset.specs@ file with the name of your class file (line seperated) to be added to the list of valid implementations. For more information check out the section on extending the asset-pipeline.

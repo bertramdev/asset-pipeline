@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="davids-macbook.local" name="asset.pipeline.grails.CachingLinkGeneratorSpec" skipped="0" tests="4" time="0.064" timestamp="2016-04-22T16:46:21">
+  <properties />
+  <testcase classname="asset.pipeline.grails.CachingLinkGeneratorSpec" name="finds assets when calling for resource in dev mode" time="0.034" />
+  <testcase classname="asset.pipeline.grails.CachingLinkGeneratorSpec" name="finds assets with absolute path when calling for resource in dev mode" time="0.008" />
+  <testcase classname="asset.pipeline.grails.CachingLinkGeneratorSpec" name="finds asset in precompiled (prod) mode" time="0.01" />
+  <testcase classname="asset.pipeline.grails.CachingLinkGeneratorSpec" name="falls back to standard resource lookup if not found in asset pipeline" time="0.008" />
+  <system-out><![CDATA[--Output from finds assets when calling for resource in dev mode--
+--Output from finds assets with absolute path when calling for resource in dev mode--
+--Output from finds asset in precompiled (prod) mode--
+--Output from falls back to standard resource lookup if not found in asset pipeline--
+]]></system-out>
+  <system-err><![CDATA[--Output from finds assets when calling for resource in dev mode--
+--Output from finds assets with absolute path when calling for resource in dev mode--
+--Output from finds asset in precompiled (prod) mode--
+--Output from falls back to standard resource lookup if not found in asset pipeline--
+]]></system-err>
+</testsuite>

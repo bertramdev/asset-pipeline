@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="davids-macbook.local" name="asset.pipeline.grails.AssetMethodTagLibSpec" skipped="0" tests="1" time="3.907" timestamp="2016-04-22T16:46:08">
+  <properties />
+  <testcase classname="asset.pipeline.grails.AssetMethodTagLibSpec" name="should return assetPath" time="3.782" />
+  <system-out><![CDATA[--Output from should return assetPath--
+]]></system-out>
+  <system-err><![CDATA[--Output from should return assetPath--
+]]></system-err>
+</testsuite>

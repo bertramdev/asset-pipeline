@@ -1,0 +1,79 @@
+Asset-Pipeline has several customizable options to tweak the compiler to suit your needs. Below is a list of the various configuration options and explanations for how to use them
+
+h3. Excludes and Includes
+
+Certain files are not needed for compilation in production. This can be configured globally or for a specific plugin by using the provided configuration options:
+
+{table}
+*Property* | *Value*
+grails.assets.excludes | \["tiny_mce/src/\*.js"]
+grails.assets.plugin."twitter-bootstrap".excludes | \["\*\*/\*.less"]
+grails.assets.plugin."twitter-bootstrap".includes | \["bootstrap.less"]
+{table}
+
+Above you will notice the use of an includes. An includes allows you to override a specific file after the excludes scan has already been performed. The above example makes sure the @bootstrap.less@ file can be compiled from the @twitter-bootstrap plugin@.
+
+h3. Minification
+
+The Asset-pipeline comes with the newer version of Closure Compiler to minify your JavaScript assets. This is great for compression and a few options are provided to tune the minifier. Closure can be enabled/disabled entirely as well as configured via various options.
+
+{table}
+*Property* | *Value* | *Default*
+grails.assets.minifyJs | *true* or *false* | *true*
+grails.assets.minifyCss | *true* or *false* | *true*
+grails.assets.enableSourceMaps | *true* or *false* | *true*
+grails.assets.minifyOptions | *Map* | (see below)
+grails.assets.skipNonDigests | *true* or *false* | *true*
+{table}
+
+
+{note}
+It is normally not necessary to turn off 'skipNonDigests'. Tomcat will automatically still serve files by non digest name and will copy them out using storagePath via the `manifest.properties` alias map.
+This simply cuts storage in half. However, if you are attempting to do things like upload to a cdn outside of the cdn-asset-pipeline plugin and via the contents of 'target/assets'. This may still be useful.
+{note}
+
+{code}
+grails.assets.minifyOptions = [
+    languageMode: 'ES5',
+    targetLanguage: 'ES5', //Can go from ES6 to ES5 for those bleeding edgers
+    optimizationLevel: 'SIMPLE' //Or ADVANCED or WHITESPACE_ONLY
+]
+{code}
+
+Above are the default values for the majority of Closure Compiler. For specifics on what these options do please refer to the documentation for Closure Compiler.
+
+h3. Mappings and Asset Taglib URLs
+
+In many cases you may want to change the URL for which to include your static assets. This can be useful when using a CDN or perhaps even using nginx to serve your static assets.
+
+To change the URL for your taglibs use the following configuration option:
+
+{code}
+grails.assets.url = "http://cdn.example.com/"
+{code}
+
+Now your files are gonna reference the CDN when running in the production environment. To go with this feature, you can have your application automatically copy your asset files out of your base WAR file on startup of your application. Optionally the asset URL config can also be defined as a closure that takes a request argument.
+
+{code}
+grails.assets.url = { request ->
+	if(request.isSecure()) {
+		return "https://cdn.example.com/"
+	} else {
+		return "http://cdn.example.com/"
+	}
+}
+{code}
+
+This allows more fine grained control of your asset URLs based on the incoming request. An example, might be SSL detection or even changing CDN region by source IP.
+
+{code}
+grails.assets.storagePath = "/var/cdn/path"
+{code}
+
+You can also change the default Tomcat path for both debugging and file inclusion using the @mapping@ config option.
+
+{code}
+grails.assets.mapping = 'assets'
+{code}
+
+For all these configuration options, you will want to put these config values in the appropriate environment in Config.groovy.

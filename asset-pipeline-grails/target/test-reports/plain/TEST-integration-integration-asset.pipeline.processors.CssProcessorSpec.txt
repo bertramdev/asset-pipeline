@@ -1,0 +1,13 @@
+Testsuite: asset.pipeline.processors.CssProcessorSpec
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.116 sec
+------------- Standard Output ---------------
+--Output from replaces image urls with relative paths--
+--Output from replaces image urls with relative paths and cache digest names in precompiler mode--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from replaces image urls with relative paths--
+--Output from replaces image urls with relative paths and cache digest names in precompiler mode--
+------------- ---------------- ---------------
+
+Testcase: replaces image urls with relative paths took 0.071 sec
+Testcase: replaces image urls with relative paths and cache digest names in precompiler mode took 0.044 sec

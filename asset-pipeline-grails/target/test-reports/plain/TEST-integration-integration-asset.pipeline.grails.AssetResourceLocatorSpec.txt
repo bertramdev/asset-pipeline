@@ -1,0 +1,13 @@
+Testsuite: asset.pipeline.grails.AssetResourceLocatorSpec
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 sec
+------------- Standard Output ---------------
+--Output from finds assets when calling for resource in dev mode--
+--Output from finds asset of image type when calling for resource in dev mode--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from finds assets when calling for resource in dev mode--
+--Output from finds asset of image type when calling for resource in dev mode--
+------------- ---------------- ---------------
+
+Testcase: finds assets when calling for resource in dev mode took 0.024 sec
+Testcase: finds asset of image type when calling for resource in dev mode took 0.033 sec

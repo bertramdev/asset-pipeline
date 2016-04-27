@@ -1,0 +1,18 @@
+h1. asset:assetPath
+
+h2. Description
+
+Returns the runtime URL of an asset. This tag automatically handle swapout of cache digest names during production
+use as well as any custom URL mapping changes, e.g.
+
+{code}
+<link href="${assetPath(src: 'manifest.json')}"/>
+{code}
+
+h2. Attributes
+
+{table}
+*Name* | *Required* | *Description*
+*src* | Yes | Path to the asset from @grails-app/assets@ (excluding the first subdirectory)
+*absolute* | No | If truthy, an absolute URL will be returned. By default, a relative URL is used.
+{table}

@@ -1,0 +1,22 @@
+The Grails Asset-Pipeline is a plugin used for managing and processing static assets in [Grails|http://grails.org] applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
+
+This guide documents the configuration needed to setup the plugin and provides sample code on how to use it.
+
+h3. Relation to Resources Plugin
+
+Asset-Pipeline is intended to replace the de facto Grails equivalent [resources-plugin|http://grails.org/plugin/resources] with a more efficient, developer friendly architecture (similar to [Rails Asset Pipeline|http://guides.rubyonrails.org/asset_pipeline.html]). The Asset-Pipeline leverages the latest in minification (UglifyJS) to reduce your asset sizes as much as possible. A few differences between the resources plugin and asset-pipeline include:
+
+* On the fly processing - No more waiting for your assets to reload after making a change
+* Compiled assets on war create - No more hanging up application boot times while processing files. @grails war@
+* Reduced Dependence - The plugin has compression, minification, and cache-digests built in.
+* Easy Debugging - Makes for easy debugging by keeping files seperate in development mode.
+* Simpler manifests and taglibs - Read on for more information.
+
+h3. Additional Information
+
+* [CoffeeScript Asset-Pipeline Plugin|https://github.com/bertramdev/coffee-grails-asset-pipeline]
+* [LESS CSS Asset-Pipeline Plugin|https://github.com/bertramdev/less-grails-asset-pipeline]
+* [SASS/SCSS Compass Asset-Pipeline Plugin|https://github.com/bertramdev/sass-grails-asset-pipeline]
+* [Handlebars Asset-Pipeline Plugin|https://github.com/bertramdev/handlebars-grails-asset-pipeline]
+* [Ember Asset-Pipeline Plugin|https://github.com/bertramdev/ember-grails-asset-pipeline]
+* [Rails Asset Pipeline Guide|http://guides.rubyonrails.org/asset_pipeline.html]
