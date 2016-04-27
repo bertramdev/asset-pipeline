@@ -65,6 +65,7 @@ bintray {
     publish=true
     publications = ['maven']
     pkg {
+        githubRepo = 'bertramdev/asset-pipeline' //Optional Github repository
         githubReleaseNotesFile = 'README.md' //Optional Github readme file
         repo = 'asset-pipeline'
         userOrg = 'bertramlabs'
