@@ -6,6 +6,7 @@ buildscript {
   dependencies {
     classpath "io.ratpack:ratpack-gradle:1.2.0"
     classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+    classpath "com.bertramlabs.plugins:morpheus-gradle:0.1.2"
 //    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.7.5"
   }
 }
@@ -19,6 +20,7 @@ apply plugin: "io.ratpack.ratpack-groovy"
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: "idea"
 apply plugin: 'asset-pipeline'
+apply plugin: 'morpheus'
 
 repositories {
   jcenter()
@@ -53,6 +55,23 @@ task copyManual(type: Copy, dependsOn: ':asset-pipeline-grails:docs') {
     into 'src/assets/html/manual/'
 }
 
+morpheus {
+  if(project.hasProperty('morpheusUser')) {
+      morpheusUser = project.morpheusUser
+      morpheusPassword = project.morpheusPassword
+  }
+  applianceUrl = 'https://v2.morpheusdata.com'
+  instance 'Asset-Pipeline Site'
+  from {
+    resolverPath = new File(project(':asset-pipeline-site').buildDir, '/libs').canonicalPath
+    includes = ["asset-pipeline-site-${version}-all.jar"]
+  }
+  deployConfiguration = [
+    javaCommand: "-Dratpack.port=8080 -jar asset-pipeline-site-${version}-all.jar"
+  ]
+}
+
+tasks.morpheusDeploy.dependsOn tasks.shadowJar
 tasks.processResources.dependsOn copyApiDoc
 tasks.processResources.dependsOn copyManual
 // tasks.assetCompile.dependsOn copyManual

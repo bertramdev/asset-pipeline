@@ -8,7 +8,7 @@ build/
 .idea/
 asset-pipeline-site/src/assets/html/manual/
 asset-pipeline-site/src/assets/html/apidoc/
-gradle.properties
+.asscache
 .jruby-container
 .sass-cache
 .sass-work

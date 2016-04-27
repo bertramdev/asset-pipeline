@@ -37,7 +37,7 @@ sourceSets {
 ext {
     isReleaseVersion = !version.endsWith("SNAPSHOT")
     slf4jVersion = "1.7.10"
-    ratpackVersion = "1.3.0"
+    ratpackVersion = "1.3.2"
     spockVersion = "1.0-groovy-2.4"
     cglibVersion = "2.2.2"
     objenesisVersion = "2.1"
