@@ -20,11 +20,17 @@ public class AssetPipelineResponseBuilder {
         this.ifNoneMatchHeader = ifNoneMatchHeader
         this.ifModifiedSinceHeader = ifModifiedSinceHeader
 		this.lastModifiedDate = lastModifiedDate
+        boolean digestVersion = isDigestVersion()
 		if(!checkDateChanged()) {
 			statusCode = 304
 		} else if (checkETag()) {
             headers['Vary'] = 'Accept-Encoding'
-            headers['Cache-Control'] = 'public, max-age=31536000'
+            if(digestVersion) {
+                headers['Cache-Control'] = 'public, max-age=31536000'    
+            } else {
+                headers['Cache-Control'] = 'no-cache'
+            }
+            
         }
     }
 
@@ -45,6 +51,15 @@ public class AssetPipelineResponseBuilder {
 
         Properties manifest = AssetPipelineConfigHolder.manifest
         return "\"" + (manifest?.getProperty(manifestPath) ?: manifestPath) + "\""
+    }
+
+    public boolean isDigestVersion() {
+        String manifestPath = uri
+        if (uri.startsWith('/')) {
+            manifestPath = uri.substring(1) //Omit forward slash
+        }
+        Properties manifest = AssetPipelineConfigHolder.manifest
+        return manifest?.getProperty(manifestPath,null) ? true : false
     }
 
     public Boolean checkETag() {
