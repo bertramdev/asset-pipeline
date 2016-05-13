@@ -31,6 +31,7 @@ class AssetPipelineExtension {
     boolean enableGzip = true
     boolean packagePlugin=false
     boolean developmentRuntime=true
+    boolean verbose = true
     String compileDir = 'build/assets'
     String assetsPath = 'src/assets'
 	String jarTaskName

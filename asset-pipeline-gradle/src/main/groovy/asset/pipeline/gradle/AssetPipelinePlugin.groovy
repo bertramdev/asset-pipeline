@@ -110,6 +110,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 enableSourceMaps = assetPipeline.enableSourceMaps
                 resolvers = assetPipeline.resolvers
                 enableGzip = assetPipeline.enableGzip
+                verbose = assetPipeline.verbose
             }
 
             if(distributionContainer) {

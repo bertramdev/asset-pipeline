@@ -137,6 +137,17 @@ class AssetCompile extends DefaultTask {
 
     @Input
     @Optional
+    boolean getVerbose() {
+        pipelineExtension.verbose
+    }
+
+    void setVerbose(boolean verbose) {
+        pipelineExtension.verbose = verbose
+    }
+
+
+    @Input
+    @Optional
     Map getConfigOptions() {
         pipelineExtension.configOptions
     }
@@ -203,7 +214,8 @@ class AssetCompile extends DefaultTask {
         registerResolvers()     
         loadAssetSpecifications()
         
-        def assetCompiler = new AssetCompiler(pipelineExtension.toMap(),new GradleEventListener())
+        def listener = verbose ? new GradleEventListener() : null
+        def assetCompiler = new AssetCompiler(pipelineExtension.toMap(), listener)
         assetCompiler.excludeRules.default = pipelineExtension.excludes
         assetCompiler.includeRules.default = pipelineExtension.includes
         assetCompiler.compile()
