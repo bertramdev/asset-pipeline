@@ -1,6 +1,6 @@
-SASS Asset Pipeline
+Compass Asset Pipeline
 ==========================
-The `sass-asset-pipeline:2.3.0` is a plugin that provides SASS/Compass support for the asset-pipeline static asset management plugin via compass.
+The `compass-asset-pipeline:2.3.0` is a plugin that provides SASS/Compass support for the asset-pipeline static asset management plugin via compass and jruby.
 
 For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
 
