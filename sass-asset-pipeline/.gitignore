@@ -1,0 +1,8 @@
+.DS_Store
+.gradle
+gradle.properties
+build/
+.asscache
+.idea/
+*.iml
+classes/
