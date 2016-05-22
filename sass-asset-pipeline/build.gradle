@@ -40,7 +40,7 @@ sourceSets {
 }
 
 dependencies {
-    provided 'org.codehaus.groovy:groovy-all:2.0.7'
+    provided 'org.codehaus.groovy:groovy-all:2.0.5'
 	compile project(':asset-pipeline-core')
     compile 'log4j:log4j:1.2.17'
     compile 'io.bit3:jsass:5.1.0'
