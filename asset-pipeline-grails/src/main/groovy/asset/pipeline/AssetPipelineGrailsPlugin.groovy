@@ -47,15 +47,15 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
     void doWithApplicationContext() {
         //Register Plugin Paths
         def ctx = applicationContext
-        AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('application',"${BuildSettings.BASE_DIR}/grails-app/assets"))    
-        
+        AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('application',"${BuildSettings.BASE_DIR}/grails-app/assets"))
+
         try {
             ctx.pluginManager.getAllPlugins()?.each { plugin ->
                 if(plugin instanceof BinaryGrailsPlugin) {
                     def projectDirectory = plugin.getProjectDirectory()
                     if(projectDirectory) {
-                        String assetPath = new File(plugin.getProjectDirectory(),"grails-app/assets").canonicalPath 
-                        AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver(plugin.name,assetPath))    
+                        String assetPath = new File(plugin.getProjectDirectory(),"grails-app/assets").canonicalPath
+                        AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver(plugin.name,assetPath))
                     }
                 }
             }
@@ -74,7 +74,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
 
         def manifestProps = new Properties()
         def manifestFile
-        
+
 
         try {
             manifestFile = applicationContext.getResource("assets/manifest.properties")
@@ -98,7 +98,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
 
 
         AssetPipelineConfigHolder.config = assetsConfig
-        AssetPipelineConfigHolder.config.cacheLocation = new File(BuildSettings.TARGET_DIR,".asscache").canonicalPath
+        AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".asscache").canonicalPath
         // Register Link Generator
         String serverURL = config?.getProperty('grails.serverURL', String, null)
         boolean cacheUrls = config?.getProperty('grails.web.linkGenerator.useCache', Boolean, true)
