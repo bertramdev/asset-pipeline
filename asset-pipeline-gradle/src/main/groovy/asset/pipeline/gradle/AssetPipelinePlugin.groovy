@@ -72,11 +72,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
             def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
             ProcessResources processResources
             DistributionContainer distributionContainer
-            try {
-                processResources = (ProcessResources) project.tasks.processResources
-            } catch(UnknownTaskException ex) {
-                //we dont care this is just to see if it exists
-            }
+            processResources = (ProcessResources) project.tasks.findByName('processResources')
             try {
                 distributionContainer = project.extensions.getByType(DistributionContainer)
             } catch(UnknownDomainObjectException ex) {
