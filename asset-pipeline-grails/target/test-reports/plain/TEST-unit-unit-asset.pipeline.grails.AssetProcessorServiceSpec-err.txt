@@ -1,4 +1,0 @@
---Output from asset mapping can be configured--
---Output from can get flattened dependency list--
---Output from can serve unprocessed asset for dev debug--
---Output from can serve compiled assets--

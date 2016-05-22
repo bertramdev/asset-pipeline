@@ -1,7 +1,0 @@
---Output from gets a javascript file from a uri--
---Output from gets a javascript file given a uri and content type application/javascript--
---Output from gets a javascript file given a uri and content type application/x-javascript--
---Output from gets a javascript file given a uri and content type text/javascript--
---Output from gets a javascript file given a uri and extension()--
---Output from gets a javascript file of different extension given a uri and content type--
---Output from returns null if javascript file doesn't exist--
