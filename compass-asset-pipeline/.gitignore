@@ -1,8 +1,6 @@
 .DS_Store
 .gradle
 gradle.properties
+.jruby-container
+.sass-cache
 build/
-.asscache
-.idea/
-*.iml
-classes/

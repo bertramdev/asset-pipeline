@@ -33,9 +33,10 @@ configurations {
 sourceSets {
     main {
         compileClasspath += configurations.provided
-    }
-    test {
-        compileClasspath += configurations.provided
+        resources{
+            srcDir 'src/main/resources'
+            srcDir 'src/main/ruby'
+        }
     }
 }
 
@@ -43,9 +44,10 @@ dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.0.7'
 	compile project(':asset-pipeline-core')
     compile 'log4j:log4j:1.2.17'
-    compile 'io.bit3:jsass:5.1.0'
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testRuntime 'org.slf4j:slf4j-simple:1.7.21'
+    compile 'org.jruby:jruby-complete:1.7.11'
+	// compile 'org.jruby:jruby-complete:9.0.1.0'
+    compile 'com.bertramlabs.plugins:jruby-container:0.6.1'
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 }
 
 publishing {
@@ -56,7 +58,7 @@ publishing {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'sass-asset-pipeline'
-                    description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
+                    description 'Provides SASS Compiling support for the Asset-Pipeline library.'
                     url 'https://github.com/bertramdev/sass-asset-pipeline'
                     scm {
                         url 'https://github.com/bertramdev/sass-asset-pipeline'
@@ -72,9 +74,9 @@ publishing {
                     }
                     developers {
                         developer {
-                            id 'gferon'
-                            name 'Gabriel Féron'
-                            email 'feron.gabriel@gmail.com'
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
                         }
                     }
                 }

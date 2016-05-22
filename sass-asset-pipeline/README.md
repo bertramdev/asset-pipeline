@@ -1,27 +1,24 @@
 SASS Asset Pipeline
 ==========================
-The `sass-asset-pipeline:2.3.0` is a plugin that provides SASS/Compass support for the asset-pipeline static asset management plugin via compass.
+The `sass-asset-pipeline` is a plugin that provides SASS / SCSS support for the asset-pipeline static asset management plugin using [jsass](https://github.com/bit3/jsass), a Java wrapper around the native library  [libsass](https://github.com/sass/libsass) - the future of Sass compilation.
+
+The version numbering is synced on [jsass](https://github.com/bit3/jsass) versions, the underlying library used by this plugin.
 
 For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
 
 Configuration
 -------------
 
-This plugin can be configured to load/require alternate gems for use with the sass command.
-This can be done via the asset-pipeline config for the respective framework in use:
-
-```groovy
-grails.assets.sass.gems = ['bourbon':'4.1.1'] 
-```
-
-**NOTE:** This plugin now utilizes `compass:1.0.1` . The previous series of sass-asset-pipeline used `0.7.x`.
+Configuration is only supported for two properties:
+* sass.sourceComments = true
+* sass.outputStyle = OutputStyle.EXPANDED, OutputStyle.COMPACT, OutputStyle.COMPRESSED or OutputStyle.NESTED
 
 Usage
 -----
-Simply create `scss` or `sass` files in your assets folder. 
+Simply create `scss` or `sass` files in your assets folder.
 
-
-Thinks to be done
+Things to be done
 -----------------
 
-* Fix Compass Sprite Generation
+* Add more configuration options
+* Find a way to generate proper source maps with full paths
