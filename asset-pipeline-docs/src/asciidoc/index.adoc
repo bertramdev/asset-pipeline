@@ -1,0 +1,15 @@
+= Asset Pipeline Users Guide
+David Estes <davydotcom@gmail.com>
+{project-version}
+
+:homepage: http://asset-pipeline.com
+:apidocs: http://asset-pipeline.com/apidoc/index.html
+
+
+include::introduction.adoc[]
+include::concepts.adoc[]
+include::gradle.adoc[]
+include::grails3.adoc[]
+include::grails2.adoc[]
+include::ratpack.adoc[]
+include::extending.adoc[]

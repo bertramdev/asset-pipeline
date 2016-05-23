@@ -1,0 +1,113 @@
+=== Asset File Definition
+
+The `AssetFile` definition is where our journey begins. This is the defining file for various file types. Without this definition, the asset-pipeline will treat an unknown file type as a standard passthrough resource. As an example, lets first look at the `CssAssetFile` definition.
+
+[source,groovy]
+----
+class CssAssetFile extends AbstractAssetFile {
+  static final String contentType = 'text/css'
+  static extensions = ['css']
+  static compiledExtension = 'css'
+  static processors = [CssProcessor]
+
+  String directiveForLine(String line) {
+    line.find(/\*=(.*)/) { fullMatch, directive -> return directive }
+  }
+}
+----
+
+This file definition is pretty short but allows us to define some very useful information. First, we look at the static definitions at the top of the class. These static definitions are fairly easy to meta-override with Groovy and add additional processors or adjust with added plugins.
+
+The `contentType` property is used to match a file definition with an incoming file request. When the browser requests a `text/css` content-type file , this file is matched and files matching this definition are scanned. The `extensions` list tells asset-pipeline which file extensions to scan through and match. In this case it is just 'css', but in the case of LESS for example, we may be looking for extensions `less`, or `css.less`.
+
+The `compiledExtension` property tells asset-pipelines precompiler what the final file extension should be.
+
+Finally, the `processors` array determines the list of processors that need be run on the file contents before returning a result. This array is executed in order. In this case, we have the `CssProcessor` (a processor for converting the relative image paths and replacing with their cache digested version).
+
+==== Directive Definition
+
+An `assetFile` can specify a REGEXP pattern for require directives. These directives are used to bundle assets together. Some file types don't utilize these require directives and simply returning a null value will cancel directive processing.
+
+[source,groovy]
+----
+  Pattern directivePattern = ~/(?m)\*=(.*)/
+----
+
+NOTE: Used to there was a `directiveForLine` that matched on each individual line. This was changed to support a multiline regex pattern for faster processing.
+
+The example above shows a match pattern for CSS files. This allows it to match require directives for the following example:
+
+[source,groovy]
+----
+/*
+*= require_self
+*= require_file example_b
+*= require_tree .
+*/
+
+body {
+  margin-top:25px;
+}
+----
+
+==== Processing Data Streams
+
+Processors are used to precompile certain assets, and/or adjust the file path contents. The Processor class itself will get a more in depth explanation in the next section. For now, the part we want to look at is the processedStream function.
+
+[source,groovy]
+----
+String processedStream(Boolean precompiler) {
+  def fileText
+  def skipCache = precompiler ?: (!processors || processors.size() == 0)
+
+  if(baseFile?.encoding || encoding) {
+    fileText = file?.getText(baseFile?.encoding ? baseFile.encoding : encoding)
+  } else {
+    fileText = file?.text
+  }
+
+  def md5 = AssetHelper.getByteDigest(fileText.bytes)
+  if(!skipCache) {
+    def cache = CacheManager.findCache(file.canonicalPath, md5)
+    if(cache) {
+      return cache
+    }
+  }
+  for(processor in processors) {
+    def processInstance = processor.newInstance(precompiler)
+    fileText = processInstance.process(fileText, this)
+  }
+
+  if(!skipCache) {
+    CacheManager.createCache(file.canonicalPath,md5,fileText)
+  }
+
+  return fileText
+}
+----
+
+The example above iterates over all of the processor classes defined in our static `processors` variable. This creates a new instance and informs the processor whether this is a developer mode request or being issued by the precompiler (useful for determining if file replacements need to be cache digested or not). The `processedStream` method is now a part of the `AbstractAssetFile` definition and handles cache management if there are processors.
+
+==== Adding the Asset definiton to the list of AssetFiles
+
+Originally we had to add these classes on startup in both runtime and build phases to the `AssetHelper.assetSpecs` array. Thanks to contributions by Graeme Rocher we have been able to simplify this process.
+Simply adding a list file `META-INF/asset-pipeline/asset.specs` to the classpath will automatically get scanned.
+
+Example:
+
+[source,groovy]
+----
+asset.pipeline.HtmlAssetFile
+asset.pipeline.JsAssetFile
+asset.pipeline.CssAssetFile
+----
+
+Another autoscanning file allows us to tack on Processors to already registered AssetFile specifications. This is called the `processor.specs` file and goes in the same `META-INF/asset-pipeline` folder.
+This is a Properties file with the key being the class path of the Processor and the value being a comma delimited list of `AssetFile` classes you want the processor added to.
+
+Example:
+
+[source,groovy]
+----
+asset.pipeline.CssProcessor=asset.pipeline.CssAssetFile,asset.pipeline.LessAssetFile
+----

@@ -1,0 +1,58 @@
+=== Configuration
+
+The asset-pipeline gradle plugin provides several very useful configuration options. An extension called `assets` is automatically added to Gradle when the plugin is applied that provides several options:
+
+[source,groovy]
+.build.gradle
+----
+assets {
+  minifyJs = true
+  minifyCss = true
+  enableSourceMaps = true
+  configOptions = [:] //useful for custom config on extension libraries
+
+  minifyOptions = [
+    optimizationLevel: 'SIMPLE',
+    angularPass: true // Can use @ngInject annotation for Angular Apps
+  ]
+
+  includes = []
+  excludes = ['**/*.less'] //Example Exclude GLOB pattern
+
+  //for plugin packaging
+  packagePlugin=false //set to true if this is a library
+
+  //developmentRuntime can be turned off
+  developmentRuntime=true
+
+  //if you want to customize the jar task this task runs on you can specify a jarTaskName
+  jarTaskName=null
+
+  // Can add custom asset locations (directories or individual jar files)
+  from '/vendor/lib'
+  from '/path/to/file.jar'
+}
+----
+
+The default settings will work for most projects, but if one wanted to add a custom source file location the `from` directive can be quite useful. Asset-pipeline's broad `Resolver` support makes it easy to include assets from a diverse set of locations (even webjars).
+
+A common configuration change for assets may be the includes/excludes patterns. These allow one to specify specific files that should not be individually required or compiled because it does not make sense for them to be individually compiled. In the example above: all `.less` files are excluded. This does not exclude processing however when a `require` directive is used making it very easy to only package and bundle assets that the final website needs. It is also important to note that these patterns do not have to be `GLOB` patterns but can also be regular expressions by prefixing the pattern with `regex:`. By default all files prefixed with an underscore are automatically excluded from individual processing (similar to SASS).
+
+TIP: Tuning the includes/excludes patterns can dramatically reduce the build time of your project.
+
+Some additional options are also provided for configuring what types of output assets are generated:
+
+[source,groovy]
+.build.gradle
+----
+assets {
+  enableDigests = true
+  skipNonDigests = false
+  enableGzip = true
+}
+----
+
+By default both digested named versions of assets as well as non digested named versions are generated as well as the gzip equivalents. Some frameworks dont actually need the non digested named versions ( `ratpack`, `grails`, `spring-boot`, and `servlets`). These frameworks take advantage of the `manifest.properties` file discussed earlier in the documentation to properly map requests for non digested file names to the digested equivalent and preserve compatibility with libraries that may not work well with digested file names.
+
+TIP: Change `skipNonDigests` to true to help reduce the file size of your final generated project.
+

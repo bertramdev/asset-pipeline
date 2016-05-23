@@ -1,0 +1,48 @@
+=== Organization
+
+Asset pipeline organization occurs within the "grails-app/assets" folder. This folder can exist within both the main application as well as a plugin.
+
+NOTE: A plugin will also include its web-app directory to better deal with plugins that wish to support both the resources plugin as well as asset-pipeline.
+
+Within the `grails-app/assets` directory are several subfolders
+
+* `grails-app/assets/javascripts`
+* `grails-app/assets/stylesheets`
+* `grails-app/assets/images`
+
+A common folder that gets added to this set of organization is a "lib" folder. This folder can be useful in organizing third party libraries like jQuery, or Bootstrap.
+
+==== Plugins
+
+Plugins also can have the same "grails-app/assets" folder and their URL mapping is also the same. This means it can be more important to ensure unique naming / path mapping between plugins. This is also powerful in the sense that a plugin can add helper manifests to be used within your apps like jquery, bootstrap, font-awesome, and more.
+
+Plugins should make sure that the `assets { packagePlugin }` property is set to true in their `build.gradle` file otherwise assets will not properly be packaged into the plugin for use by the application.
+
+IMPORTANT: Plugins with assets must have the `packagePlugin` property set to true on the assets extension in `build.gradle`
+
+If, in the event, a file within a plugin needs to be overridden within your application, simply create the same file with the same relative path to `grails-app/assets` and it will override / take precedence over the plugin. More on that later.
+
+NOTE: Since plugins share the same file structure for assets, as well as web-app. It can become more important to "namespace" your plugins by creating further nested folders. (i.e. the plugin SpudCore puts its application.js file within `grails-app/assets/javascripts/spud/admin/application.js`).
+
+==== Search Paths
+
+When a file is referenced via a taglib or a manifest require directive, the asset-pipeline checks for the file in several locations.
+
+First it tries to find the file relative to the manifest including it. For example "admin/application.js" looking for "table.js"
+
+[source,javascript]
+----
+// FileName: admin/application.js
+//= require table
+----
+
+The first place we will look is within `grails-app/assets/javascripts/admin/*` We will proceed to do this within all of the asset sub folders across plugins after the main application is searched.
+
+The next place we will look is the root of all grails-app/assets plugin sub folders (e.g. `grails-app/assets/*/table.js`, and `web-app/*/table.js` for plugins).
+
+Finally all binary plugins are scanned in the `classpath:META-INF/assets` folder, `classpath:META-INF/static` and `classpath:META-INF/resources`.
+
+In all cases, the applications assets folder takes precedence between the search paths, but plugins get scanned as well.
+
+NOTE: These same conditions should be implemented on any preprocessor extension plugin, e.g. LESS-asset-pipeline follows the same scan for @import directives.
+

@@ -1,0 +1,52 @@
+=== Getting Started
+
+In Ratpack assets live in the same place as a standard gradle implementation `src/assets` directory. This folder should contain organizational subdirectories `javascripts`, `images`, and `stylesheets`.
+
+To get started simply add asset-pipeline to your `build.gradle` file (See Gradle usage). And the ratpacks plugin to the dependencies block:
+
+[source,groovy,subs="attributes"]
+----
+dependencies {
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:{project-version}'
+  //Example LESS or Sass Integration
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+}
+----
+
+Finally the `AssetPipelineModule` needs added to the Ratpack Registry.
+
+[source,groovy]
+.ratpack.groovy
+----
+import static ratpack.groovy.Groovy.ratpack
+import asset.pipeline.ratpack.AssetPipelineModule
+
+ratpack {
+  bindings {
+    module(AssetPipelineModule) { cfg ->
+		// by default /assets, change url mapping
+    	// cfg.url("/")
+    	cfg.sourcePath("../../../src/assets")
+    }
+  }
+}
+----
+
+This module does support a few configuration options and due to how the runtime works the sourcePath does need to be specified depending on if ratpack is being run in development from an IDE or gradle directly.
+
+By default a Handler will be registered to the url `/assets` but it is also possible to simply use the `AssetPipelineHandler` directly or even change the base mapping config as seen in the example above.
+
+==== Development Runtime
+
+A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of `FileWatcher`. These results are also cached making it highly performant as your project grows.
+
+Ratpack has great native continuous build integration support with Gradle and in some cases developers may not want to use the development runtime and instead rely on this continuous build flow. To do that simply disable developmentRuntime:
+
+[source,groovy]
+.build.gradle
+----
+assets {
+  developmentRuntime = false
+}
+----

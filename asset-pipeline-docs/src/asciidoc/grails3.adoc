@@ -1,0 +1,9 @@
+[[grails3]]
+== Grails 3
+
+This section of the documentation discusses configuration and setup of the asset-pipeline plugin for Grails 3 based applications. Grails is the first jvm framework the asset-pipeline supported and was officially made standard in Grails 2.4 in order to replace the deprecated `resources` plugin. This also covers differences in the asset-pipeline configuration for development runtime as well as provided taglibs.
+
+include::grails3/getting_started.adoc[]
+include::grails3/configuration.adoc[]
+include::grails3/organization.adoc[]
+include::grails3/taglibs.adoc[]

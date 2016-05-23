@@ -1,0 +1,88 @@
+=== Taglibs
+
+Asset Pipeline adds a few new taglibs to properly reference your assets. These taglibs automatically handle swapout of cache digest names during production use as well as any custom URL mapping changes.
+
+[source,html]
+----
+<head>
+  <asset:javascript src="application.js"/>
+  <asset:stylesheet src="application.css"/>
+</head>
+----
+
+The primary include tags, as shown above, are quite useful for including your relevant JavaScript or stylesheet files. Notice that you do not have to prefix with '/assets', as this is handled automatically by the tag.
+
+In GSP views, you can also reference images included in the asset-pipeline with the following tag:
+
+[source,html]
+----
+<asset:image src="logo.png" width="200" height="200"/>
+----
+
+Assets can also be referenced within subdirectories if required and simply require the use of the relative path.
+
+[source,html]
+----
+<asset:image src="icons/delete.png"/>
+----
+
+It is also possible to return an assetPath as a string for injection in your own tags:
+
+[source,html]
+----
+<link href="${assetPath(src: 'manifest.json')}"/>
+----
+
+It is also possible to execute a code section only if an asset exists or to simply test for existence
+
+[source,html]
+----
+<asset:assetPathExists src="test.js">
+This will only be displayed if the asset exists
+</asset:assetPathExists>
+----
+
+or
+
+[source,html]
+----
+asset.assetPathExists(src: 'test.js') //returns true or false
+----
+
+
+==== Getting Resource
+As of version 0.8.2 a new bean exists called `assetResourceLocator` This can be used to find assets by URI in both development and production mode.
+
+[source,html]
+----
+class ExampleService {
+  def assetResourceLocator
+
+  def someMethod() {
+    Resource myResource = assetResourceLocator.findAssetForURI('test.css')
+  }
+}
+----
+
+
+==== Deferred Scripts
+
+Asset-Pipeline provides a set of tags that can be used to ensure script blocks are deferred to the end of your page. This is not recommended as its not very unobtrusive, but has been added to help newcomers upgrade existing apps from resources.
+
+[source,html]
+----
+<asset:javascript src="application.js" asset-defer/>
+<asset:script type="text/javascript">
+  console.log("Hello World");
+</asset:script>
+<asset:script type="text/javascript">
+  console.log("Hello World 2");
+</asset:script>
+----
+
+Now to render the output of these scripts simply use the following:
+
+[source,gsp]
+----
+<asset:deferredScripts/>
+----

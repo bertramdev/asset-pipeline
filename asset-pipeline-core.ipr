@@ -22,6 +22,7 @@
       <module name="asset-pipeline-gradle" target="1.7"/>
       <module name="asset-pipeline-servlet" target="1.7"/>
       <module name="asset-pipeline-spring-boot" target="1.7"/>
+      <module name="asset-pipeline-grails" target="1.7"/>
     </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="">
@@ -69,6 +70,8 @@
       <module fileurl="file://$PROJECT_DIR$/ratpack-asset-pipeline/ratpack-asset-pipeline.iml" filepath="$PROJECT_DIR$/ratpack-asset-pipeline/ratpack-asset-pipeline.iml"/>
       <module fileurl="file://$PROJECT_DIR$/sass-asset-pipeline/sass-asset-pipeline.iml" filepath="$PROJECT_DIR$/sass-asset-pipeline/sass-asset-pipeline.iml"/>
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml" filepath="$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-grails/asset-pipeline-grails.iml" filepath="$PROJECT_DIR$/asset-pipeline-grails/asset-pipeline-grails.iml"/>
+      <module fileurl="file://$PROJECT_DIR$/compass-asset-pipeline/compass-asset-pipeline.iml" filepath="$PROJECT_DIR$/compass-asset-pipeline/compass-asset-pipeline.iml"/>
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-type="JavaSDK" assert-jdk-15="true" project-jdk-name="1.8">

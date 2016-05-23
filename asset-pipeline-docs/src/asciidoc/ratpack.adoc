@@ -1,0 +1,6 @@
+[[ratpack]]
+== Ratpack
+
+This section of the documentation discusses configuration and setup of the asset-pipeline plugin for https://ratpack.io/[Ratpack] based applications. Ratpack functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Ratpack framework except template url replacement helpers (as this has not been standardized in the framework yet).
+
+include::ratpack/getting_started.adoc[]

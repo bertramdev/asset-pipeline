@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="application.css">
+    <title>Plugins | Asset-Pipeline</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img height="35px" src="assetpipeline_white.svg"/></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-right navbar-nav">
+                <li class="active"><a href="/plugins">Plugins</a></li>
+                <li><a href="/manual/index.html">Manual</a></li>
+                <li><a href="/apidoc/index.html">API Doc</a></li>
+
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid main-container">
+    <div class="container-fluid asspipe-hero">
+        <a href="https://github.com/bertramdev/asset-pipeline"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+        <div class="col-sm-6 text-center col-sm-offset-3">
+            <img src="transparentpipe.svg" class="pipe-hero" width="250"/>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3 text-center">
+            <form class="" action="/plugins" method="GET">
+                <div class="form-group">
+                    <div class="input-group input-lg">
+                        <input type="text" name="phrase" class="form-control input-lg" placeholder="Search Plugins" value="{{phrase}}"/>
+          <span class="input-group-btn">
+          <button class="btn btn-default input-lg" type="submit"><span class="
+glyphicon glyphicon-search"></span></button>
+        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-8 col-sm-offset-2">
+        <h3>Results: {{phrase}}</h3>
+        <hr/>
+        <ul class="list-unstyled plugin-results">
+        {{#each plugins}}
+            <li>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <h4><a href="{{plugin_url}}" target="_blank">{{name}} <small>{{owner}}</small></a></h4>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <small>Latest Version: {{latest_version}}</small>
+                    </div>
+                    <div class="col-xs-12">
+                        <p>
+                            {{desc}}
+                        </p>
+                    </div>
+                    <div class="col-xs-8">
+                        <span class="pluginid small">{{system_id}}:{{latest_version}}</span>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <p class="text-right">
+
+                            {{#if website_url}}
+                            <a href="{{website_url}}" class="btn btn-xs btn-link" target="_blank" title="Website"><span class="glyphicon glyphicon-link"></span></a>
+                            {{/if}}
+                            {{#if issue_tracker_url}}
+                            <a href="{{issue_tracker_url}}" class="btn btn-xs btn-link" target="_blank" title="Issue Tracker"><span class="glyphicon glyphicon-fire"></span></a>
+                            {{/if}}
+                            {{#if vcs_url}}
+                            <a  target="_blank" class="btn btn-xs btn-link" href="{{vcs_url}}" title="Source Code"><span class="
+glyphicon glyphicon-file"></span></a>
+                            {{/if}}
+                        </p>
+                    </div>
+
+                </div>
+            </li>
+        {{/each}}
+        </ul>
+    </div>
+</div>
+
+
+
+<script src="application.js" type="application/javascript"/>
+</body>
+</html>

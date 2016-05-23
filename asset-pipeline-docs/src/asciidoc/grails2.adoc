@@ -1,0 +1,9 @@
+[[grails2]]
+== Grails 2
+
+This section of the documentation discusses configuration and setup of the asset-pipeline plugin for Grails 2 based applications. Grails is the first jvm framework the asset-pipeline supported and was officially made standard in Grails 2.4 in order to replace the deprecated `resources` plugin. This also covers differences in the asset-pipeline configuration and build process as it pertains to GANT instead of Gradle.
+
+include::grails2/getting_started.adoc[]
+include::grails2/configuration.adoc[]
+include::grails2/organization.adoc[]
+include::grails2/taglibs.adoc[]

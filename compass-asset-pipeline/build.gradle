@@ -53,17 +53,17 @@ dependencies {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId 'sass-asset-pipeline'
+            artifactId 'compass-asset-pipeline'
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'sass-asset-pipeline'
-                    description 'Provides SASS Compiling support for the Asset-Pipeline library.'
+                    name 'compass-asset-pipeline'
+                    description 'Provides SASS/Compass Compiling support for the Asset-Pipeline library.'
                     url 'https://github.com/bertramdev/sass-asset-pipeline'
                     scm {
-                        url 'https://github.com/bertramdev/sass-asset-pipeline'
-                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
-                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
+                        url 'https://github.com/bertramdev/asset-pipeline/compass-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/asset-pipeline.git'
                     }
                     licenses {
                         license {
@@ -98,7 +98,7 @@ bintray {
     pkg {
         repo = 'asset-pipeline'
         userOrg = 'bertramlabs'
-        name = 'sass-asset-pipeline'
+        name = 'compass-asset-pipeline'
         licenses = ['Apache-2.0']
         version {
             if (project.hasProperty('mavenUser')) {

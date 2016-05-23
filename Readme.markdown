@@ -78,7 +78,7 @@ assets {
 
 dependencies {
   // Example additional LESS support
-  // assets 'com.bertramlabs.plugins:less-asset-pipeline:2.7.0'
+  // assets 'com.bertramlabs.plugins:less-asset-pipeline:{}'
 }
 
 ```
@@ -166,11 +166,11 @@ dependencies {
 ```
 
 
-Grails Documentation
+Documentation
 -------------
 
-* [API Doc](http://bertramdev.github.io/asset-pipeline)
-* [Grails Doc](http://bertramdev.github.io/grails-asset-pipeline)
+* [API Doc](http://www.asset-pipeline.com/apidoc/index.html)
+* [Doc](http://www.asset-pipeline.com/manual/index.html)
 
 
 For Grails 3 asset-pipeline has to be provided both for Grails and Gradle. An example configuration could be: 

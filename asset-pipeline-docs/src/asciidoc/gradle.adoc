@@ -1,0 +1,9 @@
+[[gradle]]
+== Gradle
+
+This section of the documentation discusses configuration and setup of the asset-pipeline gradle plugin. Most framework integrations use this plugin for builds so it is important to know how it works.
+
+include::gradle/getting_started.adoc[]
+include::gradle/configuration.adoc[]
+include::gradle/java.adoc[]
+

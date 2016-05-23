@@ -1,0 +1,121 @@
+[[concepts]]
+== Concepts
+
+Asset-pipeline is a highly extensible asset processing library that is easy to integrate into your jvm based application or to even use standalone with gradle. It works by defining `AssetFile` definitions for different file types in which `Processors` can be chained for processing and conversion to different target content types. But to use it you don't really need to know about any of this (It really does just work).
+
+=== Directives
+
+Similar to other packaging libraries like webpack or grunt, asset-pipeline provides a means to require other files or "modules" into your javascript and/or css. We will call these require patterns `directives`.
+
+NOTE: Asset-pipeline chooses to be dependency syntax agnostic. This makes it very easy to add in extension modules for things like CommonJS.
+
+In asset-pipeline it is a common pattern to list all requirements of your file at the top in a comments section but this is not required. Example:
+
+[source,javascript]
+----
+//This is a JavaScript file with its top level require directives
+//= require jquery
+//= require app/models.js
+//= require_tree views
+//= require_self
+
+console.log("This is my javascript manifest");
+----
+
+Or similarly a CSS file might look like this:
+
+[source,css]
+----
+/*
+This is a comment block in the top of a css file
+*= require bootstrap
+*= require font-awesome
+*= require navigation/header.css
+*= require_tree components
+*/
+
+body {
+  font-size: 12px;
+}
+----
+
+This may look very simple at first but can become really quite powerful. For example, these directives can be nested in other files that you might include. This allows the asset-pipeline to build a dependency-graph, eliminating duplicate requirements, and ensuring everything is loaded in the most optimal order possible.
+
+IMPORTANT: Requirement directives are recursively scanned within each required file, not just the first file.
+
+One other cool aspect of these require directives is the extension is not mandatory. Asset-pipeline will automatically look for any file matching that name (minus the extension) that has a registered `AssetFile` capable of converting it to the intended target file type. i.e. that Bootstrap directive could be including a LESS file or the javascript could easily include a Coffeescript file.
+
+==== Encoding
+
+In some cases it may be necessary to specify an encoding for your assets. An example might be for Japanese characters in a JavaScript file. To do this, two things must be done. First, we simply set the charset attribute when we include are JavaScript file:
+
+[source,html]
+----
+<script src="application.js" charset="utf-8"/>
+----
+
+This should take care of testing in development mode and debugging. However, when we move to production/WAR mode the precompiler has no way to infer the desired encoding for compilation. To accomplish this, we have the `//= encoding` directive. This can be placed at the top of your `application.js` to define the desired compilation encoding.
+
+[source,javascript]
+----
+//=encoding UTF-8
+//=require_self
+//=require_tree .
+----
+
+That's all there is to it.
+
+
+=== Project Structure
+
+Depending on which framework integration is being used (or even if no framework integration is being used) the project of the asset-pipeline files can slightly differ. However, typically this only affects the source folder location while all other aspects of the project structure remain the same.
+
+By default assets live in the `src/assets` directory of the project (except in the case of grails where these live in `src/assets`). However, files should not live at this direct root level and by default asset-pipeline will not detect them if they were. It is a conventional practice that files be organized in one level down subfolders. For example, in a base grails app the following folder structure is used and encouraged:
+
+* `assets/javascripts`
+* `assets/stylesheets`
+* `assets/images`
+* `assets/libs` -- common naming for components that contain both css/javascript/images
+
+Asset-pipeline will automatically add any subfolder in the `assets` directory as a `FileResolver`. Meaning each folder is treated as a root level resolver path. It is also important to note that asset-pipeline does not actually care what file types go where. This is purely for the organizational benefit of the project.
+
+IMPORTANT: When requiring files using require directives do not include these directory names, treat them as root level traversal.
+
+=== Search Paths
+
+When a file is referenced via a require directive or web request, the asset-pipeline checks for the file in several locations.
+
+First it tries to find the file relative to the manifest including it. For example "admin/application.js" looking for "table.js"
+
+[source,javascript]
+----
+// FileName: admin/application.js
+//= require table
+----
+
+The first place we will look is within `src/assets/javascripts/admin/*` We will proceed to do this within all of the asset sub folders across plugins after the main application is searched.
+
+The next place we will look is the root of all src/assets plugin sub folders (e.g. `src/assets/*/table.js`).
+
+Finally all binary plugins are scanned in the `classpath:META-INF/assets` folder, `classpath:META-INF/static` and `classpath:META-INF/resources`.
+
+In all cases, the applications assets folder takes precedence between the search paths, but plugins get scanned as well.
+
+=== Build Structure
+
+When the project is built (in Gradle that's the `assetCompile` task) these folders are flattened and merged. Meaning this first level subdirectory structure disappears and all files are copied into `build/assets`. These files also get md5 digested names for cache busting as well as GZIP versions for compressed file serving (except already compressed images).
+
+In a Java based framework any type of WAR or JAR packaging typically gets detected and assets are automatically moved into `classpath:assets` along with a file `classpath:assets/manifest.properties`. This manifest is a list of every file that was packaged by the asset-pipeline as the key, and the digested name equivalent as the value. This facilitates easy differential syncing between CDNS (like an s3 bucket for cloudfront) as well as fast and easy generation of ETag headers when serving assets from the application (more on this later).
+
+
+=== Relative Urls
+
+With all this renaming of assets with digested names as well as slight restructuring between source and build, what happens with url references specified in `CSS` as well as `HTML`. This is where some familiar with the Ruby on Rails sprockets based asset-pipeline might remember the need for erb helpers to specify path replacement. The asset-pipeline for the JVM, however, takes a different more automatic approach:
+
+All CSS type files go through a processor called the `CssProcessor`. This processor looks for any `url(../path/to/file.png)` type patterns and automatically resolves the asset from the asset-pipeline. If it finds the matching file, the url is automatically replaced with the correct url pattern including the digest name: `url(path/file-dadvbfgdaf123e.png)`.
+
+This relative url replacement is really handy because any external css library that is included in your project (i.e. bootstrap) can be used as is without any need to sift through its code and replace url patterns to match. This feature is also performend on `HTML` files.
+
+TIP: HTML files automatically get relative url replacement making it easy to generate 100% static websites without any need for a dynamic templating engine.
+
+Currently javascript is not scanned for relative path replacement. It is common practice to create a base path variable if required in the html that includes your javascript if your javascript indeed needs to reference images or documents in the asset-pipeline.

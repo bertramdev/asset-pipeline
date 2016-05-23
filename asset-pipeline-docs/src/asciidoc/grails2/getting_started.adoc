@@ -1,0 +1,30 @@
+=== Getting Started
+
+In Grails 2 most assets live in the `grails-app/assets` directory. On any Grails 2.4 or newer application this folder is automatically generated for you along with the organizational subdirectories `javascripts`, `images`, and `stylesheets`.
+
+To get started with asset-pipeline for grails simply add asset-pipeline to the `BuildConfig.groovy`
+
+[source,groovy,subs="attributes"]
+.BuildConfig.groovy
+----
+plugins {
+  compile ":asset-pipeline:{project-version}"
+  // Uncomment these to enable additional asset-pipeline capabilities
+  //compile ":sass-asset-pipeline:{project-version}"
+  //compile ":less-asset-pipeline:{project-version}"
+  //compile ":coffee-asset-pipeline:{project-version}"
+  //compile ":handlebars-asset-pipeline:{project-version}"
+}
+----
+
+NOTE: While there are grails 2 plugins for most add on modules like LESS and SASS, It is not required and the binary asset-pipeline module dependencies can be used instead in the `dependencies{}` block of `BuildConfig.groovy`.
+
+==== Development Runtime
+
+A great feature built into grails is its development runtime support. All assets that are used in your gsp files are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of `FileWatcher`. These results are also cached making it highly performant as your project grows.
+
+Another great aspect of development runtime with grails is each file will individually be required in the gsp. A dependency graph is generated and each file is required individually to make it easy to debug javascript errors and stylesheet errors. While sourcemap support is integrated for javascript, this is not supported in a lot of browsers developers still target compatibility for. It is possible to disable this feature via configuration or simply testing your app with `grails dev run-war` to see how post minified and bundled assets will behave.
+
+TIP: Use `grails dev run-war` to test your apps behavior once assets are minified and bundled
+.
+

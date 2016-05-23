@@ -1,0 +1,19 @@
+=== Getting Started
+
+In Grails 3 most assets live in the `grails-app/assets` directory. This folder is automatically generated for you along with the organizational subdirectories `javascripts`, `images`, and `stylesheets`.
+
+To get started simply add asset-pipeline to your `build.gradle` file (See Gradle usage). And the grails plugin to the dependencies block:
+
+[source,groovy,subs="attributes"]
+----
+dependencies {
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:{project-version}'
+}
+----
+
+==== Development Runtime
+
+A great feature built into grails is its development runtime support. All assets that are used in your gsp files are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of `FileWatcher`. These results are also cached making it highly performant as your project grows.
+
+Another great aspect of development runtime with grails is each file will individually be required in the gsp. A dependency graph is generated and each file is required individually to make it easy to debug javascript errors and stylesheet errors. While sourcemap support is integrated for javascript, this is not supported in a lot of browsers developers still target compatibility for. It is possible to disable this feature via configuration or simply testing your app with the embedded tomcat war to see how post minified and bundled assets will behave.
+

@@ -1,0 +1,56 @@
+=== Getting Started
+
+Getting started with gradle is very quick and easy. The `asset-pipeline-gradle` plugin is included in both the gradle plugin repository as well as jcenter and maven. For those of you not familiar with http://gradle.org[gradle] it is a very powerful build tooling system that you should definitely check out.
+
+IMPORTANT: Asset-Pipelines build classes are not directly dependent on gradle and can be easily integrated into other build tooling frameworks like Maven.
+
+In its simplest form the `build.gradle` file might look like this:
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:{project-version}"
+  }
+}
+
+apply plugin: "com.bertramlabs.asset-pipeline"
+----
+
+Or even simpler:
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+//gradle 2.1+
+plugins {
+  id "com.bertramlabs.asset-pipeline" version "{project-version}"
+}
+----
+
+When this plugin is added a couple tasks and extensions are automatically registered:
+
+* `assetCompile` - Compiles and packages assets from `src/assets` into `build/assets`
+* `assetPackage` - Copies all assets unprocessed into an archive useful for plugin jars similar to webjars.
+* `assetClean` - Cleans and resets the `build/assets` directory.
+
+NOTE: All of these tasks support Gradle's incubating continuous build feature. Simply prefix the task with `-t`.
+
+Create a folder `src/assets` and subfolders:
+
+* `javascripts`
+*  `stylesheets`
+*  `html`
+*  `images`
+*  `...`
+
+Now assets can be packaged and processed with ease and performance far outpacing other static asset build tooling.
+
+TIP: Including javascript libraries and css libraries from npm is super easy as well. Check out https://twitter.com/craigburke[@craigburke]'s awesome gradle plugin https://github.com/craigburke/client-dependencies-gradle[client-dependencies-gradle]
+

@@ -1,0 +1,17 @@
+=== JVM Based Dependencies
+
+When working on any jvm based gradle project, the asset-pipeline plugin automatically detects all dependencies on the classpath and scans them for assets. This makes it easy to package assets in shared libraries for multiple apps to use or to even include assets that are included from a http://www.webjars.org[webjar] dependency.
+
+NOTE: If a library is simply a webjar or asset library, these packages are not needed in your final application package and can be set to `provided` or `compileOnly`.
+
+When using asset-pipeline plugins for processing `LESS` files or other custom extensions they typically need to be both in the development runtime classpath as well as the build classpath. This is because asset-pipeline provides on the fly asset compilation during development for more rapid iteration cycles. To make this simpler a configuration dependency type is automatically added called assets:
+
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+  // Example additional LESS support
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+}
+----
