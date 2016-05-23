@@ -25,7 +25,7 @@ public class AssetPipelineResponseBuilder {
 			statusCode = 304
 		} else if (checkETag()) {
             headers['Vary'] = 'Accept-Encoding'
-            if(digestVersion) {
+            if(digestVersion && !uri.endsWith(".html")) {
                 headers['Cache-Control'] = 'public, max-age=31536000'    
             } else {
                 headers['Cache-Control'] = 'no-cache'
