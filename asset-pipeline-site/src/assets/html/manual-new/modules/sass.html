@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Getting Started</title>
+<title>SASS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -505,89 +505,41 @@ table.CodeRay td.code>pre{padding:0}
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel2">
-<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#sass">SASS</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect2">
-<h3 id="getting-started">Getting Started</h3>
+<h3 id="sass">SASS</h3>
 <div class="paragraph">
-<p>In Ratpack assets live in the same place as a standard gradle implementation <code>src/assets</code> directory. This folder should contain organizational subdirectories <code>javascripts</code>, <code>images</code>, and <code>stylesheets</code>.</p>
-</div>
-<div class="paragraph">
-<p>To get started simply add asset-pipeline to your <code>build.gradle</code> file (See Gradle usage). And the ratpacks plugin to the dependencies block:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.9.0'
-  //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.9.0'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.9.0'
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Asset-Pipeline requires ratpack-groovy to be used in a ratpack application.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Finally the <code>AssetPipelineModule</code> needs added to the Ratpack Registry.</p>
-</div>
-<div class="listingblock">
-<div class="title">ratpack.groovy</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">static</span> <span class="include">ratpack.groovy.Groovy.ratpack</span>
-<span class="keyword">import</span> asset.pipeline.ratpack.AssetPipelineModule
-
-ratpack {
-  bindings {
-    module(AssetPipelineModule) { cfg -&gt;
-                <span class="comment">// by default /assets, change url mapping</span>
-            <span class="comment">// cfg.url(&quot;/&quot;)</span>
-            cfg.sourcePath(<span class="string"><span class="delimiter">&quot;</span><span class="content">../../../src/assets</span><span class="delimiter">&quot;</span></span>)
-    }
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This module does support a few configuration options and due to how the runtime works the sourcePath does need to be specified depending on if ratpack is being run in development from an IDE or gradle directly.</p>
-</div>
-<div class="paragraph">
-<p>By default a Handler will be registered to the url <code>/assets</code> but it is also possible to simply use the <code>AssetPipelineHandler</code> directly or even change the base mapping config as seen in the example above.</p>
-</div>
-<div class="sect3">
-<h4 id="development-runtime">Development Runtime</h4>
-<div class="paragraph">
-<p>A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of <code>FileWatcher</code>. These results are also cached making it highly performant as your project grows.</p>
-</div>
-<div class="paragraph">
-<p>Ratpack has great native continuous build integration support with Gradle and in some cases developers may not want to use the development runtime and instead rely on this continuous build flow. To do that simply disable developmentRuntime:</p>
+<p>The SASS module provides easy processing and implementation of <code>scss</code> and <code>sass</code> files. It uses libsass for highly performant compiling of SASS files and automatically handles asset resolution correctly.</p>
 </div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">assets {
-  developmentRuntime = <span class="predefined-constant">false</span>
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.9.0'
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plugin has been renamed to compass-asset-pipeline.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 16:46:53 -04:00
+Last updated 2016-05-23 16:48:13 -04:00
 </div>
 </div>
 </body>

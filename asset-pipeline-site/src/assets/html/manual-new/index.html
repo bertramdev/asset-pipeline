@@ -552,6 +552,18 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#getting-started-4">Getting Started</a></li>
 </ul>
 </li>
+<li><a href="#spring-boot">Spring Boot</a>
+<ul class="sectlevel2">
+<li><a href="#getting-started-5">Getting Started</a></li>
+</ul>
+</li>
+<li><a href="#modules">Plugin Modules</a>
+<ul class="sectlevel2">
+<li><a href="#less">LESS</a></li>
+<li><a href="#sass">SASS</a></li>
+<li><a href="#coffeescript">Coffeescript</a></li>
+</ul>
+</li>
 <li><a href="#extending">Extending</a>
 <ul class="sectlevel2">
 <li><a href="#asset-file-definition">Asset File Definition</a></li>
@@ -2353,6 +2365,18 @@ This will only be displayed if the asset exists
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Asset-Pipeline requires ratpack-groovy to be used in a ratpack application.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Finally the <code>AssetPipelineModule</code> needs added to the Ratpack Registry.</p>
 </div>
@@ -2395,6 +2419,176 @@ ratpack {
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="spring-boot">Spring Boot</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section of the documentation discusses configuration and setup of the asset-pipeline plugin for <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> based applications. Spring functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Ratpack framework except template url replacement helpers.</p>
+</div>
+<div class="sect2">
+<h3 id="getting-started-5">Getting Started</h3>
+<div class="paragraph">
+<p>In Spring Boot assets live in the same place as a standard gradle implementation <code>src/assets</code> directory. This folder should contain organizational subdirectories <code>javascripts</code>, <code>images</code>, and <code>stylesheets</code>.</p>
+</div>
+<div class="paragraph">
+<p>To get started simply add asset-pipeline to your <code>build.gradle</code> file (See Gradle usage). And the ratpacks plugin to the dependencies block:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.9.0'
+  //Example LESS or Sass Integration
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.9.0'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.9.0'
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot application.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>It is also necessary to add <code>ComponentScan</code> to your application class in order for the asset-pipeline plugin to properly initialize.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">package</span> demo
+
+<span class="annotation">@Configuration</span>
+<span class="annotation">@ComponentScan</span>([<span class="string"><span class="delimiter">'</span><span class="content">demo</span><span class="delimiter">'</span></span>,<span class="string"><span class="delimiter">'</span><span class="content">asset.pipeline.springboot</span><span class="delimiter">'</span></span>])
+<span class="annotation">@EnableAutoConfiguration</span>
+<span class="type">class</span> <span class="class">Application</span> {
+
+    <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+        SpringApplication.run Application, args
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default a servlet filter will be registered to the url <code>/assets</code> from which all assets will be served.</p>
+</div>
+<div class="sect3">
+<h4 id="development-runtime-4">Development Runtime</h4>
+<div class="paragraph">
+<p>A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of <code>FileWatcher</code>. These results are also cached making it highly performant as your project grows.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="modules">Plugin Modules</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Asset-pipeline comes out of the box with modules for processing several common asset types. These include LESS, SASS, Coffeescript, Handlebars, and more. There are also several third party modules created by developers for Typescript, JSX, etc.</p>
+</div>
+<div class="sect2">
+<h3 id="less">LESS</h3>
+<div class="paragraph">
+<p>With the LESS module it is easy to automatically compile LESS files down to the native browser CSS format. By default the <code>less-asset-pipeline</code> plugin takes advantage of Less4j for highly performant LESS compilation. If the standard compiler is desired this can also be enabled however it is dramatically slower due to running in a javascript environment.</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.9.0'
+}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuration-4">Configuration</h4>
+<div class="paragraph">
+<p>To switch to the standard compiler simply adjust the <code>less.compiler</code> property to 'standard':</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">assets {
+    configOptions = [
+      <span class="key">less</span>: [
+        <span class="key">compiler</span>: <span class="string"><span class="delimiter">'</span><span class="content">standard</span><span class="delimiter">'</span></span>
+      ]
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+During war build your <code>less</code> files are compiled into css files. This is all well and good but sometimes you dont want each individual <code>less</code> file compiled, but rather your main base <code>less</code> file. It may be best to add a sub folder for those LESS files and exclude it in your precompile config.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sass">SASS</h3>
+<div class="paragraph">
+<p>The SASS module provides easy processing and implementation of <code>scss</code> and <code>sass</code> files. It uses libsass for highly performant compiling of SASS files and automatically handles asset resolution correctly.</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.9.0'
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plugin has been renamed to compass-asset-pipeline.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="coffeescript">Coffeescript</h3>
+<div class="paragraph">
+<p>The Coffee Asset-Pipeline module provides coffeescript compilation support for the jvm based asset-pipeline. Simply add this file to your buildscript classpath or development environment and they are automatically processed.</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.9.0'
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+If the native coffeescript binary is detected in the build environment. Coffeescript processing will take advantage of this over internal javascript processing. Simply <code>npm install -g coffeescript</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -2605,7 +2799,7 @@ for this is the SassProcessor in the SASS/SCSS Asset Pipeline Plugin. Image spri
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 11:58:53 -04:00
+Last updated 2016-05-23 16:43:15 -04:00
 </div>
 </div>
 </body>
