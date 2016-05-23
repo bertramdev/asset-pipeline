@@ -22,8 +22,9 @@ Documentation
 
 We are in the middle of revamping the documentation:
 
-* [API Doc](http://bertramdev.github.io/asset-pipeline)
-* [Grails Doc](http://bertramdev.github.io/grails-asset-pipeline)
+* [API Doc](http://www.asset-pipeline.com/apidoc/index.html)
+* [Usage Guide](http://www.asset-pipeline.com/manual/)
+* [Website](http://www.asset-pipeline.com)
 
 
 Gradle Usage
