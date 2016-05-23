@@ -1,0 +1,6 @@
+[[spring-boot]]
+== Spring Boot
+
+This section of the documentation discusses configuration and setup of the asset-pipeline plugin for http://projects.spring.io/spring-boot/[Spring Boot] based applications. Spring functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Ratpack framework except template url replacement helpers.
+
+include::spring-boot/getting_started.adoc[]

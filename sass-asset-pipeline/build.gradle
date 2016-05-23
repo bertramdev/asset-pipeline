@@ -57,7 +57,7 @@ publishing {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'sass-asset-pipeline'
                     description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
-                    url 'https://github.com/bertramdev/sass-asset-pipeline'
+                    url 'https://www.asset-pipeline.com'
                     scm {
                         url 'https://github.com/bertramdev/sass-asset-pipeline'
                         connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'

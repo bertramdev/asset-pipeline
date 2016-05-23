@@ -1,0 +1,13 @@
+=== Coffeescript
+
+The Coffee Asset-Pipeline module provides coffeescript compilation support for the jvm based asset-pipeline. Simply add this file to your buildscript classpath or development environment and they are automatically processed.
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:{project-version}'
+}
+----
+
+NOTE: If the native coffeescript binary is detected in the build environment. Coffeescript processing will take advantage of this over internal javascript processing. Simply `npm install -g coffeescript`.

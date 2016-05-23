@@ -1,0 +1,31 @@
+=== LESS
+
+With the LESS module it is easy to automatically compile LESS files down to the native browser CSS format. By default the `less-asset-pipeline` plugin takes advantage of Less4j for highly performant LESS compilation. If the standard compiler is desired this can also be enabled however it is dramatically slower due to running in a javascript environment.
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+}
+----
+
+
+==== Configuration
+
+To switch to the standard compiler simply adjust the `less.compiler` property to 'standard':
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    configOptions = [
+      less: [
+        compiler: 'standard'
+      ]
+    ]
+}
+----
+
+TIP: During war build your `less` files are compiled into css files. This is all well and good but sometimes you dont want each individual `less` file compiled, but rather your main base `less` file. It may be best to add a sub folder for those LESS files and exclude it in your precompile config.
+

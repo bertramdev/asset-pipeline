@@ -1,0 +1,14 @@
+=== SASS
+
+The SASS module provides easy processing and implementation of `scss` and `sass` files. It uses libsass for highly performant compiling of SASS files and automatically handles asset resolution correctly.
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+}
+----
+
+IMPORTANT: Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plugin has been renamed to compass-asset-pipeline.
+

@@ -1,0 +1,41 @@
+=== Getting Started
+
+In Spring Boot assets live in the same place as a standard gradle implementation `src/assets` directory. This folder should contain organizational subdirectories `javascripts`, `images`, and `stylesheets`.
+
+To get started simply add asset-pipeline to your `build.gradle` file (See Gradle usage). And the ratpacks plugin to the dependencies block:
+
+[source,groovy,subs="attributes"]
+----
+dependencies {
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:{project-version}'
+  //Example LESS or Sass Integration
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+}
+----
+
+NOTE: Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot application.
+
+It is also necessary to add `ComponentScan` to your application class in order for the asset-pipeline plugin to properly initialize.
+
+[source,groovy]
+----
+package demo
+
+@Configuration
+@ComponentScan(['demo','asset.pipeline.springboot'])
+@EnableAutoConfiguration
+class Application {
+
+    static void main(String[] args) {
+        SpringApplication.run Application, args
+    }
+}
+----
+
+By default a servlet filter will be registered to the url `/assets` from which all assets will be served.
+
+==== Development Runtime
+
+A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of `FileWatcher`. These results are also cached making it highly performant as your project grows.
+

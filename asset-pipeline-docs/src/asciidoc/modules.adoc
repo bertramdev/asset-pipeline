@@ -1,0 +1,8 @@
+[[modules]]
+== Plugin Modules
+
+Asset-pipeline comes out of the box with modules for processing several common asset types. These include LESS, SASS, Coffeescript, Handlebars, and more. There are also several third party modules created by developers for Typescript, JSX, etc.
+
+include::modules/less.adoc[]
+include::modules/sass.adoc[]
+include::modules/coffeescript.adoc[]
