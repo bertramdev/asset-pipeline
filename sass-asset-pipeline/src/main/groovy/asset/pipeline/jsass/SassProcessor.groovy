@@ -31,7 +31,6 @@ class SassProcessor extends AbstractProcessor {
 
     SassProcessor(AssetCompiler precompiler) {
         super(precompiler)
-        options.getImporters().add(new SassAssetFileImporter())
         // TODO: Add support for more configuration options (like source maps)
         options.setOutputStyle(AssetPipelineConfigHolder.config?.sass?.outputStyle ?: OutputStyle.EXPANDED)
         options.setSourceComments(AssetPipelineConfigHolder.config?.sass?.sourceComments ?: true)
@@ -44,10 +43,8 @@ class SassProcessor extends AbstractProcessor {
      * @return
      */
     String process(String input, AssetFile assetFile) {
-        if (!this.precompiler) {
-            SassAssetFileImporter.assetFileThreadLocal.set(assetFile)
-        }
-
+        options.getImporters().add(new SassAssetFileImporter(assetFile))
+        
         log.info "Compiling $assetFile.name"
         def output = compiler.compileString(input, assetFile.path.toURI(), null, options)
         return output.css

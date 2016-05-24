@@ -18,16 +18,20 @@ package asset.pipeline.jsass
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
 import asset.pipeline.CacheManager
-import groovy.util.logging.Log4j
+import groovy.util.logging.Commons
 import io.bit3.jsass.importer.Import
 import io.bit3.jsass.importer.Importer
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@Log4j
+@Commons
 class SassAssetFileImporter implements Importer {
-    static final ThreadLocal<AssetFile> assetFileThreadLocal = new ThreadLocal();
+    AssetFile baseFile
+    SassAssetFileImporter(AssetFile assetFile) {
+        super()
+        this.baseFile = assetFile
+    }
 
     /**
      * Find the real file name to be resolved to a AssetFile instance
@@ -39,11 +43,9 @@ class SassAssetFileImporter implements Importer {
     static AssetFile getAssetFromScssImport(String parent, String importUrl) {
         Path parentPath = Paths.get(parent)
         Path relativeRootPath = parentPath.parent ?: Paths.get('.')
-
         Path importUrlPath = Paths.get(importUrl)
-        def possibleStylesheets = ["${importUrlPath}.scss", "${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.scss"]
-        for (String possibleStylesheet : possibleStylesheets) {
-            Path stylesheetPath = relativeRootPath.resolve(possibleStylesheet)
+        def possibleStylesheets = [relativeRootPath.resolve("${importUrlPath}.scss").toString(), relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.scss").toString(), "${importUrlPath.fileName}.scss","_${importUrlPath.fileName}.scss" ]
+        for (String stylesheetPath : possibleStylesheets) {
             def assetFile = AssetHelper.fileForFullName(stylesheetPath.toString())
             if (assetFile) {
                 log.debug "$parent imported $assetFile.path"
@@ -57,13 +59,14 @@ class SassAssetFileImporter implements Importer {
 
     @Override
     public Collection<Import> apply(String url, Import previous) {
-        def assetFile = assetFileThreadLocal.get()
         def importedAssetFile = getAssetFromScssImport(previous.absoluteUri.toString(), url)
-        if (assetFile && importedAssetFile) {
-            CacheManager.addCacheDependency(assetFile.name, importedAssetFile)
-            return Collections.singletonList(
+
+        if (baseFile && importedAssetFile) {
+            CacheManager.addCacheDependency(baseFile.name, importedAssetFile)
+            def results = Collections.singletonList(
                     new Import(importedAssetFile.name, importedAssetFile.path, importedAssetFile.inputStream.text)
-            )
+                    )
+            return results
         }
 
         // at this point, compilation will fail

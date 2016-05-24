@@ -53,6 +53,20 @@ class SassProcessorSpec extends Specification {
 		output.contains('.sub')
 	}
 
+	void "should compile nested foo into css"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.config = [:]
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		def assetFile = AssetHelper.fileForFullName('foo/foo.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text,assetFile)
+		println "Results \n ${output}"
+		then:
+		output.contains('.bar')
+	}
+
 	void "should compile Bourbon"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
