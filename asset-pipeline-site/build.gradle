@@ -78,9 +78,15 @@ morpheus {
     resolverPath = new File(project(':asset-pipeline-site').buildDir, '/libs').canonicalPath
     includes = ["asset-pipeline-site-${version}-all.jar"]
   }
-  deployConfiguration = [
-    javaCommand: "-Dratpack.port=8080 -Dratpack.bintrayUsername=${bintrayUser} -Dratpack.bintrayApiKey=${bintrayKey} -jar asset-pipeline-site-${version}-all.jar"
-  ]
+  if(project.hasProperty('bintrayUsername')) {
+    deployConfiguration = [
+      javaCommand: "-Dratpack.port=8080 -Dratpack.bintrayUsername=${bintrayUser} -Dratpack.bintrayApiKey=${bintrayKey} -jar asset-pipeline-site-${version}-all.jar"
+    ]
+  } else {
+    deployConfiguration = [
+      javaCommand: "-Dratpack.port=8080 -jar asset-pipeline-site-${version}-all.jar"
+    ]
+  }
 }
 
 [ tasks.run].each { runTask ->
