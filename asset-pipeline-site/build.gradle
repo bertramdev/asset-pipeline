@@ -78,7 +78,7 @@ morpheus {
     resolverPath = new File(project(':asset-pipeline-site').buildDir, '/libs').canonicalPath
     includes = ["asset-pipeline-site-${version}-all.jar"]
   }
-  if(project.hasProperty('bintrayUsername')) {
+  if(project.hasProperty('bintrayUser')) {
     deployConfiguration = [
       javaCommand: "-Dratpack.port=8080 -Dratpack.bintrayUsername=${bintrayUser} -Dratpack.bintrayApiKey=${bintrayKey} -jar asset-pipeline-site-${version}-all.jar"
     ]

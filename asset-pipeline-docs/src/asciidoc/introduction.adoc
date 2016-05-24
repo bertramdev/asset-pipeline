@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* May 24, 2016
+** 2.9.1 Release - Fixes asset resolution issues with libsass in sass-asset-pipeline
 * May 23, 2016
 ** 2.9.0 Release - sass-asset-pipeline moved to compass-asset-pipeline and new sass-asset-pipeline using jsass (libsass) added. New Documentation and Website release.
 * April 22, 2016
