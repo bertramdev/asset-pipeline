@@ -118,7 +118,7 @@ class AssetProcessorService {
 				break
 		}
 
-		String finalUrl = ensureEndsWith(new StringBuilder(baseUrl.length() + mapping.length() + 2).append(baseUrl), '/' as char)
+		final String finalUrl = ensureEndsWith(new StringBuilder(baseUrl.length() + mapping.length() + 2).append(baseUrl), '/' as char)
 			.append(mapping)
 			.append('/' as char)
 			.toString()
