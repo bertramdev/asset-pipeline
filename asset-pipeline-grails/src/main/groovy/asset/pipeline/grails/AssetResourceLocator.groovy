@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource
 
 class AssetResourceLocator extends DefaultResourceLocator {
 
+	@Override
 	Resource findResourceForURI(String uri) {
 		Resource resource = super.findResourceForURI(uri)
 		if(!resource) {
