@@ -1,6 +1,6 @@
 package asset.pipeline.grails
 
-
+import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.DirectiveProcessor
@@ -24,10 +24,10 @@ class AssetResourceLocator extends DefaultResourceLocator {
 	Resource findAssetForURI(String uri) {
 		Resource resource
 		if(warDeployed) {
-			def manifest = AssetPipelineConfigHolder.manifest
+			Properties manifest = AssetPipelineConfigHolder.manifest
 			uri = manifest?.getProperty(uri, uri)
 
-			def assetUri = "assets/${uri}"
+			String assetUri = "assets/${uri}"
 			Resource defaultResource = defaultResourceLoader.getResource(assetUri)
 			if (!defaultResource?.exists()) {
 				defaultResource = defaultResourceLoader.getResource("classpath:${assetUri}")
@@ -36,22 +36,22 @@ class AssetResourceLocator extends DefaultResourceLocator {
 				resource = defaultResource
 			}
 		} else {
-			def contentTypes = AssetHelper.assetMimeTypeForURI(uri)
-			def contentType
+			List<String> contentTypes = AssetHelper.assetMimeTypeForURI(uri)
+			String contentType
 			if(contentTypes) {
 				contentType = contentTypes[0]
 			}
 
-			def extension = AssetHelper.extensionFromURI(uri)
-			def name      = AssetHelper.nameWithoutExtension(uri)
-			def assetFile = AssetHelper.fileForUri(name, contentType, extension)
+			String    extension = AssetHelper.extensionFromURI(uri)
+			String    name      = AssetHelper.nameWithoutExtension(uri)
+			AssetFile assetFile = AssetHelper.fileForUri(name, contentType, extension)
 			if(assetFile) {
 				if(assetFile instanceof GenericAssetFile) {
 					resource = new ByteArrayResource(assetFile.bytes)
 				} else {
-					def directiveProcessor = new DirectiveProcessor(contentType, null, this.class.classLoader)
+					DirectiveProcessor directiveProcessor = new DirectiveProcessor(contentType, null, this.class.classLoader)
 					def fileContents = directiveProcessor.compile(assetFile)
-					def encoding = assetFile.encoding
+					String encoding = assetFile.encoding
 					if(encoding) {
 						resource = new ByteArrayResource(fileContents.getBytes(encoding))
 					} else {

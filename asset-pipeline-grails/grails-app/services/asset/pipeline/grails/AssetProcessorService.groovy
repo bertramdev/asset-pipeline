@@ -33,7 +33,7 @@ class AssetProcessorService {
 	 * @throws IllegalArgumentException if the path contains <code>/</code>
 	 */
 	String getAssetMapping() {
-		final def mapping = grailsApplication.config?.grails?.assets?.mapping ?: 'assets'
+		final String mapping = grailsApplication.config?.grails?.assets?.mapping ?: 'assets'
 		if (mapping.contains('/')) {
 			throw new IllegalArgumentException(
 				'The property [grails.assets.mapping] can only be one level deep.  ' +
@@ -76,7 +76,7 @@ class AssetProcessorService {
 
 		url = assetBaseUrl(null, NONE) + url
 		if (! hasAuthority(url)) {
-			def absolutePath = linkGenerator.handleAbsolute(attrs)
+			String absolutePath = linkGenerator.handleAbsolute(attrs)
 
 			if (absolutePath == null) {
 				final String contextPath = attrs.contextPath?.toString() ?: linkGenerator.contextPath
@@ -117,7 +117,7 @@ class AssetProcessorService {
 				break
 		}
 
-		def finalUrl = ensureEndsWith(new StringBuilder(baseUrl.length() + mapping.length() + 2).append(baseUrl), '/' as char)
+		String finalUrl = ensureEndsWith(new StringBuilder(baseUrl.length() + mapping.length() + 2).append(baseUrl), '/' as char)
 			.append(mapping)
 			.append('/' as char)
 			.toString()
