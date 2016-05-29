@@ -3,6 +3,7 @@ package asset.pipeline.grails
 
 import static asset.pipeline.grails.UrlBase.*
 
+
 class AssetMethodTagLib {
 
 	static namespace = 'g'

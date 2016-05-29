@@ -1,5 +1,6 @@
 package asset.pipeline.grails
 
+
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.DirectiveProcessor
@@ -7,7 +8,6 @@ import asset.pipeline.GenericAssetFile
 import org.grails.core.io.DefaultResourceLocator
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
-import groovy.util.logging.Commons
 
 
 class AssetResourceLocator extends DefaultResourceLocator {
