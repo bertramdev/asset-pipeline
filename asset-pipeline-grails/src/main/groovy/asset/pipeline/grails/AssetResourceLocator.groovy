@@ -38,10 +38,10 @@ class AssetResourceLocator extends DefaultResourceLocator {
 			}
 		} else {
 			final List<String> contentTypes = AssetHelper.assetMimeTypeForURI(uri)
-			final String    contentType  = contentTypes ? contentTypes[0] : null
-			final String    extension    = AssetHelper.extensionFromURI(uri)
-			final String    name         = AssetHelper.nameWithoutExtension(uri)
-			final AssetFile assetFile    = AssetHelper.fileForUri(name, contentType, extension)
+			final String       contentType  = contentTypes ? contentTypes[0] : null
+			final String       extension    = AssetHelper.extensionFromURI(uri)
+			final String       name         = AssetHelper.nameWithoutExtension(uri)
+			final AssetFile    assetFile    = AssetHelper.fileForUri(name, contentType, extension)
 			if(assetFile) {
 				if(assetFile instanceof GenericAssetFile) {
 					resource = new ByteArrayResource(assetFile.bytes)
