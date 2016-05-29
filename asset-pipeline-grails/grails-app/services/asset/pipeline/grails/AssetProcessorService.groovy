@@ -47,7 +47,7 @@ class AssetProcessorService {
 
 	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets) {
 		final String relativePath = trimLeadingSlash(path)
-		return manifest?.getProperty(relativePath,relativePath) ?: relativePath
+		return manifest?.getProperty(relativePath, relativePath) ?: relativePath
 	}
 
 
@@ -58,7 +58,6 @@ class AssetProcessorService {
 		} else {
 			AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
 		}
-
 	}
 
 
@@ -119,9 +118,10 @@ class AssetProcessorService {
 		}
 
 		def finalUrl = ensureEndsWith(new StringBuilder(baseUrl.length() + mapping.length() + 2).append(baseUrl), '/' as char)
-				.append(mapping)
-				.append('/' as char)
-				.toString()
+			.append(mapping)
+			.append('/' as char)
+			.toString()
+
 		return finalUrl
 	}
 

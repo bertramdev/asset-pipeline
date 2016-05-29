@@ -6,10 +6,12 @@ import static asset.pipeline.grails.UrlBase.*
 
 class AssetMethodTagLib {
 
-	static namespace = 'g'
+	static namespace           = 'g'
 	static returnObjectForTags = ['assetPath']
 
+
 	def assetProcessorService
+
 
 	def assetPath = {final def attrs ->
 		final def     src

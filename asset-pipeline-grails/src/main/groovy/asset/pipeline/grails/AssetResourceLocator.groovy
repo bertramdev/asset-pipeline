@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource
 
 
 class AssetResourceLocator extends DefaultResourceLocator {
+
 	Resource findResourceForURI(String uri) {
 		Resource resource = super.findResourceForURI(uri)
 		if(!resource) {
@@ -40,9 +41,9 @@ class AssetResourceLocator extends DefaultResourceLocator {
 				contentType = contentTypes[0]
 			}
 
-			def extension    = AssetHelper.extensionFromURI(uri)
-			def name         = AssetHelper.nameWithoutExtension(uri)
-			def assetFile    = AssetHelper.fileForUri(name,contentType,extension)
+			def extension = AssetHelper.extensionFromURI(uri)
+			def name      = AssetHelper.nameWithoutExtension(uri)
+			def assetFile = AssetHelper.fileForUri(name, contentType, extension)
 			if(assetFile) {
 				if(assetFile instanceof GenericAssetFile) {
 					resource = new ByteArrayResource(assetFile.bytes)
