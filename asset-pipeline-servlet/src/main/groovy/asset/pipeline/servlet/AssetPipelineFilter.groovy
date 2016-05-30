@@ -10,6 +10,7 @@ import javax.servlet.ServletResponse
 
 
 class AssetPipelineFilter implements Filter {
+
 	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
 
@@ -28,7 +29,6 @@ class AssetPipelineFilter implements Filter {
 
 	@Override
 	void destroy() {
-
 	}
 
 	@Override

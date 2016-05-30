@@ -13,7 +13,9 @@ import javax.servlet.ServletResponse
 
 @Log4j
 class AssetPipelineDevFilter implements Filter {
+
 	AssetPipelineDevFilterCore assetPipelineDevFilterCoreStandalone = new AssetPipelineDevFilterCore()
+
 
 	@Override
 	void init(FilterConfig config) throws ServletException {
@@ -29,5 +31,4 @@ class AssetPipelineDevFilter implements Filter {
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		assetPipelineDevFilterCoreStandalone.doFilter(request, response, chain)
 	}
-
 }

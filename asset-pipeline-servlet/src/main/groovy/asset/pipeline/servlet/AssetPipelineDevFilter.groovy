@@ -10,7 +10,9 @@ import javax.servlet.ServletResponse
 
 
 class AssetPipelineDevFilter implements Filter {
+
 	AssetPipelineDevFilterCore assetPipelineDevFilterCore = new AssetPipelineDevFilterCore()
+
 
 	void setMapping(String mapping) {
 		assetPipelineDevFilterCore.mapping = mapping
@@ -23,7 +25,6 @@ class AssetPipelineDevFilter implements Filter {
 
 	@Override
 	void destroy() {
-
 	}
 
 	@Override

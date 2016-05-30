@@ -18,7 +18,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils
 
 @Log4j
 class AssetPipelineFilter implements Filter {
+
 	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
+
 
 	@Override
 	void init(FilterConfig config) throws ServletException {
@@ -39,10 +41,14 @@ class AssetPipelineFilter implements Filter {
 	}
 
 	private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
+
 		private final WebApplicationContext applicationContext
+
+
 		SpringServletResourceRepository(WebApplicationContext applicationContext) {
 			this.applicationContext = applicationContext
 		}
+
 
 		@Override
 		AssetPipelineServletResource getResource(String path) {
@@ -56,14 +62,17 @@ class AssetPipelineFilter implements Filter {
 	}
 
 	private static final class SpringServletResource implements AssetPipelineServletResource {
+
 		private final Resource resource
+
 
 		private SpringServletResource(Resource resource) {
 			this.resource = resource
 		}
 
+
 		static SpringServletResource create(Resource resource) {
-			if (!resource.exists()) {
+			if(!resource.exists()) {
 				return null
 			}
 

@@ -1,4 +1,3 @@
-
 package asset.pipeline
 
 
@@ -22,15 +21,17 @@ import org.springframework.web.filter.OncePerRequestFilter
 class AssetPipelineFilter extends OncePerRequestFilter {
 
 	static final ProductionAssetCache fileCache = new ProductionAssetCache()
+
+
 	ApplicationContext applicationContext
 	ServletContext servletContext
+
 
 	@Override
 	void initFilterBean() throws ServletException {
 		def config = filterConfig
 		applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
 		servletContext = config.servletContext
-
 	}
 
 	@Override
@@ -47,6 +48,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
+
 		if(warDeployed) {
 			def manifest = AssetPipelineConfigHolder.manifest
 			def manifestPath = fileUri
@@ -60,10 +62,10 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			if(attributeCache) {
 				if(attributeCache.exists()) {
 					def file = attributeCache.resource
-					def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'),attributeCache.getLastModified())
+					def responseBuilder = new AssetPipelineResponseBuilder(fileUri, request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), attributeCache.getLastModified())
 
 					responseBuilder.headers.each { header ->
-						response.setHeader(header.key,header.value)
+						response.setHeader(header.key, header.value)
 					}
 
 					if(responseBuilder.statusCode) {
@@ -74,7 +76,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						def acceptsEncoding = request.getHeader("Accept-Encoding")
 						if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
 							file = attributeCache.getGzipResource()
-							response.setHeader('Content-Encoding','gzip')
+							response.setHeader('Content-Encoding', 'gzip')
 							response.setHeader('Content-Length', attributeCache.getGzipFileSize().toString())
 						} else {
 							response.setHeader('Content-Length', attributeCache.getFileSize().toString())
@@ -90,12 +92,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 							int len
 							inputStream = file.inputStream
 							def out = response.outputStream
-							while ((len = inputStream.read(buffer)) != -1) {
+							while((len = inputStream.read(buffer)) != -1) {
 								out.write(buffer, 0, len)
 							}
 							response.flushBuffer()
 						} catch(e) {
-							log.debug("File Transfer Aborted (Probably by the user)",e)
+							log.debug("File Transfer Aborted (Probably by the user)", e)
 						} finally {
 							try { inputStream?.close() } catch(ie) { /* silent fail */}
 						}
@@ -106,7 +108,6 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					response.status = 404
 					response.flushBuffer()
 				}
-
 			} else {
 				def file = applicationContext.getResource("assets/${fileUri}")
 				if(!file.exists()) {
@@ -114,13 +115,13 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 				}
 
 				if(file.exists()) {
-					def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'),file.lastModified() ? new Date(file.lastModified()) : null)
+					def responseBuilder = new AssetPipelineResponseBuilder(fileUri, request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), file.lastModified() ? new Date(file.lastModified()) : null)
 
 					if(responseBuilder.statusCode) {
 						response.status = responseBuilder.statusCode
 					}
 					responseBuilder.headers.each { header ->
-						response.setHeader(header.key,header.value)
+						response.setHeader(header.key, header.value)
 					}
 
 					def gzipFile = applicationContext.getResource("assets/${fileUri}.gz")
@@ -137,7 +138,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						if(acceptsEncoding?.split(",")?.contains("gzip")) {
 							if(gzipFile.exists()) {
 								file = gzipFile
-								response.setHeader('Content-Encoding','gzip')
+								response.setHeader('Content-Encoding', 'gzip')
 							}
 						}
 						if(encoding) {
@@ -151,12 +152,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 							int len
 							inputStream = file.inputStream
 							def out = response.outputStream
-							while ((len = inputStream.read(buffer)) != -1) {
+							while((len = inputStream.read(buffer)) != -1) {
 								out.write(buffer, 0, len)
 							}
 							response.flushBuffer()
 						} catch(e) {
-							log.debug("File Transfer Aborted (Probably by the user)",e)
+							log.debug("File Transfer Aborted (Probably by the user)", e)
 						} finally {
 							try { inputStream?.close() } catch(ie) { /* silent fail */}
 						}
@@ -173,13 +174,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		} else {
 			def fileContents
 			if(request.getParameter('compile') == 'false') {
-				fileContents = AssetPipeline.serveUncompiledAsset(fileUri,format, null, encoding)
+				fileContents = AssetPipeline.serveUncompiledAsset(fileUri, format, null, encoding)
 			} else {
-				fileContents = AssetPipeline.serveAsset(fileUri,format, null, encoding)
+				fileContents = AssetPipeline.serveAsset(fileUri, format, null, encoding)
 			}
 
-			if (fileContents != null) {
-
+			if(fileContents != null) {
 				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
 				response.setHeader("Pragma", "no-cache") // HTTP 1.0.
 				response.setDateHeader("Expires", 0) // Proxies.
@@ -190,7 +190,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					response.outputStream << fileContents
 					response.flushBuffer()
 				} catch(e) {
-					log.debug("File Transfer Aborted (Probably by the user)",e)
+					log.debug("File Transfer Aborted (Probably by the user)", e)
 				}
 			} else {
 				response.status = 404
@@ -198,10 +198,8 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			}
 		}
 
-		if (!response.committed) {
+		if(!response.committed) {
 			chain.doFilter(request, response)
 		}
 	}
-
-
 }
