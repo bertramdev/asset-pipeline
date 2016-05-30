@@ -20,92 +20,92 @@ import java.text.SimpleDateFormat
 @Commons
 @CompileStatic
 class AssetPipelineFilter extends OncePerRequestFilter {
-	
+
 	public static final ProductionAssetCache fileCache = new ProductionAssetCache();
-    ApplicationContext applicationContext
-    ServletContext servletContext
+	ApplicationContext applicationContext
+	ServletContext servletContext
 
-    @Override
-    void initFilterBean() throws ServletException {
-        def config = filterConfig
-        applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
-        servletContext = config.servletContext
+	@Override
+	void initFilterBean() throws ServletException {
+		def config = filterConfig
+		applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
+		servletContext = config.servletContext
 
-    }
+	}
 
-    void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        boolean warDeployed = AssetPipelineConfigHolder.manifest ? true : false
+	void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+		boolean warDeployed = AssetPipelineConfigHolder.manifest ? true : false
 
-        String mapping = ((AssetProcessorService)(applicationContext.getBean('assetProcessorService', AssetProcessorService))).assetMapping
+		String mapping = ((AssetProcessorService)(applicationContext.getBean('assetProcessorService', AssetProcessorService))).assetMapping
 
-        def fileUri = new URI(request.requestURI).path
-        def baseAssetUrl = request.contextPath == "/" ? "/$mapping" : "${request.contextPath}/${mapping}"
-        def format = servletContext.getMimeType(fileUri)
-        def encoding = request.getParameter('encoding') ?: request.getCharacterEncoding()
+		def fileUri = new URI(request.requestURI).path
+		def baseAssetUrl = request.contextPath == "/" ? "/$mapping" : "${request.contextPath}/${mapping}"
+		def format = servletContext.getMimeType(fileUri)
+		def encoding = request.getParameter('encoding') ?: request.getCharacterEncoding()
 
-        if(fileUri.startsWith(baseAssetUrl)) {
-            fileUri = fileUri.substring(baseAssetUrl.length())
-        }
-        if(warDeployed) {
+		if(fileUri.startsWith(baseAssetUrl)) {
+			fileUri = fileUri.substring(baseAssetUrl.length())
+		}
+		if(warDeployed) {
 			def manifest = AssetPipelineConfigHolder.manifest
 			def manifestPath = fileUri
 			if(fileUri.startsWith('/')) {
-			  manifestPath = fileUri.substring(1) //Omit forward slash
+				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
 			fileUri = manifest?.getProperty(manifestPath, manifestPath)
 
 			AssetAttributes attributeCache = fileCache.get(fileUri)
 
 			if(attributeCache) {
-                if(attributeCache.exists()) {
-                    def file = attributeCache.resource
-                    def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'),attributeCache.getLastModified())
-                    
-                    responseBuilder.headers.each { header ->
-                        response.setHeader(header.key,header.value)
-                    }
-                    
-                    if(responseBuilder.statusCode) {
-                        response.status = responseBuilder.statusCode
-                    }
+				if(attributeCache.exists()) {
+					def file = attributeCache.resource
+					def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'),attributeCache.getLastModified())
 
-                    if(response.status != 304) {
-                        def acceptsEncoding = request.getHeader("Accept-Encoding")
-                        if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
-                            file = attributeCache.getGzipResource()
-                            response.setHeader('Content-Encoding','gzip')
-                            response.setHeader('Content-Length', attributeCache.getGzipFileSize().toString())
-                        } else {
-                            response.setHeader('Content-Length', attributeCache.getFileSize().toString())
-                        }
-                        if(encoding) {
-                            response.setCharacterEncoding(encoding)
-                        }
+					responseBuilder.headers.each { header ->
+						response.setHeader(header.key,header.value)
+					}
 
-                        response.setContentType(format)
-                        def inputStream
-                        try {
-                            byte[] buffer = new byte[102400];
-                            int len;
-                            inputStream = file.inputStream
-                            def out = response.outputStream
-                            while ((len = inputStream.read(buffer)) != -1) {
-                                out.write(buffer, 0, len);
-                            }
-                            response.flushBuffer()
-                        } catch(e) {
-                            log.debug("File Transfer Aborted (Probably by the user)",e)
-                        } finally {
-                            try { inputStream?.close() } catch(ie) { /* silent fail */}
-                        }
-                    } else {
-                        response.flushBuffer()
-                    }
-                } else {
-                    response.status = 404
-                    response.flushBuffer()
-                }
-				
+					if(responseBuilder.statusCode) {
+						response.status = responseBuilder.statusCode
+					}
+
+					if(response.status != 304) {
+						def acceptsEncoding = request.getHeader("Accept-Encoding")
+						if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
+							file = attributeCache.getGzipResource()
+							response.setHeader('Content-Encoding','gzip')
+							response.setHeader('Content-Length', attributeCache.getGzipFileSize().toString())
+						} else {
+							response.setHeader('Content-Length', attributeCache.getFileSize().toString())
+						}
+						if(encoding) {
+							response.setCharacterEncoding(encoding)
+						}
+
+						response.setContentType(format)
+						def inputStream
+						try {
+							byte[] buffer = new byte[102400];
+							int len;
+							inputStream = file.inputStream
+							def out = response.outputStream
+							while ((len = inputStream.read(buffer)) != -1) {
+								out.write(buffer, 0, len);
+							}
+							response.flushBuffer()
+						} catch(e) {
+							log.debug("File Transfer Aborted (Probably by the user)",e)
+						} finally {
+							try { inputStream?.close() } catch(ie) { /* silent fail */}
+						}
+					} else {
+						response.flushBuffer()
+					}
+				} else {
+					response.status = 404
+					response.flushBuffer()
+				}
+
 			} else {
 				def file = applicationContext.getResource("assets/${fileUri}")
 				if(!file.exists()) {
@@ -114,7 +114,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 				if(file.exists()) {
 					def responseBuilder = new AssetPipelineResponseBuilder(fileUri,request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'),file.lastModified() ? new Date(file.lastModified()) : null)
-					
+
 					if(responseBuilder.statusCode) {
 						response.status = responseBuilder.statusCode
 					}
@@ -126,7 +126,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					if(!gzipFile.exists()) {
 						gzipFile = applicationContext.getResource("classpath:assets/${fileUri}.gz")
 					}
-                    Date lastModifiedDate = file.lastModified() ? new Date(file.lastModified()) : null
+					Date lastModifiedDate = file.lastModified() ? new Date(file.lastModified()) : null
 					AssetAttributes newCache = new AssetAttributes(true, gzipFile.exists(), false, file.contentLength(), gzipFile.exists() ? gzipFile.contentLength() : null, lastModifiedDate, file, gzipFile)
 					fileCache.put(fileUri, newCache)
 
@@ -144,7 +144,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						}
 						response.setContentType(format)
 						response.setHeader('Content-Length', file.contentLength().toString())
-                        def inputStream
+						def inputStream
 						try {
 							byte[] buffer = new byte[102400];
 							int len;
@@ -157,8 +157,8 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						} catch(e) {
 							log.debug("File Transfer Aborted (Probably by the user)",e)
 						} finally {
-                            try { inputStream?.close() } catch(ie) { /* silent fail */}
-                        }
+							try { inputStream?.close() } catch(ie) { /* silent fail */}
+						}
 					} else {
 						response.flushBuffer()
 					}
@@ -169,38 +169,38 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					response.flushBuffer()
 				}
 			}
-        } else {
-            def fileContents
-            if(request.getParameter('compile') == 'false') {
-                fileContents = AssetPipeline.serveUncompiledAsset(fileUri,format, null, encoding)
-            } else {
-                fileContents = AssetPipeline.serveAsset(fileUri,format, null, encoding)
-            }
+		} else {
+			def fileContents
+			if(request.getParameter('compile') == 'false') {
+				fileContents = AssetPipeline.serveUncompiledAsset(fileUri,format, null, encoding)
+			} else {
+				fileContents = AssetPipeline.serveAsset(fileUri,format, null, encoding)
+			}
 
-            if (fileContents != null) {
+			if (fileContents != null) {
 
-                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
-                response.setHeader("Pragma", "no-cache") // HTTP 1.0.
-                response.setDateHeader("Expires", 0) // Proxies.
-                response.setHeader('Content-Length', fileContents.size().toString())
+				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
+				response.setHeader("Pragma", "no-cache") // HTTP 1.0.
+				response.setDateHeader("Expires", 0) // Proxies.
+				response.setHeader('Content-Length', fileContents.size().toString())
 
-                response.setContentType(format)
-                try {
-                    response.outputStream << fileContents
-                    response.flushBuffer()
-                } catch(e) {
-                    log.debug("File Transfer Aborted (Probably by the user)",e)
-                }
-            } else {
-                response.status = 404
-                response.flushBuffer()
-            }
-        }
+				response.setContentType(format)
+				try {
+					response.outputStream << fileContents
+					response.flushBuffer()
+				} catch(e) {
+					log.debug("File Transfer Aborted (Probably by the user)",e)
+				}
+			} else {
+				response.status = 404
+				response.flushBuffer()
+			}
+		}
 
-        if (!response.committed) {
-            chain.doFilter(request, response)
-        }
-    }
+		if (!response.committed) {
+			chain.doFilter(request, response)
+		}
+	}
 
 
 }

@@ -7,18 +7,18 @@ import javax.servlet.*
 
 @Log4j
 class AssetPipelineDevFilter implements Filter {
-    AssetPipelineDevFilterCore assetPipelineDevFilterCoreStandalone = new AssetPipelineDevFilterCore()
+	AssetPipelineDevFilterCore assetPipelineDevFilterCoreStandalone = new AssetPipelineDevFilterCore()
 
-    void init(FilterConfig config) throws ServletException {
-        assetPipelineDevFilterCoreStandalone.servletContext = config.servletContext
-        assetPipelineDevFilterCoreStandalone.mapping = "assets"
-    }
+	void init(FilterConfig config) throws ServletException {
+		assetPipelineDevFilterCoreStandalone.servletContext = config.servletContext
+		assetPipelineDevFilterCoreStandalone.mapping = "assets"
+	}
 
-    void destroy() {
-    }
+	void destroy() {
+	}
 
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        assetPipelineDevFilterCoreStandalone.doFilter(request, response, chain)
-    }
+	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		assetPipelineDevFilterCoreStandalone.doFilter(request, response, chain)
+	}
 
 }

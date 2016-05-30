@@ -8,24 +8,24 @@ import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 
 class AssetPipelineDevFilter implements Filter {
-    AssetPipelineDevFilterCore assetPipelineDevFilterCore = new AssetPipelineDevFilterCore()
+	AssetPipelineDevFilterCore assetPipelineDevFilterCore = new AssetPipelineDevFilterCore()
 
-    void setMapping(String mapping) {
-        assetPipelineDevFilterCore.mapping = mapping
-    }
+	void setMapping(String mapping) {
+		assetPipelineDevFilterCore.mapping = mapping
+	}
 
-    @Override
-    void init(FilterConfig filterConfig) throws ServletException {
-        assetPipelineDevFilterCore.servletContext = filterConfig.getServletContext()
-    }
+	@Override
+	void init(FilterConfig filterConfig) throws ServletException {
+		assetPipelineDevFilterCore.servletContext = filterConfig.getServletContext()
+	}
 
-    @Override
-    void destroy() {
+	@Override
+	void destroy() {
 
-    }
+	}
 
-    @Override
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        assetPipelineDevFilterCore.doFilter(request, response, chain)
-    }
+	@Override
+	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		assetPipelineDevFilterCore.doFilter(request, response, chain)
+	}
 }

@@ -16,63 +16,63 @@ import org.springframework.web.context.WebApplicationContext
 
 @Log4j
 class AssetPipelineFilter implements Filter {
-    AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
+	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
-    void init(FilterConfig config) throws ServletException {
-        assetPipelineFilterCore.servletContext = config.servletContext
-        assetPipelineFilterCore.mapping = "assets"
+	void init(FilterConfig config) throws ServletException {
+		assetPipelineFilterCore.servletContext = config.servletContext
+		assetPipelineFilterCore.mapping = "assets"
 
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
-        assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
-    }
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
+		assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
+	}
 
-    void destroy() {
-    }
+	void destroy() {
+	}
 
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        assetPipelineFilterCore.doFilter(request, response, chain)
-    }
+	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		assetPipelineFilterCore.doFilter(request, response, chain)
+	}
 
-    private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
-        private final WebApplicationContext applicationContext
-        public SpringServletResourceRepository(WebApplicationContext applicationContext) {
-            this.applicationContext = applicationContext
-        }
+	private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
+		private final WebApplicationContext applicationContext
+		public SpringServletResourceRepository(WebApplicationContext applicationContext) {
+			this.applicationContext = applicationContext
+		}
 
-        @Override
-        AssetPipelineServletResource getResource(String path) {
-            return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
-        }
+		@Override
+		AssetPipelineServletResource getResource(String path) {
+			return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
+		}
 
-        @Override
-        AssetPipelineServletResource getGzippedResource(String path) {
-            return SpringServletResource.create(applicationContext.getResource("assets${path}.gz"))
-        }
-    }
+		@Override
+		AssetPipelineServletResource getGzippedResource(String path) {
+			return SpringServletResource.create(applicationContext.getResource("assets${path}.gz"))
+		}
+	}
 
-    private static final class SpringServletResource implements AssetPipelineServletResource {
-        private final Resource resource
+	private static final class SpringServletResource implements AssetPipelineServletResource {
+		private final Resource resource
 
-        private SpringServletResource(Resource resource) {
-            this.resource = resource
-        }
+		private SpringServletResource(Resource resource) {
+			this.resource = resource
+		}
 
-        static SpringServletResource create(Resource resource) {
-            if (!resource.exists()) {
-                return null
-            }
+		static SpringServletResource create(Resource resource) {
+			if (!resource.exists()) {
+				return null
+			}
 
-            new SpringServletResource(resource)
-        }
+			new SpringServletResource(resource)
+		}
 
-        @Override
-        Long getLastModified() {
-            return resource.lastModified()
-        }
+		@Override
+		Long getLastModified() {
+			return resource.lastModified()
+		}
 
-        @Override
-        InputStream getInputStream() {
-            return resource.getInputStream()
-        }
-    }
+		@Override
+		InputStream getInputStream() {
+			return resource.getInputStream()
+		}
+	}
 }
