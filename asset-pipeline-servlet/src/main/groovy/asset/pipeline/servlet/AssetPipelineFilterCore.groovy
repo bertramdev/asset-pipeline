@@ -1,7 +1,8 @@
 package asset.pipeline.servlet
 
-import asset.pipeline.AssetPipelineConfigHolder
 
+import asset.pipeline.AssetPipelineResponseBuilder
+import java.util.logging.Logger
 import javax.servlet.FilterChain
 import javax.servlet.ServletContext
 import javax.servlet.ServletException
@@ -9,9 +10,7 @@ import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import java.text.SimpleDateFormat
-import java.util.logging.Logger
-import asset.pipeline.AssetPipelineResponseBuilder
+
 
 class AssetPipelineFilterCore {
 	private static final Logger log = Logger.getLogger(getClass().getName())

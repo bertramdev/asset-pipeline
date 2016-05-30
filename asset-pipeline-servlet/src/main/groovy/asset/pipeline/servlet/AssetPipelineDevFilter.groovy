@@ -1,11 +1,13 @@
 package asset.pipeline.servlet
 
+
 import javax.servlet.Filter
 import javax.servlet.FilterChain
 import javax.servlet.FilterConfig
 import javax.servlet.ServletException
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
+
 
 class AssetPipelineDevFilter implements Filter {
 	AssetPipelineDevFilterCore assetPipelineDevFilterCore = new AssetPipelineDevFilterCore()

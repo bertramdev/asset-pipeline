@@ -1,21 +1,21 @@
 
 package asset.pipeline
 
-import org.springframework.context.*
-import javax.servlet.*
-import javax.servlet.http.*
-import org.springframework.web.context.support.WebApplicationContextUtils
-import org.springframework.web.filter.*
-import groovy.util.logging.Commons
-import groovy.transform.*
-import asset.pipeline.grails.AssetProcessorService
-import asset.pipeline.AssetPipelineConfigHolder
-import asset.pipeline.AssetPipelineResponseBuilder
+
 import asset.pipeline.grails.AssetAttributes
+import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.ProductionAssetCache
-import java.net.URI
-import java.util.TimeZone
-import java.text.SimpleDateFormat
+import groovy.transform.CompileStatic
+import groovy.util.logging.Commons
+import javax.servlet.FilterChain
+import javax.servlet.ServletContext
+import javax.servlet.ServletException
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+import org.springframework.context.ApplicationContext
+import org.springframework.web.context.support.WebApplicationContextUtils
+import org.springframework.web.filter.OncePerRequestFilter
+
 
 @Commons
 @CompileStatic
