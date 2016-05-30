@@ -37,10 +37,8 @@ class AssetMethodTagLibSpec extends Specification {
 	def setup() {
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('application','grails-app/assets'))
 
-		assetProcessorService.grailsApplication   = grailsApplication
-		assetProcessorService.grailsLinkGenerator = [serverBaseURL: MOCK_BASE_SERVER_URL]
-
 		tagLib.assetProcessorService = assetProcessorService
+		tagLib.grailsLinkGenerator   = [serverBaseURL: MOCK_BASE_SERVER_URL]
 	}
 
 	void "should return assetPath"() {
