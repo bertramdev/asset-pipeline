@@ -20,6 +20,7 @@ class AssetProcessorService {
 	static transactional = false
 
 
+	// <editor-fold desc="Grails-specific methods">
 	/**
 	 * Retrieves the asset path from the property [grails.assets.mapping] which is used by the url mapping and the
 	 * taglib.  The property cannot contain <code>/</code>, and must be one level deep
@@ -36,28 +37,6 @@ class AssetProcessorService {
 			)
 		}
 		return mapping
-	}
-
-
-	String getAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		return manifest?.getProperty(relativePath) ?: relativePath
-	}
-
-
-	String getResolvedAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		if(manifest) {
-			return manifest.getProperty(relativePath)
-		} else {
-			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
-		}
-	}
-
-
-	boolean isAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		return relativePath && (manifest ? manifest.getProperty(relativePath) : AssetHelper.fileForFullName(relativePath) != null)
 	}
 
 
@@ -80,6 +59,44 @@ class AssetProcessorService {
 		}
 
 		return url
+	}
+
+
+	String makeServerURL(final DefaultLinkGenerator linkGenerator) {
+		String serverUrl = linkGenerator.configuredServerBaseURL
+		if (! serverUrl) {
+			final GrailsWebRequest req = lookup()
+			if (req) {
+				serverUrl = getBaseUrlWithScheme(req.currentRequest).toString()
+				if (!serverUrl && !Environment.isWarDeployed()) {
+					serverUrl = "http://localhost:${System.getProperty('server.port') ?: '8080'}${linkGenerator.contextPath ?: ''}"
+				}
+			}
+		}
+		return serverUrl
+	}
+	// </editor-fold>
+
+
+	String getAssetPath(final String path) {
+		final String relativePath = trimLeadingSlash(path)
+		return manifest?.getProperty(relativePath) ?: relativePath
+	}
+
+
+	String getResolvedAssetPath(final String path) {
+		final String relativePath = trimLeadingSlash(path)
+		if(manifest) {
+			return manifest.getProperty(relativePath)
+		} else {
+			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
+		}
+	}
+
+
+	boolean isAssetPath(final String path) {
+		final String relativePath = trimLeadingSlash(path)
+		return relativePath && (manifest ? manifest.getProperty(relativePath) : AssetHelper.fileForFullName(relativePath) != null)
 	}
 
 
@@ -106,21 +123,6 @@ class AssetProcessorService {
 			.toString()
 
 		return finalUrl
-	}
-
-
-	String makeServerURL(final DefaultLinkGenerator linkGenerator) {
-		String serverUrl = linkGenerator.configuredServerBaseURL
-		if (! serverUrl) {
-			final GrailsWebRequest req = lookup()
-			if (req) {
-				serverUrl = getBaseUrlWithScheme(req.currentRequest).toString()
-				if (!serverUrl && !Environment.isWarDeployed()) {
-					serverUrl = "http://localhost:${System.getProperty('server.port') ?: '8080'}${linkGenerator.contextPath ?: ''}"
-				}
-			}
-		}
-		return serverUrl
 	}
 
 
