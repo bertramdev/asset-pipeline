@@ -1,6 +1,8 @@
 package asset.pipeline.grails
 
 
+import asset.pipeline.AssetPaths
+
 import static org.apache.commons.lang.StringUtils.trimToEmpty
 
 
@@ -27,6 +29,6 @@ class AssetMethodTagLib {
 			baseUrl = trimToEmpty(grailsLinkGenerator.contextPath)
 		}
 
-		return assetProcessorService.assetBaseUrl(request, baseUrl) + assetProcessorService.getAssetPath(Objects.toString(src))
+		return assetProcessorService.assetBaseUrl(request, baseUrl) + AssetPaths.getAssetPath(Objects.toString(src))
 	}
 }

@@ -1,14 +1,13 @@
 package asset.pipeline.grails
 
 
-import asset.pipeline.AssetHelper
+import asset.pipeline.AssetPaths
 import grails.util.Environment
 import javax.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
 
 import static asset.pipeline.AssetPipelineConfigHolder.getConfig
-import static asset.pipeline.AssetPipelineConfigHolder.manifest
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
 import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
 import static asset.pipeline.utils.net.Urls.hasAuthority
@@ -21,27 +20,8 @@ class AssetProcessorService {
 
 
 	// <editor-fold desc="Grails-specific methods">
-	/**
-	 * Retrieves the asset path from the property [grails.assets.mapping] which is used by the url mapping and the
-	 * taglib.  The property cannot contain <code>/</code>, and must be one level deep
-	 *
-	 * @return the path
-	 * @throws IllegalArgumentException if the path contains <code>/</code>
-	 */
-	String getAssetMapping() {
-		final String mapping = config.mapping ?: 'assets'
-		if (mapping.contains('/')) {
-			throw new IllegalArgumentException(
-				'The property [grails.assets.mapping] can only be one level deep.  ' +
-				"For example, 'foo' and 'bar' would be acceptable values, but 'foo/bar' is not"
-			)
-		}
-		return mapping
-	}
-
-
 	String asset(final Map attrs, final DefaultLinkGenerator linkGenerator) {
-		String url = getResolvedAssetPath(attrs.file ?: attrs.src)
+		String url = AssetPaths.getResolvedAssetPath(attrs.file ?: attrs.src)
 
 		if (! url) {
 			return null
@@ -78,28 +58,28 @@ class AssetProcessorService {
 	// </editor-fold>
 
 
-	String getAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		return manifest?.getProperty(relativePath) ?: relativePath
-	}
-
-
-	String getResolvedAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		if(manifest) {
-			return manifest.getProperty(relativePath)
-		} else {
-			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
+	// <editor-fold desc="Grails-config-property-specific methods that could be moved to core if core made to respect property">
+	/**
+	 * Retrieves the asset path from the property [grails.assets.mapping] which is used by the url mapping and the
+	 * taglib.  The property cannot contain <code>/</code>, and must be one level deep
+	 *
+	 * @return the path
+	 * @throws IllegalArgumentException if the path contains <code>/</code>
+	 */
+	String getAssetMapping() {
+		final String mapping = config.mapping ?: 'assets'
+		if(mapping.contains('/')) {
+			throw new IllegalArgumentException(
+				'The property [grails.assets.mapping] can only be one level deep.  ' +
+				"For example, 'foo' and 'bar' would be acceptable values, but 'foo/bar' is not"
+			)
 		}
+		return mapping
 	}
+	// </editor-fold>
 
 
-	boolean isAssetPath(final String path) {
-		final String relativePath = trimLeadingSlash(path)
-		return relativePath && (manifest ? manifest.getProperty(relativePath) : AssetHelper.fileForFullName(relativePath) != null)
-	}
-
-
+	// <editor-fold desc="HttpServletRequest-specific methods">
 	String getConfigBaseUrl(final HttpServletRequest req) {
 		final def url = config.url
 		if(url instanceof Closure) {
@@ -111,7 +91,7 @@ class AssetProcessorService {
 
 	String assetBaseUrl(final HttpServletRequest req, final String baseUrl) {
 		final String url = getConfigBaseUrl(req)
-		if (url) {
+		if(url) {
 			return url
 		}
 
@@ -124,12 +104,5 @@ class AssetProcessorService {
 
 		return finalUrl
 	}
-
-
-	private static String trimLeadingSlash(final String s) {
-		if(!s || s[0] != '/') {
-			return s
-		}
-		return s.substring(1)
-	}
+	// </editor-fold>
 }
