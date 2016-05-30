@@ -6,6 +6,7 @@ import java.util.logging.Logger
 import javax.servlet.FilterChain
 import javax.servlet.ServletContext
 import javax.servlet.ServletException
+import javax.servlet.ServletOutputStream
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
@@ -45,7 +46,13 @@ class AssetPipelineFilterCore {
 		AssetPipelineServletResource resource = assetPipelineServletResourceRepository.getResource(fileUri)
 		if(resource) {
 			final Date lastModifiedDate = resource.getLastModified() ? new Date(resource.getLastModified()) : null
-			final def responseBuilder = new AssetPipelineResponseBuilder(fileUri, request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), lastModifiedDate)
+			final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
+				fileUri,
+				request.getHeader('If-None-Match'),
+				request.getHeader('If-Modified-Since'),
+				lastModifiedDate
+			)
+
 			responseBuilder.headers.each { final header ->
 				response.setHeader(header.key, header.value)
 			}
@@ -55,7 +62,7 @@ class AssetPipelineFilterCore {
 
 			if(response.status != 304) {
 				// Check for GZip
-				final def acceptsEncoding = request.getHeader("Accept-Encoding")
+				final String acceptsEncoding = request.getHeader("Accept-Encoding")
 				if(acceptsEncoding?.split(",")?.contains("gzip")) {
 					final AssetPipelineServletResource gzipResource = assetPipelineServletResourceRepository.getGzippedResource(fileUri)
 					if(gzipResource) {
@@ -63,18 +70,18 @@ class AssetPipelineFilterCore {
 						response.setHeader('Content-Encoding', 'gzip')
 					}
 				}
-				final def format = servletContext.getMimeType(request.requestURI)
-				final def encoding = request.getCharacterEncoding()
+				final String format = servletContext.getMimeType(request.requestURI)
+				final String encoding = request.getCharacterEncoding()
 				if(encoding) {
 					response.setCharacterEncoding(encoding)
 				}
 				response.setContentType(format)
-				final def inputStream
+				final InputStream inputStream
 				try {
 					final byte[] buffer = new byte[102400]
 					int len
 					inputStream = resource.inputStream
-					final def out = response.outputStream
+					final ServletOutputStream out = response.outputStream
 					while((len = inputStream.read(buffer)) != -1) {
 						out.write(buffer, 0, len)
 					}
@@ -82,7 +89,7 @@ class AssetPipelineFilterCore {
 				} catch(final e) {
 					log.fine("File Transfer Aborted (Probably by the user): ${e.getMessage()}")
 				} finally {
-					try { inputStream?.close() } catch(final ie) { /* silent fail*/}
+					try { inputStream?.close() } catch(final ie) { /* silent fail */ }
 				}
 			} else {
 				response.flushBuffer()

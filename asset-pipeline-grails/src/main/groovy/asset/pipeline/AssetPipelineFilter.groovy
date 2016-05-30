@@ -7,11 +7,14 @@ import asset.pipeline.grails.ProductionAssetCache
 import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
 import javax.servlet.FilterChain
+import javax.servlet.FilterConfig
 import javax.servlet.ServletContext
 import javax.servlet.ServletException
+import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.context.ApplicationContext
+import org.springframework.core.io.Resource
 import org.springframework.web.context.support.WebApplicationContextUtils
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -24,12 +27,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 
 	ApplicationContext applicationContext
-	ServletContext servletContext
+	ServletContext     servletContext
 
 
 	@Override
 	void initFilterBean() throws ServletException {
-		final def config = filterConfig
+		final FilterConfig config = filterConfig
 		applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
 		servletContext = config.servletContext
 	}
@@ -40,18 +43,19 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 		final String mapping = ((AssetProcessorService)(applicationContext.getBean('assetProcessorService', AssetProcessorService))).assetMapping
 
-		def fileUri = new URI(request.requestURI).path
-		final def baseAssetUrl = request.contextPath == "/" ? "/$mapping" : "${request.contextPath}/${mapping}"
-		final def format = servletContext.getMimeType(fileUri)
-		final def encoding = request.getParameter('encoding') ?: request.getCharacterEncoding()
+		String fileUri = new URI(request.requestURI).path
+
+		final String baseAssetUrl = request.contextPath == "/" ? "/$mapping" : "${request.contextPath}/${mapping}"
+		final String format       = servletContext.getMimeType(fileUri)
+		final String encoding     = request.getParameter('encoding') ?: request.getCharacterEncoding()
 
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
 
 		if(warDeployed) {
-			final def manifest = AssetPipelineConfigHolder.manifest
-			def manifestPath = fileUri
+			final Properties manifest = AssetPipelineConfigHolder.manifest
+			String manifestPath = fileUri
 			if(fileUri.startsWith('/')) {
 				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
@@ -61,8 +65,13 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 			if(attributeCache) {
 				if(attributeCache.exists()) {
-					def file = attributeCache.resource
-					final def responseBuilder = new AssetPipelineResponseBuilder(fileUri, request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), attributeCache.getLastModified())
+					Resource file = attributeCache.resource
+					final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
+						fileUri,
+						request.getHeader('If-None-Match'),
+						request.getHeader('If-Modified-Since'),
+						attributeCache.getLastModified()
+					)
 
 					responseBuilder.headers.each { final header ->
 						response.setHeader(header.key, header.value)
@@ -73,7 +82,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					}
 
 					if(response.status != 304) {
-						final def acceptsEncoding = request.getHeader("Accept-Encoding")
+						final String acceptsEncoding = request.getHeader("Accept-Encoding")
 						if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
 							file = attributeCache.getGzipResource()
 							response.setHeader('Content-Encoding', 'gzip')
@@ -86,12 +95,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						}
 
 						response.setContentType(format)
-						final def inputStream
+						final InputStream inputStream
 						try {
 							final byte[] buffer = new byte[102400]
 							int len
 							inputStream = file.inputStream
-							final def out = response.outputStream
+							final ServletOutputStream out = response.outputStream
 							while((len = inputStream.read(buffer)) != -1) {
 								out.write(buffer, 0, len)
 							}
@@ -99,7 +108,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						} catch(final e) {
 							log.debug("File Transfer Aborted (Probably by the user)", e)
 						} finally {
-							try { inputStream?.close() } catch(final ie) { /* silent fail */}
+							try { inputStream?.close() } catch(final ie) { /* silent fail */ }
 						}
 					} else {
 						response.flushBuffer()
@@ -109,13 +118,18 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					response.flushBuffer()
 				}
 			} else {
-				def file = applicationContext.getResource("assets/${fileUri}")
+				Resource file = applicationContext.getResource("assets/${fileUri}")
 				if(!file.exists()) {
 					file = applicationContext.getResource("classpath:assets/${fileUri}")
 				}
 
 				if(file.exists()) {
-					final def responseBuilder = new AssetPipelineResponseBuilder(fileUri, request.getHeader('If-None-Match'), request.getHeader('If-Modified-Since'), file.lastModified() ? new Date(file.lastModified()) : null)
+					final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
+						fileUri,
+						request.getHeader('If-None-Match'),
+						request.getHeader('If-Modified-Since'),
+						file.lastModified() ? new Date(file.lastModified()) : null
+					)
 
 					if(responseBuilder.statusCode) {
 						response.status = responseBuilder.statusCode
@@ -124,17 +138,27 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						response.setHeader(header.key, header.value)
 					}
 
-					def gzipFile = applicationContext.getResource("assets/${fileUri}.gz")
+					Resource gzipFile = applicationContext.getResource("assets/${fileUri}.gz")
 					if(!gzipFile.exists()) {
 						gzipFile = applicationContext.getResource("classpath:assets/${fileUri}.gz")
 					}
 					final Date lastModifiedDate = file.lastModified() ? new Date(file.lastModified()) : null
-					final AssetAttributes newCache = new AssetAttributes(true, gzipFile.exists(), false, file.contentLength(), gzipFile.exists() ? gzipFile.contentLength() : null, lastModifiedDate, file, gzipFile)
+
+					final AssetAttributes newCache = new AssetAttributes(
+						true,
+						gzipFile.exists(),
+						false,
+						file.contentLength(),
+						gzipFile.exists() ? gzipFile.contentLength() : null,
+						lastModifiedDate,
+						file,
+						gzipFile
+					)
 					fileCache.put(fileUri, newCache)
 
 					if(response.status != 304) {
 						// Check for GZip
-						final def acceptsEncoding = request.getHeader("Accept-Encoding")
+						final String acceptsEncoding = request.getHeader("Accept-Encoding")
 						if(acceptsEncoding?.split(",")?.contains("gzip")) {
 							if(gzipFile.exists()) {
 								file = gzipFile
@@ -146,12 +170,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						}
 						response.setContentType(format)
 						response.setHeader('Content-Length', String.valueOf(file.contentLength()))
-						final def inputStream
+						final InputStream inputStream
 						try {
 							final byte[] buffer = new byte[102400]
 							int len
 							inputStream = file.inputStream
-							final def out = response.outputStream
+							final ServletOutputStream out = response.outputStream
 							while((len = inputStream.read(buffer)) != -1) {
 								out.write(buffer, 0, len)
 							}
@@ -159,7 +183,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						} catch(final e) {
 							log.debug("File Transfer Aborted (Probably by the user)", e)
 						} finally {
-							try { inputStream?.close() } catch(final ie) { /* silent fail */}
+							try { inputStream?.close() } catch(final ie) { /* silent fail */ }
 						}
 					} else {
 						response.flushBuffer()
@@ -172,7 +196,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 				}
 			}
 		} else {
-			final def fileContents
+			final byte[] fileContents
 			if(request.getParameter('compile') == 'false') {
 				fileContents = AssetPipeline.serveUncompiledAsset(fileUri, format, null, encoding)
 			} else {
