@@ -18,7 +18,7 @@ class AssetPipelineDevFilter implements Filter {
 
 
 	@Override
-	void init(FilterConfig config) throws ServletException {
+	void init(final FilterConfig config) throws ServletException {
 		assetPipelineDevFilterCoreStandalone.servletContext = config.servletContext
 		assetPipelineDevFilterCoreStandalone.mapping = "assets"
 	}
@@ -28,7 +28,7 @@ class AssetPipelineDevFilter implements Filter {
 	}
 
 	@Override
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		assetPipelineDevFilterCoreStandalone.doFilter(request, response, chain)
 	}
 }

@@ -23,11 +23,11 @@ class AssetPipelineFilter implements Filter {
 
 
 	@Override
-	void init(FilterConfig config) throws ServletException {
+	void init(final FilterConfig config) throws ServletException {
 		assetPipelineFilterCore.servletContext = config.servletContext
 		assetPipelineFilterCore.mapping = "assets"
 
-		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
+		final WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
 		assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
 	}
 
@@ -36,7 +36,7 @@ class AssetPipelineFilter implements Filter {
 	}
 
 	@Override
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		assetPipelineFilterCore.doFilter(request, response, chain)
 	}
 
@@ -45,18 +45,18 @@ class AssetPipelineFilter implements Filter {
 		private final WebApplicationContext applicationContext
 
 
-		SpringServletResourceRepository(WebApplicationContext applicationContext) {
+		SpringServletResourceRepository(final WebApplicationContext applicationContext) {
 			this.applicationContext = applicationContext
 		}
 
 
 		@Override
-		AssetPipelineServletResource getResource(String path) {
+		AssetPipelineServletResource getResource(final String path) {
 			return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
 		}
 
 		@Override
-		AssetPipelineServletResource getGzippedResource(String path) {
+		AssetPipelineServletResource getGzippedResource(final String path) {
 			return SpringServletResource.create(applicationContext.getResource("assets${path}.gz"))
 		}
 	}
@@ -66,12 +66,12 @@ class AssetPipelineFilter implements Filter {
 		private final Resource resource
 
 
-		private SpringServletResource(Resource resource) {
+		private SpringServletResource(final Resource resource) {
 			this.resource = resource
 		}
 
 
-		static SpringServletResource create(Resource resource) {
+		static SpringServletResource create(final Resource resource) {
 			if(!resource.exists()) {
 				return null
 			}

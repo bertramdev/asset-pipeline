@@ -14,16 +14,16 @@ class AssetPipelineFilter implements Filter {
 	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
 
-	void setAssetPipelineServletResourceRepository(AssetPipelineServletResourceRepository assetPipelineServletResourceRepository) {
+	void setAssetPipelineServletResourceRepository(final AssetPipelineServletResourceRepository assetPipelineServletResourceRepository) {
 		assetPipelineFilterCore.assetPipelineServletResourceRepository = assetPipelineServletResourceRepository
 	}
 
-	void setMapping(String mapping) {
+	void setMapping(final String mapping) {
 		assetPipelineFilterCore.mapping = mapping
 	}
 
 	@Override
-	void init(FilterConfig filterConfig) throws ServletException {
+	void init(final FilterConfig filterConfig) throws ServletException {
 		assetPipelineFilterCore.servletContext = filterConfig.getServletContext()
 	}
 
@@ -32,7 +32,7 @@ class AssetPipelineFilter implements Filter {
 	}
 
 	@Override
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		assetPipelineFilterCore.doFilter(request, response, chain)
 	}
 }

@@ -14,12 +14,12 @@ class AssetPipelineDevFilter implements Filter {
 	AssetPipelineDevFilterCore assetPipelineDevFilterCore = new AssetPipelineDevFilterCore()
 
 
-	void setMapping(String mapping) {
+	void setMapping(final String mapping) {
 		assetPipelineDevFilterCore.mapping = mapping
 	}
 
 	@Override
-	void init(FilterConfig filterConfig) throws ServletException {
+	void init(final FilterConfig filterConfig) throws ServletException {
 		assetPipelineDevFilterCore.servletContext = filterConfig.getServletContext()
 	}
 
@@ -28,7 +28,7 @@ class AssetPipelineDevFilter implements Filter {
 	}
 
 	@Override
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		assetPipelineDevFilterCore.doFilter(request, response, chain)
 	}
 }

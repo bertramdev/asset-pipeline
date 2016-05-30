@@ -21,7 +21,7 @@ class AssetPipelineDevFilterCore {
 	ServletContext servletContext
 
 
-	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if(request instanceof HttpServletRequest) {
 			doFilterHttp(request, response, chain)
 		} else {
@@ -29,15 +29,15 @@ class AssetPipelineDevFilterCore {
 		}
 	}
 
-	private void doFilterHttp(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+	private void doFilterHttp(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) {
 		String fileUri = request.requestURI
-		String baseAssetUrl = request.contextPath == "/" ? "/$mapping/" : "${request.contextPath}/${mapping}/"
+		final String baseAssetUrl = request.contextPath == "/" ? "/$mapping/" : "${request.contextPath}/${mapping}/"
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
-		String format = servletContext.getMimeType(request.requestURI)
+		final String format = servletContext.getMimeType(request.requestURI)
 
-		byte[] fileContents = AssetPipeline.serveAsset(fileUri, format, null, request.characterEncoding)
+		final byte[] fileContents = AssetPipeline.serveAsset(fileUri, format, null, request.characterEncoding)
 		if(fileContents) {
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 			response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
@@ -46,7 +46,7 @@ class AssetPipelineDevFilterCore {
 			try {
 				response.outputStream << fileContents
 				response.flushBuffer()
-			} catch(e) {
+			} catch(final e) {
 				log.fine("File Transfer Aborted (Probably by the user): ${e.getMessage()}")
 			}
 		}
