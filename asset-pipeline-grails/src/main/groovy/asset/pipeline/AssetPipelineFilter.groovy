@@ -145,7 +145,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 							response.setCharacterEncoding(encoding)
 						}
 						response.setContentType(format)
-						response.setHeader('Content-Length', file.contentLength().toString())
+						response.setHeader('Content-Length', String.valueOf(file.contentLength()))
 						final def inputStream
 						try {
 							final byte[] buffer = new byte[102400]
@@ -183,7 +183,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 				response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
 				response.setHeader("Pragma", "no-cache") // HTTP 1.0.
 				response.setDateHeader("Expires", 0) // Proxies.
-				response.setHeader('Content-Length', fileContents.size().toString())
+				response.setHeader('Content-Length', String.valueOf(fileContents.size()))
 
 				response.setContentType(format)
 				try {
