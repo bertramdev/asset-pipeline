@@ -69,12 +69,12 @@ class AssetPipelineFilterCore {
 				response.setContentType(format)
 				def inputStream
 				try {
-					byte[] buffer = new byte[102400];
-					int len;
+					byte[] buffer = new byte[102400]
+					int len
 					inputStream = resource.inputStream
 					def out = response.outputStream
 					while ((len = inputStream.read(buffer)) != -1) {
-						out.write(buffer, 0, len);
+						out.write(buffer, 0, len)
 					}
 					response.flushBuffer()
 				} catch (e) {

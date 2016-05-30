@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @CompileStatic
 class AssetPipelineFilter extends OncePerRequestFilter {
 
-	public static final ProductionAssetCache fileCache = new ProductionAssetCache();
+	public static final ProductionAssetCache fileCache = new ProductionAssetCache()
 	ApplicationContext applicationContext
 	ServletContext servletContext
 
@@ -85,12 +85,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						response.setContentType(format)
 						def inputStream
 						try {
-							byte[] buffer = new byte[102400];
-							int len;
+							byte[] buffer = new byte[102400]
+							int len
 							inputStream = file.inputStream
 							def out = response.outputStream
 							while ((len = inputStream.read(buffer)) != -1) {
-								out.write(buffer, 0, len);
+								out.write(buffer, 0, len)
 							}
 							response.flushBuffer()
 						} catch(e) {
@@ -146,12 +146,12 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						response.setHeader('Content-Length', file.contentLength().toString())
 						def inputStream
 						try {
-							byte[] buffer = new byte[102400];
-							int len;
+							byte[] buffer = new byte[102400]
+							int len
 							inputStream = file.inputStream
 							def out = response.outputStream
 							while ((len = inputStream.read(buffer)) != -1) {
-								out.write(buffer, 0, len);
+								out.write(buffer, 0, len)
 							}
 							response.flushBuffer()
 						} catch(e) {
