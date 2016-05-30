@@ -15,14 +15,17 @@ import javax.servlet.ServletResponse
 class AssetPipelineDevFilter implements Filter {
 	AssetPipelineDevFilterCore assetPipelineDevFilterCoreStandalone = new AssetPipelineDevFilterCore()
 
+	@Override
 	void init(FilterConfig config) throws ServletException {
 		assetPipelineDevFilterCoreStandalone.servletContext = config.servletContext
 		assetPipelineDevFilterCoreStandalone.mapping = "assets"
 	}
 
+	@Override
 	void destroy() {
 	}
 
+	@Override
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		assetPipelineDevFilterCoreStandalone.doFilter(request, response, chain)
 	}

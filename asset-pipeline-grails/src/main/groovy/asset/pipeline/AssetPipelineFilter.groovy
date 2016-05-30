@@ -33,6 +33,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 	}
 
+	@Override
 	void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 		boolean warDeployed = AssetPipelineConfigHolder.manifest ? true : false
 

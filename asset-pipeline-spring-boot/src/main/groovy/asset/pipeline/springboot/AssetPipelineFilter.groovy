@@ -20,6 +20,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils
 class AssetPipelineFilter implements Filter {
 	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
+	@Override
 	void init(FilterConfig config) throws ServletException {
 		assetPipelineFilterCore.servletContext = config.servletContext
 		assetPipelineFilterCore.mapping = "assets"
@@ -28,9 +29,11 @@ class AssetPipelineFilter implements Filter {
 		assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
 	}
 
+	@Override
 	void destroy() {
 	}
 
+	@Override
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		assetPipelineFilterCore.doFilter(request, response, chain)
 	}
