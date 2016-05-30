@@ -21,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 @CompileStatic
 class AssetPipelineFilter extends OncePerRequestFilter {
 
-	public static final ProductionAssetCache fileCache = new ProductionAssetCache()
+	static final ProductionAssetCache fileCache = new ProductionAssetCache()
 	ApplicationContext applicationContext
 	ServletContext servletContext
 

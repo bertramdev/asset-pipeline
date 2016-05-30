@@ -37,7 +37,7 @@ class AssetPipelineFilter implements Filter {
 
 	private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
 		private final WebApplicationContext applicationContext
-		public SpringServletResourceRepository(WebApplicationContext applicationContext) {
+		SpringServletResourceRepository(WebApplicationContext applicationContext) {
 			this.applicationContext = applicationContext
 		}
 

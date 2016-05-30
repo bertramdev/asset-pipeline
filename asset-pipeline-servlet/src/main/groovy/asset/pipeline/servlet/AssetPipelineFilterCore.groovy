@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 
 class AssetPipelineFilterCore {
 	private static final Logger log = Logger.getLogger(getClass().getName())
-	public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz"
+	static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz"
 
 	String mapping = "mapping"
 	AssetPipelineServletResourceRepository assetPipelineServletResourceRepository
