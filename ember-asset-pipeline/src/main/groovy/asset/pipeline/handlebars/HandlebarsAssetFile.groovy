@@ -22,7 +22,7 @@ import asset.pipeline.AbstractAssetFile
 import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 import asset.pipeline.ember.EmberHandlebarsProcessor
-
+import asset.pipeline.processors.JsProcessor
 /**
 * And {@link asset.pipeline.AssetFile} implementation for the handlebars file format to javascript
 *
@@ -33,7 +33,7 @@ class HandlebarsAssetFile extends AbstractAssetFile {
 	static final String contentType = 'application/javascript'
 	static extensions = ['handlebars', 'hbs']
 	static final String compiledExtension = 'js'
-	static processors = [EmberHandlebarsProcessor]
+	static processors = [EmberHandlebarsProcessor,JsProcessor]
 	Pattern directivePattern = null
 
 }

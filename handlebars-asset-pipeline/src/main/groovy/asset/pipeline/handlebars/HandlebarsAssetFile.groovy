@@ -19,6 +19,7 @@ package asset.pipeline.handlebars
 import asset.pipeline.CacheManager
 import asset.pipeline.AssetHelper
 import asset.pipeline.AbstractAssetFile
+import asset.pipeline.processors.JsProcessor
 import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 
@@ -32,7 +33,7 @@ class HandlebarsAssetFile extends AbstractAssetFile {
 	static final String contentType = 'application/javascript'
 	static extensions = ['handlebars', 'hbs']
 	static final String compiledExtension = 'js'
-	static processors = [HandlebarsProcessor]
+	static processors = [HandlebarsProcessor,JsProcessor]
 	Pattern directivePattern = null
 
 }

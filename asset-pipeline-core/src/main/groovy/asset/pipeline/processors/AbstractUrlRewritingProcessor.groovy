@@ -18,6 +18,7 @@ package asset.pipeline.processors
 
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
+import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetFile
 import asset.pipeline.DirectiveProcessor
 import asset.pipeline.GenericAssetFile
@@ -139,6 +140,36 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         // fragment (aka reference; aka anchor)
         if (urlSplitter.ref) {
             replacementPathSb << '#' << urlSplitter.ref
+        }
+
+        return replacementPathSb.toString()
+    }
+
+
+    protected String replacementAssetPath(final AssetFile assetFile, final AssetFile currFile) {
+
+        final StringBuilder replacementPathSb = new StringBuilder()
+        replacementPathSb << '/' << (AssetPipelineConfigHolder.config?.mapping ?: 'assets') << '/'
+
+        // file
+        final String fileName = nameWithoutExtension(currFile.name)
+        if(precompiler && precompiler.options.enableDigests) {
+            if(currFile instanceof GenericAssetFile) {
+                replacementPathSb << fileName << '-' << currFile.getByteDigest() << '.' << extensionFromURI(currFile.name)
+            } else {
+                final String compiledExtension = currFile.compiledExtension
+                if (NO_CACHE_DIGEST_FOR_COMPILED_EXTENSION_SET.contains(compiledExtension)) {
+                    replacementPathSb << fileName << '.' << compiledExtension
+                } else {
+                    replacementPathSb << fileName << '-' << getByteDigest(new DirectiveProcessor(currFile.contentType[0], precompiler).compile(currFile).bytes) << '.' << compiledExtension
+                }
+            }
+        } else {
+            if(currFile instanceof GenericAssetFile) {
+                replacementPathSb << currFile.name
+            } else {
+                replacementPathSb << fileName << '.' << currFile.compiledExtension
+            }
         }
 
         return replacementPathSb.toString()
