@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* June 3, 2016
+** 2.10.0 Release - Adds asset_url() method to javascript processing for resolving assets with properly digested names within your javascript files. See Concepts section on Relative Urls.
 * May 24, 2016
 ** 2.9.1 Release - Fixes asset resolution issues with libsass in sass-asset-pipeline
 * May 23, 2016
