@@ -1,78 +1,92 @@
 package asset.pipeline.springboot
 
-import asset.pipeline.AssetPipelineConfigHolder
-import asset.pipeline.AssetPipelineResponseBuilder
+
 import asset.pipeline.servlet.AssetPipelineFilterCore
 import asset.pipeline.servlet.AssetPipelineServletResource
 import asset.pipeline.servlet.AssetPipelineServletResourceRepository
 import groovy.util.logging.Log4j
+import javax.servlet.Filter
+import javax.servlet.FilterChain
+import javax.servlet.FilterConfig
+import javax.servlet.ServletException
+import javax.servlet.ServletRequest
+import javax.servlet.ServletResponse
 import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
 
-import javax.servlet.*
-import java.text.SimpleDateFormat
-import org.springframework.web.context.WebApplicationContext
 
 @Log4j
 class AssetPipelineFilter implements Filter {
-    AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
-    void init(FilterConfig config) throws ServletException {
-        assetPipelineFilterCore.servletContext = config.servletContext
-        assetPipelineFilterCore.mapping = "assets"
+	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
 
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
-        assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
-    }
 
-    void destroy() {
-    }
+	@Override
+	void init(final FilterConfig config) throws ServletException {
+		assetPipelineFilterCore.servletContext = config.servletContext
+		assetPipelineFilterCore.mapping = "assets"
 
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        assetPipelineFilterCore.doFilter(request, response, chain)
-    }
+		final WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
+		assetPipelineFilterCore.assetPipelineServletResourceRepository = new SpringServletResourceRepository(applicationContext)
+	}
 
-    private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
-        private final WebApplicationContext applicationContext
-        public SpringServletResourceRepository(WebApplicationContext applicationContext) {
-            this.applicationContext = applicationContext
-        }
+	@Override
+	void destroy() {
+	}
 
-        @Override
-        AssetPipelineServletResource getResource(String path) {
-            return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
-        }
+	@Override
+	void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+		assetPipelineFilterCore.doFilter(request, response, chain)
+	}
 
-        @Override
-        AssetPipelineServletResource getGzippedResource(String path) {
-            return SpringServletResource.create(applicationContext.getResource("assets${path}.gz"))
-        }
-    }
+	private static final class SpringServletResourceRepository implements AssetPipelineServletResourceRepository {
 
-    private static final class SpringServletResource implements AssetPipelineServletResource {
-        private final Resource resource
+		private final WebApplicationContext applicationContext
 
-        private SpringServletResource(Resource resource) {
-            this.resource = resource
-        }
 
-        static SpringServletResource create(Resource resource) {
-            if (!resource.exists()) {
-                return null
-            }
+		SpringServletResourceRepository(final WebApplicationContext applicationContext) {
+			this.applicationContext = applicationContext
+		}
 
-            new SpringServletResource(resource)
-        }
 
-        @Override
-        Long getLastModified() {
-            return resource.lastModified()
-        }
+		@Override
+		AssetPipelineServletResource getResource(final String path) {
+			return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
+		}
 
-        @Override
-        InputStream getInputStream() {
-            return resource.getInputStream()
-        }
-    }
+		@Override
+		AssetPipelineServletResource getGzippedResource(final String path) {
+			return SpringServletResource.create(applicationContext.getResource("assets${path}.gz"))
+		}
+	}
+
+	private static final class SpringServletResource implements AssetPipelineServletResource {
+
+		private final Resource resource
+
+
+		private SpringServletResource(final Resource resource) {
+			this.resource = resource
+		}
+
+
+		static SpringServletResource create(final Resource resource) {
+			if(!resource.exists()) {
+				return null
+			}
+
+			new SpringServletResource(resource)
+		}
+
+		@Override
+		Long getLastModified() {
+			return resource.lastModified()
+		}
+
+		@Override
+		InputStream getInputStream() {
+			return resource.getInputStream()
+		}
+	}
 }
