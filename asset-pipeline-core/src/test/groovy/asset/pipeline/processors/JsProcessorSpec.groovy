@@ -24,13 +24,13 @@ import spock.lang.Specification
 */
 class JsProcessorSpec extends Specification {
 
-	void "should be able to fetch a js file and perform url replacement on asset_path()"() {
-		given:
-			def resolver = new FileSystemAssetResolver('application','assets')
-		when:
-			// def file = resolver.getAsset('grails_logo',null,'png')
-		then:
-			// file instanceof GenericAssetFile
-	}
+	// void "should be able to fetch a js file and perform url replacement on asset_path()"() {
+	// 	given:
+	// 		def resolver = new FileSystemAssetResolver('application','assets')
+	// 	when:
+	// 		// def file = resolver.getAsset('grails_logo',null,'png')
+	// 	then:
+	// 		// file instanceof GenericAssetFile
+	// }
 
 }

@@ -149,7 +149,17 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
     protected String replacementAssetPath(final AssetFile assetFile, final AssetFile currFile) {
 
         final StringBuilder replacementPathSb = new StringBuilder()
-        replacementPathSb << '/' << (AssetPipelineConfigHolder.config?.mapping ?: 'assets') << '/'
+        def urlConfig = AssetPipelineConfigHolder.config?.url
+        String baseUrl
+        if(urlConfig instanceof Closure) {
+            baseUrl = urlConfig.call(null)
+        }
+
+        if(baseUrl) {
+            replacementPathSb << baseUrl
+        } else {
+            replacementPathSb << '/' << (AssetPipelineConfigHolder.config?.mapping ?: 'assets') << '/'    
+        }
 
         // file
         final String fileName = nameWithoutExtension(currFile.name)

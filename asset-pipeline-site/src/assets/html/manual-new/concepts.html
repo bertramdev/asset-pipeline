@@ -716,7 +716,26 @@ HTML files automatically get relative url replacement making it easy to generate
 </table>
 </div>
 <div class="paragraph">
-<p>Currently javascript is not scanned for relative path replacement. It is common practice to create a base path variable if required in the html that includes your javascript if your javascript indeed needs to reference images or documents in the asset-pipeline.</p>
+<p>Currently javascript is not scanned for relative path replacement. It is now possible to reference assets from your javascript using a precompiler directive in your code called <code>asset_url</code>. It is not relative and always produces an absolute path response which can be configured via the <code>mapping</code> config option which defaults to 'assets':</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">---
+<span class="keyword">var</span> logo = asset_url(<span class="string"><span class="delimiter">'</span><span class="content">grails_logo.png</span><span class="delimiter">'</span></span>);</code></pre>
+</div>
+</div>
+<hr>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This method is not evaluated in javascript but rather replaced like a precompiler directive.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -724,7 +743,7 @@ HTML files automatically get relative url replacement making it easy to generate
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 12:06:53 -04:00
+Last updated 2016-06-03 15:11:07 -05:00
 </div>
 </div>
 </body>
