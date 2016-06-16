@@ -22,8 +22,6 @@ class AssetPipelineBootStrap {
                 if(!res.exists()) {
                     res = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}")
                 }
-                
-                
                 def fileBytes = res.inputStream.bytes
 
                 def outputFile = new File(storagePath, propertyName)
