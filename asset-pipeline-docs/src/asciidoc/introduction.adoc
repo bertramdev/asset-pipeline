@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* June 16, 2016
+** 2.9.2 Release - Bug fixes with grails bootup and copying files to external folder.
 * May 23, 2016
 ** 2.9.0 Release - sass-asset-pipeline moved to compass-asset-pipeline and new sass-asset-pipeline using jsass (libsass) added. New Documentation and Website release.
 * April 22, 2016
