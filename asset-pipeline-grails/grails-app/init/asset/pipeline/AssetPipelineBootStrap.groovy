@@ -18,8 +18,10 @@ class AssetPipelineBootStrap {
             storageFile.mkdirs()
             manifest.stringPropertyNames().each { propertyName ->
                 def propertyValue = manifest.getProperty(propertyName)
-                def res = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}")
-                
+                def res = grailsApplication.getParentContext().getResource("assets/${propertyValue}")
+                if(!res.exists()) {
+                    res = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}")
+                }
                 def fileBytes = res.inputStream.bytes
 
                 def outputFile = new File(storagePath, propertyName)
@@ -28,7 +30,10 @@ class AssetPipelineBootStrap {
                 outputFile.bytes = fileBytes
                 def outputDigestFile = new File(storagePath, propertyValue)
                 outputDigestFile.bytes = fileBytes
-                def gzRes = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}.gz")
+                def gzRes = grailsApplication.getParentContext().getResource("assets/${propertyValue}.gz")
+                if(!gzRes.exists()) {
+                    gzRes = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}.gz")
+                }
                 if(gzRes.exists()) {
                     def gzBytes = gzRes.inputStream.bytes
                     def outputGzFile = new File(storagePath, "${propertyName}.gz")
