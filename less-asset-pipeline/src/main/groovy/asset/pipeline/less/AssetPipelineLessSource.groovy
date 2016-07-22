@@ -22,8 +22,10 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.processors.CssProcessor
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import groovy.util.logging.Commons
 
 
+@Commons
 class AssetPipelineLessSource extends LessSource {
 	def sourceFile
 	String contents

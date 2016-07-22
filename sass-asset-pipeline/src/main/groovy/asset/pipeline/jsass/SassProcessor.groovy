@@ -19,12 +19,12 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetPipelineConfigHolder
-import groovy.util.logging.Log4j
+import groovy.util.logging.Commons
 import io.bit3.jsass.Compiler
 import io.bit3.jsass.Options
 import io.bit3.jsass.OutputStyle
 
-@Log4j
+@Commons
 class SassProcessor extends AbstractProcessor {
     final Compiler compiler = new Compiler();
     final Options options = new Options();
@@ -45,7 +45,12 @@ class SassProcessor extends AbstractProcessor {
     String process(String input, AssetFile assetFile) {
         options.getImporters().add(new SassAssetFileImporter(assetFile))
         
-        log.info "Compiling $assetFile.name"
+        log.debug "Compiling $assetFile.name"
+        if(assetFile.name.endsWith('.sass')) {
+            options.setIsIndentedSyntaxSrc(true); 
+        } else {
+            options.setIsIndentedSyntaxSrc(false); 
+        }
         def output = compiler.compileString(input, assetFile.path.toURI(), null, options)
         return output.css
     }

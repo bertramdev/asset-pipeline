@@ -73,6 +73,9 @@ class ClosureCompilerProcessor {
 			outputWriter.close();
 			output = "//# sourceMappingURL=${baseFileName + '.js.map'}\n" + output
 		}
+		if(!output) {
+			return inputText
+		}
 		return output
 	}
 

@@ -6,7 +6,6 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import groovy.util.logging.Commons
-import groovy.util.logging.Log4j
 import asset.pipeline.processors.CssProcessor
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.JavaScriptException
