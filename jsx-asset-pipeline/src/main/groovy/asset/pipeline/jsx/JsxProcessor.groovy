@@ -46,11 +46,9 @@ class JsxProcessor extends AbstractProcessor {
 		while((element = lexer.yylex()) != null) {
 			elements << element
 		}
-		println "Received Elements ${elements} - state ${lexer.yystate()}"
 		int lastPosition = 0
 		StringBuilder output = new StringBuilder()
 		elements.each { currElement ->
-			println "looking at currElement ${currElement.name} - ${currElement.value} - ${currElement.getLength()}"
 			output << input.substring(lastPosition,currElement.getPosition())
 			lastPosition = currElement.getPosition() + currElement.getLength()		
 			output << renderElement(currElement) + ';'
@@ -68,17 +66,17 @@ class JsxProcessor extends AbstractProcessor {
 		depth = depth ?: element.getColumn()
 		element.children?.each { child ->
 			if(child instanceof JsxElement) {
-				println "Child ${child.class.name} - ${child.value}"
 				reactArgs << renderElement(child, depth + 2)
 			} else {
 				if(child.name == 'JSXText') {
 					if(child.value.trim()) {
 						reactArgs << "\"${child.value.trim()}\""
 					}
-					println "Child ${child.class.name} - ${child.name} - ${child.value}"
 				} else {
-					println "Child ${child.class.name} - ${child.name} - ${child.value}"
-					reactArgs << child.value
+					if(child.value.trim()) {
+						reactArgs << child.value.trim()	
+					}
+					
 				}
 			}
 		}
@@ -94,7 +92,7 @@ class JsxProcessor extends AbstractProcessor {
 
 	protected String renderAttributes(Symbol element) {
 		def map = [:]
-		JsxAttribute spreadAttribute = element.getAttributes()?.find{it.attributeType == 'SpreadAttribute'}
+		JsxAttribute spreadAttribute = element.getAttributes()?.find{it.attributeType == 'spreadAttribute'}
 		if(element.getAttributes().size() == 0) {
 			return "null";
 		} else if(spreadAttribute) {

@@ -61,11 +61,11 @@ publishing {
                     resolveStrategy = Closure.DELEGATE_FIRST
                     name 'jsx-asset-pipeline'
                     description 'JSX Transpiler Extension for the JVM Based Asset-Pipeline.'
-                    url 'https://github.com/bertramdev/jsx-asset-pipeline'
+                    url 'https://github.com/bertramdev/asset-pipeline'
                     scm {
-                        url 'https://github.com/bertramdev/jsx-asset-pipeline'
-                        connection 'scm:https://bertramdev@github.com/bertramdev/jsx-asset-pipeline.git'
-                        developerConnection 'scm:git://github.com/bertramdev/jsx-asset-pipeline.git'
+                        url 'https://github.com/bertramdev/asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/asset-pipeline.git'
                     }
                     licenses {
                         license {
@@ -101,11 +101,12 @@ bintray {
         repo = 'asset-pipeline'
         userOrg = 'bertramlabs'
         name = 'jsx-asset-pipeline'
+        vcsUrl = 'https://github.com/bertramdev/asset-pipeline.git'
         licenses = ['Apache-2.0']
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
-                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
                     user = mavenUser //OSS user token
                     password = mavenPassword //OSS user password
                     close = '1'

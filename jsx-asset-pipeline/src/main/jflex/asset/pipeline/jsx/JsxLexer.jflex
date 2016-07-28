@@ -20,6 +20,7 @@ import java.io.*;
 
 %{
   StringBuffer string = new StringBuffer();
+  int curleyBraceCounter = 0;
   ArrayList<Symbol> elementStack = new ArrayList<Symbol>();
   JsxAttribute attribute;
 
@@ -173,6 +174,7 @@ AssignmentExpression = [^\r\n]
 }
 
 
+
 <JSXOPENINGELEMENT, JSXSELFCLOSINGELEMENT> {
   {JSXElementName}               {yybegin(JSXATTRIBUTES);Symbol sym = jsxElement(yytext()); if(sym != null) {return sym;}}
   /* whitespace */
@@ -189,9 +191,10 @@ AssignmentExpression = [^\r\n]
 <JSXATTRIBUTES> {
   \/>                            {yybegin(JSXSELFCLOSINGELEMENT); yypushback(yylength()); attribute = null; }
   >                             {yybegin(JSXOPENINGELEMENT); yypushback(yylength()) ; attribute = null;}
+  {JSXSpreadAttribute}           {string.setLength(0);attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);attribute.setAttributeType("spreadAttribute"); yypushback(yylength()-4); yybegin(ASSIGNMENTEXPRESSION);}
   {JSXAttribute}                  {yybegin(JSXATTRIBUTE);yypushback(yylength()); attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);}
   /* whitespace */
-  {JSXSpreadAttribute}           {attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);attribute.setAttributeType("spreadAttribute"); yypushback(yylength()-4); yybegin(ASSIGNMENTEXPRESSIONVALUE);}
+  
   {WhiteSpace}                   { /* ignore */ }
 }
 
@@ -205,7 +208,7 @@ AssignmentExpression = [^\r\n]
 <JSXATTRIBUTEVALUE> {
   \"                             {yybegin(STRINGDOUBLE); string.setLength(0);}
   \'                             {yybegin(STRINGSINGLE); string.setLength(0);}
-  {ChildExpression}              {yybegin(ASSIGNMENTEXPRESSION);yypushback(yylength() - 1);}
+  {ChildExpression}              {yybegin(ASSIGNMENTEXPRESSION);string.setLength(0);yypushback(yylength() - 1);attribute.setAttributeType("assignmentExpression");}
 }
 
 <JSXCHILDREN> {
@@ -220,21 +223,13 @@ AssignmentExpression = [^\r\n]
 }
 
 <ASSIGNMENTEXPRESSION> {
-  \}                              {if(attribute != null) {yybegin(JSXATTRIBUTES);attribute.setAttributeType("assignmentExpression");} else {yybegin(JSXCHILDREN);}}
-  /* comments */
-  {Comment}                       { /* ignore */ }
-  {AssignmentExpression}          {yybegin(ASSIGNMENTEXPRESSIONVALUE); yypushback(yylength());}
+  {Comment}                      { /* ignore */ }
+  \}                            {if(curleyBraceCounter > 0) { string.append(yytext()); curleyBraceCounter--; } else if(attribute != null) {attribute.setValue(string.toString());addAttributeSymbol(attribute); yybegin(JSXATTRIBUTES);string.setLength(0);} else {yybegin(JSXCHILDREN); symbol("JSXAssignmentExpression",string.toString());string.setLength(0);}}
+  \{                            { string.append(yytext()); curleyBraceCounter++;}
+  [^\{\}\r\n]                   { string.append( yytext() ); }
 
-  
-  {WhiteSpace}                    { /* ignore */ }
-  
 }
 
-<ASSIGNMENTEXPRESSIONVALUE> {
-  \}                              {if(attribute != null) {yybegin(JSXATTRIBUTES);} else {yybegin(JSXCHILDREN);}}
-  {AssignmentExpression}+         { if(attribute != null) { attribute.setValue(yytext()) ; addAttributeSymbol(attribute);} else {symbol("JSXAssignmentExpression",yytext());} }
-  {WhiteSpace}                    { /* ignore */ }
-}
 
 /* error fallback */
     [^]                              { throw new Error("Illegal character <"+

@@ -25,11 +25,15 @@ class JsxProcessorSpec extends Specification {
 	void "should compile jsx into js using JsxLexer"() {
 		given:
 			def jsx = '''
+var props = {};
+props.foo = x;
+props.bar = y;
 var NewComponent = React.createClass({
   render: function() {
     return (
-      <div>
-      	{ /*Hello World*/ }
+      <div {...props}>
+      	{ /* Comment Block */}
+      	{"blah"}
         <div className="awesome" style={{border: '1px solid red'}}>
           <label htmlFor="name" data-id='1'>Enter your name: </label>
           <input type="text" id="name" />

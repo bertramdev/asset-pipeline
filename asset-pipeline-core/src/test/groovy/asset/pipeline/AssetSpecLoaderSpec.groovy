@@ -28,8 +28,9 @@ class AssetSpecLoaderSpec extends Specification {
             def specifications = AssetSpecLoader.loadSpecifications()
 
         then:"The specifications are correct"
-            specifications.size() == 3
+            specifications.size() == 4
             specifications.contains JsAssetFile
+            specifications.contains JsEs6AssetFile
             specifications.contains HtmlAssetFile
             specifications.contains CssAssetFile
     }

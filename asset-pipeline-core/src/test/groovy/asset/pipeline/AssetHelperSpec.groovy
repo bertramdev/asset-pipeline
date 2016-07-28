@@ -34,9 +34,9 @@ class AssetHelperSpec extends Specification {
 	    	fileSpecs as Set == assetHelper.getPossibleFileSpecs(contentType) as Set
 	    where:
 	    	contentType                | fileSpecs
-	    	'application/javascript'   | [JsAssetFile]
-	    	'application/x-javascript' | [JsAssetFile]
-	    	'text/javascript'          | [JsAssetFile]
+	    	'application/javascript'   | [JsAssetFile, JsEs6AssetFile]
+	    	'application/x-javascript' | [JsAssetFile, JsEs6AssetFile]
+	    	'text/javascript'          | [JsAssetFile, JsEs6AssetFile]
 	    	'text/css'                 | [CssAssetFile]
 	    	'text/html'                | [HtmlAssetFile]
 	    	'blob/text'                | []

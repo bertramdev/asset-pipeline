@@ -127,7 +127,9 @@ abstract class AbstractAssetFile implements AssetFile {
      * @return Name of the file
      */
 	public String getName() {
-		path.split("/")[-1]
+		if(path) {
+			path.split("/")[-1]	
+		}
 	}
 
     /**

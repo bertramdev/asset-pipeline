@@ -11,6 +11,5 @@ public class JsxElement extends GenericSymbol {
 
 	public JsxElement(String name,String value,Integer line, Integer column,Integer position) {
 		super(name,value,line,column,position);
-		System.out.println("Creating New Jsx Element: " + value);
 	}
 }
