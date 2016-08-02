@@ -22,6 +22,7 @@ import asset.pipeline.AssetHelper
 import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 import asset.pipeline.processors.JsProcessor
+import asset.pipeline.processors.JsRequireProcessor
 import asset.pipeline.processors.Es6Processor
 
 /**
@@ -33,7 +34,7 @@ class JsxAssetFile extends AbstractAssetFile {
 	static final contentType = ['application/javascript','application/x-javascript','text/javascript']
 	static extensions = ['jsx', 'js.jsx']
 	static final String compiledExtension = 'js'
-	static processors = [JsxProcessor,JsProcessor, Es6Processor]
+	static processors = [JsxProcessor,JsProcessor,JsRequireProcessor]
 	Pattern directivePattern = ~/(?m)#=(.*)/
 
 }

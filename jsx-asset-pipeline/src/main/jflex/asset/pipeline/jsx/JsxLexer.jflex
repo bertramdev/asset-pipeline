@@ -74,7 +74,6 @@ import java.io.*;
 
   private void closeJsxElement() {
     Symbol sym = elementStack.get(elementStack.size()-1);
-    System.out.println("Closing Element: " + (yychar) + " - " + (yychar - sym.getPosition() + yylength()));
     sym.setLength(yychar - sym.getPosition() + yylength());
     elementStack.remove(elementStack.size()-1);
   }
@@ -218,7 +217,7 @@ AssignmentExpression = [^\r\n]
   
   
   {JSXText}                       { symbol("JSXText",yytext()); }
-  {ChildExpression}               { yybegin(ASSIGNMENTEXPRESSION);yypushback(yylength() - 1); }
+  {ChildExpression}               { yybegin(ASSIGNMENTEXPRESSION);yypushback(yylength() - 1);string.setLength(0); }
   {WhiteSpace}                    { /* ignore */ }
 }
 

@@ -2,6 +2,7 @@ Asset Pipeline Core
 ===================
 [![Build Status](https://travis-ci.org/bertramdev/asset-pipeline-core.svg?branch=master)](https://travis-ci.org/bertramdev/asset-pipeline-core)
 
+
 Overview
 --------
 The Asset-Pipeline is a plugin used for managing and processing static assets in JVM applications primarily via Gradle (however not mandatory). Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
@@ -19,8 +20,6 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 
 Documentation
 ------------
-
-We are in the middle of revamping the documentation:
 
 * [API Doc](http://www.asset-pipeline.com/apidoc/index.html)
 * [Usage Guide](http://www.asset-pipeline.com/manual/)
@@ -41,7 +40,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.0"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.10.1"
   }
 }
 
@@ -86,8 +85,6 @@ dependencies {
 
 Now that you have your build.gradle files. All you need to do is put files in your projects `src/assets/javascripts`, `src/assets/stylesheets`, `src/assets/images`, or whatever subdirectory you want.
 When you run `gradle assetCompile` these files will be processed and output into your `build/assets` folder by default.
-
-You can also configure custom resolution paths for your project (STILL WORKING ON IT).
 
 Thats about all there is to it. Now you can use gradle to handle processing of all your client side assets.
 
@@ -180,23 +177,23 @@ For Grails 3 asset-pipeline has to be provided both for Grails and Gradle. An ex
 // Add the Gradle plugin to the build dependencies and apply it to the build process
 buildscript {
     dependencies {        
-        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.8.0'
+        classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.10.1'
     }
 }
 apply plugin: 'asset-pipeline'
 
 // The plugin could also be applied with the newer syntax 
 // plugins {
-//     id "com.bertramlabs.asset-pipeline" version "2.8.0"
+//     id "com.bertramlabs.asset-pipeline" version "2.10.1"
 // }
 
 dependencies {        
     // Add the Grails Plugin to the runtime dependencies
-    runtime 'org.grails.plugins:asset-pipeline:3.2.0'
+    runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.10.1'
     
     // Define needed asset-pipeline plugins with the special assets-scope 
-    assets 'com.bertramlabs.plugins:less-asset-pipeline:2.8.0'
-    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.8.0'
+    assets 'com.bertramlabs.plugins:less-asset-pipeline:2.10.1'
+    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.10.1'
 }
 ```
 
@@ -220,7 +217,7 @@ sourceSets {
 
 dependencies {
   provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "com.bertramlabs.plugins:asset-pipeline-core:2.8.0"
+  compile "com.bertramlabs.plugins:asset-pipeline-core:2.10.1"
 }
 ```
 

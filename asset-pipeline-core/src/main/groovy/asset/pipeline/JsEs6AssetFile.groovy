@@ -17,6 +17,7 @@
 package asset.pipeline
 
 import asset.pipeline.processors.Es6Processor
+import asset.pipeline.processors.JsRequireProcessor
 
 import java.util.regex.Pattern
 import asset.pipeline.processors.JsProcessor
@@ -32,7 +33,7 @@ class JsEs6AssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
     static List<String> extensions = ['es6','js.es6']
     static String compiledExtension = 'js'
-    static processors = [JsProcessor, Es6Processor]
+    static processors = [JsProcessor, JsRequireProcessor, Es6Processor]
     Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

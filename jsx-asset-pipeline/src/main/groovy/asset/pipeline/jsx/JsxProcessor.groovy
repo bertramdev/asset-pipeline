@@ -21,6 +21,8 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.jsx.symbols.*
 
+import javax.swing.text.html.HTML
+
 /**
  * @author David Estes
  */
@@ -51,7 +53,7 @@ class JsxProcessor extends AbstractProcessor {
 		elements.each { currElement ->
 			output << input.substring(lastPosition,currElement.getPosition())
 			lastPosition = currElement.getPosition() + currElement.getLength()		
-			output << renderElement(currElement) + ';'
+			output << renderElement(currElement)
 		}
 		if(lastPosition < input.size()) {
 			output << input.substring(lastPosition,input.size())
@@ -61,7 +63,7 @@ class JsxProcessor extends AbstractProcessor {
 
 	protected String renderElement(Symbol element, Integer depth=null) {
 		def reactArgs = []
-		reactArgs << "\"${element.value}\""
+		reactArgs << elementNameForValue(element.value)
 		reactArgs << renderAttributes(element)
 		depth = depth ?: element.getColumn()
 		element.children?.each { child ->
@@ -111,4 +113,21 @@ class JsxProcessor extends AbstractProcessor {
 			return out;
 		}
 	}
+
+
+	// protected attributeNameFromCamel(String value) {
+	// 	return value.replaceAll(/\B[A-Z]/) { '-' + it }.toLowerCase() 
+	// }
+	protected elementNameForValue(String value) {
+		if(HTML_ELEMENTS.contains(value.toLowerCase())) {
+			return "\"${value}\""
+		} else {
+			return value
+		}
+	}
+
+
+	static List<String> HTML_ELEMENTS = [
+		'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr', 'circle', 'clipPath', 'defs', 'ellipse', 'g', 'image', 'line', 'linearGradient', 'mask', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'stop', 'svg', 'text', 'tspan'
+	]
 }

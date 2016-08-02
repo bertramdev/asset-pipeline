@@ -46,7 +46,7 @@ class Es6Processor extends AbstractProcessor {
 			return inputText
 		}
 		if(assetFile instanceof JsAssetFile) {
-			if(!AssetPipelineConfigHolder.config.enableES6) {
+			if(!AssetPipelineConfigHolder.config?.enableES6) {
 				return inputText
 			}
 		}
