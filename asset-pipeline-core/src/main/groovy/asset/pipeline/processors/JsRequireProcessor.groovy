@@ -39,7 +39,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 				String replacementPath
 				if (cachedPath != null) {
-					replacementPath = cachedPath
+					return "_asset_pipeline_require(${quote}${cachedPath}${quote})"
 				} else if(assetPath.size() > 0) {
 					final AssetFile currFile = AssetHelper.fileForUri(assetPath,'application/javascript')
 					if(!currFile) {
@@ -47,15 +47,15 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 					}
 					if(!currFile) {
 						cachedPaths[assetPath] = assetPath
-						return "require(${quote}${assetPath}${quote})"
+						return "_asset_pipeline_require(${quote}${assetPath}${quote})"
 					} else {
 						currFile.baseFile = assetFile.baseFile ?: assetFile
 						appendModule(currFile)
 						cachedPaths[assetPath] = currFile.path
-						return "require(${quote}${currFile.path}${quote})"
+						return "_asset_pipeline_require(${quote}${currFile.path}${quote})"
 					}
 				} else {
-					return "${quote}${replacementPath}${quote}"
+					return "require(${quote}${assetPath}${quote})"
 				}
 			}
 
@@ -113,7 +113,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 	static final String requireMethod = """
-var require = function(path) {
+var _asset_pipeline_require = function(path) {
 	var module = _asset_pipeline_modules[path];
 	if(module != undefined) {
 		return module().exports;
