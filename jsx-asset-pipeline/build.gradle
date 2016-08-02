@@ -106,7 +106,7 @@ bintray {
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
-                    sync = false //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
                     user = mavenUser //OSS user token
                     password = mavenPassword //OSS user password
                     close = '1'

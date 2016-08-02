@@ -121,6 +121,8 @@ class JsxProcessor extends AbstractProcessor {
 	protected elementNameForValue(String value) {
 		if(HTML_ELEMENTS.contains(value.toLowerCase())) {
 			return "\"${value}\""
+		} else if(value.toLowerCase() == value) {
+			return "\"${value}\""
 		} else {
 			return value
 		}
