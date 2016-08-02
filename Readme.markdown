@@ -192,11 +192,11 @@ apply plugin: 'asset-pipeline'
 
 dependencies {        
     // Add the Grails Plugin to the runtime dependencies
-    runtime 'org.grails.plugins:asset-pipeline:3.2.0'
+     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.10.0"
     
     // Define needed asset-pipeline plugins with the special assets-scope 
-    assets 'com.bertramlabs.plugins:less-asset-pipeline:2.8.0'
-    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.8.0'
+    assets 'com.bertramlabs.plugins:less-asset-pipeline:2.10.0'
+    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.10.0'
 }
 ```
 
