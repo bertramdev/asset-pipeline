@@ -70,7 +70,7 @@ That's all there is to it.
 
 Depending on which framework integration is being used (or even if no framework integration is being used) the project of the asset-pipeline files can slightly differ. However, typically this only affects the source folder location while all other aspects of the project structure remain the same.
 
-By default assets live in the `src/assets` directory of the project (except in the case of grails where these live in `src/assets`). However, files should not live at this direct root level and by default asset-pipeline will not detect them if they were. It is a conventional practice that files be organized in one level down subfolders. For example, in a base grails app the following folder structure is used and encouraged:
+By default assets live in the `src/assets` directory of the project (except in the case of grails where these live in `grails-app/assets`). However, files should not live at this direct root level and by default asset-pipeline will not detect them if they were. It is a conventional practice that files be organized in one level down subfolders. For example, in a base grails app the following folder structure is used and encouraged:
 
 * `assets/javascripts`
 * `assets/stylesheets`
