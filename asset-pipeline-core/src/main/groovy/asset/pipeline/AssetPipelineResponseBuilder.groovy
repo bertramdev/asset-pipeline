@@ -73,7 +73,7 @@ public class AssetPipelineResponseBuilder {
     }
 
 	public Boolean checkDateChanged() {
-		SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT);
+		SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT,Locale.US);
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		boolean hasNotChanged = false
 		if(lastModifiedDate) {
@@ -90,7 +90,7 @@ public class AssetPipelineResponseBuilder {
 	}
 
 	private String getLastModifiedDate(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT);
+		SimpleDateFormat sdf = new SimpleDateFormat(HTTP_DATE_FORMAT,Locale.US);
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 		String lastModifiedDateTimeString = sdf.format(new Date())
 		try {

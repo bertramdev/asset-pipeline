@@ -22,10 +22,10 @@ import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetFile
 import asset.pipeline.DirectiveProcessor
 import asset.pipeline.GenericAssetFile
-
+import asset.pipeline.AssetHelper
 import static asset.pipeline.AssetHelper.DIRECTIVE_FILE_SEPARATOR
 import static asset.pipeline.AssetHelper.extensionFromURI
-import static asset.pipeline.AssetHelper.fileForFullName
+import static asset.pipeline.AssetHelper.fileForUri
 import static asset.pipeline.AssetHelper.getByteDigest
 import static asset.pipeline.AssetHelper.nameWithoutExtension
 import static asset.pipeline.AssetHelper.normalizePath
@@ -67,14 +67,14 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
         final URL urlSplitter = new URL('http', 'hostname', urlSansScheme)
 
         final AssetFile baseFile = assetFile.baseFile ?: assetFile
-        final AssetFile currFile =
-            fileForFullName(
-                normalizePath(
-                    assetFile.parentPath
-                        ? assetFile.parentPath + DIRECTIVE_FILE_SEPARATOR + urlSplitter.path
-                        : urlSplitter.path
-                )
-            )
+        final String assetPath  = normalizePath(assetFile.parentPath ? assetFile.parentPath + DIRECTIVE_FILE_SEPARATOR + urlSplitter.path : urlSplitter.path)
+
+        final List<String> contentType = AssetHelper.assetMimeTypeForURI(assetPath)
+        
+        AssetFile currFile = AssetHelper.fileForUri(assetPath,contentType ? contentType[0] : null)
+        if(!currFile) {
+            currFile = AssetHelper.fileForFullName(assetPath)
+        }
 
         if (! currFile) {
             return null

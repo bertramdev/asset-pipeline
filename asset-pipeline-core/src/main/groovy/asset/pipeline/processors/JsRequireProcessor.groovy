@@ -5,7 +5,7 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
 import groovy.transform.CompileStatic
-
+import asset.pipeline.CacheManager
 import java.util.regex.Pattern
 
 @CompileStatic
@@ -83,6 +83,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 			return
 		}
 		moduleMap[assetFile.path] = encapsulateModule(assetFile)
+		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 	}
 
 	private encapsulateModule(AssetFile assetFile) {
