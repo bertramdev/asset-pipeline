@@ -59,7 +59,8 @@ public class AssetPipelineResponseBuilder {
             manifestPath = uri.substring(1) //Omit forward slash
         }
         Properties manifest = AssetPipelineConfigHolder.manifest
-        return manifest?.getProperty(manifestPath,null) ? true : false
+        
+        return manifest?.getProperty(manifestPath,null) ? false : true
     }
 
     public Boolean checkETag() {

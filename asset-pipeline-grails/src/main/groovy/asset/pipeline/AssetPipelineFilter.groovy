@@ -67,7 +67,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 				if(attributeCache.exists()) {
 					Resource file = attributeCache.resource
 					final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
-						fileUri,
+						manifestPath,
 						request.getHeader('If-None-Match'),
 						request.getHeader('If-Modified-Since'),
 						attributeCache.getLastModified()
@@ -125,7 +125,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 				if(file.exists()) {
 					final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
-						fileUri,
+						manifestPath,
 						request.getHeader('If-None-Match'),
 						request.getHeader('If-Modified-Since'),
 						file.lastModified() ? new Date(file.lastModified()) : null
