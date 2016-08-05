@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
-apply plugin: 'jflex'
+apply plugin: 'org.xbib.gradle.plugin.jflex'
 
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
