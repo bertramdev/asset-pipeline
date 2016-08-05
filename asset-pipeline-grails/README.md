@@ -1,12 +1,15 @@
 Grails Asset Pipeline
 =====================
-[![Build Status](https://travis-ci.org/bertramdev/asset-pipeline.png?branch=master)](https://travis-ci.org/bertramdev/asset-pipeline)
+This repository has moved into the main asset-pipeline repository. Please refer to that repository from now on.
+
+[asset-pipeline](https://github.com/bertramdev/asset-pipeline)
+
 
 Overview
 --------
 The Grails Asset-Pipeline is a plugin used for managing and processing static assets in [Grails](http://grails.org) applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript or LESS.
 
-For contributions to the core plugin please see the repository for the core plugin at [asset-pipeline-core](https://github.com/bertramdev/asset-pipeline-core)
+For contributions to the core plugin please see the repository for the core plugin at [asset-pipeline](https://github.com/bertramdev/asset-pipeline)
 
 Code Documentation
 -------------
