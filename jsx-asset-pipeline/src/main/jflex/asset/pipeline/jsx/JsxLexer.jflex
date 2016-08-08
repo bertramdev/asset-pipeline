@@ -121,7 +121,7 @@ JSXChild = {JSXText} | {JSXElement} | {ChildExpression}
 ChildExpression = "{" {AssignmentExpression}* "}"
 JSXText = {JSXTextCharacter}+
 JSXTextCharacter = [^\{\}\<\>]
-AssignmentExpression = [^\r\n]
+AssignmentExpression = .
 
 %state STRINGDOUBLE
 %state STRINGSINGLE
