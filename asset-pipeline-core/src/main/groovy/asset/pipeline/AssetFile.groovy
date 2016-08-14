@@ -84,6 +84,15 @@ interface AssetFile {
      * Processes the AssetFile uses the Asset {@link Processor} instances
      *
      * @param precompiler The {@link AssetCompiler}
+     * @param skipCaching Optional flag to disable development time cache manager persistence.
+     * @return The processes contents
+     */
+    String processedStream(AssetCompiler precompiler, Boolean skipCaching)
+
+    /**
+     * Processes the AssetFile uses the Asset {@link Processor} instances
+     *
+     * @param precompiler The {@link AssetCompiler}
      * @return The processes contents
      */
     String processedStream(AssetCompiler precompiler)

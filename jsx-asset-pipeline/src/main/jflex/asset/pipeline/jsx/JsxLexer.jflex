@@ -16,7 +16,9 @@ import java.io.*;
 %char
 %type Symbol
 
-
+%yylexthrow{
+JsxParserException
+%yylexthrow}
 
 %{
   StringBuffer string = new StringBuffer();
@@ -106,7 +108,7 @@ JSXMemberExpression = ({Identifier} "." {Identifier})+
 
 /*Attributes*/
 JSXAttributes = {JSXSpreadAttribute} | {JSXAttribute} | \s | [^>]
-JSXSpreadAttribute = "{..." {AssignmentExpression}* "}"  
+JSXSpreadAttribute = "{..." {AssignmentExpression}* ~"}"  
 JSXAttribute = {JSXAttributeName} "=" {JSXAttributeValue}
 JSXAttributeName = [:jletter:] [a-zA-Z0-9\-\_]* | {JSXNamespacedName}
 JSXAttributeValue = "\"" {JSXDoubleStringCharacters} "\"" | "\'" {JSXSingleStringCharacters} "\'" | "{" {AssignmentExpression}* "}"
@@ -121,7 +123,7 @@ JSXChild = {JSXText} | {JSXElement} | {ChildExpression}
 ChildExpression = "{" {AssignmentExpression}* "}"
 JSXText = {JSXTextCharacter}+
 JSXTextCharacter = [^\{\}\<\>]
-AssignmentExpression = .
+AssignmentExpression = [^]
 
 %state STRINGDOUBLE
 %state STRINGSINGLE
@@ -225,11 +227,10 @@ AssignmentExpression = .
   {Comment}                      { /* ignore */ }
   \}                            {if(curleyBraceCounter > 0) { string.append(yytext()); curleyBraceCounter--; } else if(attribute != null) {attribute.setValue(string.toString());addAttributeSymbol(attribute); yybegin(JSXATTRIBUTES);string.setLength(0);} else {yybegin(JSXCHILDREN); symbol("JSXAssignmentExpression",string.toString());string.setLength(0);}}
   \{                            { string.append(yytext()); curleyBraceCounter++;}
-  [^\{\}\r\n]                   { string.append( yytext() ); }
-
+  [^\{\}]                   { string.append( yytext() ); }
 }
 
 
 /* error fallback */
-    [^]                              { throw new Error("Illegal character <"+
-                                                        yytext()+"> - state: " + yystate() ); }
+    [^]                              { throw new JsxParserException("Illegal character <"+
+                                                        yytext()+"> found on line: " + (yyline+1) + " col: " + (yycolumn+1) ); }

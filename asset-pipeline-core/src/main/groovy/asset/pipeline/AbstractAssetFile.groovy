@@ -58,6 +58,7 @@ abstract class AbstractAssetFile implements AssetFile {
 	List<String> matchedDirectives = []
 	DigestInputStream digestStream
 	MessageDigest digest
+	private String digestString
 
     /**
      * Executes the inputStreamSource() closure to fetch a new inputStream object
@@ -81,6 +82,9 @@ abstract class AbstractAssetFile implements AssetFile {
      * @return String hexDigest
      */
 	public String getByteDigest() {
+		if(digestString != null) {
+			return digestString
+		}
 		if(!digestStream || !digest) {
 			getInputStream()
 		}
@@ -96,8 +100,8 @@ abstract class AbstractAssetFile implements AssetFile {
 		} finally {
 			try { digestStream?.close() } catch(Exception ex) { /*ignore if already closed this reduces open file handles*/ }
 		}
-
-		return digest.digest().encodeHex().toString()
+		digestString = digest.digest().encodeHex().toString()
+		return digestString
 	}
 
     /**
@@ -138,11 +142,12 @@ abstract class AbstractAssetFile implements AssetFile {
      * The precompiler object is passed to all processors as well as determines the behavior of the runtime cache
      * manager.
      * @param precompiler reference to the active compiler being used (If NULL development mode is assumed)
+     * @param skipCaching defaults to false. Optional flag for forcing a cache skip.
      * @return the final processed contents of the file
      */
-	String processedStream(AssetCompiler precompiler) {
+	String processedStream(AssetCompiler precompiler, Boolean skipCaching = false) {
 		String fileText
-		Boolean skipCache = precompiler ?: (!processors || processors.size() == 0)
+		Boolean skipCache = skipCaching ?: precompiler ?: (!processors || processors.size() == 0)
 		String cacheKey
 		InputStream sourceStream = getInputStream()
 		try {

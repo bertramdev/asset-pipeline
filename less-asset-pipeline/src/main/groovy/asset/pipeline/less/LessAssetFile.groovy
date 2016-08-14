@@ -15,7 +15,7 @@ class LessAssetFile extends AbstractAssetFile {
     static processors = [CssProcessor]
     Pattern directivePattern = ~/(?m)\*=(.*)/
 
-    String processedStream(AssetCompiler precompiler) {
+    String processedStream(AssetCompiler precompiler, Boolean skipCaching = false) {
         def fileText
 		def skipCache = precompiler ?: (!processors || processors.size() == 0)
 		InputStream sourceStream = getInputStream()

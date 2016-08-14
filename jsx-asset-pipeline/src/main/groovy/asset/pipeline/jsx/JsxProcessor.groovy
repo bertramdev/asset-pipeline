@@ -45,19 +45,25 @@ class JsxProcessor extends AbstractProcessor {
 		JsxLexer lexer = new JsxLexer(reader)
 		Symbol element
 		ArrayList<Symbol> elements = new ArrayList<Symbol>()
-		while((element = lexer.yylex()) != null) {
-			elements << element
-		}
-		int lastPosition = 0
 		StringBuilder output = new StringBuilder()
-		elements.each { currElement ->
-			output << input.substring(lastPosition,currElement.getPosition())
-			lastPosition = currElement.getPosition() + currElement.getLength()		
-			output << renderElement(currElement)
+		try {
+			while((element = lexer.yylex()) != null) {
+				elements << element
+			}
+			int lastPosition = 0
+			
+			elements.each { currElement ->
+				output << input.substring(lastPosition,currElement.getPosition())
+				lastPosition = currElement.getPosition() + currElement.getLength()		
+				output << renderElement(currElement)
+			}
+			if(lastPosition < input.size()) {
+				output << input.substring(lastPosition,input.size())
+			}
+		} catch(JsxParserException jex) {
+			throw new JsxParserException("Error Parsing JSX File ${assetFile.name}: ${jex.getMessage()}")
 		}
-		if(lastPosition < input.size()) {
-			output << input.substring(lastPosition,input.size())
-		}
+		
 		return output.toString()
 	}
 

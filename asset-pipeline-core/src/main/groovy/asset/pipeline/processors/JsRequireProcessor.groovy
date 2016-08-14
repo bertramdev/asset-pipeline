@@ -41,7 +41,16 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 				if (cachedPath != null) {
 					return "_asset_pipeline_require(${quote}${cachedPath}${quote})"
 				} else if(assetPath.size() > 0) {
-					final AssetFile currFile = AssetHelper.fileForUri(assetPath,'application/javascript')
+					AssetFile currFile
+					if(!assetPath.startsWith('/')) {
+						def relativeFileName = [ assetFile.parentPath, assetPath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )	
+						currFile = AssetHelper.fileForUri(relativeFileName,'application/javascript')
+					}
+					
+					if(!currFile) {
+						currFile = AssetHelper.fileForUri(assetPath,'application/javascript')
+					}
+					
 					if(!currFile) {
 						currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath,'application/javascript')
 					}
@@ -92,7 +101,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
   var module = {exports: {}};
   var exports = module.exports;
 
-  ${assetFile.processedStream(precompiler)}
+  ${assetFile.processedStream(precompiler,true)}
 
   return module;
 })

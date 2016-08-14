@@ -52,8 +52,9 @@ public class CacheManager {
 			def cacheFiles = cacheRecord.dependencies.keySet()
 			def expiredCacheFound = cacheFiles.find { String cacheFileName ->
 				def cacheFile = AssetHelper.fileForUri(cacheFileName)
-				if(!cacheFile)
+				if(!cacheFile) {
 					return true
+				}
 				def depMd5 = AssetHelper.getByteDigest(cacheFile.inputStream.bytes)
 				if(cacheRecord.dependencies[cacheFileName] != depMd5) {
 					return true
@@ -115,6 +116,7 @@ public class CacheManager {
 			createCache(fileName, null, null)
 			cacheRecord = cache[fileName]
 		}
+
 		def newMd5 = dependentFile.getByteDigest()
 		cacheRecord.dependencies[dependentFile.path] = newMd5
 		asyncCacheSave()
