@@ -91,9 +91,20 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		if(moduleMap[assetFile.path]) {
 			return
 		}
+		//this is here to prevent circular dependencies
+		String placeHolderModule = """
+		(function() {
+		  var module = {exports: {}};
+		  var exports = module.exports;
+		  return module;
+		})
+		"""
+		moduleMap[assetFile.path] = placeHolderModule
 		moduleMap[assetFile.path] = encapsulateModule(assetFile)
 		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 	}
+
+
 
 	private encapsulateModule(AssetFile assetFile) {
 		String encapsulation = """
