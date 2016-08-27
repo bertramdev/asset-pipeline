@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 @CompileStatic
 class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
-	private static final Pattern URL_CALL_PATTERN = ~/require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? &+%=]++)\1?(?:\s*)\)/
+	private static final Pattern URL_CALL_PATTERN = ~/[^.]?require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? &+%=]++)\1?(?:\s*)\)/
 	public static ThreadLocal<Map<String,String>> commonJsModules = new ThreadLocal<Map<String,String>>()
 	public static ThreadLocal<String> baseModule = new ThreadLocal<String>()
 

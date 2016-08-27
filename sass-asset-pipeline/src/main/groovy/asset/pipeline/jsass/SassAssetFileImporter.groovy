@@ -62,7 +62,7 @@ class SassAssetFileImporter implements Importer {
         def importedAssetFile = getAssetFromScssImport(previous.absoluteUri.toString(), url)
 
         if (baseFile && importedAssetFile) {
-            CacheManager.addCacheDependency(baseFile.name, importedAssetFile)
+            CacheManager.addCacheDependency(baseFile.path, importedAssetFile)
             def results = Collections.singletonList(
                     new Import(importedAssetFile.name, importedAssetFile.path, importedAssetFile.inputStream.getText('UTF-8'))
                     )
