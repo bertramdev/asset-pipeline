@@ -8,7 +8,7 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 === Release History
 
 * August 27, 2016
-** 2.11.2 - Resolving issue with jsass not expiring cache dependencies. Also fixing bug in commonJs lib
+** 2.11.2 - Resolving issue with jsass not expiring cache dependencies. Also fixing bug in commonJs lib and allowing a config option to turn off commonJs.
 * August 14, 2016
 ** 2.11.0 - Fixing Relative CommonJS Resolution and improving React JSX Parser to support newlines in assignment expressions. Also added JSX Parser Exception error handling
 * August 5, 2016
