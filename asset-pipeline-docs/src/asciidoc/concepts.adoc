@@ -65,6 +65,30 @@ This should take care of testing in development mode and debugging. However, whe
 
 That's all there is to it.
 
+=== Common Js
+
+As of asset-pipeline 2.10.x CommonJs support was added. This is automatically detected in any javascript file and assets are automatically resolved within the project structure of asset-pipeline just like any other directive processor (i.e. `var React = require('react');`). If your project has conflicts with commonJs it can be turned off by setting the `configOptions` in gradle and in `grails.assets` config.
+
+[source,groovy]
+.build.gradle
+----
+assets {
+  configOptions = [commonJs: false] //useful for custom config on extension libraries
+}
+----
+
+or:
+
+[source,groovy]
+.application.groovy
+----
+grails {
+  assets {
+    commonJs = false
+  }
+}
+----
+
 
 === Project Structure
 

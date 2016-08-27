@@ -3,6 +3,7 @@ package asset.pipeline.processors
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
+import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetHelper
 import groovy.transform.CompileStatic
 import asset.pipeline.CacheManager
@@ -26,6 +27,9 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 	String process(final String inputText, final AssetFile assetFile) {
+		if(AssetPipelineConfigHolder.config?.commonJs == false) {
+			return inputText
+		}
 		final Map<String, String> cachedPaths = [:]
 		Boolean originator = false
 		if(!baseModule.get()) {
