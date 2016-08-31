@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 @CompileStatic
 class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
-	private static final Pattern URL_CALL_PATTERN = ~/[^.]?require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? &+%=]++)\1?(?:\s*)\)/
+	private static final Pattern URL_CALL_PATTERN = ~/[^\.]require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? &+%=]++)\1?(?:\s*)\)/
 	public static ThreadLocal<Map<String,String>> commonJsModules = new ThreadLocal<Map<String,String>>()
 	public static ThreadLocal<String> baseModule = new ThreadLocal<String>()
 
@@ -27,7 +27,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 	String process(final String inputText, final AssetFile assetFile) {
-		if(AssetPipelineConfigHolder.config?.commonJs == false) {
+		if(AssetPipelineConfigHolder.config != null && AssetPipelineConfigHolder.config.commonJs == false) {
 			return inputText
 		}
 		final Map<String, String> cachedPaths = [:]
@@ -59,8 +59,8 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath,'application/javascript')
 					}
 					if(!currFile) {
-						cachedPaths[assetPath] = assetPath
-						return "_asset_pipeline_require(${quote}${assetPath}${quote})"
+						// cachedPaths[assetPath] = assetPath
+						return "require(${quote}${assetPath}${quote})"
 					} else {
 						currFile.baseFile = assetFile.baseFile ?: assetFile
 						appendModule(currFile)
