@@ -72,9 +72,11 @@ public class AssetPropertiesHandler implements Handler {
 
   private static String normalizePath(String path) {
     String[] parts = path.split("/");
-    String fileName = parts[parts.length-1];
-    if (!fileName.contains(".")) {
-      path = path + '/';
+    if (parts.length > 0) {
+      String fileName = parts[parts.length - 1];
+      if (!fileName.contains(".")) {
+        path = path + '/';
+      }
     }
     return path;
   }
