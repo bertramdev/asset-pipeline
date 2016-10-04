@@ -156,7 +156,7 @@ public class ProductionAssetHandler implements Handler {
 
   private static Factory<BasicFileAttributes> getter(Path file) {
     return () -> {
-      if (Files.exists(file)) {
+      if (file != null && Files.exists(file)) {
         return Files.readAttributes(file, BasicFileAttributes.class);
       } else {
         return null;
