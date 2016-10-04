@@ -90,4 +90,20 @@ class BaseFunctionalSpec extends Specification {
     response.statusCode == 404
     response.body.text == "from error handler"
   }
+
+  void "requesting empty urls should not cause server errors"() {
+    expect:
+    statusCodeForExactPath("///") != 500
+  }
+
+  private int statusCodeForExactPath(String path) {
+    def statusLine = new Socket("localhost", address.port).withCloseable { socket ->
+      def pw = new PrintWriter(socket.outputStream)
+      pw.println("GET $path HTTP/1.1")
+      pw.println()
+      pw.flush()
+      new InputStreamReader(socket.inputStream).readLine()
+    }
+    statusLine.tokenize()[1].toInteger()
+  }
 }
