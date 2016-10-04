@@ -121,4 +121,10 @@ class ProductionFunctionalSpec extends Specification {
     response.statusCode == 404
     response.body.text == "from error handler"
   }
+
+  void "requesting paths outside of file system binding should not cause server errors"() {
+    expect:
+    httpClient.get("assets/../../../malicious").statusCode == 404
+  }
+
 }
