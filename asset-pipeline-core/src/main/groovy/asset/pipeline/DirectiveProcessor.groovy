@@ -172,7 +172,7 @@ class DirectiveProcessor {
             }
             else {
                 // No matching processor means its a matched directive
-                fileSpec.matchedDirectives += unprocessedArgs[0]
+                fileSpec.matchedDirectives += directive
             }
         }
     }

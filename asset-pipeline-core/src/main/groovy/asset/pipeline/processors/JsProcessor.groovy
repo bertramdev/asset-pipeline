@@ -33,7 +33,7 @@ import static asset.pipeline.utils.net.Urls.isRelative
  */
 class JsProcessor extends AbstractUrlRewritingProcessor {
 
-	private static final Pattern URL_CALL_PATTERN = ~/asset_url\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? &+%=]++)\1?(?:\s*)\)/
+	private static final Pattern URL_CALL_PATTERN = ~/asset_url\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#? $&+%=]++)\1?(?:\s*)\)/
 
 	static {
         doNotInsertCacheDigestIntoUrlForCompiledExtension('html')

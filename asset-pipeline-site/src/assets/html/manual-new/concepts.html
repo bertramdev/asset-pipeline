@@ -508,6 +508,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#concepts">Concepts</a>
 <ul class="sectlevel2">
 <li><a href="#directives">Directives</a></li>
+<li><a href="#common-js">Common Js</a></li>
 <li><a href="#project-structure">Project Structure</a></li>
 <li><a href="#search-paths">Search Paths</a></li>
 <li><a href="#build-structure">Build Structure</a></li>
@@ -613,6 +614,33 @@ Requirement directives are recursively scanned within each required file, not ju
 </div>
 <div class="paragraph">
 <p>That&#8217;s all there is to it.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="common-js">Common Js</h3>
+<div class="paragraph">
+<p>As of asset-pipeline 2.10.x CommonJs support was added. This is automatically detected in any javascript file and assets are automatically resolved within the project structure of asset-pipeline just like any other directive processor (i.e. <code>var React = require('react');</code>). If your project has conflicts with commonJs it can be turned off by setting the <code>configOptions</code> in gradle and in <code>grails.assets</code> config.</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">assets {
+  configOptions = [<span class="key">commonJs</span>: <span class="predefined-constant">false</span>] <span class="comment">//useful for custom config on extension libraries</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or:</p>
+</div>
+<div class="listingblock">
+<div class="title">application.groovy</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">grails {
+  assets {
+    commonJs = <span class="predefined-constant">false</span>
+  }
+}</code></pre>
 </div>
 </div>
 </div>
@@ -743,7 +771,7 @@ This method is not evaluated in javascript but rather replaced like a precompile
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-08-05 09:11:37 -04:00
+Last updated 2016-08-27 08:36:52 -04:00
 </div>
 </div>
 </body>
