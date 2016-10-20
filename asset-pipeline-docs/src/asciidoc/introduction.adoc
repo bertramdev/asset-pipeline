@@ -7,6 +7,10 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* October 20, 2016
+** 2.11.4 - Resolving Issue with tomcat grails container mode and assetResourceLocator
+* October 12, 2016
+** 2.11.3 - Improvements to ratpack as well as several merged bug fixes.
 * August 27, 2016
 ** 2.11.2 - Resolving issue with jsass not expiring cache dependencies. Also fixing bug in commonJs lib and allowing a config option to turn off commonJs.
 * August 14, 2016
