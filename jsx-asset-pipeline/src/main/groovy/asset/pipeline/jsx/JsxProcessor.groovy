@@ -61,7 +61,7 @@ class JsxProcessor extends AbstractProcessor {
 				output << input.substring(lastPosition,input.size())
 			}
 		} catch(JsxParserException jex) {
-			throw new JsxParserException("Error Parsing JSX File ${assetFile?.name}: ${jex.getMessage()}")
+			throw new JsxParserException("Error Parsing JSX File ${assetFile?.name}: ${jex.getMessage()} State: ${lexer.yystate()}")
 		}
 		
 		return output.toString()

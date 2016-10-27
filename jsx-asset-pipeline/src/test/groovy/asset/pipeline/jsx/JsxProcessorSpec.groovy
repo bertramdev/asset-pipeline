@@ -34,7 +34,7 @@ var NewComponent = React.createClass({
       <div {...props}>
       	{ /* Comment Block */}
       	{"blah"}
-        <div className="awesome" style={{border: '1px solid red'}}>
+        <div className = "awesome" style={{border: '1px solid red'}}>
           <label htmlFor="name" data-id='1'>Enter your name: </label>
           <input type="text" id="name" />
         </div>

@@ -85,6 +85,7 @@ JsxParserException
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
+WhiteSpaceOpt = [ \t\f]+?
 
 /* comments */
 Comment = {TraditionalComment} | {EndOfLineComment} | {DocumentationComment}
@@ -109,7 +110,7 @@ JSXMemberExpression = ({Identifier} "." {Identifier})+
 /*Attributes*/
 JSXAttributes = {JSXSpreadAttribute} | {JSXAttribute} | \s | [^>]
 JSXSpreadAttribute = "{..." {AssignmentExpression}* ~"}"  
-JSXAttribute = {JSXAttributeName} "=" {JSXAttributeValue}
+JSXAttribute = {JSXAttributeName} {WhiteSpaceOpt} "=" {WhiteSpaceOpt} {JSXAttributeValue}
 JSXAttributeName = [:jletter:] [a-zA-Z0-9\-\_]* | {JSXNamespacedName}
 JSXAttributeValue = "\"" {JSXDoubleStringCharacters} "\"" | "\'" {JSXSingleStringCharacters} "\'" | "{" {AssignmentExpression}* "}"
 JSXDoubleStringCharacters = {JSXDoubleStringCharacter}*
@@ -210,6 +211,7 @@ AssignmentExpression = [^]
   \"                             {yybegin(STRINGDOUBLE); string.setLength(0);}
   \'                             {yybegin(STRINGSINGLE); string.setLength(0);}
   {ChildExpression}              {yybegin(ASSIGNMENTEXPRESSION);string.setLength(0);yypushback(yylength() - 1);attribute.setAttributeType("assignmentExpression");}
+  {WhiteSpace}                   { /* ignore */ }
 }
 
 <JSXCHILDREN> {
