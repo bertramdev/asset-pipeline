@@ -98,7 +98,9 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
 
 
         AssetPipelineConfigHolder.config = assetsConfig
-        AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".asscache").canonicalPath
+        if (BuildSettings.TARGET_DIR) {
+            AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".asscache").canonicalPath
+        }
         // Register Link Generator
         String serverURL = config?.getProperty('grails.serverURL', String, null)
         boolean cacheUrls = config?.getProperty('grails.web.linkGenerator.useCache', Boolean, true)
