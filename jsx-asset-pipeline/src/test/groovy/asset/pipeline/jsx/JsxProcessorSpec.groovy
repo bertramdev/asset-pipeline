@@ -39,6 +39,7 @@ var NewComponent = React.createClass({
           <input type="text" id="name" />
         </div>
         <p>Enter your HTML here</p>
+        <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}/>
       </div>
     );
   }

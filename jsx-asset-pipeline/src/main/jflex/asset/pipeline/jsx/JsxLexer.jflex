@@ -194,8 +194,8 @@ AssignmentExpression = [^]
   >                             {yybegin(JSXOPENINGELEMENT); yypushback(yylength()) ; attribute = null;}
   {JSXSpreadAttribute}           {string.setLength(0);attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);attribute.setAttributeType("spreadAttribute"); yypushback(yylength()-4); yybegin(ASSIGNMENTEXPRESSION);}
   {JSXAttribute}                  {yybegin(JSXATTRIBUTE);yypushback(yylength()); attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);}
+  {JSXAttributeName}             {attribute = new JsxAttribute("JSXAttribute",null,yyline,yycolumn,yychar);attribute.setName(yytext());addAttributeSymbol(attribute);}
   /* whitespace */
-  
   {WhiteSpace}                   { /* ignore */ }
 }
 

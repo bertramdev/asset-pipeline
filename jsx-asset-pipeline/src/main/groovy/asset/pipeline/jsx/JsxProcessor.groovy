@@ -61,7 +61,7 @@ class JsxProcessor extends AbstractProcessor {
 				output << input.substring(lastPosition,input.size())
 			}
 		} catch(JsxParserException jex) {
-			throw new JsxParserException("Error Parsing JSX File ${assetFile.name}: ${jex.getMessage()}")
+			throw new JsxParserException("Error Parsing JSX File ${assetFile?.name}: ${jex.getMessage()}")
 		}
 		
 		return output.toString()
@@ -110,6 +110,8 @@ class JsxProcessor extends AbstractProcessor {
 			out += element.getAttributes().collect { attribute ->
 				if(attribute.attributeType == 'assignmentExpression') {
 					"${attribute.name.contains('-') ? ('"' + attribute.name + '"') : attribute.name}: ${attribute.value}"
+				} else if(!attribute.value) {
+					"${attribute.name.contains('-') ? ('"' + attribute.name + '"') : attribute.name}: true"
 				} else {
 					"${attribute.name.contains('-') ? ('"' + attribute.name + '"') : attribute.name}: \"${attribute.value}\""
 				}
