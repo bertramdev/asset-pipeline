@@ -210,7 +210,7 @@ class AssetCompile extends DefaultTask {
     @CompileDynamic
     void compile() {
         AssetPipelineConfigHolder.config = configOptions
-
+        AssetPipelineConfigHolder.resolvers = []
         registerResolvers()     
         loadAssetSpecifications()
         
