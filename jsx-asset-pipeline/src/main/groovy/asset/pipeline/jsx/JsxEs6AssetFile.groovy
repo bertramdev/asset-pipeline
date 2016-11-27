@@ -26,15 +26,15 @@ import asset.pipeline.processors.JsRequireProcessor
 import asset.pipeline.processors.Es6Processor
 
 /**
-* Specification for the JSX file extension which compiles into javascript
-* @author David Estes
-*/
+ * Specification for the JSX file extension which compiles into javascript
+ * @author David Estes
+ */
 @CompileStatic
-class JsxAssetFile extends AbstractAssetFile {
+class JsxEs6AssetFile extends AbstractAssetFile {
 	static final contentType = ['application/javascript','application/x-javascript','text/javascript']
-	static extensions = ['jsx', 'js.jsx']
+	static extensions = ['jsx.es6', 'js.jsx.es6']
 	static final String compiledExtension = 'js'
-	static processors = [JsxProcessor,JsProcessor,JsRequireProcessor]
+	static processors = [JsxProcessor,JsProcessor,JsRequireProcessor, Es6Processor]
 	Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

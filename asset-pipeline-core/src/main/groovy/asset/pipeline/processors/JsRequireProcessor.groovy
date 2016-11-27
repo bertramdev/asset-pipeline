@@ -143,10 +143,16 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 	static final String requireMethod = """
+var _asset_pipeline_loaded_modules = _asset_pipeline_loaded_modules || {};
 var _asset_pipeline_require = function(path) {
+	var loadedModule = _asset_pipeline_loaded_modules[path];
+	if(loadedModule != undefined) {
+		return loadedModule.exports;
+	}
 	var module = _asset_pipeline_modules[path];
 	if(module != undefined) {
-		return module().exports;
+		_asset_pipeline_loaded_modules[path] = module();
+		return _asset_pipeline_loaded_modules[path].exports;
 	}
 	return null;
 };
