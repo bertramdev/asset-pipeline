@@ -6,6 +6,8 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+* November 27, 2016
+** 2.12.0 - Ecmascript 6 Module Loading Support using (.js.es6 or .jsx.es6) file extensions. Improved CommonJs support. Released at 30k ft!
 * October 28, 2016
 ** 2.11.6 - Fixing gradle bug with multiproject builds including assets from other projects.
 * October 27, 2016
