@@ -174,9 +174,9 @@ class Es6Processor extends AbstractProcessor {
 		}
 		if(insertPosition != null) {
 			moduleList.add(insertPosition,moduleMap)	
+		} else {
+			moduleList << moduleMap	
 		}
-		moduleList << moduleMap
-		
 		moduleMap.value = encapsulateModule(assetFile, moduleName)
 		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 	}
@@ -204,7 +204,8 @@ goog.provide('${moduleName}');
 
   ${output}
 
-  ${moduleName} = {default:module.exports};
+  ${moduleName} = {default:module['exports']};
+  return module;
 })()
 """
 			return encapsulation
@@ -217,6 +218,6 @@ goog.provide('${moduleName}');
 
 	private String es6Runtime() {
 		def es6RuntimeJsResource = classLoader.getResource('asset/pipeline/goog/es6_runtime.js')
-		return es6RuntimeJsResource.text + "\n"
+		return es6RuntimeJsResource.text + "\n" + "var _asset_pipeline_loaded_modules = _asset_pipeline_loaded_modules || {};\n"
 	}
 }
