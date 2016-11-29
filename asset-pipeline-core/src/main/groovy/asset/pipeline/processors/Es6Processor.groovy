@@ -37,7 +37,7 @@ class Es6Processor extends AbstractProcessor {
 	ClassLoader classLoader
 
 	private static final Pattern URL_CALL_PATTERN = ~/goog\.require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#?$ &+%=]++)\1?(?:\s*)\)/
-	public static ThreadLocal<Map<String,String>> es6JsModules = new ThreadLocal<Map<String,String>>()
+	public static ThreadLocal<ArrayList> es6JsModules = new ThreadLocal<ArrayList>()
 	public static ThreadLocal<String> baseModule = new ThreadLocal<String>()
 
 	Es6Processor(final AssetCompiler precompiler) {
@@ -53,6 +53,7 @@ class Es6Processor extends AbstractProcessor {
 		}
 		if(assetFile instanceof JsAssetFile) {
 			if(!AssetPipelineConfigHolder.config?.enableES6) {
+				println "Skipping ES6 transpile"
 				return inputText
 			}
 		}
@@ -82,15 +83,16 @@ class Es6Processor extends AbstractProcessor {
 		if(!baseModule.get()) {
 			baseModule.set(assetFile.path)
 			originator = true
-			es6JsModules.set([:] as Map<String,String>)
+			es6JsModules.set([])
 		}
 		try {
 			output = output.replaceAll(URL_CALL_PATTERN) { final String urlCall, final String quote, final String assetPath ->
 				final Boolean cacheFound = cachedPaths.containsKey(assetPath)
 				final String cachedPath = cachedPaths[assetPath]
 				String modulePath = assetPath
+				String subModuleName = assetPath
 				if(assetPath.startsWith('module$')) {
-					modulePath = assetPath.substring(7).replace('$','/')
+					modulePath = assetPath.substring(7).replace('$','/').replace('_','-')
 				}
 				String replacementPath
 				if (cacheFound) {
@@ -118,8 +120,8 @@ class Es6Processor extends AbstractProcessor {
 						return "goog.require(${quote}${assetPath}${quote})"
 					} else {
 						currFile.baseFile = assetFile.baseFile ?: assetFile
-						appendModule(currFile)
-						String path = AssetHelper.nameWithoutExtension(currFile.path)
+						appendModule(currFile, subModuleName, assetFile)
+						String path = AssetHelper.fileNameWithoutExtensionFromArtefact(currFile.path, currFile)
 						cachedPaths[assetPath] = assetPath
 						return "goog.require(${quote}${assetPath}${quote})"
 					}
@@ -128,47 +130,93 @@ class Es6Processor extends AbstractProcessor {
 				}
 			}
 
-
 			if(baseModule.get() == assetFile.path && es6JsModules.get()) {
-				output = modulesJs() + output
+				def googBaseJsResource = classLoader.getResource('asset/pipeline/goog/base.js')
+				output = googBaseJsResource.text + "\n" + es6Runtime() + modulesJs() + output
 			}
+			else if(baseModule.get() == assetFile.path) {
+				def googBaseJsResource = classLoader.getResource('asset/pipeline/goog/base.js')
+				output = googBaseJsResource.text + "\n" + es6Runtime() + output
+			}	
+			
 		} finally {
 			if(originator) {
-				es6JsModules.set([:] as Map<String,String>)
+				es6JsModules.set([])
 				baseModule.set(null)
 			}
 		}
 
 		AssetFile baseFile = assetFile.baseFile ?: assetFile
 		if(!baseFile.matchedDirectives.find{it == '__goog_base'}) {
-			def googBaseJsResource = classLoader.getResource('asset/pipeline/goog/base.js')
-			output = googBaseJsResource.text + "\n" + output
-			baseFile.matchedDirectives << '__goog_base'
+			
 		}
 		return output
 	}
 
-	private appendModule(AssetFile assetFile) {
-		Map<String,String> moduleMap = es6JsModules.get()
-		if(!moduleMap) {
-			moduleMap = [:] as Map<String,String>
-			es6JsModules.set(moduleMap)
+	private appendModule(AssetFile assetFile, String moduleName, AssetFile currentFile) {
+		List moduleList = es6JsModules.get()
+		if(!moduleList) {
+			moduleList = []
+			es6JsModules.set(moduleList)
 		}
 
-		if(moduleMap[assetFile.path]) {
+		if(moduleList.find{Map<String,String> row -> row.name == assetFile.path}) {
 			return
 		}
-		moduleMap[assetFile.path] = ' \n'
-		moduleMap[assetFile.path] = assetFile.processedStream(precompiler,true)
+		Map<String,String> moduleMap = [:] as Map<String,String>
+		moduleMap.name = assetFile.path
+		moduleMap.value = ' \n'
+		def insertPosition = null
+		moduleList.eachWithIndex{ row, index ->
+			if(row.name == currentFile.path) {
+				insertPosition = index
+			}
+		}
+		if(insertPosition != null) {
+			moduleList.add(insertPosition,moduleMap)	
+		}
+		moduleList << moduleMap
+		
+		moduleMap.value = encapsulateModule(assetFile, moduleName)
 		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 	}
 
 	private String modulesJs() {
 		String output = ''
-		output += es6JsModules.get()?.collect { path, encapsulation ->
-			"${encapsulation};"
+
+		output += es6JsModules.get()?.collect { Map<String,String> row ->
+			"${row.value};"
 		}.join('\n')
 
 		return output
+	}
+
+
+	private encapsulateModule(AssetFile assetFile, moduleName) {
+		String output = assetFile.processedStream(precompiler,true)
+		if(!output.contains(moduleName)) {
+			//its not an ES6 module we need to wrap it in a require js module syntax
+					String encapsulation = """
+goog.provide('${moduleName}');
+(function() {
+  var module = {exports: {}};
+  var exports = module.exports;
+
+  ${output}
+
+  ${moduleName} = {default:module.exports};
+})()
+"""
+			return encapsulation
+		} else {
+			return output
+		}
+	}
+
+
+
+	private String es6Runtime() {
+		def es6RuntimeJsResource = classLoader.getResource('asset/pipeline/goog/es6_runtime.js')
+		return es6RuntimeJsResource.text + "\n"
 	}
 }
