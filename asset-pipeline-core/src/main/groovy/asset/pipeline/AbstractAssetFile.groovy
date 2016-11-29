@@ -70,7 +70,7 @@ abstract class AbstractAssetFile implements AssetFile {
 		if(byteCache == null) {
 			digest = MessageDigest.getInstance("MD5")
 			digestStream = new DigestInputStream((InputStream)inputStreamSource(),digest)
-			byteCache = digestStream.bytes
+			byteCache = digestStream.getBytes()
 		}
 		return new ByteArrayInputStream(byteCache)
 	}
