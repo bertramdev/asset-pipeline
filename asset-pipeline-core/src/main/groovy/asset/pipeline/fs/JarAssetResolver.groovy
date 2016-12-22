@@ -98,7 +98,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 			basePath = parentPathArgs.join(File.separator)
 		}
 		def combinedPath = basePath ? [prefixPath, basePath].join("/") : prefixPath
-		basePath = AssetHelper.normalizePath(combinedPath + "/")
+		basePath = AssetHelper.normalizePath(combinedPath) + "/"
 
 		baseJar.entries().each { JarEntry entry ->
 			if(entry.name.startsWith(basePath)) {
