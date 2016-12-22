@@ -14,7 +14,9 @@ import groovy.transform.CompileStatic
 */
 @Commons
 public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
+    static String NATIVE_FILE_SEPARATOR = File.separator
     static String DIRECTIVE_FILE_SEPARATOR = '/'
+
     ClassLoader classLoader
     String prefixPath
     String assetListPath
@@ -44,7 +46,7 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
         if (!relativePath) {
             return null
         }
-        def normalizedPath = AssetHelper.normalizePath(relativePath)
+        def normalizedPath = AssetHelper.normalizePath(relativePath.replace(NATIVE_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR))
         def specs
 
         if (contentType) {
