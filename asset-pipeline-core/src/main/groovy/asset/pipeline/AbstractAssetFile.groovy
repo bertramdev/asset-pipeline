@@ -30,7 +30,7 @@ import java.security.DigestInputStream
 *
 * @author David Estes
 */
-@CompileStatic
+// @CompileStatic
 abstract class AbstractAssetFile implements AssetFile {
 
 	String path
