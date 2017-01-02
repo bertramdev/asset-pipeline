@@ -78,7 +78,7 @@ class JsxProcessor extends AbstractProcessor {
 			} else {
 				if(child.name == 'JSXText') {
 					if(child.value.trim()) {
-						reactArgs << "\"${child.value.trim()}\""
+						reactArgs << "\"${child.value}\""
 					}
 				} else {
 					if(child.value.trim()) {
