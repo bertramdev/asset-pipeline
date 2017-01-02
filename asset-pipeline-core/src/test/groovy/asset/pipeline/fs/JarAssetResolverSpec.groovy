@@ -43,4 +43,14 @@ class JarAssetResolverSpec extends Specification {
 			println file?.inputStream?.text
 			file instanceof JsAssetFile
 	}
+
+
+	void "should load exact directory and not all directories with the same prefixes"() {
+		given:
+			def resolver = new JarAssetResolver('application','lib/test-lib.zip','META-INF/assets')
+		when:
+			def files = resolver.getAssets('jquery','application/javascript')
+		then:
+            files.name == ['jquery.js']
+	}
 }
