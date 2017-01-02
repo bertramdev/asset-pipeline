@@ -29,7 +29,7 @@ class Es6ProcessorSpec extends Specification {
 		given:
 			def resolver = new FileSystemAssetResolver('application','assets')
 		when:
-			def file = resolver.getAsset('asset-pipeline/test/test-es6',null,'es6')
+			def file = resolver.getAsset('asset-pipeline/test/test-es6',null,'js.es6')
 			def processedText = file.processedStream(null)
 			println processedText
 		then:
