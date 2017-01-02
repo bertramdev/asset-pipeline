@@ -390,6 +390,17 @@ class AssetCompiler {
 					zippedDigestFile.delete()
 				}
 				propertiesToRemove << compiledName
+			} else {
+				def compiledFile = new File(options.compileDir, compiledName)
+				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
+
+				if(compiledFile.exists() && skipNonDigests == true) {
+					compiledFile.delete()
+				}
+				if(zippedFile.exists() && skipNonDigests == true) {
+					zippedFile.delete()
+				}
+				propertiesToRemove << compiledName
 			}
 		}
 
