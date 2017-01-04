@@ -53,7 +53,6 @@ class Es6Processor extends AbstractProcessor {
 		}
 		if(assetFile instanceof JsAssetFile) {
 			if(!AssetPipelineConfigHolder.config?.enableES6) {
-				println "Skipping ES6 transpile"
 				return inputText
 			}
 		}
