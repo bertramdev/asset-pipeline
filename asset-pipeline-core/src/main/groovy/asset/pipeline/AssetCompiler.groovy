@@ -394,10 +394,10 @@ class AssetCompiler {
 				def compiledFile = new File(options.compileDir, compiledName)
 				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
 
-				if(compiledFile.exists() && skipNonDigests == true) {
+				if(compiledFile.exists() && options.skipNonDigests == true) {
 					compiledFile.delete()
 				}
-				if(zippedFile.exists() && skipNonDigests == true) {
+				if(zippedFile.exists() && options.skipNonDigests == true) {
 					zippedFile.delete()
 				}
 				propertiesToRemove << compiledName
