@@ -63,7 +63,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 					if(!currFile) {
 						currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath,'application/javascript')
 					}
-					if(!currFile) {
+					if(!currFile || currFile instanceof GenericAssetFile) {
 						cachedPaths[assetPath] = null
 						return "require(${quote}${assetPath}${quote})"
 					} else {
