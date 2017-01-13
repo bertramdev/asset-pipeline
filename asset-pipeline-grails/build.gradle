@@ -12,9 +12,9 @@ buildscript {
 }
 
 plugins {
-    id "io.spring.dependency-management" version "0.5.2.RELEASE"
     id "com.jfrog.bintray" version "1.6"
 }
+
 
 group "com.bertramlabs.plugins"
 

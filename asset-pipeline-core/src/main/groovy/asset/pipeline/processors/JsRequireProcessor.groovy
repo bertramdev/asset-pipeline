@@ -3,6 +3,7 @@ package asset.pipeline.processors
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
+import asset.pipeline.GenericAssetFile
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetHelper
 import groovy.transform.CompileStatic
