@@ -23,6 +23,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
+apply plugin: 'com.jfrog.bintray'
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "org.grails.grails-doc"
 apply plugin: "org.grails.grails-plugin-publish"
