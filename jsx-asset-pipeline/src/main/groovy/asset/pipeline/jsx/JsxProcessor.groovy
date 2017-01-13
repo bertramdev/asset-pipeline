@@ -82,10 +82,10 @@ class JsxProcessor extends AbstractProcessor {
 						Integer lineNo = 0
 						child.value.eachLine { line ->
 							if(line.trim()) {
-								if(lineNo = 0) {
-									finalValue << "\"${rtrim(line)}\""		
+								if(lineNo == 0) {
+									finalValue << rtrim(line)
 								} else {
-									finalValue << "\"${line.trim()}\""		
+									finalValue << line.trim()
 								}
 							}
 							lineNo++
