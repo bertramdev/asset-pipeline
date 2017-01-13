@@ -78,13 +78,26 @@ class JsxProcessor extends AbstractProcessor {
 			} else {
 				if(child.name == 'JSXText') {
 					if(child.value.trim()) {
-						reactArgs << "\"${child.value}\""
+						List finalValue = []
+						Integer lineNo = 0
+						child.value.eachLine { line ->
+							if(line.trim()) {
+								if(lineNo = 0) {
+									finalValue << "\"${rtrim(line)}\""		
+								} else {
+									finalValue << "\"${line.trim()}\""		
+								}
+							}
+							lineNo++
+						}
+						if(finalValue) {
+							reactArgs << "\"${finalValue.join(" ")	}\""
+						}
 					}
 				} else {
 					if(child.value.trim()) {
 						reactArgs << child.value.trim()	
 					}
-					
 				}
 			}
 		}
@@ -135,6 +148,14 @@ class JsxProcessor extends AbstractProcessor {
 			return value
 		}
 	}
+
+	public static String rtrim(String s) {
+        int i = s.length()-1;
+        while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
+            i--;
+        }
+        return s.substring(0,i+1);
+    }
 
 
 	static List<String> HTML_ELEMENTS = [
