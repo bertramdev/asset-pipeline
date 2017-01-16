@@ -20,13 +20,14 @@ import asset.pipeline.AssetFile
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.jsx.symbols.*
-
+import java.util.regex.Pattern
 import javax.swing.text.html.HTML
 
 /**
  * @author David Estes
  */
 class JsxProcessor extends AbstractProcessor {
+	Pattern commentMatch = Pattern.compile("(/\\*\\*/)|(/\\*(.+?)?\\*/)", Pattern.DOTALL);
 
 	JsxProcessor(AssetCompiler precompiler) {
 		super(precompiler)
@@ -95,6 +96,8 @@ class JsxProcessor extends AbstractProcessor {
 						}
 					}
 				} else {
+					
+					child.value = child.value.replaceAll(commentMatch,"")
 					if(child.value.trim()) {
 						reactArgs << child.value.trim()	
 					}
