@@ -49,6 +49,11 @@ var NewComponent = React.createClass({
                 </a>
         <p>Enter your HTML here</p>
         <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}/>
+        <div>
+          { ['test','array'].map(function() {
+              return <div>{item}</div>;
+            })}
+        </div>
       </div>
     );
   }

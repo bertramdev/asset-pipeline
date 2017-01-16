@@ -56,7 +56,7 @@ class JsxProcessor extends AbstractProcessor {
 			elements.each { currElement ->
 				output << input.substring(lastPosition,currElement.getPosition())
 				lastPosition = currElement.getPosition() + currElement.getLength()		
-				output << renderElement(currElement)
+				output << renderElement(currElement,null,assetFile)
 			}
 			if(lastPosition < input.size()) {
 				output << input.substring(lastPosition,input.size())
@@ -68,14 +68,14 @@ class JsxProcessor extends AbstractProcessor {
 		return output.toString()
 	}
 
-	protected String renderElement(Symbol element, Integer depth=null) {
+	protected String renderElement(Symbol element, Integer depth=null, AssetFile assetFile=null) {
 		def reactArgs = []
 		reactArgs << elementNameForValue(element.value)
 		reactArgs << renderAttributes(element)
 		depth = depth ?: element.getColumn()
 		element.children?.each { child ->
 			if(child instanceof JsxElement) {
-				reactArgs << renderElement(child, depth + 2)
+				reactArgs << renderElement(child, depth + 2, assetFile)
 			} else {
 				if(child.name == 'JSXText') {
 					if(child.value.trim()) {
@@ -97,9 +97,9 @@ class JsxProcessor extends AbstractProcessor {
 					}
 				} else {
 					
-					child.value = child.value.replaceAll(commentMatch,"")
+					child.value = child.value.replaceAll(commentMatch,"") //strip comments
 					if(child.value.trim()) {
-						reactArgs << child.value.trim()	
+						reactArgs << process(child.value.trim(),assetFile)
 					}
 				}
 			}
