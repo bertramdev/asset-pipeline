@@ -18,10 +18,9 @@ plugins {
 
 group "com.bertramlabs.plugins"
 
-apply plugin: 'maven-publish'
+// apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "org.grails.grails-gsp"
@@ -104,6 +103,12 @@ dependencies {
 
     console "org.grails:grails-console"
 }
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+}
+// enable if you wish to package this plugin as a standalone application
+bootRepackage.enabled = false
 
 grailsPublish {
   if(project.hasProperty('bintrayUser')) {
