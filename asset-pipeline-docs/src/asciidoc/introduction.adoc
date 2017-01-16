@@ -7,6 +7,7 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 * January 16, 2017
+** 2.12.7 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
 ** 2.12.6 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
 ** * January 12, 2017
 ** 2.12.5 - Bug fixes in jsx processor

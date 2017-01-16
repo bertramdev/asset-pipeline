@@ -226,7 +226,6 @@ AssignmentExpression = [^]
 }
 
 <ASSIGNMENTEXPRESSION> {
-  {Comment}                      { /* ignore */ }
   \}                            {if(curleyBraceCounter > 0) { string.append(yytext()); curleyBraceCounter--; } else if(attribute != null) {attribute.setValue(string.toString());addAttributeSymbol(attribute); yybegin(JSXATTRIBUTES);string.setLength(0);} else {yybegin(JSXCHILDREN); symbol("JSXAssignmentExpression",string.toString());string.setLength(0);}}
   \{                            { string.append(yytext()); curleyBraceCounter++;}
   [^\{\}]                   { string.append( yytext() ); }

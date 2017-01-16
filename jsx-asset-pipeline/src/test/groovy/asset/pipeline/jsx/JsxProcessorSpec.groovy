@@ -43,6 +43,10 @@ var NewComponent = React.createClass({
           <label htmlFor="name" data-id='1'>Enter your name: </label>
           <input type="text" id="name" />
         </div>
+        <a id="fbshare" target="_blank"
+                   href={"https://www.facebook.com/sharer/sharer.php?u=https://www.scentbird.com/r/f/" + this.state.user.referralCode}>
+                    <div><i className="icon-facebook"></i>Share This</div>
+                </a>
         <p>Enter your HTML here</p>
         <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}/>
       </div>
