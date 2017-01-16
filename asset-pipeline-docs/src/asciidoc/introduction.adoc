@@ -7,9 +7,9 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 * January 16, 2017
-** 2.12.5 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
+** 2.12.6 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
 ** * January 12, 2017
-** 2.12.4 - Bug fixes in jsx processor
+** 2.12.5 - Bug fixes in jsx processor
 * January 2, 2017
 ** 2.12.2 - Bug fixes for Spring Boot and CompileStatic issue in AbstractAssetFile
 * November 27, 2016
