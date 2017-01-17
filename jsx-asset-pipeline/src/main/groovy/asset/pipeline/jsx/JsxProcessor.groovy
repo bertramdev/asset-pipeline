@@ -143,7 +143,7 @@ class JsxProcessor extends AbstractProcessor {
 	// 	return value.replaceAll(/\B[A-Z]/) { '-' + it }.toLowerCase() 
 	// }
 	protected elementNameForValue(String value) {
-		if(HTML_ELEMENTS.contains(value.toLowerCase())) {
+		if(HTML_ELEMENTS.contains(value)) {
 			return "\"${value}\""
 		} else if(value.toLowerCase() == value) {
 			return "\"${value}\""
