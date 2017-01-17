@@ -92,7 +92,7 @@ class JsxProcessor extends AbstractProcessor {
 							lineNo++
 						}
 						if(finalValue) {
-							reactArgs << "\"${finalValue.join(" ")	}\""
+							reactArgs << "\"${finalValue.join(" ").replace('"','\\\"')	}\""
 						}
 					}
 				} else {
