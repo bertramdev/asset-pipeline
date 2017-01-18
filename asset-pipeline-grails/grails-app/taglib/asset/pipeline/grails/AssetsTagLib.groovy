@@ -1,11 +1,11 @@
 package asset.pipeline.grails
 
-import grails.util.Environment
-import grails.core.GrailsApplication
+
+import asset.pipeline.AssetHelper
+import asset.pipeline.AssetPaths
 import asset.pipeline.AssetPipeline
 import asset.pipeline.AssetPipelineConfigHolder
-import asset.pipeline.AssetHelper
-import asset.pipeline.AssetPipeline
+import grails.core.GrailsApplication
 import org.grails.buffer.GrailsPrintWriter
 
 
@@ -15,8 +15,9 @@ class AssetsTagLib {
 	static returnObjectForTags = ['assetPath']
 
 	private static final LINE_BREAK = System.getProperty('line.separator') ?: '\n'
+
+
 	GrailsApplication grailsApplication
-	def assetProcessorService
 
 
 	/**
@@ -31,7 +32,6 @@ class AssetsTagLib {
 			} else {
 				outPw << '<script type="text/javascript" src="' << assetPath(src: src) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '></script>' << endOfLine
 			}
-
 		}
 	}
 
@@ -62,7 +62,6 @@ class AssetsTagLib {
 		def conf = grailsApplication.config.grails.assets
 
 		final def nonBundledMode = (!AssetPipelineConfigHolder.manifest && conf.bundle != true && attrs.remove('bundle') != 'true')
-		
 		if (! nonBundledMode) {
 			output(src, '', attrs, '')
 		}
@@ -140,7 +139,7 @@ class AssetsTagLib {
 	}
 
 	boolean isAssetPath(src) {
-		assetProcessorService.isAssetPath(src)
+		AssetPaths.isAssetPath(src)
 	}
 
 	private paramsToHtmlAttr(attrs) {
