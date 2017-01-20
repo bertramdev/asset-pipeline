@@ -61,3 +61,4 @@ grails:
 ----
 
 For all these configuration options, you will want to put these config values in the appropriate environment in `application.yml` or in groovy format in `application.groovy`.
+

@@ -40,7 +40,7 @@ var NewComponent = React.createClass({
         test
       	{"blah"}
         <div className = "awesome" style={{border: '1px solid red'}}>
-          <label htmlFor="name" data-id='1'>Enter your name: </label>
+          <label htmlFor="name" data-id='1' {/*comment*/} >Enter your name: </label>
           <input type="text" id="name" />
         </div>
         <a id="fbshare" target="_blank"

@@ -85,3 +85,4 @@ grails.assets.mapping = 'assets'
 ----
 
 For all these configuration options, you will want to put these config values in the appropriate environment in `Config.groovy`.
+
