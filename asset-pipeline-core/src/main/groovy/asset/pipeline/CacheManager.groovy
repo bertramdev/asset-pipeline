@@ -34,6 +34,7 @@ public class CacheManager {
 	static Map<String, Map<String, Object>> cache = [:]
     static String configCacheBustDigest
 	static final Object LOCK_OBJECT = new Object()
+	static final Object LOCK_FETCH_OBJECT = new Object()
 	static CachePersister cachePersister
 
     /**
@@ -46,32 +47,34 @@ public class CacheManager {
 	public static String findCache(String fileName, String md5, String originalFileName = null) {
 		loadPersistedCache()
         checkCacheValidity()
-		def cacheRecord = cache[fileName]
-
-		if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
-			def cacheFiles = cacheRecord.dependencies.keySet()
-			def expiredCacheFound = cacheFiles.find { String cacheFileName ->
-				def cacheFile = AssetHelper.fileForUri(cacheFileName)
-				if(!cacheFile) {
-					return true
+        def cacheRecord
+        synchronized(LOCK_FETCH_OBJECT) {
+			cacheRecord = cache[fileName]
+			if(cacheRecord && cacheRecord.md5 == md5 && cacheRecord.originalFileName == originalFileName) {
+				def cacheFiles = cacheRecord.dependencies.keySet()
+				def expiredCacheFound = cacheFiles.find { String cacheFileName ->
+					def cacheFile = AssetHelper.fileForUri(cacheFileName)
+					if(!cacheFile) {
+						return true
+					}
+					def depMd5 = AssetHelper.getByteDigest(cacheFile.inputStream.bytes)
+					if(cacheRecord.dependencies[cacheFileName] != depMd5) {
+						return true
+					}
+					return false
 				}
-				def depMd5 = AssetHelper.getByteDigest(cacheFile.inputStream.bytes)
-				if(cacheRecord.dependencies[cacheFileName] != depMd5) {
-					return true
-				}
-				return false
-			}
 
-			if(expiredCacheFound) {
+				if(expiredCacheFound) {
+					cache.remove(fileName)
+					asyncCacheSave()
+					return null
+				}
+				return cacheRecord.processedFileText
+			} else if (cacheRecord) {
 				cache.remove(fileName)
 				asyncCacheSave()
 				return null
 			}
-			return cacheRecord.processedFileText
-		} else if (cacheRecord) {
-			cache.remove(fileName)
-			asyncCacheSave()
-			return null
 		}
 	}
 
@@ -83,25 +86,27 @@ public class CacheManager {
      * @param originalFileName The original file name of the base file being persisted
      */
 	public static void createCache(String fileName, String md5Hash, String processedFileText, String originalFileName = null) {
-        loadPersistedCache()
-        checkCacheValidity()
-        def thisCache = cache
-        def cacheRecord = thisCache[fileName]
-		if(cacheRecord) {
-			thisCache[fileName] = cacheRecord + [
-				md5: md5Hash,
-				originalFileName: originalFileName,
-				processedFileText: processedFileText
-			]
-		} else {
-			thisCache[fileName] = [
-				md5: md5Hash,
-				originalFileName: originalFileName,
-				processedFileText: processedFileText,
-				dependencies: [:]
-			]
+        synchronized(LOCK_FETCH_OBJECT) {
+	        loadPersistedCache()
+	        checkCacheValidity()
+	        def thisCache = cache
+	        def cacheRecord = thisCache[fileName]
+			if(cacheRecord) {
+				thisCache[fileName] = cacheRecord + [
+					md5: md5Hash,
+					originalFileName: originalFileName,
+					processedFileText: processedFileText
+				]
+			} else {
+				thisCache[fileName] = [
+					md5: md5Hash,
+					originalFileName: originalFileName,
+					processedFileText: processedFileText,
+					dependencies: [:]
+				]
+			}
+			asyncCacheSave()
 		}
-		asyncCacheSave()
 	}
 
     /**
@@ -111,15 +116,17 @@ public class CacheManager {
      * @param dependentFile the AssetFile object we are adding as a dependency
      */
 	public static void addCacheDependency(String fileName, AssetFile dependentFile) {
-		def cacheRecord = cache[fileName]
-		if(!cacheRecord) {
-			createCache(fileName, null, null)
-			cacheRecord = cache[fileName]
-		}
+		synchronized(LOCK_FETCH_OBJECT) {
+			def cacheRecord = cache[fileName]
+			if(!cacheRecord) {
+				createCache(fileName, null, null)
+				cacheRecord = cache[fileName]
+			}
 
-		def newMd5 = dependentFile.getByteDigest()
-		cacheRecord.dependencies[dependentFile.path] = newMd5
-		asyncCacheSave()
+			def newMd5 = dependentFile.getByteDigest()
+			cacheRecord.dependencies[dependentFile.path] = newMd5
+			asyncCacheSave()
+		}
 	}
 
     /**
@@ -140,12 +147,14 @@ public class CacheManager {
      * Called by the async {@link CachePersister} class to save the cache map to disk
      */
 	public static void save() {
-        String cacheLocation = AssetPipelineConfigHolder.config?.cacheLocation ?: CACHE_LOCATION
-		FileOutputStream fos = new FileOutputStream(cacheLocation);
-        Map<String, Map<String, Object>> cacheSaveData = [configCacheBustDigest: configCacheBustDigest, cache: cache]
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(cacheSaveData)
-		oos.close()
+		synchronized(LOCK_FETCH_OBJECT) {
+	        String cacheLocation = AssetPipelineConfigHolder.config?.cacheLocation ?: CACHE_LOCATION
+			FileOutputStream fos = new FileOutputStream(cacheLocation);
+	        Map<String, Map<String, Object>> cacheSaveData = [configCacheBustDigest: configCacheBustDigest, cache: cache]
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(cacheSaveData)
+			oos.close()
+		}
 	}
 
 	/**
@@ -189,7 +198,9 @@ public class CacheManager {
      */
     private static void checkCacheValidity() {
         if(configCacheBustDigest != AssetPipelineConfigHolder.getDigestString()) {
-            cache.clear()
+        	synchronized(LOCK_FETCH_OBJECT) {
+        		cache.clear()	
+        	}
             configCacheBustDigest = AssetPipelineConfigHolder.getDigestString()
         }
     }
