@@ -6,8 +6,11 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+
 * January 26, 2017
-** 2.13.0 - AssetCompiler is now Concurrent with a default maxThreads of 4, this can be adjusted in build.gradle via assets{} block 
+** 2.13.0 - AssetCompiler is now Concurrent with a default maxThreads of 4, this can be adjusted in build.gradle via assets{} block
+* January 24, 2017
+** 2.12.10 - Fix a cache manager concurrancy bug and more jsx improvements
 * January 16, 2017
 ** 2.12.7 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
 ** 2.12.6 - Fixes to jsx-asset-pipeline parsing in comment handling in expressions
