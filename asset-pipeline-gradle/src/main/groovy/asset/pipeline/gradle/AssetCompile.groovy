@@ -72,6 +72,17 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.enableDigests = enableDigests
     }
 
+    @Input
+    @Optional
+    boolean getMaxThreads() {
+        pipelineExtension.maxThreads
+    }
+
+
+    void setMaxThreads(Integer maxThreads) {
+        pipelineExtension.maxThreads = maxThreads
+    }
+
 	@Input
 	@Optional
 	String getJarTaskName() {

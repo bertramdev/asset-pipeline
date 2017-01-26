@@ -32,6 +32,7 @@ class AssetPipelineExtension {
     boolean packagePlugin=false
     boolean developmentRuntime=true
     boolean verbose = true
+    Integer maxThreads=4
     String compileDir = 'build/assets'
     String assetsPath = 'src/assets'
 	String jarTaskName
@@ -48,6 +49,6 @@ class AssetPipelineExtension {
     }
     
     Map toMap() {
-        return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir: compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps]
+        return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir: compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps, maxThreads: maxThreads]
     }
 }
