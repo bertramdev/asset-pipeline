@@ -32,7 +32,7 @@ class AssetPipelineExtension {
     boolean packagePlugin=false
     boolean developmentRuntime=true
     boolean verbose = true
-    Integer maxThreads=4
+    Integer maxThreads=null
     String compileDir = 'build/assets'
     String assetsPath = 'src/assets'
 	String jarTaskName

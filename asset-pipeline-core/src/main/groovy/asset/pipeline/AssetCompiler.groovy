@@ -124,7 +124,7 @@ class AssetCompiler {
 	void compile() {
 		def assetDir = initializeWorkspace()
 
-		threadPool = Executors.newFixedThreadPool(options.maxThreads ?: 4)
+		threadPool = Executors.newFixedThreadPool(options.maxThreads ?: Runtime.getRuntime().availableProcessors())
 		try {
 			def minifyCssProcessor = new CssMinifyPostProcessor()
 
