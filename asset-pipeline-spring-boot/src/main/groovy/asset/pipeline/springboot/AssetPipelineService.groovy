@@ -1,15 +1,17 @@
 package asset.pipeline.springboot
-import org.springframework.boot.context.embedded.*
-import org.springframework.context.annotation.*;
+import javax.servlet.ServletContext
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.web.context.WebApplicationContext
+import org.springframework.web.context.support.WebApplicationContextUtils
+
 import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.fs.ClasspathAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
 import groovy.util.logging.Log4j
-import javax.servlet.ServletContext
-import org.springframework.web.context.support.WebApplicationContextUtils
-import org.springframework.web.context.WebApplicationContext
-import asset.pipeline.fs.ClasspathAssetResolver
-import org.springframework.core.io.ResourceLoader
 
 @Log4j
 @Configuration

@@ -46,7 +46,7 @@ dependencies {
 	provided    'org.codehaus.groovy:groovy:2.0.7'
 	compile     project(':asset-pipeline-core')
 	compile     project(':asset-pipeline-servlet')
-	compile     'org.springframework.boot:spring-boot-starter-web:1.1.9.RELEASE'
+	compile     'org.springframework.boot:spring-boot-starter-web:1.5.1.RELEASE'
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 }
 
