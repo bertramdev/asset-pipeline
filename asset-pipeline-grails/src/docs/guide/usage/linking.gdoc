@@ -60,7 +60,7 @@ class ExampleService {
 
 h3. Deferred Scripts
 
-Asset-Pipeline provides a set of tags that can be used to ensure script blocks are deferred to the end of your page. This is not recommended as its not very unobtrusive, but has been added to help newcomers upgrade existing apps from resources.
+Asset-Pipeline provides a set of tags that can be used to ensure script blocks are deferred to the end of your page. This is not recommended as it is obtrusive, but has been added to help newcomers upgrade existing apps from resources.
 
 {code}
 <asset:javascript src="application.js" asset-defer/>
