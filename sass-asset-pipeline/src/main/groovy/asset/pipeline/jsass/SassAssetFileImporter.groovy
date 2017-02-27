@@ -16,6 +16,7 @@
 package asset.pipeline.jsass
 
 import asset.pipeline.AssetFile
+import java.util.regex.Pattern
 import asset.pipeline.AssetHelper
 import asset.pipeline.CacheManager
 import groovy.util.logging.Commons
@@ -49,7 +50,7 @@ class SassAssetFileImporter implements Importer {
         def possibleStylesheets = [relativeRootPath.resolve("${importUrlPath}.scss").toString(), relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.scss").toString(), "${importUrlPath.fileName}.scss","_${importUrlPath.fileName}.scss" ]
         
         for (String stylesheetPath : possibleStylesheets) {
-            String standardPathStyle = stylesheetPath?.replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
+            String standardPathStyle = stylesheetPath?.replaceAll(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
             def assetFile = AssetHelper.fileForFullName(standardPathStyle.toString())
             if (assetFile) {
                 log.debug "$parent imported $assetFile.path"
