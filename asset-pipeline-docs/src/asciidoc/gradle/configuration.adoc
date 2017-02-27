@@ -9,6 +9,7 @@ assets {
   minifyJs = true
   minifyCss = true
   enableSourceMaps = true
+  maxThreads = 4 //useful for concurrent asset processing during build
   configOptions = [:] //useful for custom config on extension libraries
 
   minifyOptions = [
@@ -49,6 +50,7 @@ assets {
   enableDigests = true
   skipNonDigests = false
   enableGzip = true
+  maxThreads = 4
 }
 ----
 

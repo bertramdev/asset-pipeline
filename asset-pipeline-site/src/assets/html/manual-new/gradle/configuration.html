@@ -522,6 +522,7 @@ table.CodeRay td.code>pre{padding:0}
   minifyJs = <span class="predefined-constant">true</span>
   minifyCss = <span class="predefined-constant">true</span>
   enableSourceMaps = <span class="predefined-constant">true</span>
+  maxThreads = <span class="integer">4</span> <span class="comment">//useful for concurrent asset processing during build</span>
   configOptions = [:] <span class="comment">//useful for custom config on extension libraries</span>
 
   minifyOptions = [
@@ -575,6 +576,7 @@ Tuning the includes/excludes patterns can dramatically reduce the build time of 
   enableDigests = <span class="predefined-constant">true</span>
   skipNonDigests = <span class="predefined-constant">false</span>
   enableGzip = <span class="predefined-constant">true</span>
+  maxThreads = <span class="integer">4</span>
 }</code></pre>
 </div>
 </div>
@@ -597,7 +599,7 @@ Change <code>skipNonDigests</code> to true to help reduce the file size of your 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 09:48:17 -04:00
+Last updated 2017-01-26 12:29:26 -05:00
 </div>
 </div>
 </body>

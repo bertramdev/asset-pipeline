@@ -552,7 +552,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.12.10"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.1"
   }
 }
 
@@ -567,7 +567,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "2.12.10"
+  id "com.bertramlabs.asset-pipeline" version "2.13.1"
 }</code></pre>
 </div>
 </div>
@@ -649,6 +649,7 @@ Including javascript libraries and css libraries from npm is super easy as well.
   minifyJs = <span class="predefined-constant">true</span>
   minifyCss = <span class="predefined-constant">true</span>
   enableSourceMaps = <span class="predefined-constant">true</span>
+  maxThreads = <span class="integer">4</span> <span class="comment">//useful for concurrent asset processing during build</span>
   configOptions = [:] <span class="comment">//useful for custom config on extension libraries</span>
 
   minifyOptions = [
@@ -702,6 +703,7 @@ Tuning the includes/excludes patterns can dramatically reduce the build time of 
   enableDigests = <span class="predefined-constant">true</span>
   skipNonDigests = <span class="predefined-constant">false</span>
   enableGzip = <span class="predefined-constant">true</span>
+  maxThreads = <span class="integer">4</span>
 }</code></pre>
 </div>
 </div>
@@ -746,7 +748,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.12.10'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.13.1'
 }</code></pre>
 </div>
 </div>
