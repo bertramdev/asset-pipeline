@@ -28,6 +28,8 @@ import java.nio.file.Paths
 @Commons
 class SassAssetFileImporter implements Importer {
     AssetFile baseFile
+    static String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
+    static String DIRECTIVE_FILE_SEPARATOR = '/'
     SassAssetFileImporter(AssetFile assetFile) {
         super()
         this.baseFile = assetFile
@@ -45,8 +47,10 @@ class SassAssetFileImporter implements Importer {
         Path relativeRootPath = parentPath.parent ?: Paths.get('.')
         Path importUrlPath = Paths.get(importUrl)
         def possibleStylesheets = [relativeRootPath.resolve("${importUrlPath}.scss").toString(), relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.scss").toString(), "${importUrlPath.fileName}.scss","_${importUrlPath.fileName}.scss" ]
+        
         for (String stylesheetPath : possibleStylesheets) {
-            def assetFile = AssetHelper.fileForFullName(stylesheetPath.toString())
+            String standardPathStyle = stylesheetPath?.replace(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
+            def assetFile = AssetHelper.fileForFullName(standardPathStyle.toString())
             if (assetFile) {
                 log.debug "$parent imported $assetFile.path"
                 return assetFile

@@ -23,17 +23,19 @@ import asset.pipeline.fs.FileSystemAssetResolver
 /**
 * @author David Estes
 */
-class Es6ProcessorSpec extends Specification {
+class JsRequireProcessorSpec extends Specification {
 
-	void "should be able to process es6 files and load constants correctly"() {
+	void "should be able to load another js file via commonJs syntax"() {
 		given:
 			def resolver = new FileSystemAssetResolver('application','assets')
 		when:
-			def file = resolver.getAsset('asset-pipeline/test/test-es6',null,'js.es6')
+			def file = resolver.getAsset('asset-pipeline/test/test-common-js',null,'js')
 			def processedText = file.processedStream(null)
 			println processedText
 		then:
-			processedText.contains('/** @const */')
+			processedText.contains('in a required file')
+			processedText.contains("S3.require('common_module')");
+			processedText.contains("S3require('common_module')");
 
 	}
 

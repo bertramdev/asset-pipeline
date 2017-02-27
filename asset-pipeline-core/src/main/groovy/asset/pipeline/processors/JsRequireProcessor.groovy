@@ -13,7 +13,7 @@ import java.util.regex.Pattern
 @CompileStatic
 class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
-	private static final Pattern URL_CALL_PATTERN = ~/require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#?$ &+%=]++)\1?(?:\s*)\)/
+	private static final Pattern URL_CALL_PATTERN = ~/[^\.a-zA-Z_\-0-9]require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#?$ &+%=]++)\1?(?:\s*)\)/
 	public static ThreadLocal<Map<String,String>> commonJsModules = new ThreadLocal<Map<String,String>>()
 	public static ThreadLocal<String> baseModule = new ThreadLocal<String>()
 
@@ -42,13 +42,17 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 			String result =	inputText.replaceAll(URL_CALL_PATTERN) { final String urlCall, final String quote, final String assetPath ->
 				final Boolean cacheFound = cachedPaths.containsKey(assetPath)
 				final String cachedPath = cachedPaths[assetPath]
-
+				Integer requirePosition = urlCall.indexOf('require')
+				String resultPrefix = ''
+				if(requirePosition > 0) {
+					resultPrefix = urlCall.substring(0,requirePosition)
+				}
 				String replacementPath
 				if (cacheFound) {
 					if(cachedPath == null) {
-						return "require(${quote}${assetPath}${quote})"
+						return resultPrefix+"require(${quote}${assetPath}${quote})"
 					} else {
-						return "_asset_pipeline_require(${quote}${cachedPath}${quote})"
+						return resultPrefix+"_asset_pipeline_require(${quote}${cachedPath}${quote})"
 					}
 				} else if(assetPath.size() > 0) {
 					AssetFile currFile
@@ -66,15 +70,15 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 					}
 					if(!currFile || currFile instanceof GenericAssetFile) {
 						cachedPaths[assetPath] = null
-						return "require(${quote}${assetPath}${quote})"
+						return resultPrefix+"require(${quote}${assetPath}${quote})"
 					} else {
 						currFile.baseFile = assetFile.baseFile ?: assetFile
 						appendModule(currFile)
 						cachedPaths[assetPath] = currFile.path
-						return "_asset_pipeline_require(${quote}${currFile.path}${quote})"
+						return resultPrefix+"_asset_pipeline_require(${quote}${currFile.path}${quote})"
 					}
 				} else {
-					return "require(${quote}${assetPath}${quote})"
+					return resultPrefix+"require(${quote}${assetPath}${quote})"
 				}
 			}
 
