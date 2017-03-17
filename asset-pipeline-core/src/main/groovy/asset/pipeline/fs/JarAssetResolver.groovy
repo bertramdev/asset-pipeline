@@ -95,7 +95,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 			List<String> parentPathArgs = pathArgs ? pathArgs[0..(pathArgs.size() - 1)] as List<String> : [] as List<String>
  			parentPathArgs.addAll(basePathArgs.toList() as List<String>)
 			parentPathArgs = (parentPathArgs).findAll{String it -> it != "."} as List<String>
-			basePath = parentPathArgs.join(File.separator)
+			basePath = parentPathArgs.join(DIRECTIVE_FILE_SEPARATOR)
 		}
 		def combinedPath = basePath ? [prefixPath, basePath].join("/") : prefixPath
 		basePath = AssetHelper.normalizePath(combinedPath) + "/"
