@@ -23,9 +23,9 @@ import asset.pipeline.grails.fs.*
 import asset.pipeline.fs.*
 import asset.pipeline.*
 import grails.util.BuildSettings
-import org.springframework.boot.context.embedded.*
 import org.grails.plugins.BinaryGrailsPlugin
 import groovy.util.logging.Commons
+import org.springframework.util.ClassUtils
 
 @Commons
 class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
@@ -117,7 +117,11 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
 
         def mapping = assetsConfig.mapping?.toString() ?: "assets"
 
-        assetPipelineFilter(FilterRegistrationBean) {
+        ClassLoader classLoader = application.classLoader
+        Class registrationBean = ClassUtils.isPresent("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader ) ?
+                                    ClassUtils.forName("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader) :
+                                    ClassUtils.forName("org.springframework.boot.context.embedded.FilterRegistrationBean", classLoader)
+        assetPipelineFilter(registrationBean) {
             filter = new asset.pipeline.AssetPipelineFilter()
             urlPatterns = ["/${mapping}/*".toString()]
         }
