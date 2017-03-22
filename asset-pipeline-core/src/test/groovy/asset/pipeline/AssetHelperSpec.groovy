@@ -83,7 +83,7 @@ class AssetHelperSpec extends Specification {
     	when:
     		nameWithoutExt = AssetHelper.nameWithoutExtension(testName)
     	then:
-    		nameWithoutExt == 'test.min'
+    		nameWithoutExt == 'test'
     }
 
     void "should extract extension from file name"() {
@@ -93,7 +93,7 @@ class AssetHelperSpec extends Specification {
     	when:
     		ext = AssetHelper.extensionFromURI(testName)
     	then:
-    		ext == 'js'
+    		ext == 'min.js'
     }
 
     void "should normalize paths"() {
