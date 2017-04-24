@@ -2,7 +2,10 @@ package asset.pipeline.grails
 
 
 import asset.pipeline.AssetHelper
+import grails.core.GrailsApplication
 import grails.util.Environment
+
+import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
@@ -18,11 +21,11 @@ import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
 class AssetProcessorService {
 
-	static transactional = false
+	@Resource
+	GrailsApplication grailsApplication
 
-
-	def grailsApplication
-	def grailsLinkGenerator
+	@Resource
+	grails.web.mapping.LinkGenerator grailsLinkGenerator
 
 
 	/**

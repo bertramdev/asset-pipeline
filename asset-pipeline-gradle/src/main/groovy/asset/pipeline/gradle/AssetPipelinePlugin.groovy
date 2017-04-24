@@ -17,6 +17,7 @@
 package asset.pipeline.gradle
 
 import asset.pipeline.AssetFile
+import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import asset.pipeline.AssetCompiler
@@ -29,6 +30,7 @@ import org.gradle.api.distribution.DistributionContainer
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.language.jvm.tasks.ProcessResources
 
@@ -110,6 +112,8 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 maxThreads = assetPipeline.maxThreads
             }
 
+            configureBootRun(project)
+
             if(distributionContainer) {
                 distributionContainer.getByName("main").contents.from(assetPipeline.compileDir) {
                     into "app/assets"
@@ -154,6 +158,22 @@ class AssetPipelinePlugin implements Plugin<Project> {
         }
 
 
+    }
+
+    private void configureBootRun(Project project) {
+        JavaExec bootRunTask = (JavaExec)project.tasks.findByName('bootRun')
+        if (bootRunTask != null) {
+            List additionalFiles = []
+            def buildDependencies = project.buildscript.configurations.findByName("classpath")?.files
+            if (buildDependencies) {
+                for (file in buildDependencies) {
+                    if (file.name.startsWith('rhino-') || file.name.startsWith('closure-compiler-unshaded-')) {
+                        additionalFiles.add(file)
+                    }
+                }
+            }
+            bootRunTask.classpath += project.files(additionalFiles)
+        }
     }
 
     private void createGradleConfiguration(Project project) {
