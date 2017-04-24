@@ -39,7 +39,9 @@ class AssetsTagLibSpec extends Specification {
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('application', 'grails-app/assets'))
 
 		assetProcessorService.grailsApplication   = grailsApplication
-		assetProcessorService.grailsLinkGenerator = [serverBaseURL: MOCK_BASE_SERVER_URL]
+		grails.web.mapping.LinkGenerator linkGenerator = Mock(grails.web.mapping.LinkGenerator)
+		linkGenerator.getServerBaseURL() >> MOCK_BASE_SERVER_URL
+		assetProcessorService.grailsLinkGenerator = linkGenerator
 
 		final def assetMethodTagLibMock = mockTagLib(AssetMethodTagLib)
 		assetMethodTagLibMock.assetProcessorService = assetProcessorService
