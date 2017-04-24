@@ -16,6 +16,7 @@
 package asset.pipeline
 
 import asset.pipeline.AssetPipelineFilter
+import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.LinkGenerator
 import asset.pipeline.grails.CachingLinkGenerator
 import asset.pipeline.grails.AssetResourceLocator
@@ -107,6 +108,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         String serverURL = config?.getProperty('grails.serverURL', String, null)
         boolean cacheUrls = config?.getProperty('grails.web.linkGenerator.useCache', Boolean, true)
 
+        assetProcessorService(AssetProcessorService)
         grailsLinkGenerator(cacheUrls ? CachingLinkGenerator : LinkGenerator, serverURL) { bean ->
             bean.autowire = true
         }
@@ -114,6 +116,8 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         assetResourceLocator(AssetResourceLocator) { bean ->
             bean.parent = "abstractGrailsResourceLocator"
         }
+
+
 
         def mapping = assetsConfig.mapping?.toString() ?: "assets"
 
