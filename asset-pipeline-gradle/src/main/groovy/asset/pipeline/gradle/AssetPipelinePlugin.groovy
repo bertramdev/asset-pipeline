@@ -172,16 +172,29 @@ class AssetPipelinePlugin implements Plugin<Project> {
                     }
                 }
             }
+            def assetDeps = project.configurations.findByName(ASSET_CONFIGURATION_NAME)?.files
+            if(assetDeps) {
+                for(file in assetDeps) {
+                    additionalFiles.add(file)
+                }
+            }
             bootRunTask.classpath += project.files(additionalFiles)
         }
     }
 
     private void createGradleConfiguration(Project project) {
         Configuration configuration = project.configurations.create(ASSET_CONFIGURATION_NAME)
-        project.plugins.withType(JavaPlugin) {
-            Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
+        JavaExec bootRunTask = (JavaExec)project.tasks.findByName('bootRun')
 
-            runtimeConfiguration.extendsFrom configuration
+        project.plugins.withType(JavaPlugin) {
+            if(bootRunTask) {
+                Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)
+                runtimeConfiguration.extendsFrom configuration        
+            } else {
+                Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
+                runtimeConfiguration.extendsFrom configuration        
+            }
+            
         }
     }
 
