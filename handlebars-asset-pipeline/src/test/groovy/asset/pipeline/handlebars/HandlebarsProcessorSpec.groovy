@@ -151,5 +151,29 @@ class HandlebarsProcessorSpec extends Specification {
 	}
 
 
+	def "should be able to registerPartial when file prefixed with _"() {
+		given:
+		AssetPipelineConfigHolder.config = [
+			handlebars: [
+				wrapTemplate: null
+			]
+		]
+		HandlebarsProcessor.wrapTemplateCustom = null
+		def handlebarsText = '''
+		<html>
+		<body>
+			<h1>{{title}}</h1>
+		</body>
+		</html>
+		'''
+		AssetPipelineConfigHolder.config = [:]
+		def assetFile = new HandlebarsAssetFile()
+		assetFile.path = "templates/sub/_template.handlebars"
+		def processor = new HandlebarsProcessor()
 
+		when:
+		def output = processor.process(handlebarsText, assetFile)
+		then:
+		output.contains('registerPartial(\'sub/template\'')
+	}
 }

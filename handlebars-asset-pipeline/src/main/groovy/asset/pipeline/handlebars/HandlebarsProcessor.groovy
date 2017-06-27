@@ -112,12 +112,25 @@ class HandlebarsProcessor extends AbstractProcessor {
 		if(HandlebarsProcessor.wrapTemplateCustom) {
 			return HandlebarsProcessor.wrapTemplateCustom.make([compiledTemplate: compiledTemplate, templateName: templateName]).toString()
 		} else {
-			"""
+			
+			def partialComponents = templateName.split('/')
+			if(partialComponents[-1].startsWith('_')) {
+				partialComponents[-1] = partialComponents[-1].substring(1)
+				def partialName = partialComponents.join('/')
+				"""
+		(function(){
+			Handlebars.registerPartial('$partialName', $compiledTemplate);
+				}());
+				"""	
+			} else {
+				"""
 		(function(){
 			var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 				templates['$templateName'] = template($compiledTemplate);
 				}());
 				"""	
+			}
+			
 		}
 		
 	}
