@@ -43,7 +43,7 @@ Gradle Example:
 
 ```groovy
 assets {
-	config = [
+	configOptions = [
 		handlebars: [
 			templateRoot: 'templates',
 			templatePathSeperator: '/'
