@@ -63,6 +63,16 @@ class AssetPipelineBootStrap {
             outputFileStream.close()
             outputDigestFileStream.flush()
             outputDigestFileStream.close()
+            try {
+                targetFile.setReadable(true,false)
+                targetFile.setExecutable(true,false)
+                targetFile.setWritable(true)
+                digestFile?.setReadable(true,false)
+                digestFile?.setExecutable(true,false)
+                digestFile?.setWritable(true)
+            } catch (ex) {
+               // attempting permission set
+            }
         } finally {
             sourceStream.close()
         }
