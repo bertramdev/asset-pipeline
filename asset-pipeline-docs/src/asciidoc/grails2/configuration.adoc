@@ -9,9 +9,12 @@ Certain files are not needed for compilation in production. This can be configur
 .Table Exclude Properties
 |===
 |Property | Value
-|grails.assets.excludes, \["tiny_mce/src/\*.js"]
-|grails.assets.plugin."twitter-bootstrap".excludes, \["\*\*/\*.less"]
-|grails.assets.plugin."twitter-bootstrap".includes, \["bootstrap.less"]
+|grails.assets.excludes
+|["tiny_mce/src/\*.js"]
+|grails.assets.plugin."twitter-bootstrap".excludes
+|["\*\*/\*.less"]
+|grails.assets.plugin."twitter-bootstrap".includes
+|["bootstrap.less"]
 |===
 
 Above you will notice the use of an includes. An includes allows you to override a specific file after the excludes scan has already been performed. The above example makes sure the @bootstrap.less@ file can be compiled from the @twitter-bootstrap plugin@.
@@ -24,11 +27,21 @@ The Asset-pipeline comes with the newer version of Closure Compiler to minify yo
 .Table Build Options
 |===
 |Property |Value |Default
-|grails.assets.minifyJs, *true* or *false*, *true*
-|grails.assets.minifyCss, *true* or *false*, *true*
-|grails.assets.enableSourceMaps, *true* or *false*, *true*
-|grails.assets.minifyOptions, *Map*, (see below)
-|grails.assets.skipNonDigests, *true* or *false*, *true*
+|grails.assets.minifyJs
+|*true* or *false*
+|*true*
+|grails.assets.minifyCss
+|*true* or *false*
+|*true*
+|grails.assets.enableSourceMaps
+|*true* or *false*
+|*true*
+|grails.assets.minifyOptions
+|*Map*
+|(see below)
+|grails.assets.skipNonDigests
+|*true* or *false*
+|*true*
 |===
 
 
