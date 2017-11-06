@@ -507,7 +507,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">David Estes</span><br>
 <span id="email" class="email"><a href="mailto:davydotcom@gmail.com">davydotcom@gmail.com</a></span><br>
-<span id="revdate">2.13.2</span>
+<span id="revdate">2.14.4</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1652,7 +1652,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.4"
   }
 }
 
@@ -1667,7 +1667,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "2.13.2"
+  id "com.bertramlabs.asset-pipeline" version "2.14.4"
 }</code></pre>
 </div>
 </div>
@@ -1848,7 +1848,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.13.2'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -1872,7 +1872,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.13.2'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -2204,12 +2204,12 @@ This will only be displayed if the asset exists
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:2.13.2"
+  compile ":asset-pipeline:2.14.4"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:2.13.2"
-  //compile ":less-asset-pipeline:2.13.2"
-  //compile ":coffee-asset-pipeline:2.13.2"
-  //compile ":handlebars-asset-pipeline:2.13.2"
+  //compile ":sass-asset-pipeline:2.14.4"
+  //compile ":less-asset-pipeline:2.14.4"
+  //compile ":coffee-asset-pipeline:2.14.4"
+  //compile ":handlebars-asset-pipeline:2.14.4"
 }</code></pre>
 </div>
 </div>
@@ -2270,8 +2270,16 @@ Use <code>grails dev run-war</code> to test your apps behavior once assets are m
 <td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes, \["tiny_mce/src/\*.js"]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes, \["*\*/\*.less"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["tiny_mce/src/\*.js"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["*\*/\*.less"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".includes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["bootstrap.less"]</p></td>
 </tr>
 </tbody>
 </table>
@@ -2298,9 +2306,29 @@ Use <code>grails dev run-war</code> to test your apps behavior once assets are m
 <td class="tableblock halign-left valign-top"><p class="tableblock">Default</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyOptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Map</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(see below)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.skipNonDigests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
 </tr>
 </tbody>
 </table>
@@ -2614,10 +2642,10 @@ This will only be displayed if the asset exists
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.13.2'
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.14.4'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.13.2'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.13.2'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.4'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -2696,10 +2724,10 @@ ratpack {
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.13.2'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.14.4'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.13.2'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.13.2'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.4'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -2760,7 +2788,7 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.13.2'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -2804,7 +2832,7 @@ During war build your <code>less</code> files are compiled into css files. This 
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.13.2'
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>
@@ -2830,7 +2858,7 @@ Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plu
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.13.2'
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.14.4'
 }</code></pre>
 </div>
 </div>

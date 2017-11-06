@@ -535,12 +535,12 @@ table.CodeRay td.code>pre{padding:0}
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:2.13.2"
+  compile ":asset-pipeline:2.14.4"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:2.13.2"
-  //compile ":less-asset-pipeline:2.13.2"
-  //compile ":coffee-asset-pipeline:2.13.2"
-  //compile ":handlebars-asset-pipeline:2.13.2"
+  //compile ":sass-asset-pipeline:2.14.4"
+  //compile ":less-asset-pipeline:2.14.4"
+  //compile ":coffee-asset-pipeline:2.14.4"
+  //compile ":handlebars-asset-pipeline:2.14.4"
 }</code></pre>
 </div>
 </div>
@@ -601,8 +601,16 @@ Use <code>grails dev run-war</code> to test your apps behavior once assets are m
 <td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes, \["tiny_mce/src/\*.js"]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes, \["*\*/\*.less"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["tiny_mce/src/\*.js"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["*\*/\*.less"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".includes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["bootstrap.less"]</p></td>
 </tr>
 </tbody>
 </table>
@@ -629,9 +637,29 @@ Use <code>grails dev run-war</code> to test your apps behavior once assets are m
 <td class="tableblock halign-left valign-top"><p class="tableblock">Default</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyOptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Map</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(see below)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.skipNonDigests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
 </tr>
 </tbody>
 </table>
