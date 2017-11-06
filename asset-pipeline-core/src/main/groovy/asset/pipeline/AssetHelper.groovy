@@ -109,6 +109,9 @@ public class AssetHelper {
      */
     static String extensionFromURI(String uri) {
         String[] uriComponents = uri.split("/")
+        if (uriComponents.length == 0) {
+            return null
+        }
         String lastUriComponent = uriComponents[uriComponents.length - 1]
         List<String> extensions = (List<String>) (AssetHelper.assetSpecs.collect { Class<AssetFile> it -> it.extensions }.flatten().sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) })
         String extension = null
