@@ -59,6 +59,7 @@ dependencies {
 	compile     'org.mozilla:rhino:1.7R4'
 	compile     'com.google.javascript:closure-compiler-unshaded:v20160713'
 	compile     'commons-logging:commons-logging:1.1.1'
+	compile     'org.brotli:parent:0.1.2'
 	//compile   'log4j:log4j:1.2.16'
 	testCompile project(':asset-pipeline-classpath-test')
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'

@@ -21,23 +21,29 @@ import java.util.Date;
 
 public class AssetAttributes {
 	private boolean gzipExists = false;
+	private boolean brExists = false;
 	private boolean exists = false;
 	private Resource resource;
 	private Resource gzipResource;
 	private boolean isDirectory = false;
 	private Long fileSize;
 	private Long gzipFileSize;
+	private Long brFileSize;
+	private Resource brResource;
 	private Date lastModified;
 
-	public AssetAttributes(boolean exists, Boolean gzipExists, Boolean isDirectory, Long fileSize, Long gzipFileSize, Date lastModified, Resource resource, Resource gzipResource) {
+	public AssetAttributes(boolean exists, Boolean gzipExists, Boolean brExists, Boolean isDirectory, Long fileSize, Long gzipFileSize, Long brFileSize, Date lastModified, Resource resource, Resource gzipResource, Resource brResource) {
 		this.gzipExists = gzipExists;
+		this.brExists = brExists;
 		this.exists = exists;
 		this.fileSize = fileSize;
 		this.isDirectory = isDirectory;
 		this.gzipFileSize = gzipFileSize;
+		this.brFileSize = brFileSize;
 		this.resource = resource;
 		this.lastModified = lastModified;
 		this.gzipResource = gzipResource;
+		this.brResource = brResource;
 	}
 
 	public Date getLastModified() {
@@ -52,6 +58,10 @@ public class AssetAttributes {
 		return this.gzipResource;
 	}
 
+	public Resource getBrResource() {
+		return this.brResource;
+	}
+
 	public boolean exists() {
 		return this.exists;
 	}
@@ -64,11 +74,19 @@ public class AssetAttributes {
 		return this.gzipExists;
 	}
 
+	public boolean brExists() {
+		return this.brExists;
+	}
+
 	public Long getFileSize() {
 		return this.fileSize;
 	}
 
 	public Long getGzipFileSize() {
 		return this.gzipFileSize;
+	}
+
+	public Long getBrFileSize() {
+		return this.brFileSize;
 	}
 }

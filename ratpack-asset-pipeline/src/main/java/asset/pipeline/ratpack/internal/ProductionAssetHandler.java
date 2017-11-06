@@ -89,10 +89,10 @@ public class ProductionAssetHandler implements Handler {
         if (attributes == null || !attributes.isRegularFile()) {
 
           if(props.getIndexedPath() != null && attributes != null) {
-            fileCache.put(manifestPath,new AssetAttributes(false,false,true, null , null));
+            fileCache.put(manifestPath,new AssetAttributes(false,false,false,true, null , null,null));
             doIndexFileNext(ctx, props);
           } else {
-            fileCache.put(manifestPath,new AssetAttributes(false,false,false, null , null));
+            fileCache.put(manifestPath,new AssetAttributes(false,false,false,false, null , null, null));
             ctx.next();
           }
         } else {
@@ -109,6 +109,7 @@ public class ProductionAssetHandler implements Handler {
 
           if(responseBuilder.statusCode == null || responseBuilder.statusCode != 304) {
             Path gzipFile = ctx.file(ASSET_BASE_PATH + manifestPath + ".gz");
+            Path brFile = ctx.file(ASSET_BASE_PATH + manifestPath + ".br");
             if(acceptsGzip(ctx)) {
               readAttributes(gzipFile, gzipAttributes -> {
                 if (gzipAttributes == null || !gzipAttributes.isRegularFile()) {
@@ -148,6 +149,11 @@ public class ProductionAssetHandler implements Handler {
   private boolean acceptsGzip(Context ctx) {
     String acceptsEncoding = ctx.getRequest().getHeaders().get(HttpHeaderNames.ACCEPT_ENCODING);
     return acceptsEncoding != null && Arrays.asList(acceptsEncoding.split(",")).contains("gzip");
+  }
+
+  private boolean acceptsBr(Context ctx) {
+    String acceptsEncoding = ctx.getRequest().getHeaders().get(HttpHeaderNames.ACCEPT_ENCODING);
+    return acceptsEncoding != null && Arrays.asList(acceptsEncoding.split(",")).contains("br");
   }
 
   public static void readAttributes(Path file, Action<? super BasicFileAttributes> then) throws Exception {

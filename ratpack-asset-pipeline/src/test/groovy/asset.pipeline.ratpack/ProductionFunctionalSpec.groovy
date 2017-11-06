@@ -112,7 +112,7 @@ class ProductionFunctionalSpec extends Specification {
 
   void "client error handler should be delegated to when requesting a non existing file with an entry in manifest"() {
     given:
-    fileCache.put("not-existing-path.txt", new AssetAttributes(false, false, false, null, null))
+    fileCache.put("not-existing-path.txt", new AssetAttributes(false, false,false, false, null, null,null))
 
     when:
     def response = httpClient.get("not-existing-path.txt")

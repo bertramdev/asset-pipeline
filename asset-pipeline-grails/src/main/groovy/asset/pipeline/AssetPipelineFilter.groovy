@@ -83,7 +83,11 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 					if(response.status != 304) {
 						final String acceptsEncoding = request.getHeader("Accept-Encoding")
-						if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
+						if(acceptsEncoding?.split(",")?.contains("br") && attributeCache.brExists()) {
+							file = attributeCache.getBrResource()
+							response.setHeader('Content-Encoding', 'br')
+							response.setHeader('Content-Length', attributeCache.getBrFileSize().toString())
+						} else if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
 							file = attributeCache.getGzipResource()
 							response.setHeader('Content-Encoding', 'gzip')
 							response.setHeader('Content-Length', attributeCache.getGzipFileSize().toString())
@@ -142,24 +146,36 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					if(!gzipFile.exists()) {
 						gzipFile = applicationContext.getResource("classpath:assets/${fileUri}.gz")
 					}
+					Resource brFile = applicationContext.getResource("assets/${fileUri}.br")
+					if(!brFile.exists()) {
+						brFile = applicationContext.getResource("classpath:assets/${fileUri}.br")
+					}
 					final Date lastModifiedDate = file.lastModified() ? new Date(file.lastModified()) : null
 
 					final AssetAttributes newCache = new AssetAttributes(
 						true,
 						gzipFile.exists(),
+						brFile.exists(),
 						false,
 						file.contentLength(),
 						gzipFile.exists() ? gzipFile.contentLength() : null,
+						brFile.exists() ? brFile.contentLength() : null,
 						lastModifiedDate,
 						file,
-						gzipFile
+						gzipFile,
+						brFile
 					)
 					fileCache.put(fileUri, newCache)
 
 					if(response.status != 304) {
 						// Check for GZip
 						final String acceptsEncoding = request.getHeader("Accept-Encoding")
-						if(acceptsEncoding?.split(",")?.contains("gzip")) {
+						if(acceptsEncoding?.split(",")?.contains("br")) {
+							if(brFile.exists()) {
+								file = brFile
+								response.setHeader('Content-Encoding', 'br')
+							}
+						} else if(acceptsEncoding?.split(",")?.contains("gzip")) {
 							if(gzipFile.exists()) {
 								file = gzipFile
 								response.setHeader('Content-Encoding', 'gzip')
@@ -189,7 +205,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						response.flushBuffer()
 					}
 				} else {
-					final AssetAttributes newCache = new AssetAttributes(false, false, false, null, null, null, null, null)
+					final AssetAttributes newCache = new AssetAttributes(false, false,false, false, null, null, null, null, null,null,null)
 					fileCache.put(fileUri, newCache)
 					response.status = 404
 					response.flushBuffer()

@@ -46,7 +46,6 @@ class AssetCompiler {
 	def filesToProcess = []
 	Properties manifestProperties
 	def threadPool
-
 	/**
 	 * Creates an instance of the compiler given passed input options
 	 * @param options A Map of options that can be passed to the library
@@ -54,6 +53,7 @@ class AssetCompiler {
 	 *  <li>compileDir - String Location of where assets should be compiled into</li>
 	 *  <li>excludesGzip - List of extensions of files that should be excluded from gzip compression. (Most image types included by default)</li>
 	 *  <li>enableGzip - Whether or not we should generate gzip files (default true)</li>
+	 *  <li>enableBrotli - Whether or not we should generate brotli files (default true)</li>
 	 *  <li>enableDigests - Turns on generation of digest named assets (default true)</li>
 	 *  <li>skipNonDigests - If turned on will not generate non digest named files (default false)</li>
 	 *  <li>maxThreads - Compiler can concurrently compile assets now and defaults to a max thread count of 4</li>
@@ -74,6 +74,10 @@ class AssetCompiler {
 
 		if(!options.containsKey('enableGzip')) {
 			options.enableGzip = true
+		}
+
+		if(!options.containsKey('enableBrotli')) {
+			options.enableBrotli = true
 		}
 
 		if(!options.containsKey('enableDigests')) {
@@ -233,8 +237,9 @@ class AssetCompiler {
 							def outputFileStream
 							def digestFileStream
 							def gzipFileStream
+							def brotliFileStream
 							def gzipStreamCollection = []
-
+							def brotliStreamCollection = []
 							if(!options.skipNonDigests) {
 								outputFile.createNewFile()
 								outputFileStream = outputFile.newOutputStream()
@@ -245,6 +250,15 @@ class AssetCompiler {
 									zipFile.createNewFile()
 									gzipStreamCollection << zipFile.newOutputStream()
 								}
+
+								if(options.enableBrotli == true && !options.excludesGzip.find {
+									it.toLowerCase() == extension?.toLowerCase()
+								}) {
+									File zipFile = new File("${outputFile.getAbsolutePath()}.br")
+									zipFile.createNewFile()
+									brotliStreamCollection << zipFile.newOutputStream()
+								}
+
 							}
 							if(extension) {
 								if(options.enableDigests) {
@@ -258,6 +272,13 @@ class AssetCompiler {
 										zipFileDigest.createNewFile()
 										gzipStreamCollection << zipFileDigest.newOutputStream()
 									}
+									if(options.enableBrotli == true && !options.excludesGzip.find {
+										it.toLowerCase() == extension?.toLowerCase()
+									}) {
+										File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.br")
+										zipFileDigest.createNewFile()
+										brotliStreamCollection << zipFileDigest.newOutputStream()
+									}
 									manifestProperties.setProperty("${fileName}${extension ? ('.' + extension) : ''}", "${fileName}-${digestName}${extension ? ('.' + extension) : ''}")
 								} else {
 									manifestProperties.setProperty("${fileName}${extension ? ('.' + extension) : ''}", "${fileName}${extension ? ('.' + extension) : ''}")
@@ -268,17 +289,32 @@ class AssetCompiler {
 								MultiOutputStream targetStream = new MultiOutputStream(gzipStreamCollection)
 								gzipFileStream = new GZIPOutputStream(targetStream, true)
 							}
+							if(brotliStreamCollection) {
+								MultiOutputStream targetStream = new MultiOutputStream(brotliStreamCollection)
+								brotliFileStream = new BrotliOutputStream(targetStream)
+
+							}
 							while((nRead = writeInputStream.read(buffer, 0, buffer.length)) != -1) {
 								// noop (just to complete the stream)
 								outputFileStream?.write(buffer, 0, nRead);
 								digestFileStream?.write(buffer, 0, nRead);
 								gzipFileStream?.write(buffer, 0, nRead);
+								brotliFileStream?.write(buffer,0,nRead);
 							}
 							if(gzipFileStream) {
 								gzipFileStream.finish()
 								gzipFileStream.flush()
 								gzipFileStream.close()
 								gzipStreamCollection.each { stream ->
+									stream.flush()
+									stream.close()
+								}
+							}
+							if(brotliFileStream) {
+								brotliFileStream.finish()
+								brotliFileStream.flush()
+								brotliFileStream.close()
+								brotliStreamCollection.each { stream ->
 									stream.flush()
 									stream.close()
 								}

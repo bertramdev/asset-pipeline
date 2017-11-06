@@ -18,17 +18,21 @@ package asset.pipeline.ratpack;
 
 public class AssetAttributes {
 	private Boolean gzipExists = false;
+	private Boolean brExists = false;
 	private boolean exists = false;
 	private boolean isDirectory = false;
 	private Long fileSize;
 	private Long gzipFileSize;
+	private Long brFileSize;
 
-	public AssetAttributes(boolean exists, Boolean gzipExists, Boolean isDirectory, Long fileSize, Long gzipFileSize) {
+	public AssetAttributes(boolean exists, Boolean gzipExists, Boolean brExists, Boolean isDirectory, Long fileSize, Long gzipFileSize,Long brFileSize) {
 		this.gzipExists = gzipExists;
+		this.brExists = brExists;
 		this.exists = exists;
 		this.fileSize = fileSize;
 		this.isDirectory = isDirectory;
 		this.gzipFileSize = gzipFileSize;
+		this.brFileSize = brFileSize;
 	}
 
 	public boolean exists() {
@@ -43,11 +47,19 @@ public class AssetAttributes {
 		return this.gzipExists;
 	}
 
+	public Boolean brExists() {
+		return this.brExists;
+	}
+
 	public Long getFileSize() {
 		return this.fileSize;
 	}
 
 	public Long getGzipFileSize() {
 		return this.gzipFileSize;
+	}
+
+	public Long getBrFileSize() {
+		return this.brFileSize;
 	}
 }
