@@ -22,28 +22,60 @@ class AssetPipelineBootStrap {
                 if(!res.exists()) {
                     res = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}")
                 }
-                def fileBytes = res.inputStream.bytes
-
                 def outputFile = new File(storagePath, propertyName)
                 def parentFile = new File(outputFile.parent)
                 parentFile.mkdirs()
-                outputFile.bytes = fileBytes
                 def outputDigestFile = new File(storagePath, propertyValue)
-                outputDigestFile.bytes = fileBytes
+                copyFile(res.inputStream,outputFile,outputDigestFile)
                 def gzRes = grailsApplication.getParentContext().getResource("assets/${propertyValue}.gz")
                 if(!gzRes.exists()) {
                     gzRes = grailsApplication.getParentContext().getResource("classpath:assets/${propertyValue}.gz")
                 }
                 if(gzRes.exists()) {
-                    def gzBytes = gzRes.inputStream.bytes
                     def outputGzFile = new File(storagePath, "${propertyName}.gz")
-                    outputGzFile.bytes = gzBytes
                     def outputGzDigestFile = new File(storagePath, "${propertyValue}.gz")
-                    outputGzDigestFile.bytes = gzBytes    
+                    copyFile(gzRes.inputStream,outputGzFile,outputGzDigestFile)
                 }
             }
             def manifestFile = new File(storagePath,'manifest.properties')
             manifest.store(manifestFile.newWriter(),"")
         }
+    }
+
+    def copyFile(sourceStream, targetFile, digestFile) {
+        try {
+            if(!targetFile.exists()) {
+                targetFile.createNewFile()
+            }
+            if(!digestFile?.exists()) {
+                digestFile?.createNewFile()
+            }
+            def outputFileStream = targetFile.newOutputStream()
+            def outputDigestFileStream = digestFile?.newOutputStream()
+            byte[] buffer = new byte[8192]
+            int nRead
+            while((nRead = sourceStream.read(buffer, 0, buffer.length)) != -1) {
+                // noop (just to complete the stream)
+                outputFileStream?.write(buffer, 0, nRead);
+                outputDigestFileStream?.write(buffer, 0, nRead);
+            }
+            outputFileStream.flush()
+            outputFileStream.close()
+            outputDigestFileStream.flush()
+            outputDigestFileStream.close()
+            try {
+                targetFile.setReadable(true,false)
+                targetFile.setExecutable(true,false)
+                targetFile.setWritable(true)
+                digestFile?.setReadable(true,false)
+                digestFile?.setExecutable(true,false)
+                digestFile?.setWritable(true)
+            } catch (ex) {
+               // attempting permission set
+            }
+        } finally {
+            sourceStream.close()
+        }
+        
     }
 }

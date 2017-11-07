@@ -532,8 +532,16 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-top"><p class="tableblock">Value</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes, \["tiny_mce/src/\*.js"]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes, \["*\*/\*.less"]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["tiny_mce/src/\*.js"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".excludes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["*\*/\*.less"]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.plugin."twitter-bootstrap".includes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">["bootstrap.less"]</p></td>
 </tr>
 </tbody>
 </table>
@@ -560,9 +568,29 @@ table.CodeRay td.code>pre{padding:0}
 <td class="tableblock halign-left valign-top"><p class="tableblock">Default</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps, <strong>true</strong> or <strong>false</strong>, <strong>true</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyJs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyCss</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.enableSourceMaps</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.minifyOptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Map</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(see below)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grails.assets.skipNonDigests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong> or <strong>false</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>true</strong></p></td>
 </tr>
 </tbody>
 </table>
@@ -643,7 +671,7 @@ This simply cuts storage in half. However, if you are attempting to do things li
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-07-27 13:07:50 -04:00
+Last updated 2017-11-07 10:24:20 -05:00
 </div>
 </div>
 </body>

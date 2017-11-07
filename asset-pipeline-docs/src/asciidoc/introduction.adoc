@@ -6,6 +6,10 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+* November 7, 2017
+** 2.14.5 - Fix with decoding accepts-encoding to ensure proper use of gzip based decryption
+* November 6, 2017
+** 2.14.4 - Fixed issues with storagePath permission enforcement, and performance optimizations
 * February 27, 2017
 ** 2.13.2 - Spring Boot 1.5 Support, commonJs function parsing improvements, and fixes to potential concurrency access issue on config.
 * January 28, 2017
