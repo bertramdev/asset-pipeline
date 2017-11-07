@@ -52,12 +52,20 @@ class AssetPipelineFilter implements Filter {
 
 		@Override
 		AssetPipelineServletResource getResource(final String path) {
-			return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}"))
+			def resource = applicationContext.getResource("classpath:assets/${path}")
+			if(!resource.exists()) {
+				resource = applicationContext.getResource("assets/${path}")
+			}
+			return SpringServletResource.create(resource)
 		}
 
 		@Override
 		AssetPipelineServletResource getGzippedResource(final String path) {
-			return SpringServletResource.create(applicationContext.getResource("classpath:assets${path}.gz"))
+			def resource = applicationContext.getResource("classpath:assets/${path}.gz")
+			if(!resource.exists()) {
+				resource = applicationContext.getResource("assets/${path}.gz")
+			}
+			return SpringServletResource.create(resource)
 		}
 	}
 

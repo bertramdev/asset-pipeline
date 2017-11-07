@@ -26,9 +26,13 @@ class AssetPipelineService {
 
 		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext)
 		def manifestFile = applicationContext.getResource("classpath:assets/manifest.properties")
+		if(!manifestFile.exists()) {
+			manifestFile = applicationContext.getResource("assets/manifest.properties")
+		}
 
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		if(!manifestFile.exists()) {
+			println("Cant find manifest file!")
 			def applicationResolver= new FileSystemAssetResolver('application','src/assets')
 			AssetPipelineConfigHolder.registerResolver(applicationResolver)
 			AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/assets', "META-INF/assets.list"))

@@ -2,6 +2,7 @@ package asset.pipeline.servlet
 
 
 import asset.pipeline.AssetPipelineResponseBuilder
+import asset.pipeline.AssetPipelineConfigHolder
 import java.util.logging.Logger
 import javax.servlet.FilterChain
 import javax.servlet.ServletContext
@@ -42,7 +43,15 @@ class AssetPipelineFilterCore {
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
-
+		final Properties manifest = AssetPipelineConfigHolder.manifest
+		String manifestPath = fileUri
+		if(fileUri.startsWith('/')) {
+			manifestPath = fileUri.substring(1) //Omit forward slash
+		}
+		if(manifest) {
+			fileUri = manifest.getProperty(manifestPath, manifestPath)	
+		}
+		
 		AssetPipelineServletResource resource = assetPipelineServletResourceRepository.getResource(fileUri)
 		if(resource) {
 			final Date lastModifiedDate = resource.getLastModified() ? new Date(resource.getLastModified()) : null
