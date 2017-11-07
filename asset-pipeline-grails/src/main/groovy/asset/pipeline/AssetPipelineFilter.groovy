@@ -83,7 +83,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 					if(response.status != 304) {
 						final String acceptsEncoding = request.getHeader("Accept-Encoding")
-						if(acceptsEncoding?.split(",")?.contains("gzip") && attributeCache.gzipExists()) {
+						if(acceptsEncoding?.tokenize(", ")?.contains("gzip") && attributeCache.gzipExists()) {
 							file = attributeCache.getGzipResource()
 							response.setHeader('Content-Encoding', 'gzip')
 							response.setHeader('Content-Length', attributeCache.getGzipFileSize().toString())
