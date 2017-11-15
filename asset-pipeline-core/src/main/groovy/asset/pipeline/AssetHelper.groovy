@@ -148,7 +148,7 @@ public class AssetHelper {
         }
 
         String rootName = filename
-        assetFile.extensions.sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) }.each { extension ->
+        assetFile.extensions.toList().sort(false) { String a, String b -> -(a.size()) <=> -(b.size()) }.each { extension ->
             if (filename.endsWith(".${extension}")) {
                 String potentialName = filename.substring(0, filename.lastIndexOf(".${extension}"))
                 if (potentialName.length() < rootName.length()) {
