@@ -1,4 +1,3 @@
-/* JFlex example: partial Java language lexer specification */
 package asset.pipeline.jsx;
 import asset.pipeline.jsx.symbols.*;
 import java.util.ArrayList;
