@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.io.*;
 
 /**
- * This class is a simple example lexer.
+ * This class is a JSX lexer.
+ * @author David Estes
  */
 %%
 
