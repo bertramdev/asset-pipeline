@@ -1,4 +1,4 @@
-package asset.pipeline.less
+package asset.pipeline.groocss
 
 import asset.pipeline.AbstractAssetFile
 import asset.pipeline.AssetCompiler
@@ -37,11 +37,12 @@ class GroocssAssetFile extends AbstractAssetFile {
                     return cache
                 }
             }
-
-            def prettyPrint = AssetPipelineConfigHolder.config?.groocss?.prettyPrint ?: false
-            def compress = AssetPipelineConfigHolder.config?.groocss?.compress ?: false
-            def noExts = AssetPipelineConfigHolder.config?.groocss?.noExts ?: false
-            def convertUnderline = AssetPipelineConfigHolder.config?.groocss?.convertUnderline ?: false
+            
+            def conf = AssetPipelineConfigHolder.config
+            def prettyPrint = conf?.groocss?.prettyPrint ?: false
+            def compress = conf?.groocss?.compress ?: false
+            def noExts = conf?.groocss?.noExts ?: false
+            def convertUnderline = conf?.groocss?.convertUnderline ?: false
             def config = new Config(compress: compress, prettyPrint: prettyPrint,
                         convertUnderline: convertUnderline)
 
