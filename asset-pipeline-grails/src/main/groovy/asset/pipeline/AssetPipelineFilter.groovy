@@ -24,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 class AssetPipelineFilter extends OncePerRequestFilter {
 
 	static final ProductionAssetCache fileCache = new ProductionAssetCache()
-
+	static final indexFile = 'index.html'
 
 	ApplicationContext applicationContext
 	ServletContext     servletContext
@@ -40,7 +40,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 	@Override
 	void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		final boolean warDeployed = AssetPipelineConfigHolder.manifest ? true : false
-
+		final boolean skipNotFound = AssetPipelineConfigHolder.config.skipNotFound || AssetPipelineConfigHolder.config.mapping == ''
 		final String mapping = ((AssetProcessorService)(applicationContext.getBean('assetProcessorService', AssetProcessorService))).assetMapping
 
 		String fileUri = new URI(request.requestURI).path
@@ -56,10 +56,16 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		if(warDeployed) {
 			final Properties manifest = AssetPipelineConfigHolder.manifest
 			String manifestPath = fileUri
+			if(fileUri == '' || fileUri.endsWith('/')) {
+				fileUri += indexFile
+			}
 			if(fileUri.startsWith('/')) {
 				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
+
 			fileUri = manifest?.getProperty(manifestPath, manifestPath)
+
+
 
 			final AssetAttributes attributeCache = fileCache.get(fileUri)
 
@@ -114,8 +120,10 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 						response.flushBuffer()
 					}
 				} else {
-					response.status = 404
-					response.flushBuffer()
+					if(!skipNotFound){
+						response.status = 404
+						response.flushBuffer()
+					}
 				}
 			} else {
 				Resource file = applicationContext.getResource("assets/${fileUri}")
@@ -191,11 +199,16 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 				} else {
 					final AssetAttributes newCache = new AssetAttributes(false, false, false, null, null, null, null, null)
 					fileCache.put(fileUri, newCache)
-					response.status = 404
-					response.flushBuffer()
+					if(!skipNotFound){
+						response.status = 404
+						response.flushBuffer()
+					}
 				}
 			}
 		} else {
+			if(fileUri == '' || fileUri.endsWith('/')) {
+				fileUri += indexFile
+			}
 			final byte[] fileContents
 			if(request.getParameter('compile') == 'false') {
 				fileContents = AssetPipeline.serveUncompiledAsset(fileUri, format, null, encoding)
@@ -217,8 +230,10 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					log.debug("File Transfer Aborted (Probably by the user)", e)
 				}
 			} else {
-				response.status = 404
-				response.flushBuffer()
+				if(!skipNotFound) {
+					response.status = 404
+					response.flushBuffer()
+				}				
 			}
 		}
 
