@@ -100,6 +100,7 @@ bintray {
         userOrg = 'bertramlabs'
         name = 'groocss-asset-pipeline'
         licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/bertramdev/asset-pipeline.git'
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
