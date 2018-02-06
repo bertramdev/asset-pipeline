@@ -6,6 +6,8 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+* December 6, 2017
+** 2.14.7 - Grails filter now handles resolving index.html if at directory root. Also grails asset mapping can now be set to root level with '' to resolve at root level. if this is in place we can mix and match static documents with grails actions.
 * November 7, 2017
 ** 2.14.5 - Fix with decoding accepts-encoding to ensure proper use of gzip based decryption
 * November 6, 2017

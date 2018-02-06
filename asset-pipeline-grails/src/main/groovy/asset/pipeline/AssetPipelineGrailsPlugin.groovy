@@ -118,8 +118,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         }
 
 
-
-        def mapping = assetsConfig.mapping?.toString() ?: "assets"
+        def mapping = assetsConfig.mapping?.toString() == '' ? '' : (assetsConfig.mapping?.toString()  ?: "assets")
 
         ClassLoader classLoader = application.classLoader
         Class registrationBean = ClassUtils.isPresent("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader ) ?
@@ -127,7 +126,12 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
                                     ClassUtils.forName("org.springframework.boot.context.embedded.FilterRegistrationBean", classLoader)
         assetPipelineFilter(registrationBean) {
             filter = new asset.pipeline.AssetPipelineFilter()
-            urlPatterns = ["/${mapping}/*".toString()]
+            if(!mapping) {
+                urlPatterns = ["/*".toString()]
+            } else {
+                urlPatterns = ["/${mapping}/*".toString()]
+            }
+            
         }
     }}
 }

@@ -1,11 +1,11 @@
-/* JFlex example: partial Java language lexer specification */
 package asset.pipeline.jsx;
 import asset.pipeline.jsx.symbols.*;
 import java.util.ArrayList;
 import java.io.*;
 
 /**
- * This class is a simple example lexer.
+ * This class is a JSX lexer.
+ * @author David Estes
  */
 %%
 
