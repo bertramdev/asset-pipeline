@@ -105,7 +105,7 @@ class ClosureCompilerProcessor {
 			case 'ES6':
 				return LanguageMode.ECMASCRIPT6
 			case 'ES6_STRICT':
-				return LanguageMode.ECMASCRIPT6_STRICT
+				return LanguageMode.ECMASCRIPT6
 			case 'ES5_SCRIPT':
 				return LanguageMode.ECMASCRIPT5_STRICT
 			case 'ES3':

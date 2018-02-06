@@ -58,6 +58,9 @@ dependencies {
 	doc         'org.fusesource.jansi:jansi:1.11'
 	compile     'org.mozilla:rhino:1.7R4'
 	compile     'com.google.javascript:closure-compiler-unshaded:v20160713'
+	// compile 'com.google.javascript:closure-compiler-unshaded:v20170124'
+
+	// compile 'com.google.javascript:closure-compiler-unshaded:v20171112'
 	compile     'commons-logging:commons-logging:1.1.1'
 	//compile   'log4j:log4j:1.2.16'
 	testCompile project(':asset-pipeline-classpath-test')
