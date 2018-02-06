@@ -53,6 +53,8 @@ public class AssetPipelineService implements Service {
             manIs.close();
             AssetPipelineConfigHolder.manifest = manifestProps;
         } else {
+            AssetPipelineConfigHolder.manifest = null;
+            AssetPipelineConfigHolder.config.put("precompiled", false);
             AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver("application", path.resolve(config.getSourcePath()).toFile().getCanonicalPath()));
             AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/assets", "META-INF/assets.list"));
             AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/static"));
