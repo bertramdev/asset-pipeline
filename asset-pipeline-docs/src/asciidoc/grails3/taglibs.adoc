@@ -71,7 +71,7 @@ Asset-Pipeline provides a set of tags that can be used to ensure script blocks a
 
 [source,html]
 ----
-<asset:javascript src="application.js" asset-defer/>
+<asset:javascript src="application.js" asset-defer="true"/>
 <asset:script type="text/javascript">
   console.log("Hello World");
 </asset:script>
