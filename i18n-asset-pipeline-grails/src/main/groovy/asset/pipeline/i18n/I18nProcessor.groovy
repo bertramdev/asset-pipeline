@@ -237,30 +237,22 @@ class I18nProcessor extends AbstractProcessor {
      *                                  localized messages exists
      */
     private Resource locateResource(String fileName) {
-        println "Looking for resource: ${fileName}"
         Resource resource =
                 resourceLoader.getResource(fileName + PROPERTIES_SUFFIX)
         if (!resource.exists()) {
             resource = resourceLoader.getResource(fileName + XML_SUFFIX)
-        } else {
-            println "Found resource"
-        }
+        } 
         if (!resource.exists()) {
             resource = resourceLoader.getResource(
                     "file:grails-app/i18n/${fileName}${PROPERTIES_SUFFIX}"
             )
-        } else {
-            println "Found resource!"
-        }
+        } 
         if (!resource.exists()) {
             resource = resourceLoader.getResource(
                     "file:grails-app/i18n/${fileName}${XML_SUFFIX}"
             )
-        } else {
-            println "Found Resource 3"
-        }
+        } 
         if (!resource.exists()) {
-            println "NUCLEAR APPROACH"
             // Nuclear approach, scan all jar files for the messages file
             resource = loadFromAssetResolvers(fileName)
             
@@ -270,7 +262,6 @@ class I18nProcessor extends AbstractProcessor {
                 )
             }
         }
-        println "Returning Resource ${fileName}"
         resource
     }
 
