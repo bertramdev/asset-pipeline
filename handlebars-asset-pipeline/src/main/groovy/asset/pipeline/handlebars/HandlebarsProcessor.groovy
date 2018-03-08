@@ -30,6 +30,9 @@ class HandlebarsProcessor extends AbstractProcessor {
 	Scriptable globalScope
 	ClassLoader classLoader
 	static def wrapTemplateCustom
+	static org.mozilla.javascript.Script handlebarsCompilerScript
+	static org.mozilla.javascript.Script handlebarsPrecompileScript
+	private static final $LOCK = new Object[0]
 	HandlebarsProcessor(AssetCompiler precompiler){
 		super(precompiler)
 		try {
@@ -55,15 +58,32 @@ class HandlebarsProcessor extends AbstractProcessor {
 	public void loadHandlebars(Context cx) {
 		String scanPath = AssetPipelineConfigHolder.config?.handlebars?.scanPath ?: 'handlebars.js'
 		AssetFile handlebarsAssetFile = AssetHelper.fileForFullName(scanPath)
-
-		if(handlebarsAssetFile) {
-			def directiveProcessor = new DirectiveProcessor('application/javascript')
-
-			cx.evaluateString globalScope, directiveProcessor.compile(handlebarsAssetFile), handlebarsAssetFile.name, 1, null
-		} else {
-			def handlebarsJsResource = classLoader.getResource('asset/pipeline/handlebars/handlebars.js')
-			cx.evaluateString globalScope, handlebarsJsResource.getText('UTF-8'), handlebarsJsResource.file, 1, null
+		if(!handlebarsCompilerScript) {
+			synchronized($LOCK) {
+				if(!handlebarsCompilerScript) {
+					if(handlebarsAssetFile) {
+						def directiveProcessor = new DirectiveProcessor('application/javascript')
+						handlebarsCompilerScript = cx.compileString(directiveProcessor.compile(handlebarsAssetFile),handlebarsAssetFile.name,1,null)
+						// cx.evaluateString globalScope, directiveProcessor.compile(handlebarsAssetFile), handlebarsAssetFile.name, 1, null
+					} else {
+						def handlebarsJsResource = classLoader.getResource('asset/pipeline/handlebars/handlebars.js')
+						handlebarsCompilerScript = cx.compileString(handlebarsJsResource.getText('UTF-8'),handlebarsJsResource.file,1,null)
+						// cx.evaluateString globalScope, handlebarsJsResource.getText('UTF-8'), handlebarsJsResource.file, 1, null
+					}
+				}
+			}
 		}
+
+		handlebarsCompilerScript.exec(cx, globalScope)
+
+		if(!handlebarsPrecompileScript) {
+			synchronized($LOCK) {
+				if(!handlebarsPrecompileScript) {
+					handlebarsPrecompileScript = cx.compileString("Handlebars.precompile(handlebarsSrc)","HandlebarsCompileCommand",0,null)	
+				}
+			}
+		}
+		
 
 	}
 
@@ -73,7 +93,8 @@ class HandlebarsProcessor extends AbstractProcessor {
 			def compileScope = cx.newObject(globalScope)
 			compileScope.setParentScope(globalScope)
 			compileScope.put("handlebarsSrc", compileScope, input)
-			def result = cx.evaluateString(compileScope, "Handlebars.precompile(handlebarsSrc)", "Handlebars compile command", 0, null)
+			def result = handlebarsPrecompileScript.exec(cx,compileScope)
+			// def result = cx.evaluateString(compileScope, "Handlebars.precompile(handlebarsSrc)", "Handlebars compile command", 0, null)
 			return wrapTemplate(templateNameForFile(assetFile), result)
 		} catch (Exception e) {
 			throw new Exception("""
