@@ -96,8 +96,9 @@ grailsPublish {
     key = project.hasProperty('bintrayApiKey') \
         ? project.property('bintrayApiKey')
         : System.getenv('BINTRAY_API_KEY')
-    userOrg = 'amc-world'
-    githubSlug = 'dellermann/i18n-asset-pipeline'
+    userOrg = 'bertramlabs'
+    repo = 'asset-pipeline'
+    githubSlug = 'bertramdev/asset-pipeline'
     license {
         name = 'Apache-2.0'
     }

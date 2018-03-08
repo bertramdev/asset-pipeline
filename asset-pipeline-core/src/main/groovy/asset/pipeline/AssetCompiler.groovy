@@ -26,7 +26,8 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.Future
-
+import java.util.concurrent.ExecutorCompletionService
+import java.util.concurrent.CompletionService
 
 /**
  * Build time compiler for assets. This does a differential comparison of the source directory
@@ -125,18 +126,20 @@ class AssetCompiler {
 		def assetDir = initializeWorkspace()
 
 		threadPool = Executors.newFixedThreadPool(options.maxThreads ?: Runtime.getRuntime().availableProcessors())
+	 	CompletionService completionService = new ExecutorCompletionService(threadPool);
 		try {
 			def minifyCssProcessor = new CssMinifyPostProcessor()
 
-			filesToProcess = this.getAllAssets()
+			filesToProcess = this.getAllAssets()?.sort { a,b -> (a instanceof GenericAssetFile ? 1 : 0) <=> (b instanceof GenericAssetFile ? 1 : 0)}
 			// Lets clean up assets that are no longer being compiled
 			removeDeletedFiles(filesToProcess)
 			def futures = []
 			for(int index = 0; index < filesToProcess.size(); index++) {
 				def assetFile = filesToProcess[index]
 				def indexPosition = new Integer(index)
-				futures << threadPool.submit({ ->
+				futures << completionService.submit({ ->
 					def fileName = assetFile.path
+					String futureResult = assetFile.path
 					def startTime = new Date().time
 					eventListener?.triggerEvent("StatusUpdate", "Processing File ${indexPosition + 1} of ${filesToProcess.size()} - ${fileName}")
 
@@ -289,17 +292,34 @@ class AssetCompiler {
 							digestFileStream?.close()
 							outputFileStream?.close()
 							writeInputStream.close()
+							return futureResult
 						}
 
 					}
-				})
+				} as Callable)
 			}
+			int pending = futures.size()
+		  	while (pending > 0) {
+			      // Wait for up to 100ms to see if anything has completed.
+			      // The completed future is returned if one is found; otherwise null.
+			      // (Tune 100ms as desired)
+			      def completed = completionService.poll(100, TimeUnit.MILLISECONDS);
+			      if (completed != null) {
+			          --pending;
+      				// eventListener?.triggerEvent("StatusUpdate", "Future Completed ${futures.size() - pending + 1} - ${completed.get()}")
 
-			futures.each { it.get() }
+		    		}
+			  }
+			// Integer futureCounter = 1
+			// for(future in futures) {
+			// 	while(!future.isDone()) { sleep(100)}
+			// 	eventListener?.triggerEvent("StatusUpdate", "Future Completed ${futureCounter++}")
+			// }
 		} finally {
+			// eventListener?.triggerEvent("StatusUpdate", "Shutting Down ThreadPool")
 			threadPool.shutdown()
 		}
-
+		// eventListener?.triggerEvent("StatusUpdate", "Saving Manifest")
 		saveManifest()
 		eventListener?.triggerEvent("StatusUpdate", "Finished Precompiling Assets")
 	}
