@@ -62,7 +62,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		if(!relativePath) {
 			return null
 		}
-		relativePath = relativePath.replace(QUOTED_FILE_SEPARATOR,DIRECTIVE_FILE_SEPARATOR)
+		relativePath = relativePath.replaceAll(QUOTED_FILE_SEPARATOR,DIRECTIVE_FILE_SEPARATOR)
 		def specs
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
