@@ -1,26 +1,27 @@
 package asset.pipeline.grails
 
-import grails.util.Environment
-import grails.core.GrailsApplication
-import asset.pipeline.AssetPipeline
-import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipeline
+import asset.pipeline.AssetPipelineConfigHolder
+import grails.core.GrailsApplication
 import org.grails.buffer.GrailsPrintWriter
-
 
 class AssetsTagLib {
 
 	static namespace = 'asset'
 	static returnObjectForTags = ['assetPath']
 
+	static final ASSET_REQUEST_MEMO = "asset-pipeline.memo"
 	private static final LINE_BREAK = System.getProperty('line.separator') ?: '\n'
+
 	GrailsApplication grailsApplication
 	def assetProcessorService
 
 
 	/**
 	 * @attr src REQUIRED
+	 * @attr asset-defer OPTIONAL ensure script blocks are deferred to when the deferrred-scripts is used
+	 * @attr uniq OPTIONAL Output the script tag for the given resource only once per request, note that uniq mode cannot be bundled
 	 */
 	def javascript = {final attrs ->
 		final GrailsPrintWriter outPw = out
@@ -40,6 +41,7 @@ class AssetsTagLib {
 	 *
 	 * @attr href OPTIONAL standard URL attribute
 	 * @attr src  OPTIONAL alternate URL attribute, only used if {@code href} isn't supplied, or if {@code href} is Groovy false
+	 * @attr uniq OPTIONAL Output the stylesheet tag for the resource only once per request, note that uniq mode cannot be bundled
 	 */
 	def stylesheet = {final attrs ->
 		final GrailsPrintWriter outPw = out
@@ -53,37 +55,54 @@ class AssetsTagLib {
 		}
 	}
 
+	private boolean isIncluded(String path) {
+		HashSet<String> memo = request."$ASSET_REQUEST_MEMO"
+		if (memo == null) {
+			memo = new HashSet<String>()
+			request."$ASSET_REQUEST_MEMO" = memo
+		}
+		!memo.add(path)
+	}
+
+	private def nameAndExtension(String src, String ext) {
+		int lastDotIndex = src.lastIndexOf('.')
+		if (lastDotIndex >= 0) {
+			[uri: src.substring(0, lastDotIndex), extension: src.substring(lastDotIndex + 1)]
+		} else {
+			[uri: src, extension: ext]
+		}
+	}
+
 	private void element(final attrs, final String ext, final String contentType, final String srcOverride, final Closure<GrailsPrintWriter> output) {
 		def src = attrs.remove('src')
 		if (srcOverride) {
 			src = srcOverride
 		}
+		def uniqMode = attrs.remove('uniq') != null
+		if (uniqMode && isIncluded(src)) {
+			return
+		}
 		src = "${AssetHelper.nameWithoutExtension(src)}.${ext}"
 		def conf = grailsApplication.config.grails.assets
 
-		final def nonBundledMode = (!AssetPipelineConfigHolder.manifest && conf.bundle != true && attrs.remove('bundle') != 'true')
+		final def nonBundledMode = uniqMode || (!AssetPipelineConfigHolder.manifest && conf.bundle != true && attrs.remove('bundle') != 'true')
 		
 		if (! nonBundledMode) {
 			output(src, '', attrs, '')
 		}
 		else {
-			final int lastDotIndex = src.lastIndexOf('.')
-			final def uri
-			final def extension
-			if (lastDotIndex >= 0) {
-				uri       = src.substring(0, lastDotIndex)
-				extension = src.substring(lastDotIndex + 1)
-			}
-			else {
-				uri       = src
-				extension = ext
-			}
+			def name = nameAndExtension(src, ext)
+			final String uri = name.uri
+			final String extension = name.extension
+
 			final String queryString =
 				attrs.charset \
 					? "?compile=false&encoding=${attrs.charset}"
 					: '?compile=false'
 			AssetPipeline.getDependencyList(uri, contentType, extension)?.each {
-				output(it.path, queryString, attrs, LINE_BREAK)
+				if (nameAndExtension(it.path, ext).uri == uri || !isIncluded(it.path)) {
+					output(it.path, queryString, attrs, LINE_BREAK)
+				}
 			}
 		}
 	}

@@ -89,6 +89,18 @@ class AssetsTagLibSpec extends Specification {
 			output == '<script type="text/javascript" src="/assets/asset-pipeline/test/test.js?compile=false" ></script>' + LINE_BREAK + '<script type="text/javascript" src="/assets/asset-pipeline/test/libs/file_a.js?compile=false" ></script>' + LINE_BREAK + '<script type="text/javascript" src="/assets/asset-pipeline/test/libs/file_c.js?compile=false" ></script>' + LINE_BREAK + '<script type="text/javascript" src="/assets/asset-pipeline/test/libs/file_b.js?compile=false" ></script>' + LINE_BREAK + '<script type="text/javascript" src="/assets/asset-pipeline/test/libs/subset/subset_a.js?compile=false" ></script>' + LINE_BREAK
 	}
 
+	void "should not return javascript link twice in uniq mode"() {
+		given:
+			final def assetSrc = "asset-pipeline/test/test_simple_require.js"
+			final def depAssetSrc = "asset-pipeline/test/libs/file_a.js"
+		expect:
+			tagLib.javascript(src: assetSrc, uniq: true) == '<script type="text/javascript" src="/assets/asset-pipeline/test/libs/file_a.js?compile=false" ></script>' + LINE_BREAK + '<script type="text/javascript" src="/assets/asset-pipeline/test/test_simple_require.js?compile=false" ></script>' + LINE_BREAK
+			tagLib.javascript(src: assetSrc, uniq: true) == ''
+			tagLib.javascript(src: depAssetSrc, uniq: true) == ''
+		cleanup:
+			request."${AssetsTagLib.ASSET_REQUEST_MEMO}" = null
+	}
+
 	void "should return stylesheet link tag when debugMode is off"() {
 		given:
 			grailsApplication.config.grails.assets.bundle = true
@@ -119,6 +131,18 @@ class AssetsTagLibSpec extends Specification {
 			output = tagLib.stylesheet(src: assetSrc)
 		then:
 			output == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css?compile=false" />' + LINE_BREAK + '<link rel="stylesheet" href="/assets/asset-pipeline/test/test2.css?compile=false" />' + LINE_BREAK
+	}
+
+	void "should not return stylesheet link twice in uniq mode"() {
+		given:
+			final def assetSrc = "asset-pipeline/test/test.css"
+			final def depAssetSrc = "asset-pipeline/test/test2.css"
+		expect:
+			tagLib.stylesheet(src: assetSrc, uniq: true) == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css?compile=false" />' + LINE_BREAK + '<link rel="stylesheet" href="/assets/asset-pipeline/test/test2.css?compile=false" />' + LINE_BREAK
+			tagLib.stylesheet(src: depAssetSrc, uniq: true) == ''
+			tagLib.stylesheet(src: assetSrc, uniq: true) == ''
+		cleanup:
+			request."${AssetsTagLib.ASSET_REQUEST_MEMO}" = null
 	}
 
 	void "should return image tag"() {
