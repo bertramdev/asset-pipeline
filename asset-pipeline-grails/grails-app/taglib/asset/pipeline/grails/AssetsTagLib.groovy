@@ -79,9 +79,7 @@ class AssetsTagLib {
 			src = srcOverride
 		}
 		def uniqMode = attrs.remove('uniq') != null
-		if (uniqMode && isIncluded(src)) {
-			return
-		}
+
 		src = "${AssetHelper.nameWithoutExtension(src)}.${ext}"
 		def conf = grailsApplication.config.grails.assets
 
@@ -99,8 +97,16 @@ class AssetsTagLib {
 				attrs.charset \
 					? "?compile=false&encoding=${attrs.charset}"
 					: '?compile=false'
+			if (uniqMode && isIncluded(uri)) {
+				return
+			}
 			AssetPipeline.getDependencyList(uri, contentType, extension)?.each {
-				if (nameAndExtension(it.path, ext).uri == uri || !isIncluded(it.path)) {
+				if (uniqMode) {
+					def path = nameAndExtension(it.path, ext).uri
+					if (path == uri || !isIncluded(path)) {
+						output(it.path, queryString, attrs, LINE_BREAK)
+					}
+				} else {
 					output(it.path, queryString, attrs, LINE_BREAK)
 				}
 			}

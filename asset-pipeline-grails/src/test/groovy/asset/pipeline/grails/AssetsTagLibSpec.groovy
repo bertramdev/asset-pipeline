@@ -15,13 +15,10 @@
  */
 package asset.pipeline.grails
 
-
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-
-
 
 /**
  * @author David Estes
