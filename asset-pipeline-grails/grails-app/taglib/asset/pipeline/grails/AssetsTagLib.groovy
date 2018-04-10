@@ -55,7 +55,7 @@ class AssetsTagLib {
 		}
 	}
 
-	private boolean isIncluded(String path) {
+	private boolean isIncluded(def path) {
 		HashSet<String> memo = request."$ASSET_REQUEST_MEMO"
 		if (memo == null) {
 			memo = new HashSet<String>()
@@ -64,7 +64,7 @@ class AssetsTagLib {
 		!memo.add(path)
 	}
 
-	private def nameAndExtension(String src, String ext) {
+	private static def nameAndExtension(String src, String ext) {
 		int lastDotIndex = src.lastIndexOf('.')
 		if (lastDotIndex >= 0) {
 			[uri: src.substring(0, lastDotIndex), extension: src.substring(lastDotIndex + 1)]
@@ -97,13 +97,13 @@ class AssetsTagLib {
 				attrs.charset \
 					? "?compile=false&encoding=${attrs.charset}"
 					: '?compile=false'
-			if (uniqMode && isIncluded(uri)) {
+			if (uniqMode && isIncluded(name)) {
 				return
 			}
 			AssetPipeline.getDependencyList(uri, contentType, extension)?.each {
 				if (uniqMode) {
-					def path = nameAndExtension(it.path, ext).uri
-					if (path == uri || !isIncluded(path)) {
+					def path = nameAndExtension(it.path, ext)
+					if (path.uri == uri || !isIncluded(path)) {
 						output(it.path, queryString, attrs, LINE_BREAK)
 					}
 				} else {

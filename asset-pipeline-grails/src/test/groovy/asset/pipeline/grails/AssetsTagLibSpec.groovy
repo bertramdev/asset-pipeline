@@ -98,6 +98,16 @@ class AssetsTagLibSpec extends Specification {
 			request."${AssetsTagLib.ASSET_REQUEST_MEMO}" = null
 	}
 
+	void "should return javascript and stylesheets of the same basename"() {
+		given:
+			final def jsAssetSrc = "asset-pipeline/test/test.js"
+			final def cssAssetSrc = "asset-pipeline/test/test.css"
+		expect:
+			tagLib.javascript(src: jsAssetSrc, uniq: true) != ''
+			tagLib.javascript(src: jsAssetSrc, uniq: true) == ''
+			tagLib.stylesheet(src: cssAssetSrc, uniq: true) != ''
+	}
+
 	void "should return stylesheet link tag when debugMode is off"() {
 		given:
 			grailsApplication.config.grails.assets.bundle = true
