@@ -84,7 +84,7 @@ class AssetsTagLib {
 		final def nonBundledMode = uniqMode || (!AssetPipelineConfigHolder.manifest && conf.bundle != true && attrs.remove('bundle') != 'true')
 		
 		if (! nonBundledMode) {
-			output(src, '', attrs, '')
+			output(src, '', attrs, '', true)
 		}
 		else {
 			def name = nameAndExtension(src, ext)

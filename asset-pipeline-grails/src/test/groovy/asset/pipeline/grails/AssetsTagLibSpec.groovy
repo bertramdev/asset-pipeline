@@ -113,7 +113,7 @@ class AssetsTagLibSpec extends Specification {
 			grailsApplication.config.grails.assets.bundle = true
 			final def assetSrc = "asset-pipeline/test/test.css"
 		expect:
-			tagLib.stylesheet(href: assetSrc) == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css"/>'
+			tagLib.stylesheet(href: assetSrc) == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css" />'
 	}
 
 	void "should always return stylesheet link tag when bundle attr is 'true'"() {
@@ -123,7 +123,7 @@ class AssetsTagLibSpec extends Specification {
 			params."_debugAssets" = "y"
 			final def assetSrc = "asset-pipeline/test/test.css"
 		expect:
-			tagLib.stylesheet(href: assetSrc, bundle: 'true') == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css"/>'
+			tagLib.stylesheet(href: assetSrc, bundle: 'true') == '<link rel="stylesheet" href="/assets/asset-pipeline/test/test.css" />'
 	}
 
 	void "should return stylesheet link tag with seperated files when debugMode is on"() {
