@@ -26,11 +26,11 @@ class AssetsTagLib {
 	def javascript = {final attrs ->
 		final GrailsPrintWriter outPw = out
 		attrs.remove('href')
-		element(attrs, 'js', 'application/javascript', null) {final String src, final String queryString, final outputAttrs, final String endOfLine ->
+		element(attrs, 'js', 'application/javascript', null) {final String src, final String queryString, final outputAttrs, final String endOfLine, final boolean useManifest ->
 			if(attrs.containsKey('asset-defer')) {
-				script(outputAttrs + [type: "text/javascript", src: assetPath(src: src) + queryString],'')
+				script(outputAttrs + [type: "text/javascript", src: assetPath(src: src, useManifest: useManifest) + queryString],'')
 			} else {
-				outPw << '<script type="text/javascript" src="' << assetPath(src: src) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '></script>' << endOfLine
+				outPw << '<script type="text/javascript" src="' << assetPath(src: src, useManifest: useManifest) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '></script>' << endOfLine
 			}
 
 		}
@@ -45,12 +45,10 @@ class AssetsTagLib {
 	 */
 	def stylesheet = {final attrs ->
 		final GrailsPrintWriter outPw = out
-		element(attrs, 'css', 'text/css', Objects.toString(attrs.remove('href'), null)) {final String src, final String queryString, final outputAttrs, final String endOfLine ->
+		element(attrs, 'css', 'text/css', Objects.toString(attrs.remove('href'), null)) {final String src, final String queryString, final outputAttrs, final String endOfLine, final boolean useManifest ->
+			outPw << '<link rel="stylesheet" href="' << assetPath(src: src, useManifest: useManifest) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '/>'
 			if (endOfLine) {
-				outPw << '<link rel="stylesheet" href="' << assetPath(src: src) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '/>' << endOfLine
-			}
-			else {
-				outPw << link([rel: 'stylesheet', href: src] + outputAttrs)
+				outPw << endOfLine
 			}
 		}
 	}
@@ -100,14 +98,16 @@ class AssetsTagLib {
 			if (uniqMode && isIncluded(name)) {
 				return
 			}
+			def useManifest = !nonBundledMode
+
 			AssetPipeline.getDependencyList(uri, contentType, extension)?.each {
 				if (uniqMode) {
 					def path = nameAndExtension(it.path, ext)
 					if (path.uri == uri || !isIncluded(path)) {
-						output(it.path, queryString, attrs, LINE_BREAK)
+						output(it.path, queryString, attrs, LINE_BREAK, useManifest)
 					}
 				} else {
-					output(it.path, queryString, attrs, LINE_BREAK)
+					output(it.path, queryString, attrs, LINE_BREAK, useManifest)
 				}
 			}
 		}
