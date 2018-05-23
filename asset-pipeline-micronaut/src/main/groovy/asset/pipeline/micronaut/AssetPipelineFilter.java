@@ -22,13 +22,13 @@ import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
-@Filter("/${assets.mapping:assets}/**")
+@Filter("/${assets.mapping:}/**")
 public class AssetPipelineFilter implements HttpServerFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(AssetPipelineFilter.class);
 	AssetPipelineService assetPipelineService;
 
-	@Value("${assets.mapping:assets}")
+	@Value("${assets.mapping:}")
 	protected String assetMapping;
 
 	@Inject
@@ -48,7 +48,7 @@ public class AssetPipelineFilter implements HttpServerFilter {
 	 */
 	@Override
 	public Publisher<MutableHttpResponse<?>> doFilter(HttpRequest<?> request, ServerFilterChain chain) {
-//		LOG.info("ASSET FILTER HIT");
+
 		final String encoding = request.getParameters().getFirst("encoding").orElseGet(() -> request.getCharacterEncoding().toString());
 
 
@@ -66,7 +66,6 @@ public class AssetPipelineFilter implements HttpServerFilter {
 		if(assetPipelineService.isDevMode()) {
 			return assetPipelineService.handleAssetDevMode(fileUri,format,encoding,request).switchMap( contents -> {
 				if(contents.isPresent()) {
-					LOG.warn("Serving File!");
 					return Flowable.fromCallable(() -> {
 						MutableHttpResponse<byte[]> response = HttpResponse.ok(contents.get());
 						response.header("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -79,7 +78,6 @@ public class AssetPipelineFilter implements HttpServerFilter {
 						return response;
 					});
 				} else {
-					LOG.info("Proceeding with Chain!");
 					return chain.proceed(request);
 				}
 			});
