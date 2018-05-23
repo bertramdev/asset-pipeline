@@ -4,6 +4,7 @@ import asset.pipeline.AssetPipeline;
 import asset.pipeline.AssetPipelineConfigHolder;
 import asset.pipeline.fs.ClasspathAssetResolver;
 import asset.pipeline.fs.FileSystemAssetResolver;
+import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -15,11 +16,13 @@ import io.reactivex.schedulers.Schedulers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -28,6 +31,9 @@ public class AssetPipelineService {
 	private static final Logger LOG = LoggerFactory.getLogger(AssetPipelineService.class);
 	private static final String COMPILE_PARAM = "compile";
 	static final ProductionAssetCache fileCache = new ProductionAssetCache();
+
+	@Value("${assets}")
+	protected Map<String,Object> assetConfig;
 
 
 	public AssetPipelineService() {
@@ -55,6 +61,11 @@ public class AssetPipelineService {
 			AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/static"));
 			AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver("classpath", "META-INF/resources"));
 		}
+	}
+
+	@PostConstruct
+	public void configureAssetPipeline() {
+		AssetPipelineConfigHolder.setConfig(assetConfig);
 	}
 
 	public boolean isDevMode() {
