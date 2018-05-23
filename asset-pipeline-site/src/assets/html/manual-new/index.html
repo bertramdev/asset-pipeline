@@ -507,7 +507,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">David Estes</span><br>
 <span id="email" class="email"><a href="mailto:davydotcom@gmail.com">davydotcom@gmail.com</a></span><br>
-<span id="revdate">2.14.8</span>
+<span id="revdate">2.15.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -550,14 +550,19 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#taglibs-2">Taglibs</a></li>
 </ul>
 </li>
-<li><a href="#ratpack">Ratpack</a>
+<li><a href="#micronaut">Micronaut</a>
 <ul class="sectlevel2">
 <li><a href="#getting-started-4">Getting Started</a></li>
 </ul>
 </li>
-<li><a href="#spring-boot">Spring Boot</a>
+<li><a href="#ratpack">Ratpack</a>
 <ul class="sectlevel2">
 <li><a href="#getting-started-5">Getting Started</a></li>
+</ul>
+</li>
+<li><a href="#spring-boot">Spring Boot</a>
+<ul class="sectlevel2">
+<li><a href="#getting-started-6">Getting Started</a></li>
 </ul>
 </li>
 <li><a href="#modules">Plugin Modules</a>
@@ -591,6 +596,16 @@ table.CodeRay td.code>pre{padding:0}
 <h3 id="release-history">Release History</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>May 23, 2018</p>
+<div class="ulist">
+<ul>
+<li>
+<p>- 2.15.0 - Added Micronaut Framework Support for 1.0.0-SNAPSHOT. Added Support for deduplication of asset script and stylesheet tags support for grails.</p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>December 6, 2017</p>
 <div class="ulist">
@@ -1682,7 +1697,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.0"
   }
 }
 
@@ -1697,7 +1712,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "2.14.8"
+  id "com.bertramlabs.asset-pipeline" version "2.15.0"
 }</code></pre>
 </div>
 </div>
@@ -1878,7 +1893,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.8'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -1902,7 +1917,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.14.8'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -2195,7 +2210,7 @@ This will only be displayed if the asset exists
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;asset:javascript</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">application.js</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">asset-defer</span><span class="tag">/&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;asset:javascript</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">application.js</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">asset-defer</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">true</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
 <span class="tag">&lt;asset:script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
   console.log(&quot;Hello World&quot;);
 <span class="tag">&lt;/asset:script&gt;</span>
@@ -2234,12 +2249,12 @@ This will only be displayed if the asset exists
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:2.14.8"
+  compile ":asset-pipeline:2.15.0"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:2.14.8"
-  //compile ":less-asset-pipeline:2.14.8"
-  //compile ":coffee-asset-pipeline:2.14.8"
-  //compile ":handlebars-asset-pipeline:2.14.8"
+  //compile ":sass-asset-pipeline:2.15.0"
+  //compile ":less-asset-pipeline:2.15.0"
+  //compile ":coffee-asset-pipeline:2.15.0"
+  //compile ":handlebars-asset-pipeline:2.15.0"
 }</code></pre>
 </div>
 </div>
@@ -2634,7 +2649,7 @@ This will only be displayed if the asset exists
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;asset:javascript</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">application.js</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">asset-defer</span><span class="tag">/&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;asset:javascript</span> <span class="attribute-name">src</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">application.js</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">asset-defer</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">true</span><span class="delimiter">&quot;</span></span><span class="tag">/&gt;</span>
 <span class="tag">&lt;asset:script</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">text/javascript</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
   console.log(&quot;Hello World&quot;);
 <span class="tag">&lt;/asset:script&gt;</span>
@@ -2656,13 +2671,93 @@ This will only be displayed if the asset exists
 </div>
 </div>
 <div class="sect1">
+<h2 id="micronaut">Micronaut</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section of the documentation discusses configuration and setup of the asset-pipeline plugin for <a href="https://micronaut.io/">Micronaut</a> based applications. Micronaut functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Micronaut framework except template url replacement helpers (as this has not been standardized in the framework yet). Assets are served at the root url by default instead of <code>/assets</code> to facilitate single page app styles better. If a file is not found, the request will proceed through the Micronaut chain finding any controller endpoints that are registered.</p>
+</div>
+<div class="sect2">
+<h3 id="getting-started-4">Getting Started</h3>
+<div class="paragraph">
+<p>In Micronaut assets live in the same place as a standard gradle implementation <code>src/assets</code> directory. This folder should contain organizational subdirectories <code>javascripts</code>, <code>images</code>, and <code>stylesheets</code>. Another option is to use a standard folder within assets called something like <code>src/assets/frontend</code>. Useful if simply using asset-pipeline to render and properly digest generated apps from React or other view frameworks.</p>
+</div>
+<div class="paragraph">
+<p>To get started simply add asset-pipeline to your <code>build.gradle</code> file (See Gradle usage). And the micronaut plugin to the dependencies block:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">plugins {
+	id "com.bertramlabs.asset-pipeline" version "2.15.0"
+}
+
+dependencies {
+  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:2.15.0'
+  //Example LESS or Sass Integration
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Asset-Pipeline requires groovy when running in the development runtime mode.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>By default, the asset-pipeline gradle plugin will automatically attach itself to the <code>shadowJar</code> gradle task as a build dependency. The development runtime will also auto engage so long as no <code>assets/manifest.properties</code> file exists on the classpath.</p>
+</div>
+<div class="sect3">
+<h4 id="configuration-4">Configuration</h4>
+<div class="paragraph">
+<p>Configuration handling is still being worked on for micronaut but currently one option is configurable. By default assets in micronaut are rendered at the root url. If a file is not found, the standard micronaut filter chain is used. This is great for serving a Single Page app all in one application all while still using micronaut <code>@Controller</code> endpoints. To change asset-pipelines default mapping to the standard <code>/assets</code> endpoint simply add the following configuration to your Micronaut configuration.</p>
+</div>
+<div class="listingblock">
+<div class="title">application.groovy</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">assets {
+  mapping = <span class="string"><span class="delimiter">&quot;</span><span class="content">assets</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="development-runtime-3">Development Runtime</h4>
+<div class="paragraph">
+<p>A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of <code>FileWatcher</code>. These results are also cached making it highly performant as your project grows.</p>
+</div>
+<div class="paragraph">
+<p>Micronaut has great native continuous build integration support with Gradle and in some cases developers may not want to use the development runtime and instead rely on this continuous build flow. To do that simply disable developmentRuntime:</p>
+</div>
+<div class="listingblock">
+<div class="title">build.gradle</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">assets {
+  developmentRuntime = <span class="predefined-constant">false</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By doing this one can use <code>gradle -t run</code> to kick off continuous runs of the application.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="ratpack">Ratpack</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This section of the documentation discusses configuration and setup of the asset-pipeline plugin for <a href="https://ratpack.io/">Ratpack</a> based applications. Ratpack functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Ratpack framework except template url replacement helpers (as this has not been standardized in the framework yet).</p>
 </div>
 <div class="sect2">
-<h3 id="getting-started-4">Getting Started</h3>
+<h3 id="getting-started-5">Getting Started</h3>
 <div class="paragraph">
 <p>In Ratpack assets live in the same place as a standard gradle implementation <code>src/assets</code> directory. This folder should contain organizational subdirectories <code>javascripts</code>, <code>images</code>, and <code>stylesheets</code>.</p>
 </div>
@@ -2672,10 +2767,10 @@ This will only be displayed if the asset exists
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.14.8'
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.15.0'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.8'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.8'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -2718,7 +2813,7 @@ ratpack {
 <p>By default a Handler will be registered to the url <code>/assets</code> but it is also possible to simply use the <code>AssetPipelineHandler</code> directly or even change the base mapping config as seen in the example above.</p>
 </div>
 <div class="sect3">
-<h4 id="development-runtime-3">Development Runtime</h4>
+<h4 id="development-runtime-4">Development Runtime</h4>
 <div class="paragraph">
 <p>A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of <code>FileWatcher</code>. These results are also cached making it highly performant as your project grows.</p>
 </div>
@@ -2744,7 +2839,7 @@ ratpack {
 <p>This section of the documentation discusses configuration and setup of the asset-pipeline plugin for <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> based applications. Spring functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Ratpack framework except template url replacement helpers.</p>
 </div>
 <div class="sect2">
-<h3 id="getting-started-5">Getting Started</h3>
+<h3 id="getting-started-6">Getting Started</h3>
 <div class="paragraph">
 <p>In Spring Boot assets live in the same place as a standard gradle implementation <code>src/assets</code> directory. This folder should contain organizational subdirectories <code>javascripts</code>, <code>images</code>, and <code>stylesheets</code>.</p>
 </div>
@@ -2754,10 +2849,10 @@ ratpack {
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.14.8'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.15.0'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.8'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.8'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -2795,7 +2890,7 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <p>By default a servlet filter will be registered to the url <code>/assets</code> from which all assets will be served.</p>
 </div>
 <div class="sect3">
-<h4 id="development-runtime-4">Development Runtime</h4>
+<h4 id="development-runtime-5">Development Runtime</h4>
 <div class="paragraph">
 <p>A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of <code>FileWatcher</code>. These results are also cached making it highly performant as your project grows.</p>
 </div>
@@ -2818,12 +2913,12 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.14.8'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuration-4">Configuration</h4>
+<h4 id="configuration-5">Configuration</h4>
 <div class="paragraph">
 <p>To switch to the standard compiler simply adjust the <code>less.compiler</code> property to 'standard':</p>
 </div>
@@ -2862,7 +2957,7 @@ During war build your <code>less</code> files are compiled into css files. This 
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.8'
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -2888,7 +2983,7 @@ Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plu
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.14.8'
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.15.0'
 }</code></pre>
 </div>
 </div>
@@ -3113,7 +3208,7 @@ for this is the SassProcessor in the SASS/SCSS Asset Pipeline Plugin. Image spri
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-05-23 16:43:15 -04:00
+Last updated 2018-05-23 18:29:40 -04:00
 </div>
 </div>
 </body>

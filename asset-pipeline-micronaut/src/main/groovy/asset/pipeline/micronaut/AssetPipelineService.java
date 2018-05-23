@@ -32,8 +32,8 @@ public class AssetPipelineService {
 	private static final String COMPILE_PARAM = "compile";
 	static final ProductionAssetCache fileCache = new ProductionAssetCache();
 
-	@Value("${assets}")
-	protected Map<String,Object> assetConfig;
+	// @Value("${assets}")
+	// protected Map<String,Object> assetConfig;
 
 
 	public AssetPipelineService() {
@@ -63,10 +63,10 @@ public class AssetPipelineService {
 		}
 	}
 
-	@PostConstruct
-	public void configureAssetPipeline() {
-		AssetPipelineConfigHolder.setConfig(assetConfig);
-	}
+	// @PostConstruct
+	// public void configureAssetPipeline() {
+	// 	AssetPipelineConfigHolder.setConfig(assetConfig);
+	// }
 
 	public boolean isDevMode() {
 		if(AssetPipelineConfigHolder.manifest != null) {
