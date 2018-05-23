@@ -18,6 +18,8 @@ dependencies {
 }
 ----
 
+NOTE: Asset-Pipeline requires groovy when running in the development runtime mode.
+
 By default, the asset-pipeline gradle plugin will automatically attach itself to the `shadowJar` gradle task as a build dependency. The development runtime will also auto engage so long as no `assets/manifest.properties` file exists on the classpath.
 
 ==== Configuration
