@@ -31,7 +31,7 @@ buildscript {
     }
 }
 
-group 'org.grails.plugins'
+group 'com.bertramlabs.plugins'
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
