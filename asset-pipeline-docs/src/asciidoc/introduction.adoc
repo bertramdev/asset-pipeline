@@ -7,7 +7,7 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 * May 23, 2018
-** - 2.15.0 - Added Micronaut Framework Support for 1.0.0-SNAPSHOT.
+** - 2.15.0 - Added Micronaut Framework Support for 1.0.0-SNAPSHOT. Added Support for deduplication of asset script and stylesheet tags support for grails.
 * December 6, 2017
 ** 2.14.7 - Grails filter now handles resolving index.html if at directory root. Also grails asset mapping can now be set to root level with '' to resolve at root level. if this is in place we can mix and match static documents with grails actions.
 * November 7, 2017

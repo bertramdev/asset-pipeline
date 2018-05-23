@@ -129,7 +129,7 @@ bintray {
 		key = bintrayKey
 	}
 	publications = ['maven']
-    publish=true
+    publish=false//true
 	pkg {
 		repo = 'asset-pipeline'
 		userOrg = 'bertramlabs'
@@ -141,7 +141,7 @@ bintray {
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
-                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    sync = false//true //Optional (true by default). Determines whether to sync the version to Maven Central.
                     user = mavenUser //OSS user token
                     password = mavenPassword //OSS user password
                     close = '1'
