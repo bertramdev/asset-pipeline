@@ -46,10 +46,17 @@ class AssetProcessorService {
 		return mapping
 	}
 
+	String getAssetPath(final String path, final boolean useManifest) {
+		getAssetPath(path, grailsApplication.config.grails.assets as ConfigObject, useManifest)
+	}
 
-	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets) {
+	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets, final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
-		return manifest?.getProperty(relativePath) ?: relativePath
+		if (useManifest) {
+			return manifest?.getProperty(relativePath) ?: relativePath
+		} else {
+			return relativePath
+		}
 	}
 
 

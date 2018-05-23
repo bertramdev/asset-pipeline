@@ -89,7 +89,10 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
                 log.warn "Unable to find asset-pipeline manifest, etags will not be properly generated"
             }
         }
-        if(manifestFile?.exists()) {
+
+        def useManifest = assetsConfig.useManifest ?: true
+
+        if(useManifest && manifestFile?.exists()) {
             try {
                 manifestProps.load(manifestFile.inputStream)
                 assetsConfig.manifest = manifestProps
