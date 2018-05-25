@@ -62,7 +62,7 @@ public class AssetPipelineFilter implements HttpServerFilter {
 		}
 		final MediaType contentType = MediaType.forExtension(NameUtils.extension(fileUri)).orElseGet(() -> null);
 		final String format =  contentType != null ? contentType.toString() : null;
-
+		LOG.debug("Loading Asset For URL: " + fileUri);
 		if(assetPipelineService.isDevMode()) {
 			return assetPipelineService.handleAssetDevMode(fileUri,format,encoding,request).switchMap( contents -> {
 				if(contents.isPresent()) {

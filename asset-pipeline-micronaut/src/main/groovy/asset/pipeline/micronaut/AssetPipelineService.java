@@ -5,6 +5,7 @@ import asset.pipeline.AssetPipelineConfigHolder;
 import asset.pipeline.fs.ClasspathAssetResolver;
 import asset.pipeline.fs.FileSystemAssetResolver;
 import io.micronaut.context.annotation.Value;
+import io.micronaut.context.env.Environment;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -13,14 +14,17 @@ import io.micronaut.http.filter.ServerFilterChain;
 import io.micronaut.http.server.types.files.StreamedFile;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Optional;
@@ -32,11 +36,12 @@ public class AssetPipelineService {
 	private static final String COMPILE_PARAM = "compile";
 	static final ProductionAssetCache fileCache = new ProductionAssetCache();
 
-	// @Value("${assets}")
-	// protected Map<String,Object> assetConfig;
+	public Environment environment;
 
-
-	public AssetPipelineService() {
+	@Inject
+	public AssetPipelineService(Environment environment) {
+		this.environment = environment;
+		AssetPipelineConfigHolder.setConfig(environment.getProperty("assets",Map.class).orElse(AssetPipelineConfigHolder.getConfig()));
 		Properties manifestProps = new Properties();
 		Enumeration<URL> manifestFiles = null;
 		try {
@@ -63,10 +68,6 @@ public class AssetPipelineService {
 		}
 	}
 
-	// @PostConstruct
-	// public void configureAssetPipeline() {
-	// 	AssetPipelineConfigHolder.setConfig(assetConfig);
-	// }
 
 	public boolean isDevMode() {
 		if(AssetPipelineConfigHolder.manifest != null) {
@@ -132,10 +133,13 @@ public class AssetPipelineService {
 
 				String ifNoneMatch = request.getHeaders().get("If-None-Match");
 				if(ifNoneMatch != null && ifNoneMatch.equals(etagHeader)) {
+					LOG.debug("NOT MODIFIED!");
 					return Flowable.fromCallable(() -> HttpResponse.notModified());
 				} else {
+					LOG.debug("Generating Response");
 					return Flowable.fromCallable(() -> {
-						StreamedFile streamedFile = new StreamedFile(gzipStream ? assetAttribute.getGzipResource().openStream() : assetAttribute.getResource().openStream(),fileUri);
+						URLConnection urlCon = gzipStream ? assetAttribute.getGzipResource().openConnection() : assetAttribute.getResource().openConnection();
+						StreamedFile streamedFile = new StreamedFile(urlCon.getInputStream(), fileUri, urlCon.getLastModified(), urlCon.getContentLength() );
 						MutableHttpResponse<StreamedFile> response = HttpResponse.ok(streamedFile);
 						if(gzipStream) {
 							response.header("Content-Encoding","gzip");
@@ -177,6 +181,10 @@ public class AssetPipelineService {
 	private AssetAttributes resolveAssetAttribute(String filename) {
 		URL assetUrl = this.getClass().getClassLoader().getResource("assets/" + filename);
 		URL gzipAsset = this.getClass().getClassLoader().getResource("assets/" + filename + ".gz");
+		if(assetUrl == null) {
+			assetUrl = this.getClass().getClassLoader().getResource("assets/" + filename + "/index.html");
+			gzipAsset = this.getClass().getClassLoader().getResource("assets/" + filename + "/index.html.gz");
+		}
 		AssetAttributes attribute = new AssetAttributes(assetUrl != null, gzipAsset != null, false,0L,0L,null,assetUrl,gzipAsset);
 		fileCache.put(filename,attribute);
 		return attribute;

@@ -58,26 +58,26 @@ class I18nAssetFile extends AbstractAssetFile {
 
     @Override
     String processedStream(AssetCompiler precompiler) {
-        def skipCache = precompiler ?: (!processors || processors.size() == 0)
+        // def skipCache = precompiler ?: (!processors || processors.size() == 0)
 
         String fileText = I18nPreprocessor.instance.preprocess(this)
 
-        def md5 = AssetHelper.getByteDigest(fileText.bytes)
-        if (!skipCache) {
-            def cache = CacheManager.findCache(path, md5, baseFile?.path)
-            if (cache) {
-                return cache
-            }
-        }
+        // def md5 = AssetHelper.getByteDigest(fileText.bytes)
+        // if (!skipCache) {
+        //     def cache = CacheManager.findCache(path, md5, baseFile?.path)
+        //     if (cache) {
+        //         return cache
+        //     }
+        // }
 
         for (processor in processors) {
             def processInstance = processor.newInstance(precompiler)
             fileText = processInstance.process(fileText, this)
         }
 
-        if (!skipCache) {
-            CacheManager.createCache(path, md5, fileText, baseFile?.path)
-        }
+        // if (!skipCache) {
+        //     CacheManager.createCache(path, md5, fileText, baseFile?.path)
+        // }
 
         fileText
     }
