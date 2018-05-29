@@ -507,6 +507,8 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#concepts">Concepts</a>
 <ul class="sectlevel2">
+<li><a href="#commonjs">CommonJs</a></li>
+<li><a href="#ecmascript-2017-2018-beyond">ECMAScript 2017,2018, beyond</a></li>
 <li><a href="#directives">Directives</a></li>
 <li><a href="#common-js">Common Js</a></li>
 <li><a href="#project-structure">Project Structure</a></li>
@@ -524,6 +526,45 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sectionbody">
 <div class="paragraph">
 <p>Asset-pipeline is a highly extensible asset processing library that is easy to integrate into your jvm based application or to even use standalone with gradle. It works by defining <code>AssetFile</code> definitions for different file types in which <code>Processors</code> can be chained for processing and conversion to different target content types. But to use it you don&#8217;t really need to know about any of this (It really does just work).</p>
+</div>
+<div class="sect2">
+<h3 id="commonjs">CommonJs</h3>
+<div class="paragraph">
+<p>Asset-pipeline now fully supports the commonJs method of loading modules using the <code>require()</code> function. It is important to note, however that these calls are preprocessed outside of a js runtime such that the string being passed to require must be a constant string and not a variable..</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Loading image files as modules uses a base url prefix by default of <code>/assets/</code> The <code>mapping</code> config option can often be set to an empty string to move this to the root level of your application (very common in Micronaut apps).
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ecmascript-2017-2018-beyond">ECMAScript 2017,2018, beyond</h3>
+<div class="paragraph">
+<p>Asset-pipeline now supports processing Modern ECMAScript specifications utilizing BabelJs. By default this is disabled for performance but can be enabled by two ways. One is simply by adding <code>.es6</code> , <code>.es7</code>, <code>.es8</code> to the end of your javascript file extensions. This can also be done with jsx files (i.e. <code>.jsx.es6</code>) when using <code>jsx-asset-pipeline</code>.</p>
+</div>
+<div class="paragraph">
+<p>If it is desired to process ALL javascript assets through BabelJs this can be done as well by setting the configuration property in both development runtime and gradle for assets called <code>enableES6:true</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+BabelJs processing is new and will more than likely be enhanced in the future.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="directives">Directives</h3>
@@ -771,7 +812,7 @@ This method is not evaluated in javascript but rather replaced like a precompile
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-07-27 13:07:50 -04:00
+Last updated 2018-05-29 09:11:03 -04:00
 </div>
 </div>
 </body>

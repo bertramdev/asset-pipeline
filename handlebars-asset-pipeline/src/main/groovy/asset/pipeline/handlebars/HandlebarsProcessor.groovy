@@ -21,27 +21,32 @@ import asset.pipeline.AssetFile
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.DirectiveProcessor
-import org.mozilla.javascript.Context
-import org.mozilla.javascript.Scriptable
+
 import asset.pipeline.AbstractProcessor
+
+import javax.script.ScriptEngine
+import javax.script.ScriptEngineManager
+import javax.script.SimpleBindings
 
 class HandlebarsProcessor extends AbstractProcessor {
 
-	Scriptable globalScope
+
 	ClassLoader classLoader
 	static def wrapTemplateCustom
-	static org.mozilla.javascript.Script handlebarsCompilerScript
-	static org.mozilla.javascript.Script handlebarsPrecompileScript
+	//static org.mozilla.javascript.Script handlebarsCompilerScript
+	//static org.mozilla.javascript.Script handlebarsPrecompileScript
+	static ScriptEngine engine
+	static SimpleBindings bindings
 	private static final $LOCK = new Object[0]
 	HandlebarsProcessor(AssetCompiler precompiler){
 		super(precompiler)
 		try {
 			classLoader = getClass().getClassLoader()
 
-			Context cx = Context.enter()
-			cx.setOptimizationLevel(-1)
-			globalScope = cx.initStandardObjects()
-			loadHandlebars(cx)
+//			Context cx = Context.enter()
+//			cx.setOptimizationLevel(-1)
+//			globalScope = cx.initStandardObjects()
+			loadHandlebars()
 			if (AssetPipelineConfigHolder.config?.handlebars?.wrapTemplate && !HandlebarsProcessor.wrapTemplateCustom) {
 				HandlebarsProcessor.wrapTemplateCustom = new groovy.text.GStringTemplateEngine(this.class.classLoader).createTemplate(AssetPipelineConfigHolder.config?.handlebars?.wrapTemplate)
 			}
@@ -50,59 +55,73 @@ class HandlebarsProcessor extends AbstractProcessor {
 			throw new Exception("Handlebars Engine initialization failed.", e)
 		} finally {
 			try {
-				Context.exit()
+//				Context.exit()
 			} catch (IllegalStateException e) {}
 		}
 	}
 
-	public void loadHandlebars(Context cx) {
+	public void loadHandlebars() {
 		String scanPath = AssetPipelineConfigHolder.config?.handlebars?.scanPath ?: 'handlebars.js'
 		AssetFile handlebarsAssetFile = AssetHelper.fileForFullName(scanPath)
-		if(!handlebarsCompilerScript) {
+		if(!engine) {
 			synchronized($LOCK) {
-				if(!handlebarsCompilerScript) {
+				if(!engine) {
+					engine = new ScriptEngineManager().getEngineByName("nashorn")
+					bindings = new SimpleBindings()
+
 					if(handlebarsAssetFile) {
 						def directiveProcessor = new DirectiveProcessor('application/javascript')
-						handlebarsCompilerScript = cx.compileString(directiveProcessor.compile(handlebarsAssetFile),handlebarsAssetFile.name,1,null)
-						// cx.evaluateString globalScope, directiveProcessor.compile(handlebarsAssetFile), handlebarsAssetFile.name, 1, null
+						engine.eval(directiveProcessor.compile(handlebarsAssetFile), bindings)
 					} else {
 						def handlebarsJsResource = classLoader.getResource('asset/pipeline/handlebars/handlebars.js')
-						handlebarsCompilerScript = cx.compileString(handlebarsJsResource.getText('UTF-8'),handlebarsJsResource.file,1,null)
-						// cx.evaluateString globalScope, handlebarsJsResource.getText('UTF-8'), handlebarsJsResource.file, 1, null
+						engine.eval(handlebarsJsResource.getText('UTF-8'), bindings)
 					}
+
 				}
 			}
 		}
-
-		handlebarsCompilerScript.exec(cx, globalScope)
-
-		if(!handlebarsPrecompileScript) {
-			synchronized($LOCK) {
-				if(!handlebarsPrecompileScript) {
-					handlebarsPrecompileScript = cx.compileString("Handlebars.precompile(handlebarsSrc)","HandlebarsCompileCommand",0,null)	
-				}
-			}
-		}
+//		if(!handlebarsCompilerScript) {
+//			synchronized($LOCK) {
+//				if(!handlebarsCompilerScript) {
+//					if(handlebarsAssetFile) {
+//						def directiveProcessor = new DirectiveProcessor('application/javascript')
+//						handlebarsCompilerScript = cx.compileString(directiveProcessor.compile(handlebarsAssetFile),handlebarsAssetFile.name,1,null)
+//						// cx.evaluateString globalScope, directiveProcessor.compile(handlebarsAssetFile), handlebarsAssetFile.name, 1, null
+//					} else {
+//						def handlebarsJsResource = classLoader.getResource('asset/pipeline/handlebars/handlebars.js')
+//						handlebarsCompilerScript = cx.compileString(handlebarsJsResource.getText('UTF-8'),handlebarsJsResource.file,1,null)
+//						// cx.evaluateString globalScope, handlebarsJsResource.getText('UTF-8'), handlebarsJsResource.file, 1, null
+//					}
+//				}
+//			}
+//		}
+//
+//		handlebarsCompilerScript.exec(cx, globalScope)
+//
+//		if(!handlebarsPrecompileScript) {
+//			synchronized($LOCK) {
+//				if(!handlebarsPrecompileScript) {
+//					handlebarsPrecompileScript = cx.compileString("Handlebars.precompile(handlebarsSrc)","HandlebarsCompileCommand",0,null)
+//				}
+//			}
+//		}
 		
 
 	}
 
 	String process(String input,AssetFile assetFile) {
 		try {
-			def cx = Context.enter()
-			def compileScope = cx.newObject(globalScope)
-			compileScope.setParentScope(globalScope)
-			compileScope.put("handlebarsSrc", compileScope, input)
-			def result = handlebarsPrecompileScript.exec(cx,compileScope)
-			// def result = cx.evaluateString(compileScope, "Handlebars.precompile(handlebarsSrc)", "Handlebars compile command", 0, null)
+			def result
+			synchronized($LOCK) {
+				bindings.put("handlebarsSrc", input)
+				result = engine.eval("Handlebars.precompile(handlebarsSrc);", bindings)
+			}
 			return wrapTemplate(templateNameForFile(assetFile), result)
+
 		} catch (Exception e) {
-			throw new Exception("""
-			Handlebars Engine compilation of handlebars to javascript failed.
+			throw new Exception("""Handlebars Engine compilation of handlebars to javascript failed.
 			$e
 			""")
-		} finally {
-			Context.exit()
 		}
 	}
 

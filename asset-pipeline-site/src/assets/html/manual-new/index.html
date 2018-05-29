@@ -507,7 +507,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">David Estes</span><br>
 <span id="email" class="email"><a href="mailto:davydotcom@gmail.com">davydotcom@gmail.com</a></span><br>
-<span id="revdate">2.15.0</span>
+<span id="revdate">2.15.1.SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -519,6 +519,8 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#concepts">Concepts</a>
 <ul class="sectlevel2">
+<li><a href="#commonjs">CommonJs</a></li>
+<li><a href="#ecmascript-2017-2018-beyond">ECMAScript 2017,2018, beyond</a></li>
 <li><a href="#directives">Directives</a></li>
 <li><a href="#common-js">Common Js</a></li>
 <li><a href="#project-structure">Project Structure</a></li>
@@ -596,6 +598,16 @@ table.CodeRay td.code>pre{padding:0}
 <h3 id="release-history">Release History</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>May 29, 2018</p>
+<div class="ulist">
+<ul>
+<li>
+<p>- 3.0.0 - Enhanced ECMAScript 2017,2018 Support and BabelJs Processing. CommonJs Module Support Dramatically Enhanced. Module loading file-loader support for images. JDK 8+ Requirement (Nashorn needed for BabelJs).</p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>May 23, 2018</p>
 <div class="ulist">
@@ -1419,6 +1431,45 @@ table.CodeRay td.code>pre{padding:0}
 <p>Asset-pipeline is a highly extensible asset processing library that is easy to integrate into your jvm based application or to even use standalone with gradle. It works by defining <code>AssetFile</code> definitions for different file types in which <code>Processors</code> can be chained for processing and conversion to different target content types. But to use it you don&#8217;t really need to know about any of this (It really does just work).</p>
 </div>
 <div class="sect2">
+<h3 id="commonjs">CommonJs</h3>
+<div class="paragraph">
+<p>Asset-pipeline now fully supports the commonJs method of loading modules using the <code>require()</code> function. It is important to note, however that these calls are preprocessed outside of a js runtime such that the string being passed to require must be a constant string and not a variable..</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Loading image files as modules uses a base url prefix by default of <code>/assets/</code> The <code>mapping</code> config option can often be set to an empty string to move this to the root level of your application (very common in Micronaut apps).
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="ecmascript-2017-2018-beyond">ECMAScript 2017,2018, beyond</h3>
+<div class="paragraph">
+<p>Asset-pipeline now supports processing Modern ECMAScript specifications utilizing BabelJs. By default this is disabled for performance but can be enabled by two ways. One is simply by adding <code>.es6</code> , <code>.es7</code>, <code>.es8</code> to the end of your javascript file extensions. This can also be done with jsx files (i.e. <code>.jsx.es6</code>) when using <code>jsx-asset-pipeline</code>.</p>
+</div>
+<div class="paragraph">
+<p>If it is desired to process ALL javascript assets through BabelJs this can be done as well by setting the configuration property in both development runtime and gradle for assets called <code>enableES6:true</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+BabelJs processing is new and will more than likely be enhanced in the future.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
 <h3 id="directives">Directives</h3>
 <div class="paragraph">
 <p>Similar to other packaging libraries like webpack or grunt, asset-pipeline provides a means to require other files or "modules" into your javascript and/or css. We will call these require patterns <code>directives</code>.</p>
@@ -1697,7 +1748,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.0"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1.SNAPSHOT"
   }
 }
 
@@ -1712,7 +1763,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "2.15.0"
+  id "com.bertramlabs.asset-pipeline" version "2.15.1.SNAPSHOT"
 }</code></pre>
 </div>
 </div>
@@ -1893,7 +1944,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -1917,7 +1968,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.15.0'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2249,12 +2300,12 @@ This will only be displayed if the asset exists
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:2.15.0"
+  compile ":asset-pipeline:2.15.1.SNAPSHOT"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:2.15.0"
-  //compile ":less-asset-pipeline:2.15.0"
-  //compile ":coffee-asset-pipeline:2.15.0"
-  //compile ":handlebars-asset-pipeline:2.15.0"
+  //compile ":sass-asset-pipeline:2.15.1.SNAPSHOT"
+  //compile ":less-asset-pipeline:2.15.1.SNAPSHOT"
+  //compile ":coffee-asset-pipeline:2.15.1.SNAPSHOT"
+  //compile ":handlebars-asset-pipeline:2.15.1.SNAPSHOT"
 }</code></pre>
 </div>
 </div>
@@ -2687,14 +2738,14 @@ This will only be displayed if the asset exists
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-	id "com.bertramlabs.asset-pipeline" version "2.15.0"
+	id "com.bertramlabs.asset-pipeline" version "2.15.1.SNAPSHOT"
 }
 
 dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:2.15.0'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:2.15.1.SNAPSHOT'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.1.SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2767,10 +2818,10 @@ Asset-Pipeline requires groovy when running in the development runtime mode.
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.15.0'
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:2.15.1.SNAPSHOT'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.1.SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2849,10 +2900,10 @@ ratpack {
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.15.0'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:2.15.1.SNAPSHOT'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.1.SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2913,7 +2964,7 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.0'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2957,7 +3008,7 @@ During war build your <code>less</code> files are compiled into css files. This 
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.0'
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>
@@ -2983,7 +3034,7 @@ Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plu
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.15.0'
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:2.15.1.SNAPSHOT'
 }</code></pre>
 </div>
 </div>

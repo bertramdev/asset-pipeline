@@ -71,6 +71,12 @@ class BabelJsProcessor extends AbstractProcessor {
 					engine = new ScriptEngineManager().getEngineByName("nashorn");
 					bindings = new SimpleBindings();
 					engine.eval(babelJsResource.getText('UTF-8'), bindings);
+					def presets = "{ \"presets\": [\"es2015\",[\"stage-2\",{\"decoratorsLegacy\": true}],\"react\"], \"compact\": false }"
+					if(AssetPipelineConfigHolder.config?.babel?.options) {
+						presets = AssetPipelineConfigHolder.config?.babel?.options
+					}
+					bindings.put("optionsJson", presets);
+					engine.eval("var options = JSON.parse(optionsJson);", bindings);
 				}
 			}
 		}
@@ -89,7 +95,7 @@ class BabelJsProcessor extends AbstractProcessor {
 			return input
 		}
 		Boolean newEcmascriptKeywordsFound = false
-		if(input.contains("export ") || input.contains("import ")) {
+		if(input.contains("export default")) {
 			newEcmascriptKeywordsFound = true;
 		}
 		if(!newEcmascriptKeywordsFound && assetFile instanceof JsAssetFile) {
@@ -98,16 +104,11 @@ class BabelJsProcessor extends AbstractProcessor {
 			}
 		}
 		try {
-			def presets = "{ \"presets\": [\"es2015\",[\"stage-2\",{\"decoratorsLegacy\": true}],\"react\"], \"compact\": false }"
-			if(AssetPipelineConfigHolder.config?.babel?.options) {
-				presets = AssetPipelineConfigHolder.config?.babel?.options
-			}
-
+			
 
 			synchronized($LOCK) {
 				bindings.put("input", input);
-				bindings.put("optionsJson", presets);
-				def result = engine.eval("Babel.transform(input, JSON.parse(optionsJson)).code", bindings);
+				def result = engine.eval("Babel.transform(input, options).code", bindings);
 				return result
 			}
 		} catch(javax.script.ScriptException ex) {

@@ -33,7 +33,7 @@ class Es6ProcessorSpec extends Specification {
 			def processedText = file.processedStream(null)
 			println processedText
 		then:
-			processedText.contains('/** @const */')
+			processedText.contains('"use strict";')
 
 	}
 
