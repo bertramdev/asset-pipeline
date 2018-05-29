@@ -146,7 +146,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
     }
 
 
-    protected String replacementAssetPath(final AssetFile assetFile, final AssetFile currFile) {
+    protected String replacementAssetPath(final AssetFile assetFile, final AssetFile currFile, Boolean preferRelative=false) {
 
         final StringBuilder replacementPathSb = new StringBuilder()
         def urlConfig = AssetPipelineConfigHolder.config?.url
@@ -155,14 +155,18 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             baseUrl = urlConfig.call(null)
         }
 
+//		println "Replacing Asset Path for ${currFile.path}"
         if(baseUrl) {
             replacementPathSb << baseUrl
-        } else {
-            replacementPathSb << '/' << (AssetPipelineConfigHolder.config?.mapping ?: 'assets') << '/'    
+        } else if(!preferRelative){
+            replacementPathSb << '/' << (AssetPipelineConfigHolder.config?.mapping != null ? AssetPipelineConfigHolder.config?.mapping : 'assets')
+			if(AssetPipelineConfigHolder.config?.mapping?.size() > 0) {
+				replacementPathSb << '/'
+			}
         }
-
+//		println "FileName Check: ${replacementPathSb}"
         // file
-        final String fileName = nameWithoutExtension(currFile.name)
+        final String fileName = nameWithoutExtension(currFile.path)
         if(precompiler && precompiler.options.enableDigests) {
             if(currFile instanceof GenericAssetFile) {
                 replacementPathSb << fileName << '-' << currFile.getByteDigest() << '.' << extensionFromURI(currFile.name)
@@ -176,7 +180,7 @@ abstract class AbstractUrlRewritingProcessor extends AbstractProcessor {
             }
         } else {
             if(currFile instanceof GenericAssetFile) {
-                replacementPathSb << currFile.name
+                replacementPathSb << currFile.path
             } else {
                 replacementPathSb << fileName << '.' << currFile.compiledExtension
             }

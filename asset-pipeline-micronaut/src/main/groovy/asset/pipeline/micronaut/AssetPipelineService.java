@@ -42,6 +42,9 @@ public class AssetPipelineService {
 	public AssetPipelineService(Environment environment) {
 		this.environment = environment;
 		AssetPipelineConfigHolder.setConfig(environment.getProperty("assets",Map.class).orElse(AssetPipelineConfigHolder.getConfig()));
+		if(AssetPipelineConfigHolder.config.get("mapping") == null) {
+			AssetPipelineConfigHolder.config.put("mapping",""); //root mapping by default
+		}
 		Properties manifestProps = new Properties();
 		Enumeration<URL> manifestFiles = null;
 		try {

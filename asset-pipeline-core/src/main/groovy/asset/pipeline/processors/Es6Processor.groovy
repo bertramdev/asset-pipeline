@@ -22,7 +22,9 @@ import asset.pipeline.AssetHelper
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.CacheManager
+import asset.pipeline.GenericAssetFile
 import asset.pipeline.JsAssetFile
+import sun.net.www.content.text.Generic
 
 import java.util.regex.Pattern
 import com.google.javascript.jscomp.*
@@ -47,12 +49,12 @@ class Es6Processor extends AbstractProcessor {
 
 
 	String process(final String inputText, final AssetFile assetFile) {
-
+		println "Checking Config: ${AssetPipelineConfigHolder.config}"
 		if(!inputText) {
 			return inputText
 		}
 		if(assetFile instanceof JsAssetFile) {
-			if(!AssetPipelineConfigHolder.config?.enableES6) {
+			if(!AssetPipelineConfigHolder.config?.enableES6 && ! AssetPipelineConfigHolder.config?."enable-es6") {
 				return inputText
 			}
 		}
@@ -60,7 +62,7 @@ class Es6Processor extends AbstractProcessor {
 		CompilerOptions options = new CompilerOptions()
 		options.trustedStrings = true
 		CompilationLevel.WHITESPACE_ONLY.setOptionsForCompilationLevel(options);
-		options.setLanguageIn(LanguageMode.ECMASCRIPT6)
+		options.setLanguageIn(LanguageMode.ECMASCRIPT8)
 		options.setLanguageOut(LanguageMode.ECMASCRIPT5)
 		options.prettyPrint = true
 		options.lineBreak = true
@@ -101,20 +103,55 @@ class Es6Processor extends AbstractProcessor {
 						return "goog.require(${quote}${cachedPath}${quote})"
 					}
 				} else if(assetPath.size() > 0) {
+					println "looking for path: ${assetPath}"
 					AssetFile currFile
 					if(!assetPath.startsWith('/')) {
 						def relativeFileName = [ assetFile.parentPath, modulePath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
 						currFile = AssetHelper.fileForUri(relativeFileName,'application/javascript')
 					}
-
 					if(!currFile) {
 						currFile = AssetHelper.fileForUri(modulePath,'application/javascript')
 					}
-
 					if(!currFile) {
 						currFile = AssetHelper.fileForUri(modulePath + '/' + modulePath,'application/javascript')
 					}
+
+					//Time to look for index.js
 					if(!currFile) {
+						println "module not found, checking for index.js"
+						if(!assetPath.startsWith('/')) {
+							def relativeFileName = [ assetFile.parentPath, modulePath, 'index.js' ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+							currFile = AssetHelper.fileForUri(relativeFileName + '/index.js','application/javascript')
+						}
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(modulePath + '/index.js','application/javascript')
+						}
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(modulePath + '/' + modulePath + '/index.js','application/javascript')
+						}
+						println "Checking for currFile: ${currFile}"
+					}
+
+					if(!currFile) {
+						if(!assetPath.startsWith('/')) {
+							def relativeFileName = [ assetFile.parentPath, modulePath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+							currFile = AssetHelper.fileForUri(relativeFileName)
+						}
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(modulePath)
+						}
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(modulePath + '/' + modulePath)
+						}
+						if(currFile instanceof GenericAssetFile) {
+							//We have an image file we need its url or byte stream
+						} else {
+							currFile = null
+						}
+					}
+					if(!currFile) {
+						//Time to check FileLoader and see if this file exists as anything else
+
 						cachedPaths[assetPath] = null
 						return "goog.require(${quote}${assetPath}${quote})"
 					} else {

@@ -20,7 +20,8 @@ import asset.pipeline.processors.JsRequireProcessor
 
 import java.util.regex.Pattern
 import asset.pipeline.processors.JsProcessor
-import asset.pipeline.processors.Es6Processor
+import asset.pipeline.processors.JsNodeInjectProcessor
+import asset.pipeline.processors.BabelJsProcessor
 import groovy.transform.CompileStatic
 /**
  * An {@link AssetFile} implementation for Javascript
@@ -33,7 +34,7 @@ class JsAssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
     static List<String> extensions = ['js']
     static String compiledExtension = 'js'
-    static processors = [JsProcessor,JsRequireProcessor,Es6Processor]
+    static processors = [JsProcessor,JsNodeInjectProcessor,BabelJsProcessor,JsRequireProcessor]
     Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

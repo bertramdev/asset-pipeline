@@ -21,6 +21,8 @@ import asset.pipeline.processors.JsRequireProcessor
 
 import java.util.regex.Pattern
 import asset.pipeline.processors.JsProcessor
+import asset.pipeline.processors.BabelJsProcessor
+import asset.pipeline.processors.JsNodeInjectProcessor
 import groovy.transform.CompileStatic
 /**
  * An {@link AssetFile} implementation for ES6 Javascript
@@ -31,9 +33,9 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class JsEs6AssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
-    static List<String> extensions = ['js.es6']
+    static List<String> extensions = ['js.es6','js.es7','js.es8','bjs']
     static String compiledExtension = 'js'
-    static processors = [JsProcessor, JsRequireProcessor, Es6Processor]
+    static processors = [JsProcessor, JsNodeInjectProcessor,BabelJsProcessor, JsRequireProcessor]
     Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

@@ -56,8 +56,9 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 					}
 				} else if(assetPath.size() > 0) {
 					AssetFile currFile
-					if(!assetPath.startsWith('/')) {
-						def relativeFileName = [ assetFile.parentPath, assetPath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )	
+					if(!assetPath.startsWith('/') && assetFile.parentPath != null) {
+						def relativeFileName = [ assetFile.parentPath, assetPath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+						relativeFileName = AssetHelper.normalizePath(relativeFileName)
 						currFile = AssetHelper.fileForUri(relativeFileName,'application/javascript')
 					}
 					
@@ -68,9 +69,50 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 					if(!currFile) {
 						currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath,'application/javascript')
 					}
-					if(!currFile || currFile instanceof GenericAssetFile) {
+
+					//look for index.js
+					if(!currFile) {
+						if(!assetPath.startsWith('/') && assetFile.parentPath != null) {
+							def relativeFileName = [ assetFile.parentPath, assetPath, 'index.js' ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )	
+							relativeFileName = AssetHelper.normalizePath(relativeFileName)
+							currFile = AssetHelper.fileForUri(relativeFileName,'application/javascript')
+						}
+						
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(assetPath + '/index.js','application/javascript')
+						}
+						
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath + '/index.js','application/javascript')
+						}
+					}
+
+					//look for non js file
+					if(!currFile) {
+						if(!assetPath.startsWith('/')) {
+							def relativeFileName = [ assetFile.parentPath, assetPath].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )	
+							relativeFileName = AssetHelper.normalizePath(relativeFileName)
+
+							currFile = AssetHelper.fileForUri(relativeFileName)
+						}
+						
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(assetPath)
+						}
+						
+						if(!currFile) {
+							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath)
+						}
+
+					}
+					if(!currFile) {
 						cachedPaths[assetPath] = null
 						return resultPrefix+"require(${quote}${assetPath}${quote})"
+					} else if(currFile instanceof GenericAssetFile) {
+						appendUrlModule(currFile as AssetFile,replacementAssetPath(assetFile, currFile as AssetFile))
+						
+						cachedPaths[assetPath] = currFile.path
+						return resultPrefix+"_asset_pipeline_require(${quote}${currFile.path}${quote})"
 					} else {
 						currFile.baseFile = assetFile.baseFile ?: assetFile
 						appendModule(currFile)
@@ -118,6 +160,27 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 	}
 
+	private appendUrlModule(AssetFile assetFile, String url) {
+		Map<String,String> moduleMap = commonJsModules.get()
+		if(!moduleMap) {
+			moduleMap = [:] as Map<String,String>
+			commonJsModules.set(moduleMap)
+		}
+
+		if(moduleMap[assetFile.path]) {
+			return
+		}
+		//this is here to prevent circular dependencies
+		String placeHolderModule = """
+		(function() {
+		  var module = {exports: "${url}"};
+		  return module;
+		})
+		"""
+		moduleMap[assetFile.path] = placeHolderModule
+		
+	}
+
 
 
 	private encapsulateModule(AssetFile assetFile) {
@@ -134,6 +197,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 		return encapsulation
 	}
+
 
 
 	private String modulesJs() {

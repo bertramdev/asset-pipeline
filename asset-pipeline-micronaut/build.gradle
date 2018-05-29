@@ -24,12 +24,7 @@ targetCompatibility = '1.8'
 repositories {
 	mavenCentral()
 	maven {
-        credentials {
-            // define these in .gradle/gradle.properties below your HOME directory
-            username micronautRepoUsername
-            password micronautRepoPassword
-        }
-        url 'https://repo.micronaut.io/artifactory/libs-snapshots-local'
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
 }
 
