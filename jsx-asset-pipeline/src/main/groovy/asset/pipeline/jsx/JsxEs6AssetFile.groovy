@@ -34,7 +34,7 @@ import asset.pipeline.processors.Es6Processor
 @CompileStatic
 class JsxEs6AssetFile extends AbstractAssetFile {
 	static final contentType = ['application/javascript','application/x-javascript','text/javascript']
-	static extensions = ['jsx.es6', 'js.jsx.es6']
+	static extensions = ['jsx.es6', 'js.jsx.es6','jsx.es','js.jsx.es']
 	static final String compiledExtension = 'js'
 	static processors = [JsxProcessor, JsProcessor, BabelJsProcessor, JsRequireProcessor]
 	Pattern directivePattern = ~/(?m)^\/\/=(.*)/
