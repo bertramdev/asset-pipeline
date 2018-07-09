@@ -38,10 +38,10 @@ public class AssetPipelineService {
 
 	public Environment environment;
 
-	@Inject
-	public AssetPipelineService(Environment environment) {
-		this.environment = environment;
-		AssetPipelineConfigHolder.setConfig(environment.getProperty("assets",Map.class).orElse(AssetPipelineConfigHolder.getConfig()));
+	// @Inject
+	public AssetPipelineService() {
+		// this.environment = environment;
+		// AssetPipelineConfigHolder.setConfig(environment.getProperty("assets",Map.class).orElse(AssetPipelineConfigHolder.getConfig()));
 		if(AssetPipelineConfigHolder.config.get("mapping") == null) {
 			AssetPipelineConfigHolder.config.put("mapping",""); //root mapping by default
 		}
