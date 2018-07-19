@@ -50,7 +50,7 @@ class ClosureCompilerProcessor {
 		if(assetCompiler.options.enableSourceMaps) {
 			setSourceMapOptions(options,minifyOptions, fileName)
 		}
-
+		java.util.logging.Logger.getLogger(com.google.javascript.jscomp.PhaseOptimizer.class.getName()).setLevel(java.util.logging.Level.SEVERE);
         String baseFileName = new File(fileName).name
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
 		SourceFile sourceFile = SourceFile.fromCode(baseFileName + ".unminified.js", inputText)
@@ -84,6 +84,9 @@ class ClosureCompilerProcessor {
 			languageMode: 'ECMASCRIPT_NEXT',
 			optimizationLevel: 'SIMPLE' //WHITESPACE , ADVANCED
 		]
+
+		
+
 		minifyOptions = defaultOptions + minifyOptions
 		LanguageMode languageIn = evaluateLanguageMode(minifyOptions.get('languageMode') as String)
 		if(minifyOptions.targetLanguage) {
@@ -91,7 +94,8 @@ class ClosureCompilerProcessor {
 			compilerOptions.setLanguageIn(languageIn)
 			compilerOptions.setLanguageOut(languageOut)
 		} else {
-			compilerOptions.setLanguage(languageIn)
+			compilerOptions.setLanguageIn(languageIn)
+			compilerOptions.setLanguageOut(LanguageMode.NO_TRANSPILE)
 		}
 		setCompilationLevelOptions(compilerOptions, minifyOptions.get('optimizationLevel') as String)
 		if (minifyOptions.angularPass) {
