@@ -120,8 +120,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
             bean.parent = "abstractGrailsResourceLocator"
         }
 
-
-        def mapping = assetsConfig.mapping?.toString() == '' ? '' : (assetsConfig.mapping?.toString()  ?: "assets")
+        def mapping = assetsConfig.containsKey('mapping') ? assetsConfig.mapping?.toString() : 'assets'
 
         ClassLoader classLoader = application.classLoader
         Class registrationBean = ClassUtils.isPresent("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader ) ?

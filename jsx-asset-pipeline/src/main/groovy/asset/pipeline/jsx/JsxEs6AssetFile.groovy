@@ -25,7 +25,6 @@ import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 import asset.pipeline.processors.JsProcessor
 import asset.pipeline.processors.JsRequireProcessor
-import asset.pipeline.processors.Es6Processor
 
 /**
  * Specification for the JSX file extension which compiles into javascript

@@ -21,6 +21,8 @@ import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
 import java.io.BufferedInputStream
 import java.util.regex.Pattern
+import java.nio.file.LinkOption
+
 
 /**
  * Implementation of the {@link AssetResolver} interface for the file system
@@ -154,7 +156,13 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
     @CompileStatic
 	protected String relativePathToResolver(File file, String scanDirectoryPath) {
-		def filePath = file.canonicalPath
+		String filePath
+		try {
+			filePath = file.toPath().toRealPath(LinkOption.NOFOLLOW_LINKS).toString();
+		} catch(Exception ex2) {
+			filePath = file.canonicalPath
+		}
+		
 		if(filePath.startsWith(scanDirectoryPath)) {
 			return filePath.substring(scanDirectoryPath.size() + 1).replace(File.separator, DIRECTIVE_FILE_SEPARATOR)
 		} else {

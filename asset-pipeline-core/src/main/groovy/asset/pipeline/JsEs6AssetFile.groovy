@@ -16,9 +16,7 @@
 
 package asset.pipeline
 
-import asset.pipeline.processors.Es6Processor
 import asset.pipeline.processors.JsRequireProcessor
-
 import java.util.regex.Pattern
 import asset.pipeline.processors.JsProcessor
 import asset.pipeline.processors.BabelJsProcessor
