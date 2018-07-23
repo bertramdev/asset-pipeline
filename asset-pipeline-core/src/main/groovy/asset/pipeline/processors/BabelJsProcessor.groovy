@@ -19,8 +19,6 @@ package asset.pipeline.processors
 import asset.pipeline.AssetFile
 import groovy.util.logging.Commons
 import jdk.nashorn.api.scripting.NashornException
-import org.mozilla.javascript.Context
-import org.mozilla.javascript.Scriptable
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.JsAssetFile
@@ -48,7 +46,6 @@ class BabelJsProcessor extends AbstractProcessor {
 	
 		try {
 			classLoader = getClass().getClassLoader()
-			//Context cx = Context.enter()
 			//cx.setOptimizationLevel(-1)
 			//globalScope = cx.initStandardObjects()
 			loadBabelJs()
@@ -56,7 +53,6 @@ class BabelJsProcessor extends AbstractProcessor {
 			throw new Exception("CoffeeScript Engine initialization failed.", e)
 		} finally {
 			try {
-				//Context.exit()
 			} catch(IllegalStateException e) {
 			}
 		}
@@ -129,7 +125,7 @@ class BabelJsProcessor extends AbstractProcessor {
 			$e
 			""",e)
 		} finally {
-//			Context.exit()
+
 		}
 	}
 
