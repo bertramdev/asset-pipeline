@@ -31,8 +31,7 @@ buildscript {
     }
 }
 
-version '2.1.0-SNAPSHOT'
-group 'org.grails.plugins'
+group 'com.bertramlabs.plugins'
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -97,14 +96,15 @@ grailsPublish {
     key = project.hasProperty('bintrayApiKey') \
         ? project.property('bintrayApiKey')
         : System.getenv('BINTRAY_API_KEY')
-    userOrg = 'amc-world'
-    githubSlug = 'dellermann/i18n-asset-pipeline'
+    userOrg = 'bertramlabs'
+    repo = 'asset-pipeline'
+    githubSlug = 'bertramdev/asset-pipeline'
     license {
         name = 'Apache-2.0'
     }
-    title = 'i18n-asset-pipeline'
+    title = 'i18n-asset-pipeline-grails'
     desc = 'asset-pipeline plugin to use localized messages in JavaScript.'
-    developers = [dellermann: 'Daniel Ellermann']
+    developers = [dellermann: 'Daniel Ellermann', davydotcom: "David Estes"]
 }
 
 assets {
