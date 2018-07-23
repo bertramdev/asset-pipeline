@@ -11,21 +11,23 @@ plugins {
 	id 'com.jfrog.bintray' version '1.2'
 }
 
+
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
-
-ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
-
-
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 repositories {
-	jcenter()
 	mavenCentral()
+	jcenter()
+}
+
+ext {
+	micronautVersion = '1.0.0.M2'
 }
 
 configurations {
@@ -41,43 +43,45 @@ sourceSets {
 	}
 }
 
-groovydoc {
-	docTitle "Asset Pipeline Core"
-	windowTitle "Asset Pipeline For the JVM API Doc"
-	groovyClasspath = configurations.doc
-	classpath = configurations.runtime
-	// Links to external Javadoc, currently only the J2SE links are working properly 
-  	link('http://download.oracle.com/javase/8/docs/api/', 'java.', 'org.xml', 'javax.', 'org.xml.') 
-  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.codehaus.groovy.') 
+dependencies {
+	compile     project(':asset-pipeline-core')
+	compileOnly "io.micronaut:inject-groovy:1.0.0.M2"
+	compileOnly "io.micronaut:inject-java:1.0.0.M2"
+    compile "io.micronaut:http-server-netty:1.0.0.M2"
+    compile 'javax.annotation:javax.annotation-api:1.3.2'
+
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+
+    testCompile("org.spockframework:spock-core:1.1-groovy-2.4") {
+        exclude module:'groovy-all'
+    }
+    testCompile "io.micronaut:http-client:${micronautVersion}"
+    testCompile "io.micronaut:inject-groovy:${micronautVersion}"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+    
 }
 
-dependencies {
-	provided    'org.codehaus.groovy:groovy:2.0.7'
-	provided    'org.codehaus.groovy:groovy-templates:2.0.7'
-	doc         'org.codehaus.groovy:groovy-all:2.4.3'
-	doc         'org.fusesource.jansi:jansi:1.11'
-	compile     'org.mozilla:rhino:1.7R4'
-	compile     'com.google.javascript:closure-compiler-unshaded:v20180716'
-	compile     'commons-logging:commons-logging:1.1.1'
-	//compile   'log4j:log4j:1.2.16'
-	testCompile project(':asset-pipeline-classpath-test')
-	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+test {
+	testLogging {
+		exceptionFormat = 'full'
+		showStandardStreams = true
+	}
 }
 
 publishing {
 	publications {
 		maven(MavenPublication) {
-			artifactId 'asset-pipeline-core'
+			artifactId 'asset-pipeline-micronaut'
 			pom.withXml {
 				asNode().children().last() + {
 					resolveStrategy = Closure.DELEGATE_FIRST
-					name 'asset-pipeline-core'
-					description 'JVM Asset Pipeline library for serving static web assets, bundling, minifying, and extensibility for transpiling.'
-					url 'https://github.com/bertramdev/asset-pipeline-core'
+					name 'asset-pipeline-micronaut'
+					description 'JVM Asset Pipeline Micronaut Adapter.'
+					url 'https://github.com/bertramdev/asset-pipeline'
 					scm {
-						url 'https://github.com/bertramdev/asset-pipeline-core'
-						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
-						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
+						url 'https://github.com/bertramdev/asset-pipeline'
+						connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline.git'
+						developerConnection 'scm:git://github.com/bertramdev/asset-pipeline.git'
 					}
 					licenses {
 						license {
@@ -117,17 +121,20 @@ bintray {
 		user = bintrayUser
 		key = bintrayKey
 	}
-    publish=true
 	publications = ['maven']
+    publish=false//true
 	pkg {
 		repo = 'asset-pipeline'
 		userOrg = 'bertramlabs'
-		name = 'asset-pipeline-core'
+		name = 'asset-pipeline-micronaut'
 		licenses = ['Apache-2.0']
+		websiteUrl = 'https://github.com/bertramdev/asset-pipeline'
+        issueTrackerUrl = 'https://github.com/bertramdev/asset-pipeline/issues'
+        vcsUrl = 'https://github.com/bertramdev/asset-pipeline.git'
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
-                    sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    sync = false//true //Optional (true by default). Determines whether to sync the version to Maven Central.
                     user = mavenUser //OSS user token
                     password = mavenPassword //OSS user password
                     close = '1'
@@ -137,7 +144,6 @@ bintray {
         }
 	}
 }
-
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
 	classifier = 'javadoc'
@@ -150,17 +156,10 @@ task sourcesJar(type: Jar) {
 }
 
 task(console, dependsOn: 'classes', type: JavaExec) {
-  main = 'groovy.ui.Console'
-  classpath = sourceSets.main.runtimeClasspath
+	main = 'groovy.ui.Console'
+	classpath = sourceSets.main.runtimeClasspath
 }
 
-
-test {
-	testLogging {
-		exceptionFormat = 'full'
-		showStandardStreams = true
-	}
-}
 
 
 bintrayUpload.dependsOn build, sourcesJar, javadocJar

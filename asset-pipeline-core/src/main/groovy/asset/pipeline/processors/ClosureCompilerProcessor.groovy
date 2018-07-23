@@ -50,13 +50,13 @@ class ClosureCompilerProcessor {
 		if(assetCompiler.options.enableSourceMaps) {
 			setSourceMapOptions(options,minifyOptions, fileName)
 		}
-
+		java.util.logging.Logger.getLogger(com.google.javascript.jscomp.PhaseOptimizer.class.getName()).setLevel(java.util.logging.Level.SEVERE);
         String baseFileName = new File(fileName).name
 		WarningLevel.QUIET.setOptionsForWarningLevel(options);
 		SourceFile sourceFile = SourceFile.fromCode(baseFileName + ".unminified.js", inputText)
 		// def sourceFile = new SourceFile.Preloaded(fileName + ".unminified.js",fileName, inputText)
 		// sourceFile.setCode(inputText)
-		def result = compiler.compile(CommandLineRunner.getDefaultExterns(),[sourceFile] as List<SourceFile>,options)
+		def result = compiler.compile(CommandLineRunner.getBuiltinExterns(CompilerOptions.Environment.BROWSER),[sourceFile] as List<SourceFile>,options)
 		def output = compiler.toSource()
 		if(compiler.sourceMap) {
 			File mapFile = new File(assetCompiler.options.compileDir as String,fileName + ".js.map")
@@ -81,9 +81,12 @@ class ClosureCompilerProcessor {
 
 	public void translateMinifyOptions(CompilerOptions compilerOptions, Map minifyOptions) {
 		def defaultOptions = [
-			languageMode: 'ES5',
+			languageMode: 'ECMASCRIPT_NEXT',
 			optimizationLevel: 'SIMPLE' //WHITESPACE , ADVANCED
 		]
+
+		
+
 		minifyOptions = defaultOptions + minifyOptions
 		LanguageMode languageIn = evaluateLanguageMode(minifyOptions.get('languageMode') as String)
 		if(minifyOptions.targetLanguage) {
@@ -91,7 +94,8 @@ class ClosureCompilerProcessor {
 			compilerOptions.setLanguageIn(languageIn)
 			compilerOptions.setLanguageOut(languageOut)
 		} else {
-			compilerOptions.setLanguage(languageIn)
+			compilerOptions.setLanguageIn(languageIn)
+			compilerOptions.setLanguageOut(LanguageMode.NO_TRANSPILE)
 		}
 		setCompilationLevelOptions(compilerOptions, minifyOptions.get('optimizationLevel') as String)
 		if (minifyOptions.angularPass) {
@@ -102,17 +106,10 @@ class ClosureCompilerProcessor {
 
 	private LanguageMode evaluateLanguageMode(String mode) {
 		switch(mode?.toUpperCase()) {
-			case 'ES6':
-				return LanguageMode.ECMASCRIPT6
-			case 'ES6_STRICT':
-				return LanguageMode.ECMASCRIPT6
-			case 'ES5_SCRIPT':
-				return LanguageMode.ECMASCRIPT5_STRICT
-			case 'ES3':
-				return LanguageMode.ECMASCRIPT3
-			case 'ES5':
+			case 'ECMASCRIPT_NEXT':
+				return LanguageMode.ECMASCRIPT_NEXT
 			default:
-				return LanguageMode.ECMASCRIPT5
+				return LanguageMode.ECMASCRIPT_NEXT
 		}
 	}
 

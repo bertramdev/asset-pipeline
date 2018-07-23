@@ -31,26 +31,44 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 	Scriptable globalScope
 	ClassLoader classLoader
 
+	static org.mozilla.javascript.Script compilerScript
+	static org.mozilla.javascript.Script processScript
+	private static final $LOCK = new Object[0]
 	CoffeeScriptProcessor(AssetCompiler precompiler) {
 		super(precompiler)
 		if(!isNodeSupported()) {
 			try {
 				classLoader = getClass().getClassLoader()
-				def coffeeScriptJsResource = classLoader.getResource('asset/pipeline/coffee/coffee-script-1.7.1.js')
-
-
-
-
 				Context cx = Context.enter()
 				cx.setOptimizationLevel(-1)
 				globalScope = cx.initStandardObjects()
-				cx.evaluateString globalScope, coffeeScriptJsResource.getText("UTF-8"), coffeeScriptJsResource.file, 1, null
+				loadCoffee(cx)
 			} catch(Exception e) {
 				throw new Exception("CoffeeScript Engine initialization failed.", e)
 			} finally {
 				try {
 					Context.exit()
 				} catch(IllegalStateException e) {
+				}
+			}
+		}
+	}
+
+	protected void loadCoffee(Context cx) {
+		if(!compilerScript) {
+			synchronized($LOCK) {
+				if(!compilerScript) {
+					def coffeeScriptJsResource = classLoader.getResource('asset/pipeline/coffee/coffee-script-1.7.1.js')
+					compilerScript = cx.compileString(coffeeScriptJsResource.getText('UTF-8'),coffeeScriptJsResource.file,1,null)
+				}
+			}
+		}
+		compilerScript.exec(cx,globalScope)
+
+		if(!processScript) {
+			synchronized($LOCK) {
+				if(!processScript) {
+					processScript = cx.compileString("CoffeeScript.compile(coffeeScriptSrc)", "CoffeeScript compile command", 0, null)
 				}
 			}
 		}
@@ -73,7 +91,7 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 				def compileScope = cx.newObject(globalScope)
 				compileScope.setParentScope(globalScope)
 				compileScope.put("coffeeScriptSrc", compileScope, input)
-				def result = cx.evaluateString(compileScope, "CoffeeScript.compile(coffeeScriptSrc)", "CoffeeScript compile command", 0, null)
+				def result = processScript.exec(cx,compileScope)
 				return result
 			} catch(Exception e) {
 				throw new Exception("""

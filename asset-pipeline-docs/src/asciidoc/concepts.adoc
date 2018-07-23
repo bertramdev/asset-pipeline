@@ -3,6 +3,20 @@
 
 Asset-pipeline is a highly extensible asset processing library that is easy to integrate into your jvm based application or to even use standalone with gradle. It works by defining `AssetFile` definitions for different file types in which `Processors` can be chained for processing and conversion to different target content types. But to use it you don't really need to know about any of this (It really does just work).
 
+=== CommonJs
+
+Asset-pipeline now fully supports the commonJs method of loading modules using the `require()` function. It is important to note, however that these calls are preprocessed outside of a js runtime such that the string being passed to require must be a constant string and not a variable..
+
+NOTE: Loading image files as modules uses a base url prefix by default of `/assets/` The `mapping` config option can often be set to an empty string to move this to the root level of your application (very common in Micronaut apps).
+
+=== ECMAScript 2017,2018, beyond
+
+Asset-pipeline now supports processing Modern ECMAScript specifications utilizing BabelJs. By default this is disabled for performance but can be enabled by two ways. One is simply by adding `.es6` , `.es7`, `.es8` to the end of your javascript file extensions. This can also be done with jsx files (i.e. `.jsx.es6`) when using `jsx-asset-pipeline`.
+
+If it is desired to process ALL javascript assets through BabelJs this can be done as well by setting the configuration property in both development runtime and gradle for assets called `enableES6:true`.
+
+NOTE: BabelJs processing is new and will more than likely be enhanced in the future.
+
 === Directives
 
 Similar to other packaging libraries like webpack or grunt, asset-pipeline provides a means to require other files or "modules" into your javascript and/or css. We will call these require patterns `directives`.

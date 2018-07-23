@@ -89,7 +89,10 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
                 log.warn "Unable to find asset-pipeline manifest, etags will not be properly generated"
             }
         }
-        if(manifestFile?.exists()) {
+
+        def useManifest = assetsConfig.useManifest ?: true
+
+        if(useManifest && manifestFile?.exists()) {
             try {
                 manifestProps.load(manifestFile.inputStream)
                 assetsConfig.manifest = manifestProps
@@ -117,8 +120,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
             bean.parent = "abstractGrailsResourceLocator"
         }
 
-
-        def mapping = assetsConfig.mapping?.toString() == '' ? '' : (assetsConfig.mapping?.toString()  ?: "assets")
+        def mapping = assetsConfig.containsKey('mapping') ? assetsConfig.mapping?.toString() : 'assets'
 
         ClassLoader classLoader = application.classLoader
         Class registrationBean = ClassUtils.isPresent("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader ) ?

@@ -48,7 +48,7 @@ grails {
 To use the handlebars runtime simply add handlebars js to your application.js or your gsp file
 
 ```javascript
-//=require handlebars
+//=require handlebars-runtime
 ```
 
 

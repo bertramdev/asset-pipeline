@@ -1,0 +1,6 @@
+[[micronaut]]
+== Micronaut
+
+This section of the documentation discusses configuration and setup of the asset-pipeline plugin for https://micronaut.io/[Micronaut] based applications. Micronaut functionality includes both development runtime and production asset serving capabilities. All features provided by asset-pipeline are available for use with Micronaut framework except template url replacement helpers (as this has not been standardized in the framework yet). Assets are served at the root url by default instead of `/assets` to facilitate single page app styles better. If a file is not found, the request will proceed through the Micronaut chain finding any controller endpoints that are registered.
+
+include::micronaut/getting_started.adoc[]

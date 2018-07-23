@@ -9,7 +9,7 @@ import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
-
+import asset.pipeline.AssetPipelineConfigHolder
 import static asset.pipeline.AssetPipelineConfigHolder.manifest
 import static asset.pipeline.grails.UrlBase.*
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
@@ -36,7 +36,8 @@ class AssetProcessorService {
 	 * @throws IllegalArgumentException if the path contains <code>/</code>
 	 */
 	String getAssetMapping() {
-		final String mapping = grailsApplication.config?.grails?.assets?.mapping ?: 'assets'
+		final String mapping = AssetPipelineConfigHolder.config.containsKey('mapping') ? AssetPipelineConfigHolder.config.mapping : 'assets'
+		// final String mapping = grailsApplication.config?.grails?.assets?.mapping ?: 'assets'
 		if (mapping.contains('/')) {
 			throw new IllegalArgumentException(
 				'The property [grails.assets.mapping] can only be one level deep.  ' +
@@ -46,10 +47,17 @@ class AssetProcessorService {
 		return mapping
 	}
 
+	String getAssetPath(final String path, final boolean useManifest) {
+		getAssetPath(path, grailsApplication.config.grails.assets as ConfigObject, useManifest)
+	}
 
-	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets) {
+	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets, final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
-		return manifest?.getProperty(relativePath) ?: relativePath
+		if (useManifest) {
+			return manifest?.getProperty(relativePath) ?: relativePath
+		} else {
+			return relativePath
+		}
 	}
 
 

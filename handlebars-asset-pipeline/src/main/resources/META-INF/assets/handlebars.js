@@ -1,1 +1,0 @@
-//= require handlebars/handlebars.js

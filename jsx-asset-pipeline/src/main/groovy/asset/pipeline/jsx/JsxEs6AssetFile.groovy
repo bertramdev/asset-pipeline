@@ -19,11 +19,12 @@ package asset.pipeline.jsx
 import asset.pipeline.CacheManager
 import asset.pipeline.AbstractAssetFile
 import asset.pipeline.AssetHelper
+import asset.pipeline.processors.BabelJsProcessor
+
 import java.util.regex.Pattern
 import groovy.transform.CompileStatic
 import asset.pipeline.processors.JsProcessor
 import asset.pipeline.processors.JsRequireProcessor
-import asset.pipeline.processors.Es6Processor
 
 /**
  * Specification for the JSX file extension which compiles into javascript
@@ -32,9 +33,9 @@ import asset.pipeline.processors.Es6Processor
 @CompileStatic
 class JsxEs6AssetFile extends AbstractAssetFile {
 	static final contentType = ['application/javascript','application/x-javascript','text/javascript']
-	static extensions = ['jsx.es6', 'js.jsx.es6']
+	static extensions = ['jsx.es6', 'js.jsx.es6','jsx.es','js.jsx.es']
 	static final String compiledExtension = 'js'
-	static processors = [JsxProcessor,JsProcessor,JsRequireProcessor, Es6Processor]
+	static processors = [JsxProcessor, JsProcessor, BabelJsProcessor, JsRequireProcessor]
 	Pattern directivePattern = ~/(?m)^\/\/=(.*)/
 
 }

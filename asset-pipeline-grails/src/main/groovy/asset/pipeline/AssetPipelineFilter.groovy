@@ -46,6 +46,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		String fileUri = new URI(request.requestURI).path
 
 		final String baseAssetUrl = request.contextPath == "/" ? "/$mapping" : "${request.contextPath}/${mapping}"
+
 		final String format       = servletContext.getMimeType(fileUri)
 		final String encoding     = request.getParameter('encoding') ?: request.getCharacterEncoding()
 

@@ -1,0 +1,52 @@
+=== Getting Started
+
+In Micronaut assets live in the same place as a standard gradle implementation `src/assets` directory. This folder should contain organizational subdirectories `javascripts`, `images`, and `stylesheets`. Another option is to use a standard folder within assets called something like `src/assets/frontend`. Useful if simply using asset-pipeline to render and properly digest generated apps from React or other view frameworks.
+
+To get started simply add asset-pipeline to your `build.gradle` file (See Gradle usage). And the micronaut plugin to the dependencies block:
+
+[source,groovy,subs="attributes"]
+----
+plugins {
+	id "com.bertramlabs.asset-pipeline" version "{project-version}"
+}
+
+dependencies {
+  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:{project-version}'
+  //Example LESS or Sass Integration
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+}
+----
+
+NOTE: Asset-Pipeline requires groovy when running in the development runtime mode.
+
+By default, the asset-pipeline gradle plugin will automatically attach itself to the `shadowJar` gradle task as a build dependency. The development runtime will also auto engage so long as no `assets/manifest.properties` file exists on the classpath.
+
+==== Configuration
+
+Configuration handling is still being worked on for micronaut but currently one option is configurable. By default assets in micronaut are rendered at the root url. If a file is not found, the standard micronaut filter chain is used. This is great for serving a Single Page app all in one application all while still using micronaut `@Controller` endpoints. To change asset-pipelines default mapping to the standard `/assets` endpoint simply add the following configuration to your Micronaut configuration.
+
+[source,groovy]
+.application.groovy
+----
+assets {
+  mapping = "assets"
+}
+----
+
+==== Development Runtime
+
+A great feature built into asset-pipeline is its development runtime support. All assets that are used in your application are automatically generated and processed on the fly when requested. This means when a change is made in a css file or javascript file, the results are instant. A refresh of the page will reflect the changes without needing to wait for any type of `FileWatcher`. These results are also cached making it highly performant as your project grows.
+
+Micronaut has great native continuous build integration support with Gradle and in some cases developers may not want to use the development runtime and instead rely on this continuous build flow. To do that simply disable developmentRuntime:
+
+[source,groovy]
+.build.gradle
+----
+assets {
+  developmentRuntime = false
+}
+----
+
+By doing this one can use `gradle -t run` to kick off continuous runs of the application.
+
