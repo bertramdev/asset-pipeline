@@ -27,7 +27,7 @@ repositories {
 }
 
 ext {
-	micronautVersion = '1.0.0.M2'
+	micronautVersion = '1.0.0.M3'
 }
 
 configurations {
@@ -45,9 +45,9 @@ sourceSets {
 
 dependencies {
 	compile     project(':asset-pipeline-core')
-	compileOnly "io.micronaut:inject-groovy:1.0.0.M2"
-	compileOnly "io.micronaut:inject-java:1.0.0.M2"
-    compile "io.micronaut:http-server-netty:1.0.0.M2"
+	compileOnly "io.micronaut:inject-groovy:1.0.0.M3"
+	compileOnly "io.micronaut:inject-java:1.0.0.M3"
+    compile "io.micronaut:http-server-netty:1.0.0.M3"
     compile 'javax.annotation:javax.annotation-api:1.3.2'
 
     runtime "ch.qos.logback:logback-classic:1.2.3"
@@ -122,7 +122,7 @@ bintray {
 		key = bintrayKey
 	}
 	publications = ['maven']
-    publish=false//true
+    publish=true//true
 	pkg {
 		repo = 'asset-pipeline'
 		userOrg = 'bertramlabs'
@@ -134,7 +134,7 @@ bintray {
         version {
             if (project.hasProperty('mavenUser')) {
                 mavenCentralSync {
-                    sync = false//true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                    sync = true//true //Optional (true by default). Determines whether to sync the version to Maven Central.
                     user = mavenUser //OSS user token
                     password = mavenPassword //OSS user password
                     close = '1'
