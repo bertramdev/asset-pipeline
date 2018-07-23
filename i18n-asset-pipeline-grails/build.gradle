@@ -102,9 +102,9 @@ grailsPublish {
     license {
         name = 'Apache-2.0'
     }
-    title = 'i18n-asset-pipeline'
+    title = 'i18n-asset-pipeline-grails'
     desc = 'asset-pipeline plugin to use localized messages in JavaScript.'
-    developers = [dellermann: 'Daniel Ellermann']
+    developers = [dellermann: 'Daniel Ellermann', davydotcom: "David Estes"]
 }
 
 assets {
