@@ -7,6 +7,7 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 * July 26, 2018
+** - 3.0.3 - Regression fix in Gradle
 ** - 3.0.2 - Further Improvements For ECMAScript 2017, Various bug fixes, Micronaut 1.0.0.M3 support
 * May 29, 2018
 ** - 3.0.0 - Enhanced ECMAScript 2017,2018 Support and BabelJs Processing. CommonJs Module Support Dramatically Enhanced. Module loading file-loader support for images. JDK 8+ Requirement (Nashorn needed for BabelJs).	
