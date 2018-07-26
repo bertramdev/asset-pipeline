@@ -32,7 +32,7 @@ class AssetPipelineService {
 
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
 		if(!manifestFile.exists()) {
-			println("Cant find manifest file!")
+			log.debug("Cant find manifest file!")
 			def applicationResolver= new FileSystemAssetResolver('application','src/assets')
 			AssetPipelineConfigHolder.registerResolver(applicationResolver)
 			AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/assets', "META-INF/assets.list"))
