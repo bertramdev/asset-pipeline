@@ -263,8 +263,8 @@ public class AssetHelper {
             if(pathMatcher.matches(Paths.get(filePath))) {
                 return true
             }
-            if(syntax == "glob" && pattern.startsWith('**/')) {
-                pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern.substring(3)}")
+            if(syntax == "glob" && pattern.contains('**/')) {
+                pathMatcher = FileSystems.getDefault().getPathMatcher("${syntax}:${pattern.replace('**/','')}")
                 if(pathMatcher.matches(Paths.get(filePath))) {
                     return true
                 }
