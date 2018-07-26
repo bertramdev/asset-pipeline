@@ -304,8 +304,9 @@ class AssetCompiler {
 			      // The completed future is returned if one is found; otherwise null.
 			      // (Tune 100ms as desired)
 			      def completed = completionService.poll(100, TimeUnit.MILLISECONDS);
-			      completed.get() //need this to throw exceptions on main thread it seems
+			      
 			      if (completed != null) {
+			      		completed.get() //need this to throw exceptions on main thread it seems
 			          --pending;
       				// eventListener?.triggerEvent("StatusUpdate", "Future Completed ${futures.size() - pending + 1} - ${completed.get()}")
 

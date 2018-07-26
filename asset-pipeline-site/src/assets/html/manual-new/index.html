@@ -507,7 +507,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">David Estes</span><br>
 <span id="email" class="email"><a href="mailto:davydotcom@gmail.com">davydotcom@gmail.com</a></span><br>
-<span id="revdate">3.0.1</span>
+<span id="revdate">3.0.2</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -598,6 +598,16 @@ table.CodeRay td.code>pre{padding:0}
 <h3 id="release-history">Release History</h3>
 <div class="ulist">
 <ul>
+<li>
+<p>July 26, 2018</p>
+<div class="ulist">
+<ul>
+<li>
+<p>- 3.0.2 - Further Improvements For ECMAScript 2017, Various bug fixes, Micronaut 1.0.0.M3 support</p>
+</li>
+</ul>
+</div>
+</li>
 <li>
 <p>May 29, 2018</p>
 <div class="ulist">
@@ -1748,7 +1758,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.1"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.2"
   }
 }
 
@@ -1763,7 +1773,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "3.0.1"
+  id "com.bertramlabs.asset-pipeline" version "3.0.2"
 }</code></pre>
 </div>
 </div>
@@ -1944,7 +1954,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.1'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -1968,7 +1978,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.0.1'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -2300,12 +2310,12 @@ This will only be displayed if the asset exists
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:3.0.1"
+  compile ":asset-pipeline:3.0.2"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:3.0.1"
-  //compile ":less-asset-pipeline:3.0.1"
-  //compile ":coffee-asset-pipeline:3.0.1"
-  //compile ":handlebars-asset-pipeline:3.0.1"
+  //compile ":sass-asset-pipeline:3.0.2"
+  //compile ":less-asset-pipeline:3.0.2"
+  //compile ":coffee-asset-pipeline:3.0.2"
+  //compile ":handlebars-asset-pipeline:3.0.2"
 }</code></pre>
 </div>
 </div>
@@ -2738,14 +2748,14 @@ This will only be displayed if the asset exists
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-	id "com.bertramlabs.asset-pipeline" version "3.0.1"
+	id "com.bertramlabs.asset-pipeline" version "3.0.2"
 }
 
 dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:3.0.1'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:3.0.2'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.1'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.1'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.2'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -2818,10 +2828,10 @@ Asset-Pipeline requires groovy when running in the development runtime mode.
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:3.0.1'
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:3.0.2'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.1'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.1'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.2'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -2900,10 +2910,10 @@ ratpack {
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:3.0.1'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:3.0.2'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.1'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.1'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.2'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -2964,7 +2974,7 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.1'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -3008,7 +3018,7 @@ During war build your <code>less</code> files are compiled into css files. This 
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.1'
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -3034,7 +3044,7 @@ Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plu
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:3.0.1'
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:3.0.2'
 }</code></pre>
 </div>
 </div>
@@ -3259,7 +3269,7 @@ for this is the SassProcessor in the SASS/SCSS Asset Pipeline Plugin. Image spri
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-23 18:29:40 -04:00
+Last updated 2018-05-23 17:29:40 -05:00
 </div>
 </div>
 </body>
