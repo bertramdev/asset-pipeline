@@ -104,17 +104,13 @@ class LessProcessor extends AbstractProcessor {
                 errorDetails += "    --------------------------------------------\n\n"
             }
 
-            // if (precompiler && !assetFile.baseFile) {
-            //     log.error(errorDetails)
-            // } else {
-                throw new Exception(errorDetails, e)
-            // }
+            log.error(errorDetails)
 
-        // } catch (Exception e) {
-        //     throw new Exception("""
-        // LESS Engine compilation of LESS to CSS failed.
-        // $e
-        // """)
+         } catch (Exception e) {
+             throw new Exception("""
+         LESS Engine compilation of LESS to CSS failed.
+         $e
+         """)
         } finally {
             Context.exit()
         }
