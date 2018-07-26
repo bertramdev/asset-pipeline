@@ -1,0 +1,13 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.10.0"
+    classpath "com.bertramlabs.plugins:jsx-asset-pipeline:2.10.0"
+  }
+}
+
+apply plugin: "com.bertramlabs.asset-pipeline"

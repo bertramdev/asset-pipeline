@@ -35,7 +35,6 @@ import javax.script.SimpleBindings
 class BabelJsProcessor extends AbstractProcessor {
 
 	static Boolean NODE_SUPPORTED
-	Scriptable globalScope
 	ClassLoader classLoader
 
 	static ScriptEngine engine
