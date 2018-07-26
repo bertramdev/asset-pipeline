@@ -1,0 +1,4 @@
+asset.pipeline.typescript.TypeScriptAssetFile
+asset.pipeline.typescript.TypeScriptJsxAssetFile
+asset.pipeline.typescript.TypeScriptJsxEs6AssetFile
+asset.pipeline.typescript.TypeScriptESAssetFile
