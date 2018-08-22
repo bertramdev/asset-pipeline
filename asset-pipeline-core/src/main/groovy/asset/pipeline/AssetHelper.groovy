@@ -222,7 +222,7 @@ public class AssetHelper {
      * @return normalied path String (i.e. '/path/file.js')
      */
     static String normalizePath(String path) {
-        String[] pathArgs = path.split("/")
+        String[] pathArgs = path.split("[/\\\\]")
         List newPath = []
         for (int counter = 0; counter < pathArgs.length; counter++) {
             String pathElement = pathArgs[counter]
