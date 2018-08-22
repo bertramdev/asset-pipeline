@@ -3,6 +3,7 @@ package asset.pipeline.servlet
 
 import asset.pipeline.AssetPipelineResponseBuilder
 import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.AssetHelper
 import java.util.logging.Logger
 import javax.servlet.FilterChain
 import javax.servlet.ServletContext
@@ -43,6 +44,7 @@ class AssetPipelineFilterCore {
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
+		fileUri = AssetHelper.normalizePath(fileUri) //JETTY Security bug, we MUST prevent reverse 
 		final Properties manifest = AssetPipelineConfigHolder.manifest
 		String manifestPath = fileUri
 		if(fileUri.startsWith('/')) {
