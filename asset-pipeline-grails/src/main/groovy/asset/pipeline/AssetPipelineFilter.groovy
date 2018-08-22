@@ -61,11 +61,10 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			if(fileUri == '' || fileUri.endsWith('/')) {
 				fileUri += indexFile
 			}
-			fileUri = AssetHelper.normalizePath(fileUri) //JETTY Security bug, we MUST prevent reverse 
 			if(fileUri.startsWith('/')) {
 				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
-			traversal
+			manifestPath = AssetHelper.normalizePath(manifestPath) //JETTY Security bug, we MUST prevent reverse traversal
 			fileUri = manifest?.getProperty(manifestPath, manifestPath)
 
 
