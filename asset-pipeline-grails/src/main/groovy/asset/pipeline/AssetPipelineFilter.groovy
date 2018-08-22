@@ -4,6 +4,7 @@ package asset.pipeline
 import asset.pipeline.grails.AssetAttributes
 import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.ProductionAssetCache
+import asset.pipeline.AssetHelper
 import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
 import javax.servlet.FilterChain
@@ -63,7 +64,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			if(fileUri.startsWith('/')) {
 				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
-
+			fileUri = AssetHelper.normalizePath(fileUri) //JETTY Security bug, we MUST prevent reverse traversal
 			fileUri = manifest?.getProperty(manifestPath, manifestPath)
 
 
