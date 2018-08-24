@@ -18,7 +18,6 @@ package asset.pipeline.processors
 
 import asset.pipeline.AssetFile
 import groovy.util.logging.Commons
-import jdk.nashorn.api.scripting.NashornException
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.JsAssetFile
@@ -43,18 +42,7 @@ class BabelJsProcessor extends AbstractProcessor {
 	BabelJsProcessor(AssetCompiler precompiler) {
 		super(precompiler)
 	
-		try {
-			classLoader = getClass().getClassLoader()
-			//cx.setOptimizationLevel(-1)
-			//globalScope = cx.initStandardObjects()
-			loadBabelJs()
-		} catch(Exception e) {
-			throw new Exception("CoffeeScript Engine initialization failed.", e)
-		} finally {
-			try {
-			} catch(IllegalStateException e) {
-			}
-		}
+		
 		
 	}
 
@@ -99,6 +87,18 @@ class BabelJsProcessor extends AbstractProcessor {
 			}
 		}
 		try {
+			classLoader = getClass().getClassLoader()
+			//cx.setOptimizationLevel(-1)
+			//globalScope = cx.initStandardObjects()
+			loadBabelJs()
+		} catch(Exception e) {
+			throw new Exception("BabelJs Engine initialization failed.", e)
+		} finally {
+			try {
+			} catch(IllegalStateException e) {
+			}
+		}
+		try {
 			
 
 			synchronized($LOCK) {
@@ -107,8 +107,10 @@ class BabelJsProcessor extends AbstractProcessor {
 				return result
 			}
 		} catch(javax.script.ScriptException ex) {
-			if (ex.getCause() instanceof NashornException) {
-				String jsStackTrace = NashornException.getScriptStackString(ex.getCause());
+			def nashornException = Class.forName("jdk.nashorn.api.scripting.NashornException")
+			
+			if (nashornException.isInstance(ex.getCause())) {
+				String jsStackTrace = nashornException.getScriptStackString(ex.getCause());
 				throw new Exception("""BabelJs Engine compilation of javascript failed: ${ex.message} -- \n
 			${input}
 			""",ex)
