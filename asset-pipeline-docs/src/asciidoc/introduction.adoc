@@ -6,6 +6,11 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+
+* August 24, 2018
+** - 3.0.6 - compass-asset-pipeline cleanup, fixes for jdk7+ running when not using Ecmascript 6. micronaut 1.0.0.M4 build support.
+* August 23, 2018
+** - 3.0.5 - Fix for Security Vulnerability discovered in Grails/Spring filters related to Jetty only.
 * July 26, 2018
 ** - 3.0.3 - Regression fix in Gradle
 ** - 3.0.2 - Further Improvements For ECMAScript 2017, Various bug fixes, Micronaut 1.0.0.M3 support

@@ -27,7 +27,7 @@ repositories {
 }
 
 ext {
-	micronautVersion = '1.0.0.M3'
+	micronautVersion = '1.0.0.M4'
 }
 
 configurations {
@@ -45,9 +45,9 @@ sourceSets {
 
 dependencies {
 	compile     project(':asset-pipeline-core')
-	compileOnly "io.micronaut:inject-groovy:1.0.0.M3"
-	compileOnly "io.micronaut:inject-java:1.0.0.M3"
-    compile "io.micronaut:http-server-netty:1.0.0.M3"
+	compileOnly "io.micronaut:inject-groovy:1.0.0.M4"
+	compileOnly "io.micronaut:inject-java:1.0.0.M4"
+    compile "io.micronaut:http-server-netty:1.0.0.M4"
     compile 'javax.annotation:javax.annotation-api:1.3.2'
 
     runtime "ch.qos.logback:logback-classic:1.2.3"
