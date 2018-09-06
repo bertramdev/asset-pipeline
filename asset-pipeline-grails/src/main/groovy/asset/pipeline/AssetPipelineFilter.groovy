@@ -64,7 +64,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			if(fileUri.startsWith('/')) {
 				manifestPath = fileUri.substring(1) //Omit forward slash
 			}
-			traversal
+			
 			fileUri = manifest?.getProperty(manifestPath, manifestPath)
 
 
