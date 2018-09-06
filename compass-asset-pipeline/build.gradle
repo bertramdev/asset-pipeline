@@ -46,7 +46,7 @@ dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.0.7'
 	compile project(':asset-pipeline-core')
     compile 'log4j:log4j:1.2.17'
-    compile 'org.jruby:jruby-complete:1.7.11'
+    compile 'org.jruby:jruby-complete:1.7.25'
 	// compile 'org.jruby:jruby-complete:9.0.1.0'
     compile 'com.bertramlabs.plugins:jruby-container:0.6.1'
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
