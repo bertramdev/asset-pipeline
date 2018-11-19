@@ -223,12 +223,12 @@ public class AssetHelper {
      */
     static String normalizePath(String path) {
         String[] pathArgs = path.split("[/\\\\]")
-        List newPath = []
+        List<String> newPath = []
         for (int counter = 0; counter < pathArgs.length; counter++) {
             String pathElement = pathArgs[counter]
             if (pathElement == '..') {
                 if (newPath.size() > 0) {
-                    newPath.pop()
+                    newPath.remove(newPath.size() - 1)
                 } else if (counter < pathArgs.length - 1) {
                     counter++
                     continue;
