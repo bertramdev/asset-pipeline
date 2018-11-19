@@ -111,7 +111,7 @@ class I18nProcessor extends AbstractProcessor {
             if (m.group(2)){
                 def locales = m.group(2).split('_')
                 
-                def sb = new StringBuffer('messages')
+                def sb = new StringBuffer(baseFile)
                 for(locale in locales){
                     if(locale.empty){
                         options << sb.toString()

@@ -78,13 +78,13 @@ special.quotationMarks = This is a "test".
 
         and: 'a mocked resource loader'
         ResourceLoader resourceLoader = Mock()
-        1 * resourceLoader.getResource('messages_de.properties') >> nonExistantResource
-        1 * resourceLoader.getResource('messages_de.xml') >> nonExistantResource
-        1 * resourceLoader.getResource('file:grails-app/i18n/messages_de.properties') >>
+        1 * resourceLoader.getResource('mymessages_de.properties') >> nonExistantResource
+        1 * resourceLoader.getResource('mymessages_de.xml') >> nonExistantResource
+        1 * resourceLoader.getResource('file:grails-app/i18n/mymessages_de.properties') >>
             new InputStreamResource(
                 new ByteArrayInputStream(MESSAGES.bytes)
             )
-        0 * resourceLoader.getResource('file:grails-app/i18n/messages_de.xml')
+        0 * resourceLoader.getResource('file:grails-app/i18n/mymessages_de.xml')
         processor.resourceLoader = resourceLoader
 
         and: 'a localized mock asset file'
