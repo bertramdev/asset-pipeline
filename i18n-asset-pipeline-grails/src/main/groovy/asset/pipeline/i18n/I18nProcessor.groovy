@@ -187,7 +187,7 @@ class I18nProcessor extends AbstractProcessor {
 
     if (typeof win.$L === 'function' && typeof win.$L.messages !== 'undefined') {
 
-        var copy = function(destination, source) {
+        var merge = function(destination, source) {
             for (var property in source) {
                 if (source.hasOwnProperty(property)) {
                     destination[property] = source[property];
@@ -196,7 +196,7 @@ class I18nProcessor extends AbstractProcessor {
             return destination;
         };
 
-         messages = copy(messages, win.$L.messages)
+        messages = merge(messages, win.$L.messages)
     }
 
     var getMessage = function (code) {
