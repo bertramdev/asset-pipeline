@@ -196,7 +196,7 @@ class I18nProcessor extends AbstractProcessor {
             return destination;
         };
 
-        messages = merge(messages, win.$L.messages)
+        messages = merge(messages, win.$L.messages);
     }
 
     var getMessage = function (code) {
