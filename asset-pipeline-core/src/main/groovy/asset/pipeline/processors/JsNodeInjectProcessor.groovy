@@ -20,6 +20,7 @@ import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetFile
 import asset.pipeline.AbstractProcessor
+import asset.pipeline.AssetPipelineConfigHolder
 import java.util.regex.Pattern
 
 import static asset.pipeline.utils.net.Urls.isRelative
@@ -41,8 +42,15 @@ class JsNodeInjectProcessor extends AbstractProcessor  {
 
 
 	String process(final String inputText, final AssetFile assetFile) {
+		String nodeEnv = 'development'
+		
+		if (AssetPipelineConfigHolder.config != null 
+				&& AssetPipelineConfigHolder.config.nodeEnv != null) {
+			nodeEnv = AssetPipelineConfigHolder.config.nodeEnv
+		}
+
 		// if(!assetFile.baseFile) {
-			return "var process = process || {env: {NODE_ENV: \"development\"}};\n${inputText}"	
+			return "var process = process || {env: {NODE_ENV: \"$nodeEnv\"}};\n${inputText}"	
 		// } else {
 		// 	return inputText
 		// }		
