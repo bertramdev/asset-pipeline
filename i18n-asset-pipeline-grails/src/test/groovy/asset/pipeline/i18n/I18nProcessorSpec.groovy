@@ -155,9 +155,27 @@ special.crlf''',
         buf << '''
     }
 
-    win.$L = function (code) {
-        return messages[code];
+    if (typeof win.$L === 'function' && typeof win.$L.messages !== 'undefined') {
+
+        var merge = function(destination, source) {
+            for (var property in source) {
+                if (source.hasOwnProperty(property)) {
+                    destination[property] = source[property];
+                }
+            }
+            return destination;
+        };
+
+        messages = merge(messages, win.$L.messages);
     }
+
+    var getMessage = function (code) {
+        return messages[code];
+    };
+
+    getMessage.messages = messages;
+
+    win.$L = getMessage;
 }(this));
 '''
 
