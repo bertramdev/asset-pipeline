@@ -57,22 +57,29 @@ class ClosureCompilerProcessor {
 		// def sourceFile = new SourceFile.Preloaded(fileName + ".unminified.js",fileName, inputText)
 		// sourceFile.setCode(inputText)
 		def result = compiler.compile(CommandLineRunner.getBuiltinExterns(CompilerOptions.Environment.BROWSER),[sourceFile] as List<SourceFile>,options)
-		def output = compiler.toSource()
-		if(compiler.sourceMap) {
-			File mapFile = new File(assetCompiler.options.compileDir as String,fileName + ".js.map")
+		def output
+		if(result.success) {
+			output = compiler.toSource()
+			if(compiler.sourceMap) {
+				File mapFile = new File(assetCompiler.options.compileDir as String,fileName + ".js.map")
 
-			if(!mapFile.exists()) {
-				mapFile.parentFile.mkdirs()
+				if(!mapFile.exists()) {
+					mapFile.parentFile.mkdirs()
+				}
+				File unminifiedFile = new File(assetCompiler.options.compileDir as String,fileName + ".unminified.js")
+				unminifiedFile.text = inputText
+				mapFile.createNewFile()
+				FileWriter outputWriter = new FileWriter(mapFile)
+				compiler.sourceMap.setWrapperPrefix("//# sourceMappingURL=${baseFileName + '.js.map'}\n")
+				compiler.sourceMap.appendTo(outputWriter,baseFileName + ".js")
+				outputWriter.close();
+				output = "//# sourceMappingURL=${baseFileName + '.js.map'}\n" + output
 			}
-			File unminifiedFile = new File(assetCompiler.options.compileDir as String,fileName + ".unminified.js")
-			unminifiedFile.text = inputText
-			mapFile.createNewFile()
-			FileWriter outputWriter = new FileWriter(mapFile)
-			compiler.sourceMap.setWrapperPrefix("//# sourceMappingURL=${baseFileName + '.js.map'}\n")
-			compiler.sourceMap.appendTo(outputWriter,baseFileName + ".js")
-			outputWriter.close();
-			output = "//# sourceMappingURL=${baseFileName + '.js.map'}\n" + output
+		} else {
+			throw new MinifyException(result.errors.toString())
 		}
+		
+		
 		if(!output) {
 			return inputText
 		}

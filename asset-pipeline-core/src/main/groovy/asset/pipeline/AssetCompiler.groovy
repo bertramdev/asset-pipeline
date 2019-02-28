@@ -173,6 +173,7 @@ class AssetCompiler {
 									newFileData = closureCompilerProcessor.process(fileName, fileData, options.minifyOptions ?: [:])
 								} catch(e) {
 									log.error("Closure uglify JS Exception", e)
+									throw(e)
 									newFileData = fileData
 								}
 								fileData = newFileData
