@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* February 28, 2018
+** - 3.0.8 - Compass Cleanup, Improvements to i18n, Closure excluded from runtime dependencies, Build fails on minify failures correctly now.
 * August 24, 2018
 ** - 3.0.6 - compass-asset-pipeline cleanup, fixes for jdk7+ running when not using Ecmascript 6. micronaut 1.0.0.M4 build support.
 * August 23, 2018
