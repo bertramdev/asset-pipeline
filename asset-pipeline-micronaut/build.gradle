@@ -29,7 +29,7 @@ repositories {
 }
 
 ext {
-	micronautVersion = '1.0.1'
+	micronautVersion = '1.1.0.M2'
 }
 
 configurations {
@@ -47,7 +47,7 @@ sourceSets {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.micronaut:micronaut-bom:1.0.1'
+        mavenBom 'io.micronaut:micronaut-bom:1.1.0.M2'
     }
 }
 

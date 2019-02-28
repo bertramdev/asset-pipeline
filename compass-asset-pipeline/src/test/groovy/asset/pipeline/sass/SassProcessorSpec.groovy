@@ -63,7 +63,7 @@ class SassProcessorSpec extends Specification {
 		AssetPipelineConfigHolder.config = [
 		  sass: [
 		  	gems: [
-		  	  bourbon:''
+		  	  bourbon:'5.1.0'
 		  	]
 		  ]
 		]
