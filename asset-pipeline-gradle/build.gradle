@@ -38,7 +38,7 @@ dependencies {
 	compile localGroovy()
 
 	compile project(':asset-pipeline-core')
-
+	compile 'com.google.javascript:closure-compiler-unshaded:v20180716'
 	testCompile('org.spockframework:spock-core:0.7-groovy-2.0')
 }
 
