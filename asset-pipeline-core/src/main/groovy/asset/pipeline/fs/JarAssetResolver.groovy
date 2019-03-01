@@ -60,6 +60,9 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 			relativePath = relativePath.substring(1)
 		}
 		def normalizedPath = AssetHelper.normalizePath(relativePath)
+		if(!normalizedPath) {
+			return null
+		}
 		def specs
 
 		if(contentType) {

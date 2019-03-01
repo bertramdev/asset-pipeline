@@ -47,6 +47,9 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
             return null
         }
         def normalizedPath = AssetHelper.normalizePath(relativePath.replace(NATIVE_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR))
+        if(!normalizedPath) {
+            return null
+        }
         def specs
 
         if (contentType) {

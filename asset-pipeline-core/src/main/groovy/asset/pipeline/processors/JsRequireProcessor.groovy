@@ -83,7 +83,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						}
 						
 						if(!currFile) {
-							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath + '/index.js','application/javascript')
+							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath.tokenize('/')[-1] + '/index.js','application/javascript')
 						}
 					}
 
@@ -101,7 +101,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						}
 						
 						if(!currFile) {
-							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath)
+							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath.tokenize('/')[-1])
 						}
 
 					}
