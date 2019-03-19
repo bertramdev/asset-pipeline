@@ -44,6 +44,7 @@ class ClosureCompilerProcessor {
 		def compiler = new Compiler()
 		CompilerOptions options = new CompilerOptions()
 		options.trustedStrings = true
+		options.setEmitUseStrict(false)
 
 		translateMinifyOptions(options,minifyOptions)
 

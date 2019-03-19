@@ -139,7 +139,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                         }
                     }
                 } else { //no jar task name specified we need to try and infer
-                    def assetTasks = ['war', 'shadowJar', 'jar']
+                    def assetTasks = ['war', 'shadowJar', 'jar', 'bootWar','bootJar']
 
                     assetTasks?.each { taskName ->
                         try {
