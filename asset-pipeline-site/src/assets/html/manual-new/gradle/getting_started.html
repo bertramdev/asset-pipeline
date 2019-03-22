@@ -540,7 +540,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.8"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
   }
 }
 
@@ -555,7 +555,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "3.0.8"
+  id "com.bertramlabs.asset-pipeline" version "3.0.10"
 }</code></pre>
 </div>
 </div>
@@ -568,7 +568,7 @@ plugins {
 <p><code>assetCompile</code> - Compiles and packages assets from <code>src/assets</code> into <code>build/assets</code></p>
 </li>
 <li>
-<p><code>assetPackage</code> - Copies all assets unprocessed into an archive useful for plugin jars similar to webjars.</p>
+<p><code>assetPluginPackage</code> - Copies all assets unprocessed into an archive useful for plugin jars similar to webjars.</p>
 </li>
 <li>
 <p><code>assetClean</code> - Cleans and resets the <code>build/assets</code> directory.</p>
@@ -628,7 +628,7 @@ Including javascript libraries and css libraries from npm is super easy as well.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-28 13:31:51 -04:00
+Last updated 2019-03-22 12:47:31 -04:00
 </div>
 </div>
 </body>
