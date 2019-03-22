@@ -37,7 +37,7 @@ plugins {
 When this plugin is added a couple tasks and extensions are automatically registered:
 
 * `assetCompile` - Compiles and packages assets from `src/assets` into `build/assets`
-* `assetPackage` - Copies all assets unprocessed into an archive useful for plugin jars similar to webjars.
+* `assetPluginPackage` - Copies all assets unprocessed into an archive useful for plugin jars similar to webjars.
 * `assetClean` - Cleans and resets the `build/assets` directory.
 
 NOTE: All of these tasks support Gradle's incubating continuous build feature. Simply prefix the task with `-t`.
