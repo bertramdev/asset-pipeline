@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* July 3, 2019
+** - 3.0.11 - Updates for Ratpack 1.6
 * March 19, 2019
 ** - 3.0.10 - Added Grails 4 and Spring Boot 2+ Support due to new gradle tasks, Upgraded GrooCSS To The Latest.
 * February 28, 2019
