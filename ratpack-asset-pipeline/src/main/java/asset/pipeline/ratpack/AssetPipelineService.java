@@ -20,8 +20,8 @@ import asset.pipeline.AssetPipelineConfigHolder;
 import asset.pipeline.fs.ClasspathAssetResolver;
 import asset.pipeline.fs.FileSystemAssetResolver;
 import ratpack.file.FileSystemBinding;
-import ratpack.server.Service;
-import ratpack.server.StartEvent;
+import ratpack.service.Service;
+import ratpack.service.StartEvent;
 
 import java.io.InputStream;
 import java.nio.file.Files;
