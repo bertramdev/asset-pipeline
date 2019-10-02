@@ -74,6 +74,10 @@ assets {
   // Can add custom asset locations (directories or individual jar files)
   from '/vendor/lib'
   from '/path/to/file.jar'
+  
+  // can be used to customize the hashing of the assets
+  digestAlgorithm = 'MD5'
+  digestSalt = ''
 }
 
 dependencies {

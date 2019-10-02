@@ -210,10 +210,9 @@ public class AssetHelper {
      * @return md5 String
      */
     static String getByteDigest(byte[] fileBytes) {
-        def hashConfig = AssetPipelineConfigHolder.getConfig()?.url?.hash
 
-        def hashAlgorithm = hashConfig?.algorithm ?: 'MD5' as String
-        def salt = hashConfig?.salt ?: '' as String
+        def hashAlgorithm = AssetPipelineConfigHolder.getConfig()?.digestAlgorithm ?: 'MD5'
+        def salt = AssetPipelineConfigHolder.getConfig()?.digestSalt ?: ''
 
         // Generate Checksum based on the file contents and the configuration settings
         MessageDigest md = MessageDigest.getInstance(hashAlgorithm)
@@ -230,6 +229,7 @@ public class AssetHelper {
         md.update(hashBytes)
         return md.digest().encodeHex().toString()
     }
+
 
     /**
      * Normalizes a path into a standard path, stripping out all path elements that walk the path (i.e. '..' and '.')
