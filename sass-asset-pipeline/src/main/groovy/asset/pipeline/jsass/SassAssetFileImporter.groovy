@@ -16,17 +16,18 @@
 package asset.pipeline.jsass
 
 import asset.pipeline.AssetFile
+import groovy.util.logging.Slf4j
+
 import java.util.regex.Pattern
 import asset.pipeline.AssetHelper
 import asset.pipeline.CacheManager
-import groovy.util.logging.Commons
 import io.bit3.jsass.importer.Import
 import io.bit3.jsass.importer.Importer
 
 import java.nio.file.Path
 import java.nio.file.Paths
 
-@Commons
+@Slf4j
 class SassAssetFileImporter implements Importer {
     AssetFile baseFile
     static String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)

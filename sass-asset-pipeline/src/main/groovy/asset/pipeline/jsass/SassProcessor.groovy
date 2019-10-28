@@ -19,12 +19,12 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetPipelineConfigHolder
-import groovy.util.logging.Commons
+import groovy.util.logging.Slf4j
 import io.bit3.jsass.Compiler
 import io.bit3.jsass.Options
 import io.bit3.jsass.OutputStyle
 
-@Commons
+@Slf4j
 class SassProcessor extends AbstractProcessor {
     final Compiler compiler = new Compiler();
     final Options options = new Options();
