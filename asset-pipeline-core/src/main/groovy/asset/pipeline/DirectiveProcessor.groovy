@@ -15,9 +15,7 @@
 */
 package asset.pipeline
 
-import groovy.util.logging.Commons
-
-import java.nio.charset.Charset
+import groovy.util.logging.Slf4j
 import groovy.transform.CompileStatic
 
 /**
@@ -27,7 +25,7 @@ import groovy.transform.CompileStatic
  *
  * @author David Estes
  */
-@Commons
+@Slf4j
 class DirectiveProcessor {
 
     /**

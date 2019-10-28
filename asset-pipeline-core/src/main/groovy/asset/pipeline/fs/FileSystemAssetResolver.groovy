@@ -18,8 +18,8 @@ package asset.pipeline.fs
 
 import asset.pipeline.*
 import groovy.transform.CompileStatic
-import groovy.util.logging.Commons
-import java.io.BufferedInputStream
+import groovy.util.logging.Slf4j
+
 import java.util.regex.Pattern
 import java.nio.file.LinkOption
 
@@ -31,7 +31,7 @@ import java.nio.file.LinkOption
  * @author Graeme Rocher
  */
 
-@Commons
+@Slf4j
 class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	static String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
 	static String DIRECTIVE_FILE_SEPARATOR = '/'

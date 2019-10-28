@@ -18,14 +18,13 @@ package asset.pipeline.fs
 
 import asset.pipeline.*
 import groovy.transform.CompileStatic
-import groovy.util.logging.Commons
+import groovy.util.logging.Slf4j
 
 import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.jar.JarFile
 import java.util.zip.ZipEntry
 import java.util.zip.ZipException
-import java.io.BufferedInputStream
 
 /**
  * Implementation of the {@link AssetResolver} interface for resolving from JAR files or ZIP files
@@ -33,7 +32,7 @@ import java.io.BufferedInputStream
  * @author David Estes
  * @author Graeme Rocher
  */
-@Commons
+@Slf4j
 class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 	static String QUOTED_FILE_SEPARATOR = Pattern.quote("/")
 	static String DIRECTIVE_FILE_SEPARATOR = '/'

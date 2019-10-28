@@ -17,11 +17,12 @@
 package asset.pipeline.processors
 
 import asset.pipeline.AssetFile
-import groovy.util.logging.Commons
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.JsAssetFile
 import asset.pipeline.AssetPipelineConfigHolder
+import groovy.util.logging.Slf4j
+
 import javax.script.Invocable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
@@ -30,7 +31,7 @@ import javax.script.SimpleBindings
 // CoffeeScript engine will attempt to use Node.JS coffee if it is available on
 // the system path. If not, it uses Mozilla Rhino to compile the CoffeeScript
 // template using the javascript in-browser compiler.
-@Commons
+@Slf4j
 class BabelJsProcessor extends AbstractProcessor {
 
 	static Boolean NODE_SUPPORTED

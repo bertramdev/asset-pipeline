@@ -15,17 +15,15 @@
  */
 package asset.pipeline
 
-import groovy.util.logging.Commons
 import asset.pipeline.processors.ClosureCompilerProcessor
 import asset.pipeline.utils.MultiOutputStream
 import asset.pipeline.processors.CssMinifyPostProcessor
+import groovy.util.logging.Slf4j
+
 import java.util.zip.GZIPOutputStream
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.Future
 import java.util.concurrent.ExecutorCompletionService
 import java.util.concurrent.CompletionService
 
@@ -37,7 +35,7 @@ import java.util.concurrent.CompletionService
  * @author David Estes
  * @author Graeme Rocher
  */
-@Commons
+@Slf4j
 class AssetCompiler {
 	def includeRules = [:]
 	def excludeRules = [:]
