@@ -1,6 +1,6 @@
 package asset.pipeline
 
-import groovy.util.logging.Commons
+import groovy.util.logging.Slf4j
 
 /*
  * Copyright 2014 original authors
@@ -30,7 +30,7 @@ import groovy.util.logging.Commons
  *
  * @author Graeme Rocher
  */
-@Commons
+@Slf4j
 class AssetSpecLoader {
 
     static final String FACTORIES_RESOURCE_LOCATION = "META-INF/asset-pipeline/asset.specs"

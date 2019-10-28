@@ -3,8 +3,8 @@ package asset.pipeline.fs
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
 import asset.pipeline.GenericAssetFile
-import groovy.util.logging.Commons
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 
 /**
 * Implementation of the {@link AssetResolver} interface for resolving files on the classpath.
@@ -12,7 +12,7 @@ import groovy.transform.CompileStatic
 *
 * @author David Estes
 */
-@Commons
+@Slf4j
 public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
     static String NATIVE_FILE_SEPARATOR = File.separator
     static String DIRECTIVE_FILE_SEPARATOR = '/'
