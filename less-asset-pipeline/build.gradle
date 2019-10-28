@@ -45,7 +45,7 @@ dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.0.7'
     compile project(':asset-pipeline-core')
     compile 'org.mozilla:rhino:1.7R4'
-    compile 'log4j:log4j:1.2.17'
+    compile 'org.slf4j:slf4j-api:1.7.28'
     compile "com.github.sommeri:less4j:1.17.2"
     compile "com.github.sommeri:less4j-javascript:0.0.1"
 

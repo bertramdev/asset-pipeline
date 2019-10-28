@@ -1,31 +1,14 @@
 package asset.pipeline.less
 
 import com.github.sommeri.less4j.*
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collection;
+import groovy.util.logging.Slf4j
+
 import asset.pipeline.CacheManager
 import asset.pipeline.AssetHelper
-import asset.pipeline.AssetPipelineConfigHolder
-import asset.pipeline.AssetFile
 import asset.pipeline.AssetCompiler
 import asset.pipeline.processors.CssProcessor
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import groovy.util.logging.Commons
 
-
-@Commons
+@Slf4j
 class AssetPipelineLessSource extends LessSource {
 	def sourceFile
 	String contents

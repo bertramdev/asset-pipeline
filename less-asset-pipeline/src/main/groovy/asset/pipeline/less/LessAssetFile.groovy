@@ -2,7 +2,6 @@ package asset.pipeline.less
 
 import asset.pipeline.AbstractAssetFile
 import asset.pipeline.AssetCompiler
-import asset.pipeline.AssetHelper
 import asset.pipeline.CacheManager
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.processors.CssProcessor
