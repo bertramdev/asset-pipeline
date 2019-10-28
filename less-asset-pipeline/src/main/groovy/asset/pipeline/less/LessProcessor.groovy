@@ -5,8 +5,8 @@ import asset.pipeline.CacheManager
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
-import groovy.util.logging.Commons
 import asset.pipeline.processors.CssProcessor
+import groovy.util.logging.Slf4j
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.JavaScriptException
 import org.mozilla.javascript.NativeArray
@@ -14,7 +14,7 @@ import org.mozilla.javascript.NativeObject
 import org.mozilla.javascript.Scriptable
 import sun.net.www.protocol.asset.Handler
 
-@Commons
+@Slf4j
 class LessProcessor extends AbstractProcessor {
     public static final java.lang.ThreadLocal threadLocal   = new ThreadLocal();
     public static final java.lang.ThreadLocal localCompiler = new ThreadLocal();

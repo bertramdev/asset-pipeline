@@ -1,16 +1,14 @@
 package asset.pipeline.less
 
-import asset.pipeline.AssetHelper
 import com.github.sommeri.less4j.LessCompiler
 import com.github.sommeri.less4j.core.ThreadUnsafeLessCompiler
 import com.github.sommeri.less4j_javascript.Less4jJavascript
-import groovy.util.logging.Log4j
 import asset.pipeline.AbstractProcessor
-import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import com.github.sommeri.less4j.Less4jException
+import groovy.util.logging.Slf4j
 
-@Log4j
+@Slf4j
 class Less4jProcessor extends AbstractProcessor {
 
     Less4jProcessor(precompiler) {
