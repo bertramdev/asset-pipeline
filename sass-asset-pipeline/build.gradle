@@ -45,7 +45,7 @@ dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.0.5'
 	compile project(':asset-pipeline-core')
     compile 'org.slf4j:slf4j-api:1.7.28'
-    compile 'io.bit3:jsass:5.7.3'
+    compile 'io.bit3:jsass:5.10.3'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testRuntime 'org.slf4j:slf4j-simple:1.7.21'
 }
