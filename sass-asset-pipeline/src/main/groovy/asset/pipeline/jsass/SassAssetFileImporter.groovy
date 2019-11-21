@@ -48,7 +48,11 @@ class SassAssetFileImporter implements Importer {
         Path parentPath = Paths.get(parent)
         Path relativeRootPath = parentPath.parent ?: Paths.get('.')
         Path importUrlPath = Paths.get(importUrl)
-        def possibleStylesheets = [relativeRootPath.resolve("${importUrlPath}.scss").toString(), relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.scss").toString(), "${importUrlPath.fileName}.scss","_${importUrlPath.fileName}.scss" ]
+        def possibleStylesheets = SassAssetFile.extensions.collectMany { extension ->
+            [relativeRootPath.resolve("${importUrlPath}.${extension}").toString(),
+            relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.${extension}").toString(),
+            "${importUrlPath.fileName}.${extension}","_${importUrlPath.fileName}.${extension}"]
+        }
         
         for (String stylesheetPath : possibleStylesheets) {
             String standardPathStyle = stylesheetPath?.replaceAll(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
