@@ -52,16 +52,18 @@ groovydoc {
 }
 
 dependencies {
-	provided    'org.codehaus.groovy:groovy:2.0.7'
-	provided    'org.codehaus.groovy:groovy-templates:2.0.7'
-	doc         'org.codehaus.groovy:groovy-all:2.4.3'
+	provided    'org.codehaus.groovy:groovy:2.4.19'
+	provided    'org.codehaus.groovy:groovy-templates:2.4.19'
+	doc         'org.codehaus.groovy:groovy-all:2.4.19'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	compile     'org.mozilla:rhino:1.7R4'
 	compileOnly     'com.google.javascript:closure-compiler-unshaded:v20180716'
 	compile 'org.slf4j:slf4j-api:1.7.28'
 	//compile   'log4j:log4j:1.2.16'
 	testCompile project(':asset-pipeline-classpath-test')
-	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+	testCompile 'org.codehaus.groovy:groovy-all:2.4.19'
+	testCompile 'org.spockframework:spock-core:1.3-groovy-2.4'
+
 	testRuntime 'org.slf4j:slf4j-simple:1.7.28'
 }
 

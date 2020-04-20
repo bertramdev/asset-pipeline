@@ -106,7 +106,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 					}
 					if(!currFile) {
-						cachedPaths[assetPath] = null
+						cachedPaths[assetPath] = null as String
 						return resultPrefix+"require(${quote}${assetPath}${quote})"
 					} else if(currFile instanceof GenericAssetFile) {
 						appendUrlModule(currFile as AssetFile,replacementAssetPath(assetFile, currFile as AssetFile))
@@ -183,7 +183,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 
-	private encapsulateModule(AssetFile assetFile) {
+	private String encapsulateModule(AssetFile assetFile) {
 		String encapsulation = """
 (function() {
   var module = {exports: {}};

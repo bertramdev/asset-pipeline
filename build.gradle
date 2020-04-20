@@ -8,7 +8,7 @@ buildscript {
 }
 
 subprojects {
-	version = '3.0.11'
+	version = '3.1.0'
 }
 
 apply plugin: 'groovy'
@@ -26,14 +26,14 @@ repositories {
 // }
 
 dependencies {
-	compile 'org.codehaus.groovy:groovy:2.0.7'
-	compile 'org.codehaus.groovy:groovy-templates:2.0.7'
+	compile 'org.codehaus.groovy:groovy:2.4.19'
+	compile 'org.codehaus.groovy:groovy-templates:2.4.19'
 	compile 'org.mozilla:rhino:1.7R4'
 	// compile 'com.google.javascript:closure-compiler-unshaded:v20170124'
 	// compile     'com.google.javascript:closure-compiler-unshaded:v20160713'
 	// compile 'com.google.javascript:closure-compiler-unshaded:v20171112'
 	compile 'commons-logging:commons-logging:1.1.1'
-	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+	testCompile 'org.spockframework:spock-core:1.3-groovy-2.4'
 }
 
 test {

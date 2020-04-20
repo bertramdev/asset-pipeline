@@ -307,8 +307,6 @@ class AssetCompiler {
 			      if (completed != null) {
 			      		completed.get() //need this to throw exceptions on main thread it seems
 			          --pending;
-      				// eventListener?.triggerEvent("StatusUpdate", "Future Completed ${futures.size() - pending + 1} - ${completed.get()}")
-
 		    		}
 			  }
 			// Integer futureCounter = 1

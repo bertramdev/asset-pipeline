@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* April 20, 2020
+** - 3.1.0 - Updated to groovy 2.4.19 runtime to better support groovy 3 and grails 4 across the board
 * July 3, 2019
 ** - 3.0.11 - Updates for Ratpack 1.6
 * March 19, 2019

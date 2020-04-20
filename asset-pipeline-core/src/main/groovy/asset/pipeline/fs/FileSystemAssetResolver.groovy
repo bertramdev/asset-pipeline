@@ -135,8 +135,8 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
     @CompileStatic
 	protected void recursiveTreeAppend(File directory, List<AssetFile> tree, String contentType=null, AssetFile baseFile, boolean recursive=true, String sourceDirectory) {
-		File[] files = directory.listFiles()
-		files = files?.sort { File a, File b -> a.name.compareTo b.name } as File[]
+		List<File> files = directory.listFiles().toList()
+		files = files?.sort { File a, File b -> a.name.compareTo b.name }
 		for(File file in files) {
 			String[] mimeType = AssetHelper.assetMimeTypeForURI(file.getAbsolutePath())
 			if(file.isDirectory() && recursive) {

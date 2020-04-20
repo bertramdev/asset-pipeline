@@ -41,7 +41,7 @@ ext {
     spockVersion = "1.0-groovy-2.4"
     cglibVersion = "2.2.2"
     objenesisVersion = "2.1"
-    groovyVersion = "2.4.3"
+    groovyVersion = "2.4.19"
 }
 
 dependencies {
