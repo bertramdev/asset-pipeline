@@ -31,6 +31,7 @@ class JsRequireProcessorSpec extends Specification {
 			AssetPipelineConfigHolder.config = [commonJs: true]
 		when:
 			def file = resolver.getAsset('asset-pipeline/test/test-common-js','application/javascript','js')
+			println "file class: ${file.class.name} - ${file.processors}"
 			def processedText = file.processedStream(null)
 			println processedText
 		then:
