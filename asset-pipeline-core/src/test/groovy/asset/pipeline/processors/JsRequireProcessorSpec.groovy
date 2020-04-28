@@ -28,8 +28,9 @@ class JsRequireProcessorSpec extends Specification {
 	void "should be able to load another js file via commonJs syntax"() {
 		given:
 			def resolver = new FileSystemAssetResolver('application','assets')
+			AssetPipelineConfigHolder.config = [commonJs: true]
 		when:
-			def file = resolver.getAsset('asset-pipeline/test/test-common-js',null,'js')
+			def file = resolver.getAsset('asset-pipeline/test/test-common-js','application/javascript','js')
 			def processedText = file.processedStream(null)
 			println processedText
 		then:
