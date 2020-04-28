@@ -17,6 +17,8 @@ class AssetPipelineConfigHolder {
     private static String digestString
     private static Object configMutexLock = new Object()
 
+    public static Map<String,AssetPipelineClassLoaderEntry> classLoaderRegistry = [:]
+
     public static registerResolver(AssetResolver resolver) {
         resolvers << resolver
     }
@@ -45,6 +47,26 @@ class AssetPipelineConfigHolder {
 
     public static void setResolvers(Collection<AssetResolver> resolvers) {
         this.resolvers = resolvers
+    }
+
+
+
+    public static registerClassLoader(String prefixPath, ClassLoader classLoader) {
+        classLoaderRegistry[prefixPath] = new AssetPipelineClassLoaderEntry(classLoader)
+    }
+
+    public static unregisterClassLoader(String prefixPath) {
+        classLoaderRegistry.remove(prefixPath)
+    }
+
+    public static String classLoaderKeyForUri(String fileUri) {
+        for(String key in classLoaderRegistry.keySet()) {
+            if(fileUri.startsWith(key)) {
+                return key
+                break
+            }
+        }
+        return null
     }
 
     public static String getDigestString() {

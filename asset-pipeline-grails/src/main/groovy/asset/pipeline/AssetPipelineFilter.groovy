@@ -5,6 +5,7 @@ import asset.pipeline.grails.AssetAttributes
 import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.ProductionAssetCache
 import asset.pipeline.AssetHelper
+import asset.pipeline.AssetPipelineClassLoaderEntry
 import groovy.transform.CompileStatic
 import groovy.util.logging.Commons
 import javax.servlet.FilterChain
@@ -55,7 +56,76 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
 
-		if(warDeployed) {
+		String classRegistryKey = AssetPipelineConfigHolder.classLoaderKeyForUri(fileUri)
+
+		if(classRegistryKey) {
+			AssetPipelineClassLoaderEntry classLoaderEntry = AssetPipelineConfigHolder.classLoaderRegistry[classRegistryKey]
+			fileUri = fileUri.substring(classRegistryKey.length())
+			final Properties manifest = classLoaderEntry.manifest
+			String manifestPath = fileUri
+			if(fileUri == '' || fileUri.endsWith('/')) {
+				fileUri += indexFile
+			}
+			if(fileUri.startsWith('/')) {
+				manifestPath = fileUri.substring(1) //Omit forward slash
+			}
+			manifestPath = AssetHelper.normalizePath(manifestPath) //JETTY Security bug, we MUST prevent reverse traversal
+			fileUri = manifest?.getProperty(manifestPath, manifestPath)
+			URL file = classLoaderEntry.classLoader.getResource("assets/${fileUri}")
+			if(file) {
+				final AssetPipelineResponseBuilder responseBuilder = new AssetPipelineResponseBuilder(
+					manifestPath,
+					request.getHeader('If-None-Match'),
+					request.getHeader('If-Modified-Since'),
+					null
+				)
+				if(responseBuilder.statusCode) {
+					response.status = responseBuilder.statusCode
+				}
+				responseBuilder.headers.each { final header ->
+					response.setHeader(header.key, header.value)
+				}
+				URL gzipFile = classLoaderEntry.classLoader.getResource("assets/${fileUri}.gz")
+				if(response.status != 304) {
+					// Check for GZip
+					final String acceptsEncoding = request.getHeader("Accept-Encoding")
+					if(acceptsEncoding?.tokenize(",")?.contains("gzip")) {
+						if(gzipFile) {
+							file = gzipFile
+							response.setHeader('Content-Encoding', 'gzip')
+						}
+					}
+					if(encoding) {
+						response.setCharacterEncoding(encoding)
+					}
+					response.setContentType(format)
+					// response.setHeader('Content-Length', String.valueOf(file.contentLength()))
+					final InputStream inputStream
+					try {
+						final byte[] buffer = new byte[102400]
+						int len
+						inputStream = file.openStream()
+						final ServletOutputStream out = response.outputStream
+						while((len = inputStream.read(buffer)) != -1) {
+							out.write(buffer, 0, len)
+						}
+						response.flushBuffer()
+					} catch(final e) {
+						log.debug("File Transfer Aborted (Probably by the user)", e)
+					} finally {
+						try { inputStream?.close() } catch(final ie) { /* silent fail */ }
+					}
+				} else {
+					response.flushBuffer()
+				}
+			} else {
+				if(!skipNotFound){
+					response.status = 404
+					response.flushBuffer()
+				}
+			}
+
+		} else if(warDeployed) {
 			final Properties manifest = AssetPipelineConfigHolder.manifest
 			String manifestPath = fileUri
 			if(fileUri == '' || fileUri.endsWith('/')) {
