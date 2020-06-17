@@ -7,7 +7,7 @@ class AssetPipelineBootStrap {
     def grailsApplication
 
     def init = { servletContext ->
-        def storagePath = grailsApplication.config.grails.assets.storagePath
+        def storagePath = grailsApplication.config.getProperty('grails.assets.storagePath')
         if (!storagePath) {
             return
         }
