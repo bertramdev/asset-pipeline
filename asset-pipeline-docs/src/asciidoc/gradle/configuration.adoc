@@ -15,6 +15,7 @@ assets {
   minifyOptions = [
     optimizationLevel: 'SIMPLE',
     angularPass: true // Can use @ngInject annotation for Angular Apps
+    excludes: ['**/bundle.js'] // Example of excluding specific resources from minification, e.g., if it was minified externally
   ]
 
   includes = []
