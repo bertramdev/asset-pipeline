@@ -79,7 +79,7 @@ class AssetsTagLib {
 		def uniqMode = attrs.remove('uniq') != null
 
 		src = "${AssetHelper.nameWithoutExtension(src)}.${ext}"
-		def conf = grailsApplication.config.getProperty('grails.assets')
+		def conf = grailsApplication.config.getProperty('grails.assets',[:])
 
 		final def nonBundledMode = uniqMode || (!AssetPipelineConfigHolder.manifest && conf.bundle != true && attrs.remove('bundle') != 'true')
 		
