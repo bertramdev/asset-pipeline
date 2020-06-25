@@ -4,4 +4,4 @@ jdk:
   - openjdk8
 before_script:
   - npm install -g coffee-script
-script: ./gradlew check
+script: ./gradlew check --stacktrace
