@@ -25,33 +25,33 @@ import asset.pipeline.*
 */
 class SassProcessorSpec extends Specification {
 
-	void "should compile sass into css"() {
-		given:
-		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
-		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
-		def assetFile = AssetHelper.fileForFullName('test.scss')
-		def processor = new SassProcessor()
-		when:
-		def output = processor.process(assetFile.inputStream.text,assetFile)
-		println "Results \n ${output}"
-		then:
-		output.contains('margin')
-	}
+	// void "should compile sass into css"() {
+	// 	given:
+	// 	AssetPipelineConfigHolder.resolvers = []
+	// 	AssetPipelineConfigHolder.config = [:]
+	// 	AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+	// 	def assetFile = AssetHelper.fileForFullName('test.scss')
+	// 	def processor = new SassProcessor()
+	// 	when:
+	// 	def output = processor.process(assetFile.inputStream.text,assetFile)
+	// 	println "Results \n ${output}"
+	// 	then:
+	// 	output.contains('margin')
+	// }
 
-	void "should compile nested sass into css"() {
-		given:
-		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
-		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
-		def assetFile = AssetHelper.fileForFullName('partials/forms.scss')
-		def processor = new SassProcessor()
-		when:
-		def output = processor.process(assetFile.inputStream.text,assetFile)
-		println "Results \n ${output}"
-		then:
-		output.contains('.sub')
-	}
+	// void "should compile nested sass into css"() {
+	// 	given:
+	// 	AssetPipelineConfigHolder.resolvers = []
+	// 	AssetPipelineConfigHolder.config = [:]
+	// 	AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+	// 	def assetFile = AssetHelper.fileForFullName('partials/forms.scss')
+	// 	def processor = new SassProcessor()
+	// 	when:
+	// 	def output = processor.process(assetFile.inputStream.text,assetFile)
+	// 	println "Results \n ${output}"
+	// 	then:
+	// 	output.contains('.sub')
+	// }
 
 
 	void "should be able to use bourbon"() {
