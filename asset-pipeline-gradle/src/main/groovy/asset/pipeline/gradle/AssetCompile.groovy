@@ -15,7 +15,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.file.FileCollection
-
+import org.gradle.api.tasks.CacheableTask
 /*
  * Copyright 2014 original authors
  *
@@ -38,6 +38,7 @@ import org.gradle.api.file.FileCollection
  * @author Graeme Rocher
  */
 @CompileStatic
+@CacheableTask   
 class AssetCompile extends DefaultTask {
 
     @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()

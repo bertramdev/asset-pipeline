@@ -12,11 +12,13 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.CacheableTask
 
 /**
  * Created by davydotcom on 4/21/16.
  */
 @CompileStatic
+@CacheableTask  
 class AssetPluginPackage extends DefaultTask {
     private String destinationDirectoryPath
     @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()
