@@ -29,6 +29,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 	String process(final String inputText, final AssetFile assetFile) {
 		if(AssetPipelineConfigHolder.config != null && AssetPipelineConfigHolder.config.commonJs == false) {
+			println("skipping common js processing")
 			return inputText
 		}
 		final Map<String, String> cachedPaths = [:]
