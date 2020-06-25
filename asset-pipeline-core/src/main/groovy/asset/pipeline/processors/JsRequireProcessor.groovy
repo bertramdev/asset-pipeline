@@ -29,10 +29,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 	String process(final String inputText, final AssetFile assetFile) {
 		if(AssetPipelineConfigHolder.config != null && AssetPipelineConfigHolder.config.commonJs == false) {
-			println("skipping common js processing")
 			return inputText
-		} else {
-			println ("processing common js")
 		}
 		final Map<String, String> cachedPaths = [:]
 		Boolean originator = false
@@ -58,12 +55,10 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						return resultPrefix+"_asset_pipeline_require(${quote}${cachedPath}${quote})"
 					}
 				} else if(assetPath.size() > 0) {
-					println("Looking for assetPath: ${assetPath}")
 					AssetFile currFile
 					if(!assetPath.startsWith('/') && assetFile.parentPath != null) {
 						def relativeFileName = [ assetFile.parentPath, assetPath ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
 						relativeFileName = AssetHelper.normalizePath(relativeFileName)
-						println("Looking for relativeFileName ${relativeFileName}")
 						currFile = AssetHelper.fileForUri(relativeFileName,'application/javascript')
 
 					}
@@ -115,13 +110,12 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						cachedPaths[assetPath] = null as String
 						return resultPrefix+"require(${quote}${assetPath}${quote})"
 					} else if(currFile instanceof GenericAssetFile) {
-						println("didnt find it")
+
 						appendUrlModule(currFile as AssetFile,replacementAssetPath(assetFile, currFile as AssetFile))
 						
 						cachedPaths[assetPath] = currFile.path
 						return resultPrefix+"_asset_pipeline_require(${quote}${currFile.path}${quote})"
 					} else {
-						println ("found file dependency")
 						currFile.baseFile = assetFile.baseFile ?: assetFile
 						appendModule(currFile)
 						cachedPaths[assetPath] = currFile.path
