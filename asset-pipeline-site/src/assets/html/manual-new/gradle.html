@@ -552,7 +552,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.0-SNAPSHOT"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.1"
   }
 }
 
@@ -567,7 +567,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "3.2.0-SNAPSHOT"
+  id "com.bertramlabs.asset-pipeline" version "3.2.1"
 }</code></pre>
 </div>
 </div>
@@ -655,6 +655,7 @@ Including javascript libraries and css libraries from npm is super easy as well.
   minifyOptions = [
     <span class="key">optimizationLevel</span>: <span class="string"><span class="delimiter">'</span><span class="content">SIMPLE</span><span class="delimiter">'</span></span>,
     <span class="key">angularPass</span>: <span class="predefined-constant">true</span> <span class="comment">// Can use @ngInject annotation for Angular Apps</span>
+    <span class="key">excludes</span>: [<span class="string"><span class="delimiter">'</span><span class="content">**/bundle.js</span><span class="delimiter">'</span></span>] <span class="comment">// Example of excluding specific resources from minification, e.g., if it was minified externally</span>
   ]
 
   includes = <span class="type">[]</span>
@@ -748,7 +749,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>

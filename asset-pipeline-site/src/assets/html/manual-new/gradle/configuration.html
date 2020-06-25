@@ -528,6 +528,7 @@ table.CodeRay td.code>pre{padding:0}
   minifyOptions = [
     <span class="key">optimizationLevel</span>: <span class="string"><span class="delimiter">'</span><span class="content">SIMPLE</span><span class="delimiter">'</span></span>,
     <span class="key">angularPass</span>: <span class="predefined-constant">true</span> <span class="comment">// Can use @ngInject annotation for Angular Apps</span>
+    <span class="key">excludes</span>: [<span class="string"><span class="delimiter">'</span><span class="content">**/bundle.js</span><span class="delimiter">'</span></span>] <span class="comment">// Example of excluding specific resources from minification, e.g., if it was minified externally</span>
   ]
 
   includes = <span class="type">[]</span>
@@ -599,7 +600,7 @@ Change <code>skipNonDigests</code> to true to help reduce the file size of your 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-28 13:31:51 -04:00
+Last updated 2020-06-17 14:45:07 -04:00
 </div>
 </div>
 </body>

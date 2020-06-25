@@ -55,7 +55,8 @@ class AssetsTagLibSpec extends Specification {
 
 	void "should return javascript link tag when debugMode is off"() {
 		given:
-			grailsApplication.config.grails.assets.bundle = true
+			grailsApplication.config = grailsApplication.config.merge([grails:[assets:[bundle:true]]])
+			// grailsApplication.config.grails.assets.bundle = true
 			final def assetSrc = "asset-pipeline/test/test.js"
 		expect:
 			tagLib.javascript(src: assetSrc) == '<script type="text/javascript" src="/assets/asset-pipeline/test/test.js" ></script>'

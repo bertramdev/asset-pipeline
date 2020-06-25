@@ -507,7 +507,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">David Estes</span><br>
 <span id="email" class="email"><a href="mailto:davydotcom@gmail.com">davydotcom@gmail.com</a></span><br>
-<span id="revdate">3.2.0-SNAPSHOT</span>
+<span id="revdate">3.2.1</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1824,7 +1824,7 @@ Asset-Pipelines build classes are not directly dependent on gradle and can be ea
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.0-SNAPSHOT"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.1"
   }
 }
 
@@ -1839,7 +1839,7 @@ apply plugin: "com.bertramlabs.asset-pipeline"</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">//gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "3.2.0-SNAPSHOT"
+  id "com.bertramlabs.asset-pipeline" version "3.2.1"
 }</code></pre>
 </div>
 </div>
@@ -1927,6 +1927,7 @@ Including javascript libraries and css libraries from npm is super easy as well.
   minifyOptions = [
     <span class="key">optimizationLevel</span>: <span class="string"><span class="delimiter">'</span><span class="content">SIMPLE</span><span class="delimiter">'</span></span>,
     <span class="key">angularPass</span>: <span class="predefined-constant">true</span> <span class="comment">// Can use @ngInject annotation for Angular Apps</span>
+    <span class="key">excludes</span>: [<span class="string"><span class="delimiter">'</span><span class="content">**/bundle.js</span><span class="delimiter">'</span></span>] <span class="comment">// Example of excluding specific resources from minification, e.g., if it was minified externally</span>
   ]
 
   includes = <span class="type">[]</span>
@@ -2020,7 +2021,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
   // Example additional LESS support
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -2044,7 +2045,7 @@ If a library is simply a webjar or asset library, these packages are not needed 
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.2.0-SNAPSHOT'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -2376,12 +2377,12 @@ This will only be displayed if the asset exists
 <div class="title">BuildConfig.groovy</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-  compile ":asset-pipeline:3.2.0-SNAPSHOT"
+  compile ":asset-pipeline:3.2.1"
   // Uncomment these to enable additional asset-pipeline capabilities
-  //compile ":sass-asset-pipeline:3.2.0-SNAPSHOT"
-  //compile ":less-asset-pipeline:3.2.0-SNAPSHOT"
-  //compile ":coffee-asset-pipeline:3.2.0-SNAPSHOT"
-  //compile ":handlebars-asset-pipeline:3.2.0-SNAPSHOT"
+  //compile ":sass-asset-pipeline:3.2.1"
+  //compile ":less-asset-pipeline:3.2.1"
+  //compile ":coffee-asset-pipeline:3.2.1"
+  //compile ":handlebars-asset-pipeline:3.2.1"
 }</code></pre>
 </div>
 </div>
@@ -2814,14 +2815,14 @@ This will only be displayed if the asset exists
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">plugins {
-	id "com.bertramlabs.asset-pipeline" version "3.2.0-SNAPSHOT"
+	id "com.bertramlabs.asset-pipeline" version "3.2.1"
 }
 
 dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:3.2.0-SNAPSHOT'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:3.2.1'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.0-SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -2894,10 +2895,10 @@ Asset-Pipeline requires groovy when running in the development runtime mode.
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:3.2.0-SNAPSHOT'
+  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:3.2.1'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.0-SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -2976,10 +2977,10 @@ ratpack {
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:3.2.0-SNAPSHOT'
+  runtime 'com.bertramlabs.plugins:asset-pipeline-spring-boot:3.2.1'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.0-SNAPSHOT'
+  //assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
+  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -3040,7 +3041,7 @@ Asset-Pipeline requires at least groovy 2.0.7 to be used within a spring boot ap
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.0-SNAPSHOT'
+  assets 'com.bertramlabs.plugins:less-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -3084,7 +3085,7 @@ During war build your <code>less</code> files are compiled into css files. This 
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.0-SNAPSHOT'
+  assets 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
@@ -3110,7 +3111,7 @@ Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plu
 <div class="title">build.gradle</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:3.2.0-SNAPSHOT'
+  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:3.2.1'
 }</code></pre>
 </div>
 </div>
