@@ -116,6 +116,12 @@ class ClosureCompilerProcessor {
 		switch(mode?.toUpperCase()) {
 			case 'ECMASCRIPT_NEXT':
 				return LanguageMode.ECMASCRIPT_NEXT
+			case 'ES5_SCRIPT':
+				return LanguageMode.ECMASCRIPT5_STRICT
+			case 'ES5':
+				return LanguageMode.ECMASCRIPT5
+			case 'ES3':
+				return LanguageMode.ECMASCRIPT3	
 			default:
 				return LanguageMode.ECMASCRIPT5
 		}
