@@ -83,7 +83,7 @@ class BabelJsProcessor extends AbstractProcessor {
 			newEcmascriptKeywordsFound = true;
 		}
 		if(!newEcmascriptKeywordsFound && assetFile instanceof JsAssetFile) {
-			if(!AssetPipelineConfigHolder.config?.enableES6 && ! AssetPipelineConfigHolder.config?."enable-es6") {
+			if((!newEcmascriptKeywordsFound && !AssetPipelineConfigHolder.config?.enableES6 && !AssetPipelineConfigHolder.config?."enable-es6") || (newEcmascriptKeywordsFound && (AssetPipelineConfigHolder.config?.enableES6 == false || AssetPipelineConfigHolder.config?."enable-es6" == false)))
 				return input
 			}
 		}
