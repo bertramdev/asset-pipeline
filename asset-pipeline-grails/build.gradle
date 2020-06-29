@@ -31,7 +31,7 @@ apply plugin: "org.grails.grails-plugin-publish"
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
-    websiteUrl = "https://bertramdev.github.io/grails-asset-pipeline/"
+    websiteUrl = "http://www.asset-pipeline.com"
     vcsUrl = "https://github.com/bertramdev/grails-asset-pipeline/tree/grails3"
     issueTrackerUrl = "https://github.com/bertramdev/grails-asset-pipeline/issues"
 }
