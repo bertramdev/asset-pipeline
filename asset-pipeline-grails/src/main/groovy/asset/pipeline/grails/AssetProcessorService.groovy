@@ -48,10 +48,10 @@ class AssetProcessorService {
 	}
 
 	String getAssetPath(final String path, final boolean useManifest) {
-		getAssetPath(path, grailsApplication.config.grails.assets as ConfigObject, useManifest)
+		getAssetPath(path, grailsApplication.config.getProperty('grails.assets',Map,[:]), useManifest)
 	}
 
-	String getAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets, final boolean useManifest = true) {
+	String getAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:]), final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
 		if (useManifest) {
 			return manifest?.getProperty(relativePath) ?: relativePath
@@ -61,7 +61,7 @@ class AssetProcessorService {
 	}
 
 
-	String getResolvedAssetPath(final String path, final ConfigObject conf = grailsApplication.config.grails.assets) {
+	String getResolvedAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		final String relativePath = trimLeadingSlash(path)
 		if(manifest) {
 			if(relativePath)
@@ -100,7 +100,7 @@ class AssetProcessorService {
 	}
 
 
-	String getConfigBaseUrl(final HttpServletRequest req, final ConfigObject conf = grailsApplication.config.grails.assets) {
+	String getConfigBaseUrl(final HttpServletRequest req, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		final def url = conf.url
 		if(url instanceof Closure) {
 			return url(req)
@@ -109,7 +109,7 @@ class AssetProcessorService {
 	}
 
 
-	String assetBaseUrl(final HttpServletRequest req, final UrlBase urlBase, final ConfigObject conf = grailsApplication.config.grails.assets) {
+	String assetBaseUrl(final HttpServletRequest req, final UrlBase urlBase, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		final String url = getConfigBaseUrl(req, conf)
 		if (url) {
 			return url

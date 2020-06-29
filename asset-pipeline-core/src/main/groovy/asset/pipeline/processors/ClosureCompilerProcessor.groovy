@@ -89,7 +89,7 @@ class ClosureCompilerProcessor {
 
 	public void translateMinifyOptions(CompilerOptions compilerOptions, Map minifyOptions) {
 		def defaultOptions = [
-			languageMode: 'ECMASCRIPT_NEXT',
+			// languageMode: 'ECMASCRIPT_NEXT',
 			optimizationLevel: 'SIMPLE' //WHITESPACE , ADVANCED
 		]
 
@@ -117,7 +117,7 @@ class ClosureCompilerProcessor {
 			case 'ECMASCRIPT_NEXT':
 				return LanguageMode.ECMASCRIPT_NEXT
 			default:
-				return LanguageMode.ECMASCRIPT_NEXT
+				return LanguageMode.ECMASCRIPT5
 		}
 	}
 
