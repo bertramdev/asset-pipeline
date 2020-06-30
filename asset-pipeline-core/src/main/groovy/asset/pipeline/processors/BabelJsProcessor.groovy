@@ -82,7 +82,7 @@ class BabelJsProcessor extends AbstractProcessor {
 		if(input.contains("export default")) {
 			newEcmascriptKeywordsFound = true;
 		}
-		if(!newEcmascriptKeywordsFound && assetFile instanceof JsAssetFile) {
+		if(assetFile instanceof JsAssetFile) {
 			if((!newEcmascriptKeywordsFound && !AssetPipelineConfigHolder.config?.enableES6 && !AssetPipelineConfigHolder.config?."enable-es6") || (newEcmascriptKeywordsFound && (AssetPipelineConfigHolder.config?.enableES6 == false || AssetPipelineConfigHolder.config?."enable-es6" == false))) {
 				return input
 			}
