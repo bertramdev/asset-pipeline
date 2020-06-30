@@ -121,9 +121,19 @@ class ClosureCompilerProcessor {
 			case 'ES5':
 				return LanguageMode.ECMASCRIPT5
 			case 'ES3':
-				return LanguageMode.ECMASCRIPT3	
+				return LanguageMode.ECMASCRIPT3
+			case 'ES2016':
+				return LanguageMode.ECMASCRIPT_2016
+			case 'ES2017':
+				return LanguageMode.ECMASCRIPT_2017
+			case 'ES2018':
+				return LanguageMode.ECMASCRIPT_2018	
+			case 'ES2019':
+				return LanguageMode.ECMASCRIPT_2019
+			case 'ES2020':
+				return LanguageMode.ECMASCRIPT_2020	
 			default:
-				return LanguageMode.ECMASCRIPT5
+				return LanguageMode.ECMASCRIPT_2020
 		}
 	}
 

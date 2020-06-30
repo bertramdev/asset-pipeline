@@ -15,14 +15,15 @@
 */
 
 package asset.pipeline.gradle
-
+import groovy.util.logging.Slf4j
 /**
 * Gradle Implementation of the original Gant Grails EventListener.
 * This is used to broadcast status messages provided by the asset compiler
 * @author David Estes
 */
+@Slf4j
 class GradleEventListener {
 	def triggerEvent(eventName, message) {
-		println message
+		log.info(message)
 	}
 }

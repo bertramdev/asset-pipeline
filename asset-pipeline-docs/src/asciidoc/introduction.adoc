@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* June 30, 2020
+** - 3.2.4 - Updates Minification to default source language as ECMASCRIPT_2020. This is configurable via languageMode. Changes compiler output to use gradle logger (less verbose by default). Fixes issue with disabling babel.
 * June 29, 2020
 ** - 3.2.3 - Updated settings for minification, fixed ability to disable babel, improved filter position for grails, added context loader support. More on this later. Removed grails4 deprecation warning on Config.
 * April 20, 2020

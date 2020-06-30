@@ -43,7 +43,7 @@ import java.util.regex.Matcher
 import org.springframework.core.io.DefaultResourceLoader
 import org.springframework.core.io.Resource
 import org.springframework.core.io.ResourceLoader
-
+import groovy.util.logging.Slf4j
 import java.util.regex.Pattern
 
 
@@ -75,6 +75,7 @@ import java.util.regex.Pattern
  * @version 3.0
  */
 @CompileStatic
+@Slf4j
 class I18nProcessor extends AbstractProcessor {
 
     //-- Constants ------------------------------
@@ -231,7 +232,7 @@ class I18nProcessor extends AbstractProcessor {
                 messages.putAll(props)
             }
             catch(Exception e){
-                System.out.println "Could not load file ${option}"
+                log.warn "i18N: Could not load file ${option}"
             }
         }
         messages
