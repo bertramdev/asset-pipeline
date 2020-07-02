@@ -17,7 +17,7 @@ package asset.pipeline.sass
 
 import asset.pipeline.AssetHelper
 
-import groovy.util.logging.Log4j
+import groovy.util.logging.Slf4j
 import asset.pipeline.CacheManager
 import org.jruby.embed.LocalVariableBehavior;
 import org.jruby.embed.ScriptingContainer;
@@ -30,7 +30,7 @@ import asset.pipeline.AbstractAssetFile
 import asset.pipeline.AssetPipelineConfigHolder
 import groovy.transform.CompileStatic
 
-@Log4j
+@Slf4j
 class SassProcessor extends AbstractProcessor {
     public static final java.lang.ThreadLocal threadLocal = new ThreadLocal();
     public static final java.lang.ThreadLocal fileMap = new ThreadLocal();
