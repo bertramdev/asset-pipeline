@@ -45,7 +45,7 @@ sourceSets {
 dependencies {
     provided 'org.codehaus.groovy:groovy-all:2.4.19'
 	compile project(':asset-pipeline-core')
-    compile 'log4j:log4j:1.2.17'
+    // compile 'log4j:log4j:1.2.17'
     // compile 'org.yaml:snakeyaml:1.26'
     // compile 'org.jruby:jruby:9.2.11.1'
 	compile 'org.jruby:jruby-complete:9.2.11.1'
