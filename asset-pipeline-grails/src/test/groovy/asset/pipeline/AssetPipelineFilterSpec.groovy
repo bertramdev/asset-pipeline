@@ -16,12 +16,10 @@
 
 package asset.pipeline
 
-import grails.test.mixin.TestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import asset.pipeline.fs.FileSystemAssetResolver
 
-@TestMixin(GrailsUnitTestMixin)
+// @TestMixin(GrailsUnitTestMixin)
 class AssetPipelineFilterSpec extends Specification {
     AssetPipelineFilter filter
     Properties manifest

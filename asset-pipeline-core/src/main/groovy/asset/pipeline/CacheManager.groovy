@@ -22,14 +22,14 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * A Cache Manager for the Asset-Pipeline runtime. This reduces repeat processing
  * of files that have already been processed during the runtime of the asset-pipeline.
- * It also is capable of persisting this cache as an ObjectStream to the '.asscache' file
+ * It also is capable of persisting this cache as an ObjectStream to the '.assetcache' file
  * Private API Class
  *
  * @author David Estes
  * @author Graeme Rocher
  */
 public class CacheManager {
-	static final String CACHE_LOCATION = ".asscache"
+	static final String CACHE_LOCATION = ".assetcache"
 	static final Integer CACHE_DEBOUNCE_MS = 5000 // De-bounce 5 seconds
 	static Map<String, Map<String, Object>> cache = [:]
     static String configCacheBustDigest

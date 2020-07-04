@@ -4,6 +4,7 @@ buildscript {
     }
     repositories {
         mavenLocal()
+        jcenter()
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
@@ -12,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.6"
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
 
@@ -30,7 +31,6 @@ apply plugin: "org.grails.grails-plugin-publish"
 // Used for publishing to central repository, remove if not needed
 ext {
     grailsVersion = project.grailsVersion
-    gradleWrapperVersion = project.gradleWrapperVersion
     websiteUrl = "http://www.asset-pipeline.com"
     vcsUrl = "https://github.com/bertramdev/grails-asset-pipeline/tree/grails3"
     issueTrackerUrl = "https://github.com/bertramdev/grails-asset-pipeline/issues"
@@ -42,6 +42,7 @@ targetCompatibility = 1.7
 
 repositories {
     mavenLocal()
+    jcenter()
     mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }
@@ -86,24 +87,21 @@ bintray {
 }
 
 dependencies {
-    provided 'org.springframework.boot:spring-boot-starter-logging'
-    provided "org.springframework.boot:spring-boot-starter-actuator"
-    provided "org.springframework.boot:spring-boot-autoconfigure"
-    provided "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
 
-    provided "org.grails:grails-web-boot"
-    provided "org.grails:grails-dependencies"
-    provided 'javax.servlet:javax.servlet-api:3.1.0'
-    provided "org.grails:grails-dependencies"
-    compile project(':asset-pipeline-core'), {
+    implementation "org.grails:grails-web-boot"
+    implementation "org.grails:grails-dependencies"
+    implementation 'javax.servlet:javax.servlet-api:3.1.0'
+    implementation "org.grails:grails-dependencies"
+    implementation project(':asset-pipeline-core'), {
         exclude group:'org.mozilla', module:'rhino'
         exclude group:'com.google.javascript', module:'closure-compiler-unshaded'
     }
-
-    testCompile "org.grails:grails-plugin-testing"
-
-    testCompile "org.grails:grails-plugin-testing"
-
+    testImplementation('org.grails:grails-web-testing-support')
+    // testCompile "org.grails:grails-plugin-testing"
     console "org.grails:grails-console"
 }
 
@@ -111,7 +109,7 @@ bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
 }
 // enable if you wish to package this plugin as a standalone application
-bootRepackage.enabled = false
+// bootRepackage.enabled = false
 
 grailsPublish {
   if(project.hasProperty('bintrayUser')) {
@@ -124,10 +122,6 @@ grailsPublish {
         name = 'Apache-2.0'
     }
     title = "Asset-Pipeline Grails"
-    desc = "The Asset-Pipeline is a plugin used for managing and processing static assets in Grails applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript."
+    desc = "The Asset-Pipeline is a plugin used for managing and processing static assets in Grails applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to api custom static assets, such as CoffeeScript."
     developers = [davydotcom:"David Estes"]
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
 }

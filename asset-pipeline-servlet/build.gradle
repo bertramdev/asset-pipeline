@@ -8,13 +8,13 @@ buildscript {
 }
 
 plugins {
-	id 'com.jfrog.bintray' version '1.2'
+	id "com.jfrog.bintray" version "1.8.5"
 }
 
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
-apply plugin: 'maven'
+apply plugin: 'java-library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
 
@@ -39,16 +39,16 @@ sourceSets {
 }
 
 dependencies {
-	provided    'org.codehaus.groovy:groovy:2.4.19'
-	compile     project(':asset-pipeline-core')
-	compile 'javax.servlet:javax.servlet-api:3.1.0'
-	testCompile 'org.codehaus.groovy:groovy:2.4.19'
-    testCompile 'org.eclipse.jetty:jetty-server:9.2.10.v20150310'
-    testCompile 'org.eclipse.jetty:jetty-servlet:9.2.10.v20150310'
-    testCompile 'org.eclipse.jetty:jetty-webapp:9.2.10.v20150310'
-    testCompile "org.apache.httpcomponents:httpclient:4.3.4"
-    testCompile "org.apache.httpcomponents:fluent-hc:4.3.4"
-    testCompile 'junit:junit:4.10'
+	implementation    'org.codehaus.groovy:groovy:2.4.19'
+	api     project(':asset-pipeline-core')
+	api 'javax.servlet:javax.servlet-api:3.1.0'
+	testImplementation 'org.codehaus.groovy:groovy:2.4.19'
+    testImplementation 'org.eclipse.jetty:jetty-server:9.2.10.v20150310'
+    testImplementation 'org.eclipse.jetty:jetty-servlet:9.2.10.v20150310'
+    testImplementation 'org.eclipse.jetty:jetty-webapp:9.2.10.v20150310'
+    testImplementation "org.apache.httpcomponents:httpclient:4.3.4"
+    testImplementation "org.apache.httpcomponents:fluent-hc:4.3.4"
+    testImplementation 'junit:junit:4.10'
 }
 
 test {
@@ -90,8 +90,10 @@ publishing {
 				}
 			}
 			from components.java
+			afterEvaluate {
 			artifact sourcesJar
 			artifact javadocJar
+}
 		}
 	}
 

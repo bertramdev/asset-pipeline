@@ -1,4 +1,5 @@
 build/
+.assetcache
 .asscache
 .DS_Store
 .gradle
@@ -9,6 +10,7 @@ build/
 asset-pipeline-site/src/assets/html/manual/
 asset-pipeline-site/src/assets/html/apidoc/
 .asscache
+.assetcache
 .jruby-container
 .sass-cache
 .sass-work

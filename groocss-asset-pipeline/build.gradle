@@ -8,12 +8,12 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.2"
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
-apply plugin: 'maven'
+apply plugin: 'java-library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
 
@@ -42,11 +42,11 @@ sourceSets {
 }
 
 dependencies {
-    provided 'org.codehaus.groovy:groovy-all:2.4.19'
-    compile project(':asset-pipeline-core')
-	compile "org.groocss:groocss:1.0-M1"
+    implementation 'org.codehaus.groovy:groovy-all:2.4.19'
+    api project(':asset-pipeline-core')
+	api "org.groocss:groocss:1.0-M1"
 
-    testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
+    testImplementation "org.spockframework:spock-core:1.1-groovy-2.4"
 }
 
 publishing {
@@ -81,8 +81,10 @@ publishing {
                 }
             }
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
+            afterEvaluate {
+                artifact sourcesJar
+                artifact javadocJar    
+            }
         }
     }
 }

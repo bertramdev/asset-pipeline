@@ -18,15 +18,13 @@ package asset.pipeline.grails
 
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
-import grails.test.mixin.TestFor
 import spock.lang.Specification
-
+import grails.testing.web.taglib.TagLibUnitTest
 
 /**
  * @author David Estes
  */
-@TestFor(AssetMethodTagLib)
-class AssetMethodTagLibSpec extends Specification {
+class AssetMethodTagLibSpec extends Specification implements TagLibUnitTest<AssetMethodTagLib> {
 
 	private static final MOCK_BASE_SERVER_URL = 'http://localhost:8080/foo'
 

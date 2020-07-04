@@ -2,7 +2,7 @@
 .gradle
 gradle.properties
 build/
-.asscache
+.assetcache
 .idea/
 *.iml
 classes/

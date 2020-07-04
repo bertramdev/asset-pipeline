@@ -23,12 +23,10 @@ import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.GenericAssetFile
 import asset.pipeline.fs.AssetResolver
 import asset.pipeline.grails.AssetProcessorService
-import grails.test.mixin.TestFor
 import spock.lang.Specification
+import grails.testing.web.taglib.TagLibUnitTest
 
-
-@TestFor(I18nTagLib)
-class I18nTagLibSpec extends Specification {
+class I18nTagLibSpec extends Specification implements TagLibUnitTest<I18nTagLib> {
 
     //-- Fixture methods ------------------------
 

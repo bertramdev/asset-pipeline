@@ -19,15 +19,12 @@ package asset.pipeline.grails
 import asset.pipeline.AssetPipeline
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.FileSystemAssetResolver
-import grails.test.mixin.TestFor
 import spock.lang.Specification
-
-
+import grails.testing.services.ServiceUnitTest
 /**
  * @author Tommy Barker
  */
-@TestFor(AssetProcessorService)
-class AssetProcessorServiceSpec extends Specification {
+class AssetProcessorServiceSpec extends Specification implements ServiceUnitTest<AssetProcessorService> {
 
 	private static final MOCK_BASE_SERVER_URL = 'http://localhost:8080/foo'
 

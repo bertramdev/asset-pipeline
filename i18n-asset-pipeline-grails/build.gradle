@@ -35,6 +35,7 @@ group 'com.bertramlabs.plugins'
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'java-library'
 apply plugin: 'asset-pipeline'
 apply plugin: 'org.grails.grails-plugin'
 apply plugin: 'org.grails.grails-plugin-publish'
@@ -61,24 +62,23 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-autoconfigure'
-    compile 'org.springframework.boot:spring-boot-starter-actuator'
-    compile 'org.springframework.boot:spring-boot-starter-logging'
-    compile 'org.springframework.boot:spring-boot-starter-tomcat'
-    compile 'org.grails:grails-core'
-    compile 'org.grails:grails-dependencies'
-    compile 'org.grails:grails-web-boot'
-    compile project(':asset-pipeline-core')
-    compile project(':asset-pipeline-grails')
-    // compile "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"
-    // compile 'com.bertramlabs.plugins:asset-pipeline-grails:2.13.2'
-    // compile 'com.bertramlabs.plugins:asset-pipeline-core:2.13.2'
+    api 'org.springframework.boot:spring-boot-autoconfigure'
+    api 'org.springframework.boot:spring-boot-starter-actuator'
+    api 'org.springframework.boot:spring-boot-starter-logging'
+    api 'org.springframework.boot:spring-boot-starter-tomcat'
+    api 'org.grails:grails-core'
+    api 'org.grails:grails-dependencies'
+    api 'org.grails:grails-web-boot'
+    api project(':asset-pipeline-core')
+    api project(':asset-pipeline-grails')
+    // api "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"
+    // api 'com.bertramlabs.plugins:asset-pipeline-grails:2.13.2'
+    // api 'com.bertramlabs.plugins:asset-pipeline-core:2.13.2'
 
     console 'org.grails:grails-console'
 
     profile 'org.grails.profiles:web-plugin:3.1.3'
-
-    testCompile 'org.grails:grails-plugin-testing'
+    testImplementation('org.grails:grails-web-testing-support')
 }
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion

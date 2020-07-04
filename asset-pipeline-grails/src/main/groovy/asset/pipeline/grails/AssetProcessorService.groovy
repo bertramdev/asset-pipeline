@@ -117,7 +117,7 @@ class AssetProcessorService {
 
 		final String mapping = assetMapping
 
-		final String baseUrl
+		String baseUrl
 		switch (urlBase) {
 			case SERVER_BASE_URL:
 				baseUrl = grailsLinkGenerator.serverBaseURL ?: ''

@@ -14,6 +14,9 @@ apply plugin: 'groovy'
 
 version "0.1"
 
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+
 // assets {
 // 	packagePlugin = true
 // }
@@ -32,5 +35,5 @@ repositories {
 
 
 dependencies {
-	provided localGroovy()
+	implementation localGroovy()
 }
