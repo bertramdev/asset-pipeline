@@ -1,11 +1,14 @@
 package asset.pipeline
 
+import groovy.transform.CompileStatic
+
 /**
  * Receives asynchronous cache persistance requests and executes them.
  * Also acts as a debouncer
  *
  * @author David Estes
  */
+// @CompileStatic
 public class CachePersister extends Thread {
 	public Integer delay = 0
 	public Boolean ran = true

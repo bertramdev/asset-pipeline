@@ -17,7 +17,7 @@
 package asset.pipeline
 
 import java.util.concurrent.ConcurrentHashMap
-
+import groovy.transform.CompileStatic
 
 /**
  * A Cache Manager for the Asset-Pipeline runtime. This reduces repeat processing
@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @author David Estes
  * @author Graeme Rocher
  */
+// @CompileStatic
 public class CacheManager {
 	static final String CACHE_LOCATION = ".assetcache"
 	static final Integer CACHE_DEBOUNCE_MS = 5000 // De-bounce 5 seconds

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
@@ -142,7 +143,7 @@ public class AssetPipelineService {
 					LOG.debug("Generating Response");
 					return Flowable.fromCallable(() -> {
 						URLConnection urlCon = gzipStream ? assetAttribute.getGzipResource().openConnection() : assetAttribute.getResource().openConnection();
-						StreamedFile streamedFile = new StreamedFile(urlCon.getInputStream(), fileUri, urlCon.getLastModified(), urlCon.getContentLength() );
+						StreamedFile streamedFile = new StreamedFile(urlCon.getInputStream(), contentType, urlCon.getLastModified(), urlCon.getContentLength() );
 						MutableHttpResponse<StreamedFile> response = HttpResponse.ok(streamedFile);
 						if(gzipStream) {
 							response.header("Content-Encoding","gzip");
