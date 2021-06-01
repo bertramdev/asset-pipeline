@@ -6,6 +6,7 @@ import asset.pipeline.AssetFile
 import asset.pipeline.GenericAssetFile
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetHelper
+import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import asset.pipeline.CacheManager
 import java.util.regex.Pattern
@@ -85,6 +86,22 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						
 						if(!currFile) {
 							currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath.tokenize('/')[-1] + '/index.js','application/javascript')
+						}
+					}
+
+					// look for a node module
+					if(!currFile){
+						if(!assetPath.startsWith('/')) {
+							def packageFileName = [  assetPath, 'package.json' ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+							packageFileName = AssetHelper.normalizePath(packageFileName)
+							AssetFile packageJsonFile = AssetHelper.fileForUri(packageFileName)
+							if (packageJsonFile) {
+								JsonSlurper slurper = new JsonSlurper()
+								def packageJson = slurper.parse(packageJsonFile.getInputStream()) as Map
+								def realAssetFileName = [assetPath, packageJson.get("main")].join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
+								realAssetFileName = AssetHelper.normalizePath(realAssetFileName)
+								currFile = AssetHelper.fileForUri(realAssetFileName, 'application/javascript')
+							}
 						}
 					}
 
