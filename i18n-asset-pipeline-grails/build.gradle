@@ -38,7 +38,6 @@ apply plugin: 'idea'
 apply plugin: 'java-library'
 apply plugin: 'asset-pipeline'
 apply plugin: 'org.grails.grails-plugin'
-apply plugin: 'org.grails.grails-plugin-publish'
 apply plugin: 'org.grails.grails-gsp'
 apply plugin: 'org.grails.grails-doc'
 
@@ -47,7 +46,10 @@ ext {
     gradleWrapperVersion = project.gradleWrapperVersion
 }
 
-
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
 
 repositories {
     mavenLocal()
@@ -89,23 +91,56 @@ groovydoc {
     windowTitle = "I18n asset pipeline API v${version}"
 }
 
-grailsPublish {
-    user = project.hasProperty('bintrayUser') \
-        ? project.property('bintrayUser')
-        : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') \
-        ? project.property('bintrayApiKey')
-        : System.getenv('BINTRAY_API_KEY')
-    userOrg = 'bertramlabs'
-    repo = 'asset-pipeline'
-    githubSlug = 'bertramdev/asset-pipeline'
-    license {
-        name = 'Apache-2.0'
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'i18n-asset-pipeline-grails'
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'i18n-asset-pipeline-grails'
+                    description 'asset-pipeline plugin to use localized messages in JavaScript.'
+                    url 'https://github.com/bertramdev/asset-pipeline-core'
+                    scm {
+                        url 'https://github.com/bertramdev/asset-pipeline-core'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/asset-pipeline-core.git'
+                        developerConnection 'scm:git://github.com/bertramdev/asset-pipeline-core.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'davydotcom'
+                            name 'David Estes'
+                            email 'davydotcom@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+        }
     }
-    title = 'i18n-asset-pipeline-grails'
-    desc = 'asset-pipeline plugin to use localized messages in JavaScript.'
-    developers = [dellermann: 'Daniel Ellermann', davydotcom: "David Estes"]
+    repositories {
+        maven {
+            if( !isReleaseVersion ) {
+                url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
+                if(project.hasProperty('labsNexusUser')) {
+                    credentials {
+                        username = labsNexusUser
+                        password = labsNexusPassword
+                    }
+                }
+            }
+        }
+    }
 }
+
+
 
 assets {
     packagePlugin = true

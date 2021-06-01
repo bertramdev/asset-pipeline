@@ -1,19 +1,29 @@
 buildscript {
 	repositories {
 		mavenLocal()
-		jcenter()
+		mavenCentral()
+		maven { url "https://plugins.gradle.org/m2/" }
 	}
 	dependencies {
+		classpath "io.github.gradle-nexus:publish-plugin:1.0.0"
 	}
 }
 
-subprojects {
-	version = '3.3.1'
+plugins {
+	id 'java'
+	id 'groovy'
+	id 'java-library'
+    id 'signing'
+    id 'idea'
+    id 'maven-publish'
 }
 
-apply plugin: 'java-library'
-apply plugin: 'groovy'
-apply plugin: 'idea'
+
+ext {
+    isBuildSnapshot = version.endsWith('-SNAPSHOT')
+    isReleaseVersion = !isBuildSnapshot
+}
+
 
 group = 'com.bertramlabs.plugins'
 
@@ -22,10 +32,58 @@ repositories {
 	mavenCentral()
 }
 
-// groovydoc {
-// 	groovyClasspath = configurations.doc
-// }
+if (isReleaseVersion) {
+    apply plugin: "io.github.gradle-nexus.publish-plugin"
+    nexusPublishing {
+        repositories {
+            sonatype {
+                if(project.hasProperty('mavenUser')) {
+                    username = mavenUser
+                    password = mavenPassword
+                }   
+            }
+        }
+    }
+} else {
+	
+    publishing {
+        repositories {
+            maven {
+                url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
+                if(project.hasProperty('labsNexusUser')) {
+                    credentials {
+                        username = labsNexusUser
+                        password = labsNexusPassword
+                    }
+                }
+            }
+        }
+    }
+}
 
+subprojects { project ->
+	if (project.name != 'asset-pipeline-classpath-test' && project.name != 'asset-pipeline-docs' && project.name != 'asset-pipeline-site') {
+	    apply plugin: 'java'
+	    apply plugin: 'maven-publish'
+	    apply plugin: 'signing'
+	    afterEvaluate {
+	        signing {
+	            required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+	            sign publishing.publications.maven
+	        }
+	    }
+
+	    tasks.withType(Sign) {
+	        onlyIf { isReleaseVersion }
+	    }
+
+	    //do not generate extra load on Nexus with new staging repository if signing fails
+	    tasks.withType(io.github.gradlenexus.publishplugin.InitializeNexusStagingRepository).configureEach {
+	        shouldRunAfter(tasks.withType(Sign))
+	    }
+    
+    }
+}
 
 dependencies {
 	api 'org.codehaus.groovy:groovy:2.4.19'

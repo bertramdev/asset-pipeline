@@ -10,7 +10,6 @@ buildscript {
 }
 
 plugins {
-	id "com.jfrog.bintray" version "1.8.5"
 	id "io.spring.dependency-management" version "1.0.6.RELEASE"
 	// id "io.micronaut.library" version "1.0.0.RC13"
 }
@@ -22,7 +21,6 @@ plugins {
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'java-library'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
@@ -50,13 +48,11 @@ sourceSets {
 	}
 }
 
-// micronaut {
-//     version "2.0.2"
-//     processing {
-//     	incremental true
-//     	annotations 'asset.pipeline.micronaut.*'
-//     }
-// }
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 
 dependencies {
 	compileOnly(platform("io.micronaut:micronaut-bom:2.0.2"))
@@ -115,61 +111,22 @@ publishing {
 				}
 			}
 			from components.java
-			afterEvaluate {
-				artifact sourcesJar
-				artifact javadocJar
-			}
 		}
 	}
 
-	repositories {
-		maven {
-			credentials {
-				username project.properties.get('artifactoryPublishUsername')
-				password project.properties.get('artifactoryPublishPassword')
-			}
-			url 'https://repo.grails.org/grails/libs-snapshots-local/'
-		}
-	}
-}
-
-bintray {
-	if(project.hasProperty('bintrayUser')) {
-		user = bintrayUser
-		key = bintrayKey
-	}
-	publications = ['maven']
-    publish=true//true
-	pkg {
-		repo = 'asset-pipeline'
-		userOrg = 'bertramlabs'
-		name = 'asset-pipeline-micronaut'
-		licenses = ['Apache-2.0']
-		websiteUrl = 'https://github.com/bertramdev/asset-pipeline'
-        issueTrackerUrl = 'https://github.com/bertramdev/asset-pipeline/issues'
-        vcsUrl = 'https://github.com/bertramdev/asset-pipeline.git'
-        version {
-            if (project.hasProperty('mavenUser')) {
-                mavenCentralSync {
-                    sync = true//true //Optional (true by default). Determines whether to sync the version to Maven Central.
-                    user = mavenUser //OSS user token
-                    password = mavenPassword //OSS user password
-                    close = '1'
-                    //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+    repositories {
+        maven {
+            if( !isReleaseVersion ) {
+                url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
+                if(project.hasProperty('labsNexusUser')) {
+                    credentials {
+                        username = labsNexusUser
+                        password = labsNexusPassword
+                    }
                 }
             }
         }
-	}
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadoc'
-	from 'build/docs/javadoc'
-}
-
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+    }
 }
 
 task(console, dependsOn: 'classes', type: JavaExec) {
@@ -180,6 +137,3 @@ task(console, dependsOn: 'classes', type: JavaExec) {
 tasks.withType(GroovyCompile) {
     groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
 }
-
-
-bintrayUpload.dependsOn build, sourcesJar, javadocJar
