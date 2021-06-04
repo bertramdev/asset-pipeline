@@ -37,7 +37,13 @@ class AssetPipelineDevFilterCore {
 		}
 		final String format = servletContext.getMimeType(request.requestURI)
 
-		final byte[] fileContents = AssetPipeline.serveAsset(fileUri, format, null, request.characterEncoding)
+		final byte[] fileContents
+		if(request.getParameter('compile') == 'false') {
+			fileContents = AssetPipeline.serveUncompiledAsset(fileUri, format, null, request.characterEncoding)
+		} else {
+			fileContents = AssetPipeline.serveAsset(fileUri, format, null, request.characterEncoding)
+		}
+
 		if(fileContents) {
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 			response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
