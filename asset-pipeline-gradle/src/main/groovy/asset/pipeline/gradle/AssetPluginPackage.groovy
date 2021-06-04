@@ -8,7 +8,9 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
-import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -21,9 +23,10 @@ import org.gradle.api.tasks.CacheableTask
 @CacheableTask  
 class AssetPluginPackage extends DefaultTask {
     private String destinationDirectoryPath
-    @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()
+    @Delegate(methodAnnotations = true) private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
 
-    @Input
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
     File getAssetsDir() {
         def path = pipelineExtension.assetsPath
         return path ? new File(path) : null
@@ -43,6 +46,7 @@ class AssetPluginPackage extends DefaultTask {
     }
 
     @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     FileTree getSource() {
         FileTree src = getProject().files(this.assetsDir).getAsFileTree();
         return src

@@ -51,7 +51,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
     void apply(Project project) {
         createGradleConfiguration(project)
 
-        def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtension)
+        def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtensionImpl)
         def config = AssetPipelineConfigHolder.config != null ? AssetPipelineConfigHolder.config : [:]
         config.cacheLocation = "${project.buildDir}/.assCache"
         if (project.extensions.findByName('grails')) {
@@ -73,7 +73,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
 
         project.afterEvaluate {
-            def assetPipeline = project.extensions.getByType(AssetPipelineExtension)
+            def assetPipeline = project.extensions.getByType(AssetPipelineExtensionImpl)
             ProcessResources processResources
             DistributionContainer distributionContainer
             processResources = (ProcessResources) project.tasks.findByName('processResources')
