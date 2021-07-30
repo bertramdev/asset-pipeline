@@ -37,10 +37,19 @@ grails.assets.minifyOptions = [
     languageMode: 'ES5',
     targetLanguage: 'ES5', //Can go from ES6 to ES5 for those bleeding edgers
     optimizationLevel: 'SIMPLE' //Or ADVANCED or WHITESPACE_ONLY
+    warningLevel: ['duplicate': 'OFF']
 ]
 {code}
 
 Above are the default values for the majority of Closure Compiler. For specifics on what these options do please refer to the documentation for Closure Compiler.
+
+Since 3.3.3, you could also configure the warningLevel for the Closure Compiler minifyOptions as:
+```
+grails.assets.minifyOptions = [
+    warningLevel: ['duplicate': 'OFF']
+]
+```
+The key in the `warningLevel` represents the registered name of @com.google.javascript.jscomp.DiagnosticGroup@ and the value must be supported @com.google.javascript.jscomp.CheckLevel@.
 
 h3. Mappings and Asset Taglib URLs
 

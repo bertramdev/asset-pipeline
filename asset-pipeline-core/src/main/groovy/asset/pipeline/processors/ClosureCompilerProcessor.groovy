@@ -19,6 +19,8 @@ package asset.pipeline.processors
 import asset.pipeline.AssetCompiler
 import com.google.javascript.jscomp.*
 import com.google.javascript.jscomp.CompilerOptions.LanguageMode
+import com.sun.tools.javac.comp.Check
+
 import java.util.logging.Level
 import groovy.transform.CompileStatic
 
@@ -93,8 +95,6 @@ class ClosureCompilerProcessor {
 			optimizationLevel: 'SIMPLE' //WHITESPACE , ADVANCED
 		]
 
-		
-
 		minifyOptions = defaultOptions + minifyOptions
 		LanguageMode languageIn = evaluateLanguageMode(minifyOptions.get('languageMode') as String)
 		if(minifyOptions.targetLanguage) {
@@ -108,6 +108,18 @@ class ClosureCompilerProcessor {
 		setCompilationLevelOptions(compilerOptions, minifyOptions.get('optimizationLevel') as String)
 		if (minifyOptions.angularPass) {
 			compilerOptions.setAngularPass(true)
+		}
+		if (minifyOptions.containsKey('warningLevel')) {
+			final Map<String, String> warningLevel = minifyOptions.get('warningLevel') as Map<String, String>
+			if (warningLevel) {
+				for(Map.Entry<String, String> entry: warningLevel.entrySet()) {
+					final DiagnosticGroup diagnosticGroup = DiagnosticGroups.forName(entry.getKey())
+					final CheckLevel checkLevel = CheckLevel.valueOf(entry.getValue())
+					if (diagnosticGroup && checkLevel) {
+						compilerOptions.setWarningLevel(diagnosticGroup, checkLevel)
+					}
+				}
+			}
 		}
 	}
 
