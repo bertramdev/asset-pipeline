@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* August 9, 2021
+** - 3.3.3 - Added Closure options for changing duplicate variables in javascript to a warn instead of build break if set. Also added node_modules resolution thanks @jjelliott and Puneet
 * July 4, 2020
 ** - 3.3.0 - Upgraded project gradle to 6.5...Renamed .asscache to .assetcache :(.
 * July 1, 2020
