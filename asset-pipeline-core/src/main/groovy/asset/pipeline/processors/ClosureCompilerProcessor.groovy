@@ -19,7 +19,6 @@ package asset.pipeline.processors
 import asset.pipeline.AssetCompiler
 import com.google.javascript.jscomp.*
 import com.google.javascript.jscomp.CompilerOptions.LanguageMode
-import com.sun.tools.javac.comp.Check
 
 import java.util.logging.Level
 import groovy.transform.CompileStatic
