@@ -16,39 +16,83 @@
 
 package asset.pipeline.gradle
 
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
+
 /**
  * Allows configuration of the Gradle plugin
  *
  * @author David Estes
  * @author Graeme Rocher
  */
-class AssetPipelineExtension {
-    boolean minifyJs = true
-    boolean enableSourceMaps = true
-    boolean minifyCss = true
-    boolean enableDigests = true
-    boolean skipNonDigests = false
-    boolean enableGzip = true
-    boolean packagePlugin=false
-    boolean developmentRuntime=true
-    boolean verbose = true
-    Integer maxThreads=null
-    String compileDir = 'build/assets'
-    String assetsPath = 'src/assets'
-	String jarTaskName
-    Map minifyOptions
-    Map configOptions
+interface AssetPipelineExtension {
+    @Input
+    boolean getMinifyJs()
+    void setMinifyJs(boolean value)
+    @Input
+    boolean getEnableSourceMaps()
+    void setEnableSourceMaps(boolean value)
+    @Input
+    boolean getMinifyCss()
+    void setMinifyCss(boolean value)
+    @Input
+    boolean getEnableDigests()
+    void setEnableDigests(boolean value)
+    @Input
+    boolean getSkipNonDigests()
+    void setSkipNonDigests(boolean value)
+    @Input
+    boolean getEnableGzip()
+    void setEnableGzip(boolean value)
+    @Input
+    boolean getPackagePlugin()
+    void setPackagePlugin(boolean value)
+    @Input
+    boolean getDevelopmentRuntime()
+    void setDevelopmentRuntime(boolean value)
+    @Input
+    boolean getVerbose()
+    void setVerbose(boolean value)
+    @Input
+    @Optional
+    Integer getMaxThreads()
+    void setMaxThreads(Integer value)
+    @Input
+    @Optional
+    String getCompileDir()
+    void setCompileDir(String value)
+    @Input
+    @Optional
+    String getAssetsPath()
+    void setAssetsPath(String value)
+    @Input
+    @Optional
+	String getJarTaskName()
+    void setJarTaskName(String value)
+    @Input
+    @Optional
+    Map getMinifyOptions()
+    void setMinifyOptions(Map value)
+    @Input
+    @Optional
+    Map getConfigOptions()
+    void setConfigOptions(Map value)
 
-    List excludesGzip
-    List excludes = []
-    List includes = []
-    List<String> resolvers = []
+    @Input
+    @Optional
+    List getExcludesGzip()
+    void setExcludesGzip(List value)
+    @Input
+    @Optional
+    List getExcludes()
+    void setExcludes(List value)
+    @Input
+    @Optional
+    List getIncludes()
+    void setIncludes(List value)
+    @Input
+    @Optional
+    List<String> getResolvers()
+    void setResolvers(List value)
 
-    void from(String resolverPath) {
-        resolvers += resolverPath
-    }
-    
-    Map toMap() {
-        return [minifyJs: minifyJs, minifyCss: minifyCss, minifyOptions: minifyOptions, compileDir: compileDir, enableGzip: enableGzip, skipNonDigests: skipNonDigests, enableDigests: enableDigests, excludesGzip: excludesGzip, enableSourceMaps: enableSourceMaps, maxThreads: maxThreads]
-    }
 }

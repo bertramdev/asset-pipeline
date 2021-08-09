@@ -10,6 +10,9 @@ import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
@@ -41,7 +44,7 @@ import org.gradle.api.tasks.CacheableTask
 @CacheableTask   
 class AssetCompile extends DefaultTask {
 
-    @Delegate AssetPipelineExtension pipelineExtension = new AssetPipelineExtension()
+    @Delegate(methodAnnotations = true) private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
     //private FileCollection classpath;
 
     @Input
@@ -55,7 +58,8 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.compileDir = dir.absolutePath
     }
 
-    @Input
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
     File getAssetsDir() {
         def path = pipelineExtension.assetsPath
         return path ? new File(path) : null
@@ -65,114 +69,8 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.assetsPath = assetsDir.absolutePath
     }
 
-    @Input
-    @Optional
-    boolean getEnableDigests() {
-        pipelineExtension.enableDigests
-    }
-
-
-    void setEnableDigests(boolean enableDigests) {
-        pipelineExtension.enableDigests = enableDigests
-    }
-
-    @Input
-    @Optional
-    boolean getMaxThreads() {
-        pipelineExtension.maxThreads
-    }
-
-
-    void setMaxThreads(Integer maxThreads) {
-        pipelineExtension.maxThreads = maxThreads
-    }
-
-	@Input
-	@Optional
-	String getJarTaskName() {
-		pipelineExtension.jarTaskName
-	}
-
-	void setJarTaskName(String jarTaskName) {
-		pipelineExtension.jarTaskName = jarTaskName
-	}
-
-    @Input
-    @Optional
-    boolean getEnableGzip() {
-        pipelineExtension.enableGzip
-    }
-
-    void setEnableGzip(boolean enableGzip) {
-        pipelineExtension.enableGzip = enableGzip
-    }
-
-    @Input
-    @Optional
-    boolean getEnableSourceMaps() {
-        pipelineExtension.enableSourceMaps
-    }
-
-    void setEnableSourceMaps(boolean enableSourceMaps) {
-        pipelineExtension.enableSourceMaps = enableSourceMaps
-    }
-
-    @Input
-    @Optional
-    boolean getSkipNonDigests() {
-        pipelineExtension.skipNonDigests
-    }
-
-    void setSkipNonDigests(boolean skipNonDigests) {
-        pipelineExtension.skipNonDigests = skipNonDigests
-    }
-
-
-    @Input
-    @Optional
-    boolean getMinifyJs() {
-        pipelineExtension.minifyJs
-    }
-
-    void setMinifyJs(boolean minifyJs) {
-        pipelineExtension.minifyJs = minifyJs
-    }
-
-
-    @Input
-    @Optional
-    boolean getMinifyCss() {
-        pipelineExtension.minifyCss
-    }
-
-    void setMinifyCss(boolean minifyCss) {
-        pipelineExtension.minifyCss = minifyCss
-    }
-
-
-    @Input
-    @Optional
-    boolean getVerbose() {
-        pipelineExtension.verbose
-    }
-
-    void setVerbose(boolean verbose) {
-        pipelineExtension.verbose = verbose
-    }
-
-
-    @Input
-    @Optional
-    Map getConfigOptions() {
-        pipelineExtension.configOptions
-    }
-
-    void setConfig(Map configOptions) {
-        pipelineExtension.configOptions = configOptions
-    }
-
-
     @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     @Optional
     public FileCollection getClasspath() {
         try {
@@ -209,6 +107,7 @@ class AssetCompile extends DefaultTask {
 
 
     @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     FileTree getSource() {
         FileTree src = getProject().files(this.assetsDir).getAsFileTree();
         pipelineExtension.resolvers.each { String path ->
