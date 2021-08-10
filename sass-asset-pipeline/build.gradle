@@ -45,7 +45,7 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:2.4.19'
 	api project(':asset-pipeline-core')
     api 'org.slf4j:slf4j-api:1.7.28'
-    api 'io.bit3:jsass:5.10.3'
+    api 'io.bit3:jsass:5.10.4'
     testImplementation 'org.codehaus.groovy:groovy-all:2.4.19'
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
 
