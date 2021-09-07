@@ -173,7 +173,7 @@ class AssetCompile extends DefaultTask {
     @Optional
     public FileCollection getClasspath() {
         try {
-            FileCollection runtimeFiles = getProject().configurations.getByName('runtime') as FileCollection
+            FileCollection runtimeFiles = getProject().configurations.getByName('runtimeClasspath') as FileCollection
             
             
             FileCollection totalFiles = runtimeFiles
