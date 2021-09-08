@@ -63,7 +63,7 @@ h3. Deferred Scripts
 Asset-Pipeline provides a set of tags that can be used to ensure script blocks are deferred to the end of your page. This is not recommended as it is obtrusive, but has been added to help newcomers upgrade existing apps from resources.
 
 {code}
-<asset:javascript src="application.js" asset-defer/>
+<asset:javascript src="application.js" asset-defer="true"/>
 <asset:script type="text/javascript">
   console.log("Hello World");
 </asset:script>
