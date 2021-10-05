@@ -1,26 +1,27 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.0'
     }
 }
 
-apply plugin: 'org.asciidoctor.gradle.asciidoctor'
-
+plugins {
+    id 'org.asciidoctor.jvm.convert' version '3.1.0'
+}
 
 asciidoctor { 
     outputDir = new File("$buildDir/docs")
     options = [
-        doctype: 'book',
-        attributes: [
+        doctype: 'book'
+        
+    ]
+    attributes = [
             'source-highlighter': 'coderay',
             toc                 : 'left',
             'toc-title': 'Table of Contents',
             idprefix            : '',
             idseparator         : '-'
-        ]
-    ]
+     ]
 }

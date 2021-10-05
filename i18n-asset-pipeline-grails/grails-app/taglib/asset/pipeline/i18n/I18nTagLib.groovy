@@ -116,7 +116,7 @@ class I18nTagLib implements TagLibrary {
             }
         }
         if(src){
-            out << asset.javascript(src: src ?: (name + '.js'))
+            out << asset.javascript(attrs + [src: src ?: (name + '.js')])
         }
     }
 }
