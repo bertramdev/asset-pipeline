@@ -68,9 +68,9 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-actuator'
     api 'org.springframework.boot:spring-boot-starter-logging'
     api 'org.springframework.boot:spring-boot-starter-tomcat'
-    api 'org.grails:grails-core'
-    api 'org.grails:grails-dependencies'
-    api 'org.grails:grails-web-boot'
+    api "org.grails:grails-core:$grailsVersion"
+    api "org.grails:grails-dependencies:$grailsVersion"
+    api "org.grails:grails-web-boot:$grailsVersion"
     api project(':asset-pipeline-core')
     api project(':asset-pipeline-grails')
     // api "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"

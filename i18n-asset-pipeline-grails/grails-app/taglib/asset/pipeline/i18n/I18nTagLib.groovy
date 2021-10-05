@@ -28,7 +28,7 @@ import grails.core.GrailsApplication
 import groovy.transform.CompileStatic
 import org.springframework.context.ApplicationContext
 import org.springframework.core.io.Resource
-
+import groovy.util.logging.Slf4j
 
 /**
  * Class {@code I18nTagLib} contains tags that help loading client-side i18n
@@ -37,6 +37,7 @@ import org.springframework.core.io.Resource
  * @author  Daniel Ellermann
  * @version 3.0
  */
+@Slf4j
 class I18nTagLib implements TagLibrary {
 
     //-- Class fields ---------------------------
@@ -70,9 +71,7 @@ class I18nTagLib implements TagLibrary {
             log.warn "Unknown type ${l.class.name} for attribute 'locale'; use default locale."
         }
         locale = locale.replace('-', '_')
-        if (log.debugEnabled) {
-            log.debug "Retrieving i18n messages for locale ${locale}…"
-        }
+       
 
         String name = attrs.remove('name') ?: 'messages'
         String [] parts = locale.split('_')
@@ -85,9 +84,7 @@ class I18nTagLib implements TagLibrary {
             }
             buf << '.js'
             String assetName = buf.toString()
-            if (log.debugEnabled) {
-                log.debug "Trying to find asset ${assetName}…"
-            }
+            
 
             if (manifest) {
     			String fileUri = manifest?.getProperty(assetName, assetName)
@@ -108,13 +105,7 @@ class I18nTagLib implements TagLibrary {
                 }
             }
         }
-        if (log.debugEnabled) {
-            if (src != null) {
-                log.debug "Found asset '${src}'."
-            } else {
-                log.debug "Localized asset not found - using default asset '${name}.js'"
-            }
-        }
+        
         if(src){
             out << asset.javascript(attrs + [src: src ?: (name + '.js')])
         }
