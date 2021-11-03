@@ -16,20 +16,15 @@
 
 package asset.pipeline.gradle
 
-import asset.pipeline.AssetFile
-import groovy.transform.CompileStatic
+import asset.pipeline.AssetPipelineConfigHolder
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import asset.pipeline.AssetCompiler
-import asset.pipeline.AssetPipelineConfigHolder
-import asset.pipeline.fs.FileSystemAssetResolver
-import org.gradle.api.UnknownTaskException
 import org.gradle.api.UnknownDomainObjectException
+import org.gradle.api.UnknownTaskException
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.distribution.DistributionContainer
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Delete
-import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.language.jvm.tasks.ProcessResources
@@ -193,7 +188,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME)
                 runtimeConfiguration.extendsFrom configuration        
             } else {
-                Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_CONFIGURATION_NAME)
+                Configuration runtimeConfiguration = project.configurations.getByName(JavaPlugin.RUNTIME_ONLY_CONFIGURATION_NAME)
                 runtimeConfiguration.extendsFrom configuration        
             }
             
