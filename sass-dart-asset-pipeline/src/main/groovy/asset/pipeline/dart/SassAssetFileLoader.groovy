@@ -36,7 +36,7 @@ class SassAssetFileLoader {
     @V8Function
     @SuppressWarnings('unused')
     Map resolveImport(String url, String prev, String assetFilePath) {
-        log.debug("resolving import for url [{}], prev [{}], asset file path [{}]", url, prev, assetFilePath)
+        log.debug("Resolving import for url [{}], prev [{}], asset file path [{}]", url, prev, assetFilePath)
         println "    > Importing [${url}], prev [$prev], asset file [${assetFilePath}]"
 
         // The initial import has a path of stdin, but we need to convert that to the proper base path
@@ -46,7 +46,7 @@ class SassAssetFileLoader {
         }
         else {
             // Resolve the real base path for this import
-            String priorParent = importMap.find { it.value == prev }?.key
+            String priorParent = importMap[prev]
             if (priorParent) {
                 Path priorParentPath = Paths.get(priorParent)
                 if (priorParentPath.parent) {
@@ -55,7 +55,9 @@ class SassAssetFileLoader {
             }
         }
 
-        importMap[prev] = url
+        // For each URL remember the last prev, this allows us to resolve nested imports since dart doesn't
+        // give us the full path when using stdin
+        importMap[url] = prev
 
         AssetFile imported = getAssetFromScssImport(prev, url)
         return [contents: imported.inputStream.text]
