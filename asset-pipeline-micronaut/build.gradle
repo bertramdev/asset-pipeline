@@ -67,8 +67,8 @@ dependencies {
     testImplementation("org.spockframework:spock-core:1.1-groovy-2.4") {
         exclude module:'groovy-all'
     }
-    testImplementation "io.micronaut:http-client:${micronautVersion}"
-    testImplementation "io.micronaut:inject-groovy:${micronautVersion}"
+//    testImplementation "io.micronaut:http-client:${micronautVersion}"
+//    testImplementation "io.micronaut:inject-groovy:${micronautVersion}"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
 }
 
