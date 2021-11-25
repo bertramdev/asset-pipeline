@@ -18,30 +18,53 @@ class SassAssetFileLoader {
 
     AssetFile baseFile
 
+    Map<String, String> importMap = [:]
+
     SassAssetFileLoader(AssetFile assetFile) {
         this.baseFile = assetFile
     }
 
+    /**
+     * Java callback function for the dart-sass Importer API
+     * https://sass-lang.com/documentation/js-api/interfaces/LegacySharedOptions#importer
+     *
+     * @param url the import it appears in the source file
+     * @prev either 'stdin' for the first level imports or the original url from the parent for nested
+     * @param assetFilePath the original assetFile.path that started the import chain
+     * @return https://sass-lang.com/documentation/js-api/modules#LegacyImporterResult
+     */
     @V8Function
     @SuppressWarnings('unused')
     Map resolveImport(String url, String prev, String assetFilePath) {
-        println "Import - Url=$url, Prev=$prev, AssetFilePath=$assetFilePath"
+        log.debug("resolving import for url [{}], prev [{}], asset file path [{}]", url, prev, assetFilePath)
+        println "    > Importing [${url}], prev [$prev], asset file [${assetFilePath}]"
 
-        Path filePath = Paths.get(assetFilePath)
+        // The initial import has a path of stdin, but we need to convert that to the proper base path
+        // Otherwise, if we have a parent, append that to form the correct URL as the importer syntax doesn't send what's expected
         if (prev == 'stdin') {
             prev = assetFilePath
         }
-        else if (filePath.parent) {
-            prev = "${filePath.parent.toString()}/${prev}"
+        else {
+            // Resolve the real base path for this import
+            String priorParent = importMap.find { it.value == prev }?.key
+            if (priorParent) {
+                Path priorParentPath = Paths.get(priorParent)
+                if (priorParentPath.parent) {
+                    prev = "${priorParentPath.parent.toString()}/${prev}"
+                }
+            }
         }
 
+        importMap[prev] = url
+
         AssetFile imported = getAssetFromScssImport(prev, url)
-        [contents: imported.inputStream.text]
+        return [contents: imported.inputStream.text]
     }
 
     /**
      * Find the real file name to be resolved to a AssetFile instance
      * This method tries to resolve path/to/imported.scss and path/to/_imported.scss
+     *
      * @param url
      * @return
      */

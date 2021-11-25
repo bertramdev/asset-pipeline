@@ -18,7 +18,6 @@ package asset.pipeline.dart
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
-import asset.pipeline.fs.FileSystemAssetResolver
 import com.caoccao.javet.enums.JSRuntimeType
 import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor
 import com.caoccao.javet.interop.V8Runtime
@@ -55,7 +54,9 @@ class SassProcessor extends AbstractProcessor {
      * @return the compiled output
      */
     String process(String input, AssetFile assetFile) {
+        log.debug "Compiling $assetFile.path"
         println "Compiling $assetFile.path"
+
         String output = null
 
         IJavetEngine<V8Runtime> javetEngine = javetEnginePool.getEngine()
@@ -77,13 +78,14 @@ class SassProcessor extends AbstractProcessor {
                 v8ValueObject.close()
             }
 
+            // Setup the options passed to the SASS compiler
+            // https://sass-lang.com/documentation/js-api/interfaces/LegacyStringOptions
             v8Runtime.getGlobalObject().setProperty("compileOptions", [
                 assetFilePath: assetFile.path,
                 data: input,
-                // includePaths: [((assetFile.sourceResolver as FileSystemAssetResolver).scanDirectories.first())]
             ])
 
-            // Execute the sass compiler
+            // Compile and retrieve the CSS output
             v8Runtime.getExecutor(sassCompiler).executeVoid()
             output = v8Runtime.getGlobalObject().get("css") as String
 

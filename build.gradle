@@ -28,8 +28,12 @@ ext {
 group = 'com.bertramlabs.plugins'
 
 repositories {
-	jcenter()
 	mavenCentral()
+}
+
+java {
+	withJavadocJar()
+	withSourcesJar()
 }
 
 //if (isReleaseVersion) {
@@ -45,20 +49,25 @@ repositories {
 //        }
 //    }
 //} else {
-    publishing {
-        repositories {
-            maven {
-                url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
-                if(project.hasProperty('labsNexusUser')) {
-                    credentials {
-                        username = labsNexusUser
-                        password = labsNexusPassword
-                    }
-                }
-            }
-        }
-    }
-//}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
+			if(project.hasProperty('labsNexusUser')) {
+				credentials {
+					username = labsNexusUser
+					password = labsNexusPassword
+				}
+			}
+		}
+	}
+}
 
 subprojects { project ->
 	if (project.name != 'asset-pipeline-classpath-test' && project.name != 'asset-pipeline-docs' && project.name != 'asset-pipeline-site') {
