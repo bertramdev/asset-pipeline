@@ -13,10 +13,15 @@ apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'java-library'
 apply plugin: 'idea'
+
 group = 'com.bertramlabs.plugins'
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
+
+ext {
+    javetVersion = "1.0.6"
+    isReleaseVersion = !version.endsWith("SNAPSHOT")
+}
 
 repositories {
 	mavenLocal()
@@ -45,10 +50,7 @@ apply plugin: 'com.github.node-gradle.node'
 
 dependencies {
     implementation 'org.codehaus.groovy:groovy-all:2.4.19'
-//    implementation 'com.eclipsesource.j2v8:j2v8:6.2.1'
-//    implementation 'com.eclipsesource.j2v8:j2v8_macosx_x86_64:4.6.0'
-//    implementation "com.caoccao.javet:javet:1.0.4"
-    implementation 'com.caoccao.javet:javet-macos:1.0.4' // Mac OS (x86_64 Only)
+    implementation "com.caoccao.javet:javet-core:${javetVersion}"
     api project(':asset-pipeline-core')
     api 'org.slf4j:slf4j-api:1.7.28'
     testImplementation 'org.codehaus.groovy:groovy-all:2.4.19'
@@ -107,6 +109,14 @@ publishing {
 }
 
 
+task copyJavetVersion()  {
+    doLast {
+        new File("${projectDir}/src/main/resources", "javet-version.txt").text = javetVersion
+    }
+}
+
+compileGroovy.dependsOn copyJavetVersion
+
 task(console, dependsOn: 'classes', type: JavaExec) {
   main = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
@@ -121,5 +131,5 @@ test {
 
 node {
     download = true
-    version = "14.18.1"
+    version = "16.13.0"
 }

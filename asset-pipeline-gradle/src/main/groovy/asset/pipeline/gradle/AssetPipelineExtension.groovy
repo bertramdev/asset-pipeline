@@ -93,6 +93,6 @@ interface AssetPipelineExtension {
     @Input
     @Optional
     List<String> getResolvers()
-    void setResolvers(List value)
+    void setResolvers(List<String> value)
 
 }

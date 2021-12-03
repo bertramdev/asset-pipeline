@@ -14,5 +14,3 @@ asset-pipeline-site/src/assets/html/apidoc/
 .jruby-container
 .sass-cache
 .sass-work
-node_modules/
-sass-dart-asset-pipeline/src/main/resources/js/

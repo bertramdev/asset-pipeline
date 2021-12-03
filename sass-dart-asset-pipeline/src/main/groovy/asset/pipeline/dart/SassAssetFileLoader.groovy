@@ -2,6 +2,7 @@ package asset.pipeline.dart
 
 import asset.pipeline.AssetFile
 import asset.pipeline.AssetHelper
+import asset.pipeline.CacheManager
 import com.caoccao.javet.annotations.V8Function
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -30,19 +31,17 @@ class SassAssetFileLoader {
      *
      * @param url the import it appears in the source file
      * @prev either 'stdin' for the first level imports or the original url from the parent for nested
-     * @param assetFilePath the original assetFile.path that started the import chain
      * @return https://sass-lang.com/documentation/js-api/modules#LegacyImporterResult
      */
     @V8Function
     @SuppressWarnings('unused')
-    Map resolveImport(String url, String prev, String assetFilePath) {
-        log.debug("Resolving import for url [{}], prev [{}], asset file path [{}]", url, prev, assetFilePath)
-        println "    > Importing [${url}], prev [$prev], asset file [${assetFilePath}]"
+    Map resolveImport(String url, String prev) {
+        log.debug("Importing for url [{}], prev [{}], base file [{}]", url, prev, baseFile?.path)
 
         // The initial import has a path of stdin, but we need to convert that to the proper base path
         // Otherwise, if we have a parent, append that to form the correct URL as the importer syntax doesn't send what's expected
         if (prev == 'stdin') {
-            prev = assetFilePath
+            prev = baseFile.path
         }
         else {
             // Resolve the real base path for this import
@@ -60,6 +59,8 @@ class SassAssetFileLoader {
         importMap[url] = prev
 
         AssetFile imported = getAssetFromScssImport(prev, url)
+        CacheManager.addCacheDependency(baseFile.path, imported)
+
         return [contents: imported.inputStream.text]
     }
 

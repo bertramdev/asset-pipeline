@@ -48,7 +48,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
 
         def defaultConfiguration = project.extensions.create('assets', AssetPipelineExtensionImpl)
         def config = AssetPipelineConfigHolder.config != null ? AssetPipelineConfigHolder.config : [:]
-        config.cacheLocation = "${project.buildDir}/.assCache"
+        config.cacheLocation = "${project.buildDir}/.assetcache"
         if (project.extensions.findByName('grails')) {
             
             defaultConfiguration.assetsPath = 'grails-app/assets'

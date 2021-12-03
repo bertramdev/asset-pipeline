@@ -19,11 +19,10 @@ import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
 import com.caoccao.javet.enums.JSRuntimeType
-import com.caoccao.javet.interception.logging.JavetStandardConsoleInterceptor
-import com.caoccao.javet.interop.V8Runtime
-import com.caoccao.javet.interop.engine.IJavetEngine
-import com.caoccao.javet.interop.engine.IJavetEnginePool
-import com.caoccao.javet.interop.engine.JavetEnginePool
+import com.caoccao.javet.interop.NodeRuntime
+import com.caoccao.javet.interop.V8Host
+import com.caoccao.javet.interop.loader.IJavetLibLoadingListener
+import com.caoccao.javet.interop.loader.JavetLibLoader
 import com.caoccao.javet.values.reference.V8ValueObject
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
@@ -31,8 +30,24 @@ import groovy.util.logging.Slf4j
 @Slf4j
 @CompileStatic
 class SassProcessor extends AbstractProcessor {
-    final IJavetEnginePool<V8Runtime> javetEnginePool
     final String sassCompiler
+
+    static {
+        File nativeLibrary = NativeLibraryUtil.extractNativeLibrary(JSRuntimeType.Node)
+
+        // Override Javet to use the library that we downloaded for this platform
+        JavetLibLoader.setLibLoadingListener(new IJavetLibLoadingListener() {
+            @Override
+            File getLibPath(JSRuntimeType jsRuntimeType) {
+                return nativeLibrary.parentFile
+            }
+
+            @Override
+            boolean isDeploy(JSRuntimeType jsRuntimeType) {
+                return false
+            }
+        })
+    }
 
     SassProcessor(AssetCompiler precompiler) {
         super(precompiler)
@@ -40,11 +55,6 @@ class SassProcessor extends AbstractProcessor {
         // Load script from classpath
         URL resource = getClass().classLoader.getResource("js/compiler.js")
         sassCompiler = resource.openStream().text
-
-        // Setup a Javet engine for pooling
-        javetEnginePool = new JavetEnginePool<>()
-        javetEnginePool.getConfig().setJSRuntimeType(JSRuntimeType.Node)
-        javetEnginePool.getConfig().setAllowEval(true)
     }
 
     /**
@@ -55,23 +65,19 @@ class SassProcessor extends AbstractProcessor {
      */
     String process(String input, AssetFile assetFile) {
         log.debug "Compiling $assetFile.path"
-        println "Compiling $assetFile.path"
 
         String output = null
 
-        IJavetEngine<V8Runtime> javetEngine = javetEnginePool.getEngine()
+        NodeRuntime nodeRuntime = V8Host.getNodeInstance().createV8Runtime(true, JSRuntimeType.Node.runtimeOptions) as NodeRuntime
         try {
-            V8Runtime v8Runtime = javetEngine.getV8Runtime()
-
-            // Create a Javet console interceptor.
-            JavetStandardConsoleInterceptor javetConsoleInterceptor = new JavetStandardConsoleInterceptor(v8Runtime)
-            javetConsoleInterceptor.register(v8Runtime.getGlobalObject())
+            nodeRuntime.allowEval(true)
 
             // Bind the importer callback
             SassAssetFileLoader loader = new SassAssetFileLoader(assetFile)
-            V8ValueObject v8ValueObject = v8Runtime.createV8ValueObject()
+
+            V8ValueObject v8ValueObject = nodeRuntime.createV8ValueObject()
             try {
-                v8Runtime.getGlobalObject().set("importer", v8ValueObject)
+                nodeRuntime.getGlobalObject().set("importer", v8ValueObject)
                 v8ValueObject.bind(loader)
             }
             finally {
@@ -80,21 +86,17 @@ class SassProcessor extends AbstractProcessor {
 
             // Setup the options passed to the SASS compiler
             // https://sass-lang.com/documentation/js-api/interfaces/LegacyStringOptions
-            v8Runtime.getGlobalObject().setProperty("compileOptions", [
-                assetFilePath: assetFile.path,
-                data: input,
-            ])
+            nodeRuntime.getGlobalObject().setProperty("compileOptions", [data: input])
 
             // Compile and retrieve the CSS output
-            v8Runtime.getExecutor(sassCompiler).executeVoid()
-            output = v8Runtime.getGlobalObject().get("css") as String
+            nodeRuntime.getExecutor(sassCompiler).executeVoid()
+            output = nodeRuntime.getGlobalObject().get("css") as String
 
-            // Unregister the Javet console to V8 global object.
-            javetConsoleInterceptor.unregister(v8Runtime.getGlobalObject())
-            v8Runtime.lowMemoryNotification()
+            // Cleanup the global importer
+            nodeRuntime.getGlobalObject().delete("importer")
         }
         finally {
-            javetEngine.close()
+            nodeRuntime.close()
         }
 
         output

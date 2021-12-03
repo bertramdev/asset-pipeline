@@ -16,9 +16,10 @@
 
 package asset.pipeline.dart
 
+import asset.pipeline.AssetHelper
+import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.fs.FileSystemAssetResolver
 import spock.lang.Specification
-import asset.pipeline.fs.*
-import asset.pipeline.*
 
 /**
 * @author David Estes
@@ -34,7 +35,6 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text,assetFile)
-		println "Results \n ${output}"
 		then:
 		output.contains('margin')
 	}
@@ -48,7 +48,6 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text,assetFile)
-		println "Results \n ${output}"
 		then:
 		output.contains('.sub')
 	}
@@ -62,7 +61,6 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text,assetFile)
-		println "Results \n ${output}"
 		then:
 		output.contains('.bar')
 	}
@@ -76,7 +74,6 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text, assetFile)
-		println "Results \n ${output}"
 		then:
 		output.length() > 0
 	}
@@ -90,7 +87,6 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text, assetFile)
-		println "Results \n ${output}"
 		then:
 		output.contains('Twitter')
 	}
