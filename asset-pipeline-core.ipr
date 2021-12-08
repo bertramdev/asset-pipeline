@@ -360,9 +360,12 @@
     <library name="Gradle: com.caoccao.javet:javet-core:1.0.6">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/com/caoccao/javet/javet-core/1.0.6/javet-core-1.0.6.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.caoccao.javet/javet-core/1.0.6/47c0f9e768c833b00cdf051928bcd7b97b30701a/javet-core-1.0.6.jar!/" />
       </CLASSES>
       <JAVADOC />
-      <SOURCES />
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.caoccao.javet/javet-core/1.0.6/3d4b6655e8e4d11e678099046e7dd5647777fc82/javet-core-1.0.6-sources.jar!/" />
+      </SOURCES>
     </library>
     <library name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.11.2">
       <CLASSES>
@@ -1476,7 +1479,6 @@
     <library name="Gradle: javax.activation:javax.activation-api:1.2.0">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.activation/javax.activation-api/1.2.0/85262acf3ca9816f9537ca47d5adeabaead7cb16/javax.activation-api-1.2.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
@@ -1567,7 +1569,6 @@
     <library name="Gradle: javax.xml.bind:jaxb-api:2.3.1">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.bind/jaxb-api/2.3.1/8531ad5ac454cc2deb9d4d32c40c4d7451939b5d/jaxb-api-2.3.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
@@ -1699,7 +1700,6 @@
     <library name="Gradle: org.apache.commons:commons-lang3:3.8.1">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.8.1/6505a72a097d9270f7a9e7bf42c4238283247755/commons-lang3-3.8.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
@@ -1709,7 +1709,6 @@
     <library name="Gradle: org.apache.commons:commons-lang3:3.9">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.9/122c7cee69b53ed4a7681c03d4ee4c0e2765da5/commons-lang3-3.9.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
@@ -2214,7 +2213,6 @@
     <library name="Gradle: org.fusesource.jansi:jansi:1.18">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.fusesource.jansi/jansi/1.18/d9205bbcd4b5f9cd1effe752d18f73bd942d783f/jansi-1.18.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
@@ -2925,7 +2923,6 @@
     <library name="Gradle: org.slf4j:slf4j-api:1.7.30">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar!/" />
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.30/b5a4b6d16ab13e34a88fae84c35cd5d68cac922c/slf4j-api-1.7.30.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>

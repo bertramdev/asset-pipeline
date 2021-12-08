@@ -33,7 +33,7 @@ class SassProcessor extends AbstractProcessor {
     final String sassCompiler
 
     static {
-        File nativeLibrary = NativeLibraryUtil.extractNativeLibrary(JSRuntimeType.Node)
+        File nativeLibrary = new NativeLibraryLoader(JSRuntimeType.Node).extractNativeLibrary()
 
         // Override Javet to use the library that we downloaded for this platform
         JavetLibLoader.setLibLoadingListener(new IJavetLibLoadingListener() {

@@ -26,10 +26,13 @@ import spock.lang.Specification
 */
 class SassProcessorSpec extends Specification {
 
+	void setup() {
+		AssetPipelineConfigHolder.config = [:]
+	}
+
 	void "should compile sass into css"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
 		def assetFile = AssetHelper.fileForFullName('test.scss')
 		def processor = new SassProcessor()
@@ -42,7 +45,6 @@ class SassProcessorSpec extends Specification {
 	void "should compile nested sass into css"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
 		def assetFile = AssetHelper.fileForFullName('partials/forms.scss')
 		def processor = new SassProcessor()
@@ -55,7 +57,6 @@ class SassProcessorSpec extends Specification {
 	void "should compile nested foo into css"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
 		def assetFile = AssetHelper.fileForFullName('foo/foo.scss')
 		def processor = new SassProcessor()
@@ -68,7 +69,6 @@ class SassProcessorSpec extends Specification {
 	void "should compile Bourbon"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test', 'assets'))
 		def assetFile = AssetHelper.fileForFullName('bourbon-test.scss')
 		def processor = new SassProcessor()
@@ -81,7 +81,6 @@ class SassProcessorSpec extends Specification {
 	void "should compile Bootstrap v4"() {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
-		AssetPipelineConfigHolder.config = [:]
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test', 'assets'))
 		def assetFile = AssetHelper.fileForFullName('bootstrap/bootstrap.scss')
 		def processor = new SassProcessor()
