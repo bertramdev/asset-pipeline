@@ -18,6 +18,7 @@ package asset.pipeline.dart
 import asset.pipeline.AbstractProcessor
 import asset.pipeline.AssetCompiler
 import asset.pipeline.AssetFile
+import asset.pipeline.AssetPipelineConfigHolder
 import com.caoccao.javet.enums.JSRuntimeType
 import com.caoccao.javet.interop.NodeRuntime
 import com.caoccao.javet.interop.V8Host
@@ -31,6 +32,9 @@ import groovy.util.logging.Slf4j
 @CompileStatic
 class SassProcessor extends AbstractProcessor {
     final String sassCompiler
+
+    // Compiler options
+    final Map configOptions = (AssetPipelineConfigHolder.config?.sass ?: [:]) as Map
 
     static {
         File nativeLibrary = new NativeLibraryLoader(JSRuntimeType.Node).extractNativeLibrary()
@@ -84,9 +88,12 @@ class SassProcessor extends AbstractProcessor {
                 v8ValueObject.close()
             }
 
+            // Combine options
+            Map compileOptions = configOptions + [data: input]
+
             // Setup the options passed to the SASS compiler
             // https://sass-lang.com/documentation/js-api/interfaces/LegacyStringOptions
-            nodeRuntime.getGlobalObject().setProperty("compileOptions", [data: input])
+            nodeRuntime.getGlobalObject().setProperty("compileOptions", compileOptions)
 
             // Compile and retrieve the CSS output
             nodeRuntime.getExecutor(sassCompiler).executeVoid()

@@ -5,7 +5,7 @@
     "bundle": "webpack"
   },
   "dependencies": {
-    "sass": "^1.43.4"
+    "sass": "^1.44.0"
   },
   "devDependencies": {
     "node-loader": "^2.0.0",

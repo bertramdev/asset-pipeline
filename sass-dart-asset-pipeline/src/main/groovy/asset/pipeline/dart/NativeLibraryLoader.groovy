@@ -19,6 +19,7 @@ import static com.caoccao.javet.utils.JavetOSUtils.*
 class NativeLibraryLoader {
     static final String JAVET_VERSION = NativeLibraryLoader.class.classLoader.getResource("javet-version.txt").openStream().text
     static final String BASE_URL = AssetPipelineConfigHolder.config?.javetBaseUrl ?: "https://repo1.maven.org/maven2/com/caoccao/javet"
+    static final String LIBRARY_HOME = AssetPipelineConfigHolder.config?.javetLibraryHome ?: TEMP_DIRECTORY
 
     final JavetLibLoader javetLibLoader
 
@@ -45,7 +46,7 @@ class NativeLibraryLoader {
      * @return the downloaded Javet jar file for this platform
      */
     private File downloadJavetJar() {
-        File jarFile = new File(TEMP_DIRECTORY, javetFileName)
+        File jarFile = new File(LIBRARY_HOME, javetFileName)
         if (jarFile.exists()) {
             log.debug("Jar file ${jarFile.path} exists, skipping download")
             return jarFile
@@ -79,7 +80,7 @@ class NativeLibraryLoader {
         }
 
         String libraryName = javetLibLoader.libFileName
-        File jniLibrary = new File(TEMP_DIRECTORY, libraryName)
+        File jniLibrary = new File(LIBRARY_HOME, libraryName)
         if (jniLibrary.exists()) {
             log.debug("Native library $libraryName already exists, skipping extract")
             return jniLibrary

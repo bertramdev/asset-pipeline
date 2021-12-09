@@ -27,7 +27,7 @@ import spock.lang.Specification
 class SassProcessorSpec extends Specification {
 
 	void setup() {
-		AssetPipelineConfigHolder.config = [:]
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true]]
 	}
 
 	void "should compile sass into css"() {
@@ -40,6 +40,21 @@ class SassProcessorSpec extends Specification {
 		def output = processor.process(assetFile.inputStream.text,assetFile)
 		then:
 		output.contains('margin')
+		output.readLines().size() > 1
+	}
+
+	void "should compile sass into css on a single line using compressed option"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, outputStyle: 'compressed']]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text,assetFile)
+		then:
+		output.contains('margin')
+		output.readLines().size() == 1
 	}
 
 	void "should compile nested sass into css"() {

@@ -10,7 +10,7 @@ module.exports = {
         filename: "compiler.js"
     },
     optimization: {
-        minimize: false
+        minimize: true
     },
     node: {
         global: false,

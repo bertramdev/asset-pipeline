@@ -115,7 +115,16 @@ task copyJavetVersion()  {
     }
 }
 
-compileGroovy.dependsOn copyJavetVersion
+task bundleJSCompiler(type: NpmTask, dependsOn: ['npmInstall']) {
+    doFirst {
+        mkdir('src/main/resources/js')
+    }
+    inputs.files(fileTree('src/main/js'), file('webpack.config.js'))
+    outputs.file('src/main/resources/js/compiler.js')
+    args = ['run', 'bundle']
+}
+
+compileGroovy.dependsOn copyJavetVersion, bundleJSCompiler
 
 task(console, dependsOn: 'classes', type: JavaExec) {
   main = 'groovy.ui.Console'
