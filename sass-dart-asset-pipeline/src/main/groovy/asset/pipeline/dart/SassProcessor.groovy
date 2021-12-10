@@ -50,6 +50,11 @@ class SassProcessor extends AbstractProcessor {
             boolean isDeploy(JSRuntimeType jsRuntimeType) {
                 return false
             }
+
+            @Override
+            boolean isSuppressingError(JSRuntimeType jsRuntimeType) {
+                return true
+            }
         })
     }
 
