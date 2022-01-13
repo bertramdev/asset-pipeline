@@ -1,0 +1,144 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'java-library'
+apply plugin: 'idea'
+
+group = 'com.bertramlabs.plugins'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+ext {
+    javetVersion = "1.0.6"
+    isReleaseVersion = !version.endsWith("SNAPSHOT")
+}
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    provided
+}
+ 
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+    test {
+        compileClasspath += configurations.provided
+    }
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+apply plugin: 'com.github.node-gradle.node'
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:2.4.19'
+    implementation "com.caoccao.javet:javet-core:${javetVersion}"
+    api project(':asset-pipeline-core')
+    api 'org.slf4j:slf4j-api:1.7.28'
+    testImplementation 'org.codehaus.groovy:groovy-all:2.4.19'
+    testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
+
+    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.21'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'sass-dart-asset-pipeline'
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'sass-dart-asset-pipeline'
+                    description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
+                    url 'https://www.asset-pipeline.com'
+                    scm {
+                        url 'https://github.com/bertramdev/sass-asset-pipeline'
+                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
+                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
+                    }
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'gferon'
+                            name 'Gabriel Féron'
+                            email 'feron.gabriel@gmail.com'
+                        }
+                    }
+                }
+            }
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            if( !isReleaseVersion ) {
+                url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
+                if(project.hasProperty('labsNexusUser')) {
+                    credentials {
+                        username = labsNexusUser
+                        password = labsNexusPassword
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+task copyJavetVersion()  {
+    doLast {
+        new File("${projectDir}/src/main/resources", "javet-version.txt").text = javetVersion
+    }
+}
+
+task bundleJSCompiler(type: NpmTask, dependsOn: ['npmInstall']) {
+    doFirst {
+        mkdir('src/main/resources/js')
+    }
+    inputs.files(fileTree('src/main/js'), file('webpack.config.js'))
+    outputs.file('src/main/resources/js/compiler.js')
+    args = ['run', 'bundle']
+}
+
+compileGroovy.dependsOn copyJavetVersion, bundleJSCompiler
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+node {
+    download = true
+    version = "16.13.0"
+}
