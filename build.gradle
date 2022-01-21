@@ -36,33 +36,34 @@ java {
 	withSourcesJar()
 }
 
-//if (isReleaseVersion) {
-//    apply plugin: "io.github.gradle-nexus.publish-plugin"
-//    nexusPublishing {
-//        repositories {
-//            sonatype {
-//                if(project.hasProperty('mavenUser')) {
-//                    username = mavenUser
-//                    password = mavenPassword
-//                }
-//            }
-//        }
-//    }
-//} else {
+if (isReleaseVersion) {
+   apply plugin: "io.github.gradle-nexus.publish-plugin"
+   nexusPublishing {
+       repositories {
+           sonatype {
+               if(project.hasProperty('mavenUser')) {
+                   username = mavenUser
+                   password = mavenPassword
+               }
+           }
+       }
+   }
+} else {
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+			}
 		}
-	}
-	repositories {
-		maven {
-			url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
-			if(project.hasProperty('labsNexusUser')) {
-				credentials {
-					username = labsNexusUser
-					password = labsNexusPassword
+		repositories {
+			maven {
+				url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
+				if(project.hasProperty('labsNexusUser')) {
+					credentials {
+						username = labsNexusUser
+						password = labsNexusPassword
+					}
 				}
 			}
 		}
