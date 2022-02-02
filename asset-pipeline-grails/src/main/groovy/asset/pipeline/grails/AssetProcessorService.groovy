@@ -4,6 +4,7 @@ package asset.pipeline.grails
 import asset.pipeline.AssetHelper
 import grails.core.GrailsApplication
 import grails.util.Environment
+import org.grails.config.NavigableMap
 
 import javax.annotation.Resource
 import javax.servlet.http.HttpServletRequest
@@ -109,8 +110,9 @@ class AssetProcessorService {
 	}
 
 
-	String assetBaseUrl(final HttpServletRequest req, final UrlBase urlBase, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
-		final String url = getConfigBaseUrl(req, conf)
+	String assetBaseUrl(final HttpServletRequest req, final UrlBase urlBase, final NavigableMap conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
+		Map map = conf.toFlatConfig()
+		final String url = getConfigBaseUrl(req, map)
 		if (url) {
 			return url
 		}
