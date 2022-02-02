@@ -103,7 +103,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         }
 
 
-        AssetPipelineConfigHolder.config = assetsConfig
+        AssetPipelineConfigHolder.config = assetsConfig.toFlatConfig()
         if (BuildSettings.TARGET_DIR) {
             AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".assetcache").canonicalPath
         }
