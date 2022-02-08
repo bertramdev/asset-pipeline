@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* February 8, 2022
+** - 3.4.0 - Updated for Support for Grails 5 (Fixed config holder fetching thanks to Luis Toledo), A new implementation of sass-dart-asset-pipeline for M1Mac using J2V8 libv8 adapter thanks to Aaron). Thanks to the community for doing a lot of heavy lifting on this update. Much appreciated!
 * September 7, 2021
 ** - 3.3.4 - Updated gradle plugin to handle plugin packaging for newer gradle versions
 * August 9, 2021
