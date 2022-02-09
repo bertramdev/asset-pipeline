@@ -102,8 +102,12 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
             }
         }
 
+        if(assetsConfig instanceof org.grails.config.NavigableMap) {
+            AssetPipelineConfigHolder.config = assetsConfig.toFlatConfig()
+        } else {
+            AssetPipelineConfigHolder.config = assetsConfig
+        }
 
-        AssetPipelineConfigHolder.config = assetsConfig.toFlatConfig()
         if (BuildSettings.TARGET_DIR) {
             AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".assetcache").canonicalPath
         }
