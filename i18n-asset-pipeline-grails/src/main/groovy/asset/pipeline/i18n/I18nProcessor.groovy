@@ -226,21 +226,22 @@ class I18nProcessor extends AbstractProcessor {
         for(option in options){
             Properties props = new Properties()
             try{
-                Resource res = locateResource(option)
-                if(!res?.exists()) {
-                    File file = locateFile(option)
-                    if(!file.exists()) {
+                File file = locateFile(option)
+                if(!file.exists()) {
+                     Resource res = locateResource(option)
+                    if(!res?.exists()) {
                         log.warn "i18N: Could not load file ${option}"    
                     } else {
-                        //
-                        props.load(new StringReader(file.getText(encoding)))
+                        String propertiesString = IOUtils.toString(res.inputStream, encoding)
+                        props.load(new StringReader(propertiesString))
                         messages.putAll(props)    
                     }
                 } else {
-                    String propertiesString = IOUtils.toString(res.inputStream, encoding)
-                    props.load(new StringReader(propertiesString))
+                    //
+                    props.load(new StringReader(file.getText(encoding)))
                     messages.putAll(props)    
                 }
+               
                 
             }
             catch(Exception e){
