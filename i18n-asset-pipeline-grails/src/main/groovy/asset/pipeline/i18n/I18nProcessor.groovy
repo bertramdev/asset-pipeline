@@ -227,9 +227,21 @@ class I18nProcessor extends AbstractProcessor {
             Properties props = new Properties()
             try{
                 Resource res = locateResource(option)
-                String propertiesString = IOUtils.toString(res.inputStream, encoding)
-                props.load(new StringReader(propertiesString))
-                messages.putAll(props)
+                if(!res?.exists()) {
+                    File file = locateFile(option)
+                    if(!file.exists()) {
+                        log.warn "i18N: Could not load file ${option}"    
+                    } else {
+                        //
+                        props.load(new StringReader(file.getText(encoding)))
+                        messages.putAll(props)    
+                    }
+                } else {
+                    String propertiesString = IOUtils.toString(res.inputStream, encoding)
+                    props.load(new StringReader(propertiesString))
+                    messages.putAll(props)    
+                }
+                
             }
             catch(Exception e){
                 log.warn "i18N: Could not load file ${option}"
@@ -271,17 +283,43 @@ class I18nProcessor extends AbstractProcessor {
                     "file:grails-app/i18n/${fileName}${XML_SUFFIX}"
             )
         } 
+        String i18nPath = AssetPipelineConfigHolder.config.i18nPath
+
+        if(!resource.exists()) {
+            if(i18nPath) {
+                resource = resourceLoader.getResource(
+                    "file:${i18nPath}/${fileName}${PROPERTIES_SUFFIX}"
+                )
+                if(!resource.exists()) {
+                    resource = resourceLoader.getResource(
+                        "file:${i18nPath}/${fileName}${XML_SUFFIX}"
+                    )   
+                }
+
+            }
+        }
         if (!resource.exists()) {
             // Nuclear approach, scan all jar files for the messages file
             resource = loadFromAssetResolvers(fileName)
             
-            if(!resource){
-                throw new FileNotFoundException(
-                        "Cannot find i18n messages file ${fileName}."
-                )
-            }
+            
         }
         resource
+    }
+
+    private File locateFile(String fileName) {
+       
+        String i18nPath = AssetPipelineConfigHolder.config.i18nPath
+        File i18nFile = null
+        
+        if(i18nPath) {
+            i18nFile = new File(i18nPath,"${fileName}${PROPERTIES_SUFFIX}")
+            if(!i18nFile.exists()) {
+                i18nFile = new File(i18nPath,"${fileName}${XML_SUFFIX}")
+            }
+        }
+        return i18nFile
+        
     }
 
     private static Resource loadFromAssetResolvers(String filename){
