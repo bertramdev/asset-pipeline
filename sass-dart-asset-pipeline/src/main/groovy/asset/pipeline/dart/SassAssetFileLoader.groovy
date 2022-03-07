@@ -44,9 +44,9 @@ class SassAssetFileLoader {
             prev = baseFile.path
         }
         else {
-            // Resolve the real base path for this import
+            // Resolve the real base path for this import if it's not an absolute path
             String priorParent = importMap[prev]
-            if (priorParent) {
+            if (priorParent && !prev.startsWith('/')) {
                 Path priorParentPath = Paths.get(priorParent)
                 if (priorParentPath.parent) {
                     prev = "${priorParentPath.parent.toString()}/${prev}"

@@ -94,4 +94,17 @@ class SassProcessorSpec extends Specification {
 		then:
 		output.contains('Twitter')
 	}
+
+	void "should compile webjar imports"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/resources'))
+		def assetFile = AssetHelper.fileForFullName('webjar-import/main.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text,assetFile)
+		then:
+		output.contains('Twitter')
+	}
 }
