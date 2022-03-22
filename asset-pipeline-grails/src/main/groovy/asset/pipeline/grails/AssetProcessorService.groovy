@@ -80,12 +80,11 @@ class AssetProcessorService {
 			return false
 		}
 
-		String classRegistryKey = AssetPipelineConfigHolder.classLoaderKeyForUri(relativePath)
+		String classRegistryKey = AssetPipelineConfigHolder.classLoaderKeyForUri(path)
 		if(classRegistryKey) {
 			AssetPipelineClassLoaderEntry classLoaderEntry = AssetPipelineConfigHolder.classLoaderRegistry[classRegistryKey]
-			String registryRelativePath = relativePaht.substring(classRegistryKey.length())
+			String registryRelativePath = path.substring(classRegistryKey.length())
 			final Properties manifest = classLoaderEntry.manifest
-			String manifestPath = fileUri
 			if(registryRelativePath.startsWith('/')) {
 				registryRelativePath = registryRelativePath.substring(1) //Omit forward slash
 			}
