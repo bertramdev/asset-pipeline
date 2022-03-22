@@ -12,6 +12,7 @@ import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import asset.pipeline.AssetPipelineConfigHolder
 import static asset.pipeline.AssetPipelineConfigHolder.manifest
+import asset.pipeline.AssetPipelineClassLoaderEntry
 import static asset.pipeline.grails.UrlBase.*
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
 import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
@@ -75,7 +76,25 @@ class AssetProcessorService {
 
 	boolean isAssetPath(final String path) {
 		final String relativePath = trimLeadingSlash(path)
-		return relativePath && (manifest ? manifest.getProperty(relativePath) : AssetHelper.fileForFullName(relativePath) != null)
+		if(!relativePath) {
+			return false
+		}
+
+		String classRegistryKey = AssetPipelineConfigHolder.classLoaderKeyForUri(relativePath)
+		if(classRegistryKey) {
+			AssetPipelineClassLoaderEntry classLoaderEntry = AssetPipelineConfigHolder.classLoaderRegistry[classRegistryKey]
+			String registryRelativePath = relativePaht.substring(classRegistryKey.length())
+			final Properties manifest = classLoaderEntry.manifest
+			String manifestPath = fileUri
+			if(registryRelativePath.startsWith('/')) {
+				registryRelativePath = registryRelativePath.substring(1) //Omit forward slash
+			}
+			return manifest?.getProperty(registryRelativePath) ? true : false
+		} else {
+			return (manifest ? manifest.getProperty(relativePath) : AssetHelper.fileForFullName(relativePath) != null)
+		}	
+
+		
 	}
 
 
