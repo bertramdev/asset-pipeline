@@ -55,9 +55,9 @@ groovydoc {
 }
 
 dependencies {
-	implementation    'org.codehaus.groovy:groovy:2.4.19'
-	implementation    'org.codehaus.groovy:groovy-json:2.4.19'
-	implementation    'org.codehaus.groovy:groovy-templates:2.4.19'
+	compileOnly    'org.codehaus.groovy:groovy:2.4.19'
+	compileOnly    'org.codehaus.groovy:groovy-json:2.4.19'
+	compileOnly    'org.codehaus.groovy:groovy-templates:2.4.19'
 	doc         'org.codehaus.groovy:groovy-all:2.4.19'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	api     'org.mozilla:rhino:1.7R4'

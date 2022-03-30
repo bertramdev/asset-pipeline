@@ -41,7 +41,7 @@ sourceSets {
 
 dependencies {
 	api project(':asset-pipeline-core')
-	implementation 'org.codehaus.groovy:groovy-all:2.4.19'
+	compileOnly 'org.codehaus.groovy:groovy-all:2.4.19'
     api 'org.mozilla:rhino:1.7R4'
     // api 'log4j:log4j:1.2.17'
 

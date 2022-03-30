@@ -42,7 +42,7 @@ java {
 }
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:2.4.19'
+    compileOnly 'org.codehaus.groovy:groovy-all:2.4.19'
 	api project(':asset-pipeline-core')
     api 'org.slf4j:slf4j-api:1.7.28'
     api 'io.bit3:jsass:5.10.4'
