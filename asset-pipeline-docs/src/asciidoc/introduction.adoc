@@ -7,6 +7,8 @@ This guide documents configuration and usage examples of the asset-pipeline plug
 
 === Release History
 
+* April 8, 2022
+** - 3.4.5 - package.json detection was happening post looking for index.js Causing confusion between ES2017 modules and CJS
 * March 22, 2022
 ** - 3.4.4 - Fixing isAssetPath to handle custom class loader registry lookups
 * February 9, 2022
