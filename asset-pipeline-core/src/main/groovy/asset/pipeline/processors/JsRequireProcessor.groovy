@@ -72,6 +72,22 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						currFile = AssetHelper.fileForUri(assetPath + '/' + assetPath,'application/javascript')
 					}
 
+					// look for a node module
+					if(!currFile){
+						if(!assetPath.startsWith('/')) {
+							def packageFileName = [  assetPath, 'package.json' ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+							packageFileName = AssetHelper.normalizePath(packageFileName)
+							AssetFile packageJsonFile = AssetHelper.fileForUri(packageFileName)
+							if (packageJsonFile) {
+								JsonSlurper slurper = new JsonSlurper()
+								def packageJson = slurper.parse(packageJsonFile.getInputStream()) as Map
+								def realAssetFileName = [assetPath, packageJson.get("main")].join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
+								realAssetFileName = AssetHelper.normalizePath(realAssetFileName)
+								currFile = AssetHelper.fileForUri(realAssetFileName, 'application/javascript')
+							}
+						}
+					}
+					
 					//look for index.js
 					if(!currFile) {
 						if(!assetPath.startsWith('/') && assetFile.parentPath != null) {
@@ -89,21 +105,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 						}
 					}
 
-					// look for a node module
-					if(!currFile){
-						if(!assetPath.startsWith('/')) {
-							def packageFileName = [  assetPath, 'package.json' ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
-							packageFileName = AssetHelper.normalizePath(packageFileName)
-							AssetFile packageJsonFile = AssetHelper.fileForUri(packageFileName)
-							if (packageJsonFile) {
-								JsonSlurper slurper = new JsonSlurper()
-								def packageJson = slurper.parse(packageJsonFile.getInputStream()) as Map
-								def realAssetFileName = [assetPath, packageJson.get("main")].join(AssetHelper.DIRECTIVE_FILE_SEPARATOR)
-								realAssetFileName = AssetHelper.normalizePath(realAssetFileName)
-								currFile = AssetHelper.fileForUri(realAssetFileName, 'application/javascript')
-							}
-						}
-					}
+					
 
 					//look for non js file
 					if(!currFile) {
