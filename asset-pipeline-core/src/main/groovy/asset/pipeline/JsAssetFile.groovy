@@ -32,7 +32,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class JsAssetFile extends AbstractAssetFile {
     static final List<String> contentType = ['application/javascript', 'application/x-javascript','text/javascript']
-    static List<String> extensions = ['js']
+    static List<String> extensions = ['js','cjs']
     static String compiledExtension = 'js'
     static processors = [JsProcessor,JsNodeInjectProcessor,BabelJsProcessor,JsRequireProcessor]
     Pattern directivePattern = ~/(?m)^\/\/=(.*)/
