@@ -18,6 +18,7 @@ package asset.pipeline.dart
 
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.fs.ClasspathAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
 import spock.lang.Specification
 
@@ -101,6 +102,31 @@ class SassProcessorSpec extends Specification {
 		def processor = new SassProcessor()
 		when:
 		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('Twitter')
+	}
+
+	void "should compile absolute imports"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		def assetFile = AssetHelper.fileForFullName('absolute-import/main.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text,assetFile)
+		then:
+		output.contains('Twitter')
+    }
+
+	void "should compile webjar imports"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.registerResolver(new ClasspathAssetResolver('classpath','META-INF/resources'))
+		def assetFile = AssetHelper.fileForFullName('webjar-import/main.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text,assetFile)
 		then:
 		output.contains('Twitter')
 	}
