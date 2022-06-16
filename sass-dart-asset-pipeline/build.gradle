@@ -19,7 +19,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 ext {
-    javetVersion = "1.0.6"
+    javetVersion = "1.1.0"
     isReleaseVersion = !version.endsWith("SNAPSHOT")
 }
 
