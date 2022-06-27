@@ -74,13 +74,13 @@ subprojects { project ->
 	if (project.name != 'asset-pipeline-classpath-test' && project.name != 'asset-pipeline-docs' && project.name != 'asset-pipeline-site') {
 	    apply plugin: 'java'
 	    apply plugin: 'maven-publish'
-	    apply plugin: 'signing'
+/*	    apply plugin: 'signing'
 	    afterEvaluate {
 	        signing {
 	            required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
 	            sign publishing.publications.maven
 	        }
-	    }
+	    }*/
 
 	    tasks.withType(Sign) {
 	        onlyIf { isReleaseVersion }
