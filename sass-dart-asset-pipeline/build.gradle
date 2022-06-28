@@ -108,8 +108,8 @@ publishing {
         maven {
             url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
             credentials {
-                username = "nnanag"
-                password = "tRantor1!!"
+                username = System.getenv("PKG_USERNAME")
+                password = System.getenv("PKG_PASSWORD")
             }
             /*if( !isReleaseVersion ) {
                 url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
