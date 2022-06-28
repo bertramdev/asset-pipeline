@@ -3,7 +3,7 @@ buildscript {
         publishingRepository = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
     }
     repositories {
-        gradlePluginPortal()
+        mavenLocal()
         maven { url "http://artifactory.camelotstrategic.lan/artifactory/first-party/" }
     }
     dependencies {
