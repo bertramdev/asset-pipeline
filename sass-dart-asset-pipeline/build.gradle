@@ -106,11 +106,7 @@ publishing {
     }
     repositories {
         maven {
-            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
-            credentials {
-                username = System.getenv("PKG_USERNAME")
-                password = System.getenv("PKG_PASSWORD")
-            }
+            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot/"
             /*if( !isReleaseVersion ) {
                 url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
                 if(project.hasProperty('labsNexusUser')) {
