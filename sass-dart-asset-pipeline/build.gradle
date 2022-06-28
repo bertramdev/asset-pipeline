@@ -6,7 +6,7 @@ buildscript {
         mavenLocal()
         //mavenCentral()
         maven {
-            url 'http://artifactory.camelotstrategic.lan/artifactory/first-party/'
+            url "http://artifactory.camelotstrategic.lan/artifactory/first-party/"
         }
         gradlePluginPortal()
     }
