@@ -31,10 +31,10 @@ ext {
     isReleaseVersion = !version.endsWith("SNAPSHOT")
 }
 
-/*repositories {
+repositories {
 	mavenLocal()
     mavenCentral()
-}*/
+}
 
 configurations {
     provided
@@ -71,7 +71,7 @@ dependencies {
 
 
 publishing {
-    /*publications {
+    publications {
         maven(MavenPublication) {
             artifactId 'sass-dart-asset-pipeline'
             pom.withXml {
@@ -103,7 +103,7 @@ publishing {
             }
             from components.java
         }
-    }*/
+    }
     repositories {
         maven {
             url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
