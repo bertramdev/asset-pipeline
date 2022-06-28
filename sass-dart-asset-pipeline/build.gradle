@@ -4,7 +4,8 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url "http://artifactory.camelotstrategic.lan/artifactory/first-party/" }
+        maven { url "http://artifactory.camelotstrategic.lan/artifactory/first-party" }
+        gradlePluginPortal()
     }
     dependencies {
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
