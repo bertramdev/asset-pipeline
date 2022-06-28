@@ -106,7 +106,10 @@ publishing {
     }
     repositories {
         maven {
-            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot/camelot"
+            //url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
+            url = "http://artifactory.camelotstrategic.lan/artifactory"
+            //http://artifactory.camelotstrategic.lan/artifactory/camelot/com.bertramlabs.plugins/
+            //http://artifactory.camelotstrategic.lan/artifactory/grails-plugins2-cache/org/grails/plugins/sass-asset-pipeline/1.9.2/sass-asset-pipeline-1.9.2.pom
             /*if( !isReleaseVersion ) {
                 url = "http://nexus.bertramlabs.com/content/repositories/snapshots"
                 if(project.hasProperty('labsNexusUser')) {
