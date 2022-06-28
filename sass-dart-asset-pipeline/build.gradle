@@ -9,8 +9,8 @@ buildscript {
     }
     dependencies {
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
-        classpath 'ctp.gradle.plugin:ctp-gradle-artifact-publishing-plugin:[2.2.0,2.3.0]'
-        classpath 'ctp.gradle.plugin:ctp-gradle-githooks-plugin:[1.0,2.0]'
+//        classpath 'ctp.gradle.plugin:ctp-gradle-artifact-publishing-plugin:[2.2.0,2.3.0]'
+//        classpath 'ctp.gradle.plugin:ctp-gradle-githooks-plugin:[1.0,2.0]'
     }
 }
 
