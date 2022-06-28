@@ -5,7 +5,7 @@ buildscript {
     repositories {
         mavenLocal()
         gradlePluginPortal()
-        maven { url = "http://artifactory.camelotstrategic.lan/artifactory/first-party" }
+        maven { url "http://artifactory.camelotstrategic.lan/artifactory/first-party" }
     }
     dependencies {
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
@@ -15,7 +15,7 @@ buildscript {
 }
 
 apply plugin: 'groovy'
-apply plugin: 'maven-publish'
+//apply plugin: 'maven-publish'
 apply plugin: 'java-library'
 apply plugin: 'idea'
 apply plugin: 'ctp-simple-artifact-publishing'
