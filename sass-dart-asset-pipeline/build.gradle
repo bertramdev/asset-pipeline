@@ -105,7 +105,6 @@ publishing {
             from components.java
         }
     }
-    /*
     repositories {
         maven {
 //            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
@@ -126,10 +125,9 @@ publishing {
                         password = labsNexusPassword
                     }
                 }
-            }* /
+            }*/
         }
     }
-    */
 }
 
 
