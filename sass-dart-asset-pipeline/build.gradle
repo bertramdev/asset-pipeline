@@ -69,13 +69,6 @@ dependencies {
 
 }
 
-task nikos() {
-    println "...username=" + repoUsername
-    println "...password=" + repoPassword
-}
-
-publishing.dependsOn nikos
-
 publishing {
     publications {
         maven(MavenPublication) {
