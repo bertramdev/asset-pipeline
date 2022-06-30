@@ -110,8 +110,8 @@ publishing {
             url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
 
             credentials {
-                username repoUsername
-                password repoPassword
+                username System.env.repoUsername
+                password System.env.repoPassword
             }
 
             //http://artifactory.camelotstrategic.lan/artifactory/camelot/com.bertramlabs.plugins/
