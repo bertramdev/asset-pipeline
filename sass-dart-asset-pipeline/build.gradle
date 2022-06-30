@@ -69,6 +69,12 @@ dependencies {
 
 }
 
+task nikos() {
+    println "system username=" + System.env.repoUsername
+    println "...username=" + repoUsername
+}
+
+publishing.dependsOn nikos
 
 publishing {
     publications {
