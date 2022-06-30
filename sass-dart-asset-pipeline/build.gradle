@@ -70,8 +70,8 @@ dependencies {
 }
 
 task nikos() {
-    println "system username=" + System.env.repoUsername
     println "...username=" + repoUsername
+    println "...password=" + repoPassword
 }
 
 publishing.dependsOn nikos
@@ -115,9 +115,11 @@ publishing {
 //            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
             url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
 
-            credentials {
-                username System.env.repoUsername
-                password System.env.repoPassword
+            if(project.hasProperty('repoUsername')) {
+                credentials {
+                    username repoUsername
+                    password repoPassword
+                }
             }
 
             //http://artifactory.camelotstrategic.lan/artifactory/camelot/com.bertramlabs.plugins/
