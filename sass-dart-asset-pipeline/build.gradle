@@ -105,8 +105,8 @@ publishing {
     }
     repositories {
         maven {
-//            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
-            final url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
+            final url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
+//            final url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
 
             if(project.hasProperty('repoUsername')) {
                 credentials {
