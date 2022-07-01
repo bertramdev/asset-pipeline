@@ -106,14 +106,16 @@ publishing {
     }
     repositories {
         maven {
-            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
-//            url = 'http://artifactory.camelotstrategic.lan/ui/native/camelot'
+//            url = "http://artifactory.camelotstrategic.lan/artifactory/camelot"
+            url = 'http://artifactory.camelotstrategic.lan/ui/native/camelot'
 
             if(project.hasProperty('repoUsername')) {
                 credentials {
                     username repoUsername
                     password repoPassword
                 }
+
+                url = 'http://artifactory.camelotstrategic.lan/ui/native/camelot'
             }
 
             //http://artifactory.camelotstrategic.lan/artifactory/camelot/com.bertramlabs.plugins/
