@@ -1,7 +1,7 @@
 buildscript {
-    ext {
-        publishingRepository = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
-    }
+//    ext {
+//        publishingRepository = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
+//    }
     repositories {
         mavenLocal()
         gradlePluginPortal()
@@ -9,15 +9,15 @@ buildscript {
     }
     dependencies {
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.1"
-        classpath 'ctp.gradle.plugin:ctp-gradle-artifact-publishing-plugin:[2.2.0,2.3.0]'
-        classpath 'ctp.gradle.plugin:ctp-gradle-githooks-plugin:[1.0,2.0]'
+//        classpath 'ctp.gradle.plugin:ctp-gradle-artifact-publishing-plugin:[2.2.0,2.3.0]'
+//        classpath 'ctp.gradle.plugin:ctp-gradle-githooks-plugin:[1.0,2.0]'
     }
 }
 
 apply plugin: 'groovy'
-//apply plugin: 'maven-publish'
-apply plugin: 'ctp-simple-artifact-publishing'
-apply plugin: 'ctp-githooks'
+apply plugin: 'maven-publish'
+//apply plugin: 'ctp-simple-artifact-publishing'
+//apply plugin: 'ctp-githooks'
 apply plugin: 'java-library'
 apply plugin: 'idea'
 
@@ -80,11 +80,11 @@ publishing {
                     name 'sass-dart-asset-pipeline'
                     description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
                     url 'https://www.asset-pipeline.com'
-                    scm {
+                    /*scm {
                         url 'https://github.com/bertramdev/sass-asset-pipeline'
                         connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
                         developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
-                    }
+                    }*/
                     licenses {
                         license {
                             name 'The Apache Software License, Version 2.0'
@@ -92,13 +92,13 @@ publishing {
                             distribution 'repo'
                         }
                     }
-                    developers {
+                    /*developers {
                         developer {
                             id 'gferon'
                             name 'Gabriel Féron'
                             email 'feron.gabriel@gmail.com'
                         }
-                    }
+                    }*/
                 }
             }
             from components.java
