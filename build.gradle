@@ -65,7 +65,7 @@ if (isReleaseVersion) {
 //						password = labsNexusPassword
 //					}
 //				}
-				final url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
+				url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
 
 				if(project.hasProperty('repoUsername')) {
 					credentials {
