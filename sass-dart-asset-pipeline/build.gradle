@@ -74,33 +74,33 @@ publishing {
     publications {
         maven(MavenPublication) {
             artifactId 'sass-dart-asset-pipeline'
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'sass-dart-asset-pipeline'
-                    description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
-                    url 'https://www.asset-pipeline.com'
-                    scm {
-                        url 'https://github.com/bertramdev/sass-asset-pipeline'
-                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
-                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
-                    }
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                            distribution 'repo'
-                        }
-                    }
-                    /*developers {
-                        developer {
-                            id 'gferon'
-                            name 'Gabriel Féron'
-                            email 'feron.gabriel@gmail.com'
-                        }
-                    }*/
-                }
-            }
+//            pom.withXml {
+//                asNode().children().last() + {
+//                    resolveStrategy = Closure.DELEGATE_FIRST
+//                    name 'sass-dart-asset-pipeline'
+//                    description 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
+//                    url 'https://www.asset-pipeline.com'
+//                    scm {
+//                        url 'https://github.com/bertramdev/sass-asset-pipeline'
+//                        connection 'scm:https://bertramdev@github.com/bertramdev/sass-asset-pipeline.git'
+//                        developerConnection 'scm:git://github.com/bertramdev/sass-asset-pipeline.git'
+//                    }
+//                    licenses {
+//                        license {
+//                            name 'The Apache Software License, Version 2.0'
+//                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+//                            distribution 'repo'
+//                        }
+//                    }
+//                    developers {
+//                        developer {
+//                            id 'gferon'
+//                            name 'Gabriel Féron'
+//                            email 'feron.gabriel@gmail.com'
+//                        }
+//                    }
+//                }
+//            }
             from components.java
         }
     }
