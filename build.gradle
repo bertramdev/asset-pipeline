@@ -58,14 +58,23 @@ if (isReleaseVersion) {
 		}
 		repositories {
 			maven {
-				url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
-				if(project.hasProperty('labsNexusUser')) {
+//				url = project.hasProperty('labsNexusUrl') ? labsNexusUrl : "https://nexus.bertramlabs.com/content/repositories/snapshots"
+//				if(project.hasProperty('labsNexusUser')) {
+//					credentials {
+//						username = labsNexusUser
+//						password = labsNexusPassword
+//					}
+//				}
+				final url = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
+
+				if(project.hasProperty('repoUsername')) {
 					credentials {
-						username = labsNexusUser
-						password = labsNexusPassword
+						username repoUsername
+						password repoPassword
 					}
 				}
 			}
+
 		}
 	}
 }
