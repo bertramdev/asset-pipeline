@@ -1,6 +1,5 @@
 buildscript {
     ext {
-//        publishingRepository = "http://artifactory.camelotstrategic.lan/ui/native/camelot"
         publishingRepository = 'http://artifactory.camelotstrategic.lan/artifactory/first-party/'
     }
     repositories {
@@ -17,12 +16,10 @@ buildscript {
 
 apply plugin: 'groovy'
 //apply plugin: 'maven-publish'
-apply plugin: 'ctp-simple-artifact-publishing'
+apply plugin: 'ctp-artifact-publishing'
 apply plugin: 'ctp-githooks'
 apply plugin: 'java-library'
 apply plugin: 'idea'
-
-
 
 group = 'com.bertramlabs.plugins'
 sourceCompatibility = '1.8'
