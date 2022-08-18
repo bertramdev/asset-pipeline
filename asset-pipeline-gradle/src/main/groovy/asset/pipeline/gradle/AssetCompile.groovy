@@ -9,6 +9,7 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -69,8 +70,7 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.assetsPath = assetsDir.absolutePath
     }
 
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Classpath
     @Optional
     public FileCollection getClasspath() {
         try {

@@ -33,7 +33,7 @@ class AssetPluginPackage extends DefaultTask {
     }
 
     void setAssetsDir(File assetsDir) {
-        pipelineExtension.assetsPath = assetsDir.absolutePath
+        pipelineExtension.assetsPath = assetsDir.path
     }
 
     @OutputDirectory
