@@ -9,6 +9,7 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -41,7 +42,7 @@ import org.gradle.api.tasks.CacheableTask
  * @author Graeme Rocher
  */
 @CompileStatic
-@CacheableTask   
+@CacheableTask
 class AssetCompile extends DefaultTask {
 
     @Delegate(methodAnnotations = true) private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
@@ -69,28 +70,27 @@ class AssetCompile extends DefaultTask {
         pipelineExtension.assetsPath = assetsDir.absolutePath
     }
 
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @Classpath
     @Optional
     public FileCollection getClasspath() {
         try {
             FileCollection runtimeFiles = getProject().configurations.getByName('runtimeClasspath') as FileCollection
-            
-            
+
+
             FileCollection totalFiles = runtimeFiles
             try {
                 FileCollection providedFiles = getProject().configurations.getByName('provided') as FileCollection
                 if(providedFiles) {
                     totalFiles += providedFiles
-                }    
+                }
             } catch(ex) {
                 //no biggie if not there
             }
-            
+
             try {
                 FileCollection assetsFiles = getProject().configurations.getByName('assets') as FileCollection
                 if(assetsFiles) {
-                    totalFiles += assetsFiles 
+                    totalFiles += assetsFiles
                 }
             } catch(ex2) {
                 //no biggie if not there
@@ -128,9 +128,9 @@ class AssetCompile extends DefaultTask {
             AssetPipelineConfigHolder.config = AssetPipelineConfigHolder.config + configOptions
         }
         AssetPipelineConfigHolder.resolvers = []
-        registerResolvers()     
+        registerResolvers()
         loadAssetSpecifications()
-        
+
         def listener = verbose ? new GradleEventListener() : null
         def assetCompiler = new AssetCompiler(pipelineExtension.toMap(), listener)
         assetCompiler.excludeRules.default = pipelineExtension.excludes
@@ -157,7 +157,7 @@ class AssetCompile extends DefaultTask {
 
         this.getClasspath()?.files?.each { registerJarResolvers(it) }
     }
-    
+
     void registerJarResolvers(File jarFile) {
         def isJarFile = jarFile.name.endsWith('.jar') || jarFile.name.endsWith('.zip')
         if (jarFile.exists() && isJarFile) {
@@ -166,7 +166,7 @@ class AssetCompile extends DefaultTask {
             AssetPipelineConfigHolder.registerResolver(new JarAssetResolver(jarFile.name, jarFile.canonicalPath, 'META-INF/resources'))
         }
     }
-    
+
     void loadAssetSpecifications() {
         Set<File> processorFiles = project.configurations.getByName(AssetPipelinePlugin.ASSET_CONFIGURATION_NAME)?.files
 

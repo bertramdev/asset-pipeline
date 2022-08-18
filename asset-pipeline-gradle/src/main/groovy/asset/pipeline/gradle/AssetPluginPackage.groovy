@@ -20,7 +20,7 @@ import org.gradle.api.tasks.CacheableTask
  * Created by davydotcom on 4/21/16.
  */
 @CompileStatic
-@CacheableTask  
+@CacheableTask
 class AssetPluginPackage extends DefaultTask {
     private String destinationDirectoryPath
     @Delegate(methodAnnotations = true) private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
@@ -33,7 +33,7 @@ class AssetPluginPackage extends DefaultTask {
     }
 
     void setAssetsDir(File assetsDir) {
-        pipelineExtension.assetsPath = assetsDir.absolutePath
+        pipelineExtension.assetsPath = assetsDir.path
     }
 
     @OutputDirectory
