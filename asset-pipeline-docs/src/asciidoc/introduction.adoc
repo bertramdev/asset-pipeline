@@ -6,7 +6,8 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
-
+* Sep 28, 2022
+** - 3.4.7 - Dependency updates for dart-sass-asset-pipeline, security updates for handlebars, reduced transitive dependency exposure.
 * April 10, 2022
 ** - 3.4.6 - .cjs Extension now considered a valid javascript extension
 * April 8, 2022
