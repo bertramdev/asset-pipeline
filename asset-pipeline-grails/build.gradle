@@ -111,15 +111,14 @@ publishing {
 
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-logging'
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    compileOnly 'org.springframework.boot:spring-boot-starter-logging'
+    compileOnly "org.springframework.boot:spring-boot-starter-actuator"
+    compileOnly "org.springframework.boot:spring-boot-autoconfigure"
+    compileOnly "org.springframework.boot:spring-boot-starter-tomcat"
 
-    implementation "org.grails:grails-web-boot"
-    implementation "org.grails:grails-dependencies"
-    implementation 'javax.servlet:javax.servlet-api:3.1.0'
-    implementation "org.grails:grails-dependencies"
+    compileOnly "org.grails:grails-web-boot"
+    compileOnly "org.grails:grails-dependencies"
+    compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
     implementation project(':asset-pipeline-core'), {
         exclude group:'org.mozilla', module:'rhino'
         exclude group:'com.google.javascript', module:'closure-compiler-unshaded'

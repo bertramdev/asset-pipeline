@@ -41,7 +41,7 @@ java {
 dependencies {
 	api project(':asset-pipeline-core')
     api project(':jsx-asset-pipeline')
-	implementation 'org.codehaus.groovy:groovy:2.4.19'
+	compileOnly 'org.codehaus.groovy:groovy:2.4.19'
     api 'org.mozilla:rhino:1.7R4'
     // api 'log4j:log4j:1.2.17'
 

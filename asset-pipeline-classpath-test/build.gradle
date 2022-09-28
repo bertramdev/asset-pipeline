@@ -36,5 +36,5 @@ repositories {
 
 
 dependencies {
-	implementation localGroovy()
+	compileOnly localGroovy()
 }

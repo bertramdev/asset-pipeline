@@ -43,7 +43,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:2.4.19'
+    compileOnly 'org.codehaus.groovy:groovy-all:2.4.19'
     api project(':asset-pipeline-core')
     api 'org.mozilla:rhino:1.7R4'
     api 'org.slf4j:slf4j-api:1.7.28'
