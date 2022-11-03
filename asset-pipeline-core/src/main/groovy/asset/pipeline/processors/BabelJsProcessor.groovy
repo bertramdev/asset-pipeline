@@ -27,6 +27,8 @@ import javax.script.Invocable
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.SimpleBindings
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.HostAccess
 
 // CoffeeScript engine will attempt to use Node.JS coffee if it is available on
 // the system path. If not, it uses Mozilla Rhino to compile the CoffeeScript
@@ -37,8 +39,8 @@ class BabelJsProcessor extends AbstractProcessor {
 	static Boolean NODE_SUPPORTED
 	ClassLoader classLoader
 
-	static ScriptEngine engine
-	static SimpleBindings bindings
+	static Context context
+	static def bindings
 	private static final $LOCK = new Object[0]
 	BabelJsProcessor(AssetCompiler precompiler) {
 		super(precompiler)
@@ -48,19 +50,22 @@ class BabelJsProcessor extends AbstractProcessor {
 	}
 
 	protected void loadBabelJs() {
-		if(!engine) {
+		if(!context) {
 			synchronized($LOCK) {
-				if(!engine) {
+				if(!context) {
 					def babelJsResource = classLoader.getResource('asset/pipeline/babel.min.js')
-					engine = new ScriptEngineManager().getEngineByName("nashorn");
-					bindings = new SimpleBindings();
-					engine.eval(babelJsResource.getText('UTF-8'), bindings);
+					context = Context.newBuilder().allowExperimentalOptions(true).allowHostAccess(HostAccess.newBuilder().allowListAccess(true).allowMapAccess(true).allowArrayAccess(true).build()).build()
+
+					context.eval("js",babelJsResource.getText('UTF-8'))
 					def presets = "{ \"presets\": [\"es2015\",[\"stage-2\",{\"decoratorsLegacy\": true}],\"react\"], \"compact\": false }"
 					if(AssetPipelineConfigHolder.config?.babel?.options) {
 						presets = AssetPipelineConfigHolder.config?.babel?.options
 					}
-					bindings.put("optionsJson", presets);
-					engine.eval("var options = JSON.parse(optionsJson);", bindings);
+					bindings = context.getBindings("js")
+					
+					bindings.putMember("optionsJson", presets);
+					context.eval("js","var options = JSON.parse(optionsJson);");
+
 				}
 			}
 		}
@@ -103,25 +108,10 @@ class BabelJsProcessor extends AbstractProcessor {
 			
 
 			synchronized($LOCK) {
-				bindings.put("input", input);
-				def result = engine.eval("Babel.transform(input, options).code", bindings);
+				bindings.putMember("input", input);
+				def result = context.eval("js","Babel.transform(input, options).code");
 				return result
 			}
-		} catch(javax.script.ScriptException ex) {
-			def nashornException = Class.forName("jdk.nashorn.api.scripting.NashornException")
-			
-			if (nashornException.isInstance(ex.getCause())) {
-				String jsStackTrace = nashornException.getScriptStackString(ex.getCause());
-				throw new Exception("""BabelJs Engine compilation of javascript failed: ${ex.message} -- \n
-			${input}
-			""",ex)
-			 } else {
-			 	throw new Exception("""BabelJs Engine compilation of javascript failed.
-			$ex
-			""",ex)
-
-			}
-
 		} catch(Exception e) {
 			throw new Exception("""BabelJs Engine compilation of javascript failed.
 			$e

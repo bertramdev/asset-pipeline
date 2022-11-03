@@ -1,4 +1,4 @@
-package sun.net.www.protocol.asset;
+package asset.pipeline.utils;
 
 import java.io.IOException;
 import java.net.URL;

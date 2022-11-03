@@ -13,8 +13,8 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.11'
+targetCompatibility = '1.11'
 
 repositories {
 	mavenLocal()

@@ -27,6 +27,8 @@ import asset.pipeline.AbstractProcessor
 import javax.script.ScriptEngine
 import javax.script.ScriptEngineManager
 import javax.script.SimpleBindings
+import org.graalvm.polyglot.Context
+import org.graalvm.polyglot.HostAccess
 
 class HandlebarsProcessor extends AbstractProcessor {
 
@@ -35,8 +37,8 @@ class HandlebarsProcessor extends AbstractProcessor {
 	static def wrapTemplateCustom
 	//static org.mozilla.javascript.Script handlebarsCompilerScript
 	//static org.mozilla.javascript.Script handlebarsPrecompileScript
-	static ScriptEngine engine
-	static SimpleBindings bindings
+	static Context context
+	static def bindings
 	private static final $LOCK = new Object[0]
 	HandlebarsProcessor(AssetCompiler precompiler){
 		super(precompiler)
@@ -63,18 +65,18 @@ class HandlebarsProcessor extends AbstractProcessor {
 	public void loadHandlebars() {
 		String scanPath = AssetPipelineConfigHolder.config?.handlebars?.scanPath ?: 'handlebars.js'
 		AssetFile handlebarsAssetFile = AssetHelper.fileForFullName(scanPath)
-		if(!engine) {
+		if(!context) {
 			synchronized($LOCK) {
-				if(!engine) {
-					engine = new ScriptEngineManager().getEngineByName("nashorn")
-					bindings = new SimpleBindings()
-
+				if(!context) {
+					context = Context.newBuilder().allowExperimentalOptions(true).allowHostAccess(HostAccess.newBuilder().allowListAccess(true).allowMapAccess(true).allowArrayAccess(true).build()).build()
+					bindings = context.getBindings("js")
+					
 					if(handlebarsAssetFile) {
 						def directiveProcessor = new DirectiveProcessor('application/javascript')
-						engine.eval(directiveProcessor.compile(handlebarsAssetFile), bindings)
+						context.eval("js",directiveProcessor.compile(handlebarsAssetFile))
 					} else {
 						def handlebarsJsResource = classLoader.getResource('asset/pipeline/handlebars/handlebars.js')
-						engine.eval(handlebarsJsResource.getText('UTF-8'), bindings)
+						context.eval("js",handlebarsJsResource.getText('UTF-8'))
 					}
 
 				}
@@ -113,8 +115,8 @@ class HandlebarsProcessor extends AbstractProcessor {
 		try {
 			def result
 			synchronized($LOCK) {
-				bindings.put("handlebarsSrc", input)
-				result = engine.eval("Handlebars.precompile(handlebarsSrc);", bindings)
+				bindings.putMember("handlebarsSrc", input)
+				result = context.eval("js","Handlebars.precompile(handlebarsSrc);")?.toString()
 			}
 			return wrapTemplate(templateNameForFile(assetFile), result)
 

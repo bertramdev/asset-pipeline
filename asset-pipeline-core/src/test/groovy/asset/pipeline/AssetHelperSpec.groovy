@@ -18,6 +18,7 @@ package asset.pipeline
 
 import spock.lang.Specification
 import asset.pipeline.fs.FileSystemAssetResolver
+import asset.pipeline.utils.Handler
 /**
  * @author David Estes
  */
@@ -44,7 +45,7 @@ class AssetHelperSpec extends Specification {
 
     void "Should Resolve asset:// URL Protocol Spec"() {
         given:
-            def url = new java.net.URL("asset:///asset-pipeline/test/test.css")
+            def url = new java.net.URL(null,"asset:///asset-pipeline/test/test.css", new Handler())
         when:
             def results = url.text
         then:

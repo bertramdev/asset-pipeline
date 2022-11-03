@@ -12,7 +12,7 @@ import org.mozilla.javascript.JavaScriptException
 import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.NativeObject
 import org.mozilla.javascript.Scriptable
-import sun.net.www.protocol.asset.Handler
+import asset.pipeline.utils.Handler
 
 @Slf4j
 class LessProcessor extends AbstractProcessor {

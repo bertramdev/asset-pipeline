@@ -15,8 +15,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.11'
+targetCompatibility = '1.11'
 
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
@@ -61,6 +61,10 @@ dependencies {
 	doc         'org.codehaus.groovy:groovy-all:2.4.19'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	api     'org.mozilla:rhino:1.7R4'
+	api("org.graalvm.sdk:graal-sdk:22.0.0.2")
+    api("org.graalvm.js:js:22.0.0.2")
+    api("org.graalvm.js:js-scriptengine:22.0.0.2")
+
 	compileOnly     'com.google.javascript:closure-compiler-unshaded:v20210106'
 	api 'org.slf4j:slf4j-api:1.7.28'
 	//api   'log4j:log4j:1.2.16'

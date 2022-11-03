@@ -6,6 +6,8 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+* November 3, 2022
+** - 4.0.0 - Changed jvm minimum to JDK 11+. Swapped out uses of rhino and nashorn for GraalVM JS significantly improving compile time performance.
 * Sep 28, 2022
 ** - 3.4.7 - Dependency updates for dart-sass-asset-pipeline, security updates for handlebars, reduced transitive dependency exposure.
 * April 10, 2022

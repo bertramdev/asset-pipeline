@@ -6,6 +6,7 @@ import asset.pipeline.CacheManager
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.processors.CssProcessor
 import java.util.regex.Pattern
+import asset.pipeline.utils.Handler
 
 class LessAssetFile extends AbstractAssetFile {
     static final String contentType = 'text/css'
