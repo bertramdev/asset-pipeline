@@ -1,19 +1,13 @@
 package asset.pipeline.servlet
 
-
-import asset.pipeline.AssetPipelineResponseBuilder
-import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.AssetHelper
-import java.util.logging.Logger
-import javax.servlet.FilterChain
-import javax.servlet.ServletContext
-import javax.servlet.ServletException
-import javax.servlet.ServletOutputStream
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import asset.pipeline.AssetPipelineConfigHolder
+import asset.pipeline.AssetPipelineResponseBuilder
+import jakarta.servlet.*
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
+import java.util.logging.Logger
 
 class AssetPipelineFilterCore {
 
@@ -44,16 +38,16 @@ class AssetPipelineFilterCore {
 		if(fileUri.startsWith(baseAssetUrl)) {
 			fileUri = fileUri.substring(baseAssetUrl.length())
 		}
-		fileUri = AssetHelper.normalizePath(fileUri) //JETTY Security bug, we MUST prevent reverse 
+		fileUri = AssetHelper.normalizePath(fileUri) //JETTY Security bug, we MUST prevent reverse
 		final Properties manifest = AssetPipelineConfigHolder.manifest
 		String manifestPath = fileUri
 		if(fileUri.startsWith('/')) {
 			manifestPath = fileUri.substring(1) //Omit forward slash
 		}
 		if(manifest) {
-			fileUri = manifest.getProperty(manifestPath, manifestPath)	
+			fileUri = manifest.getProperty(manifestPath, manifestPath)
 		}
-		
+
 		AssetPipelineServletResource resource = assetPipelineServletResourceRepository.getResource(fileUri)
 		if(resource) {
 			final Date lastModifiedDate = resource.getLastModified() ? new Date(resource.getLastModified()) : null
