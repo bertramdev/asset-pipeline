@@ -1,0 +1,1 @@
+_.'border-1' { border '1px' }
