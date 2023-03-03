@@ -1,6 +1,6 @@
 === Getting Started
 
-Getting started with gradle is very quick and easy. The `asset-pipeline-gradle` plugin is included in both the gradle plugin repository as well as jcenter and maven. For those of you not familiar with http://gradle.org[gradle] it is a very powerful build tooling system that you should definitely check out.
+Getting started with gradle is very quick and easy. The `asset-pipeline-gradle` plugin is included in both the gradle plugin repository as well as mavenCentral() and maven. For those of you not familiar with http://gradle.org[gradle] it is a very powerful build tooling system that you should definitely check out.
 
 IMPORTANT: Asset-Pipelines build classes are not directly dependent on gradle and can be easily integrated into other build tooling frameworks like Maven.
 

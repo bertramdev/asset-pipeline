@@ -17,10 +17,12 @@
 package asset.pipeline
 
 import asset.pipeline.fs.AssetResolver
+import asset.pipeline.processors.JsRequireProcessor
 import groovy.transform.CompileStatic
 import java.util.regex.Pattern
 import java.security.MessageDigest
 import java.security.DigestInputStream
+
 
 /**
 * This is the base Asset File specification class. An AssetFile object should extend this abstract base class.
@@ -160,11 +162,19 @@ abstract class AbstractAssetFile implements AssetFile {
 			String md5 = null
 			if(!skipCache) {
 				md5 = getByteDigest()
-				String cache = CacheManager.findCache(path, md5, baseFile?.path)
+				Map<String,Object> cache = CacheManager.findCache(path, md5, baseFile?.path)
 				if(cache) {
-					return cache
+					Map<String,String> moduleMaps = JsRequireProcessor.commonJsModules.get()
+					if(moduleMaps != null) {
+						if(cache.requireModules) {
+							moduleMaps = cache.requireModules + moduleMaps
+							JsRequireProcessor.commonJsModules.set(moduleMaps)
+						}
+					}
+					return cache.processedFileText
 				}
 			}
+
 			if(processors != null) {
 				for(Class<Processor> processor in processors) {
 					Processor processInstance = processor.newInstance(precompiler) as Processor

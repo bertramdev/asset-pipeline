@@ -15,7 +15,7 @@ If using gradle, this plugin adds a series of tasks directly to your gradle plug
 //Example build.gradle file
 buildscript {
   repositories {
-    jcenter()
+    mavenCentral()
   }
   dependencies {
     classpath 'com.bertramlabs.plugins.asset-pipeline-core:2.6.7'

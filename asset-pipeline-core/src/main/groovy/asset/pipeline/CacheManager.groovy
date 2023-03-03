@@ -18,6 +18,7 @@ package asset.pipeline
 
 import java.util.concurrent.ConcurrentHashMap
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 
 /**
  * A Cache Manager for the Asset-Pipeline runtime. This reduces repeat processing
@@ -29,6 +30,7 @@ import groovy.transform.CompileStatic
  * @author Graeme Rocher
  */
 // @CompileStatic
+@Slf4j
 public class CacheManager {
 	static final String CACHE_LOCATION = ".assetcache"
 	static final Integer CACHE_DEBOUNCE_MS = 5000 // De-bounce 5 seconds
@@ -45,7 +47,7 @@ public class CacheManager {
      * @param originalFileName - Original file name of the file. This is for cache busting bundled assets
      * @return A String value of the cache
      */
-	public static String findCache(String fileName, String md5, String originalFileName = null) {
+	public static Map<String,Object> findCache(String fileName, String md5, String originalFileName = null) {
 		loadPersistedCache()
         checkCacheValidity()
         def cacheRecord
@@ -70,7 +72,7 @@ public class CacheManager {
 					asyncCacheSave()
 					return null
 				}
-				return cacheRecord.processedFileText
+				return cacheRecord
 			} else if (cacheRecord) {
 				cache.remove(fileName)
 				asyncCacheSave()
@@ -103,6 +105,7 @@ public class CacheManager {
 					md5: md5Hash,
 					originalFileName: originalFileName,
 					processedFileText: processedFileText,
+					requireModules: [:],
 					dependencies: [:]
 				]
 			}
@@ -126,6 +129,25 @@ public class CacheManager {
 
 			def newMd5 = dependentFile.getByteDigest()
 			cacheRecord.dependencies[dependentFile.path] = newMd5
+			asyncCacheSave()
+		}
+	}
+
+
+	/**
+     * Called during asset processing to add a dependent module processed to the cache path.
+     * @param fileName The name of the file we are adding a dependency to
+     * @param moduleName The name of the module we are caching along side
+     * @param dependentModuleContent the AssetFile object we are adding as a dependency
+     */
+	public static void addCacheModule(String fileName, String moduleName, String dependentModuleContent) {
+		synchronized(LOCK_FETCH_OBJECT) {
+			def cacheRecord = cache[fileName]
+			if(!cacheRecord) {
+				createCache(fileName, null, null)
+				cacheRecord = cache[fileName]
+			}
+			cacheRecord.requireModules[moduleName] = dependentModuleContent
 			asyncCacheSave()
 		}
 	}

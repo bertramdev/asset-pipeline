@@ -36,7 +36,7 @@ class CacheManagerSpec extends Specification {
             def cacheContent
         when:
             CacheManager.createCache(testFileName, testMd5, testFile.text)
-            cacheContent = CacheManager.findCache(testFileName, testMd5)
+            cacheContent = CacheManager.findCache(testFileName, testMd5)?.processedFileText
         then:
             cacheContent == testFile.text
     }
@@ -50,12 +50,12 @@ class CacheManagerSpec extends Specification {
             CacheManager.createCache(testFileName, testMd5, testFile.text)
 
         when: "retreiving from cache"
-            cacheContent = CacheManager.findCache(testFileName, testMd5)
+            cacheContent = CacheManager.findCache(testFileName, testMd5)?.processedFileText
         then:
             cacheContent == testFile.text
 
         when: "retreiving with different md5"
-            cacheContent = CacheManager.findCache(testFileName, "xxx")
+            cacheContent = CacheManager.findCache(testFileName, "xxx")?.processedFileText
         then:
             cacheContent == null
     }
@@ -74,20 +74,20 @@ class CacheManagerSpec extends Specification {
         when: "adding dependency should return file if unchanged"
             dependentFile.text = "/*Cache Manager Dependency Test*/"
             CacheManager.addCacheDependency(testFileName, dependentAssetFile)
-            cacheContent = CacheManager.findCache(testFileName, testMd5)
+            cacheContent = CacheManager.findCache(testFileName, testMd5)?.processedFileText
         then:
             cacheContent == testFile.text
 
         when: "expiring cache dependency"
             CacheManager.addCacheDependency(testFileName, dependentAssetFile)
             dependentFile.text = "/*Cache Manager Dependency Test Cache Expire*/"
-            cacheContent = CacheManager.findCache(testFileName, testMd5)
+            cacheContent = CacheManager.findCache(testFileName, testMd5)?.processedFileText
         then:
             cacheContent == null
         when: "removing dependency should expire cache"
             CacheManager.addCacheDependency(testFileName, dependentAssetFile)
             dependentFile.delete()
-            cacheContent = CacheManager.findCache(testFileName, testMd5)
+            cacheContent = CacheManager.findCache(testFileName, testMd5)?.processedFileText
         then:
             cacheContent == null
     }
@@ -102,11 +102,11 @@ class CacheManagerSpec extends Specification {
             CacheManager.createCache(testFileName, testMd5, testFile.text, testFile.canonicalPath)
 
         then:
-            CacheManager.findCache(testFileName, testMd5, testFile.canonicalPath) != null
+            CacheManager.findCache(testFileName, testMd5, testFile.canonicalPath)?.processedFileText != null
             CacheManager.cache[testFileName] != null
 
         when:
-            boolean cacheMiss = CacheManager.findCache(testFileName, testMd5, "not the same file path") == null
+            boolean cacheMiss = CacheManager.findCache(testFileName, testMd5, "not the same file path")?.processedFileText == null
 
         then:
             assert cacheMiss

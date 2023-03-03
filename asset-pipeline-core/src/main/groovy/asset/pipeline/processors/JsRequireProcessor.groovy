@@ -10,13 +10,17 @@ import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 import asset.pipeline.CacheManager
 import java.util.regex.Pattern
+import groovy.util.logging.Slf4j
 
 @CompileStatic
+@Slf4j
 class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 	private static final Pattern URL_CALL_PATTERN = ~/[^\.a-zA-Z_\-0-9]require\((?:\s*)(['"]?)([a-zA-Z0-9\-_.:\/@#?$ &+%=]++)\1?(?:\s*)\)/
 	public static ThreadLocal<Map<String,String>> commonJsModules = new ThreadLocal<Map<String,String>>()
+	// Map<String,String> currentCommonJsModules
 	public static ThreadLocal<String> baseModule = new ThreadLocal<String>()
+	public static ThreadLocal<Boolean> withinDirectiveTree = new ThreadLocal<Boolean>()
 
 	static {
         doNotInsertCacheDigestIntoUrlForCompiledExtension('html')
@@ -34,10 +38,13 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		}
 		final Map<String, String> cachedPaths = [:]
 		Boolean originator = false
+
+		if(!baseModule.get() && !withinDirectiveTree.get()) {			
+			commonJsModules.set([:] as Map<String,String>)
+		}
 		if(!baseModule.get()) {
 			baseModule.set(assetFile.path)
 			originator = true
-			commonJsModules.set([:] as Map<String,String>)
 		}
 		try {
 			String result =	inputText.replaceAll(URL_CALL_PATTERN) { final String urlCall, final String quote, final String assetPath ->
@@ -146,13 +153,15 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 			}
 
 
-			if(baseModule.get() == assetFile.path && commonJsModules.get()) {
+			if(baseModule.get() == assetFile.path && commonJsModules.get() && !withinDirectiveTree.get()) {
 				result = requireMethod + modulesJs() + result
 			}
 			return result
 		} finally {
 			if(originator) {
-				commonJsModules.set([:] as Map<String,String>)
+				if(!withinDirectiveTree.get()) {
+					commonJsModules.set([:] as Map<String,String>)	
+				}
 				baseModule.set(null)
 			}
 		}
@@ -164,8 +173,9 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 			moduleMap = [:] as Map<String,String>
 			commonJsModules.set(moduleMap)
 		}
-
+		CacheManager.addCacheDependency(baseModule.get(), assetFile)
 		if(moduleMap[assetFile.path]) {
+			CacheManager.addCacheModule(baseModule.get(),assetFile.path,moduleMap[assetFile.path])
 			return
 		}
 		//this is here to prevent circular dependencies
@@ -178,7 +188,8 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		"""
 		moduleMap[assetFile.path] = placeHolderModule
 		moduleMap[assetFile.path] = encapsulateModule(assetFile)
-		CacheManager.addCacheDependency(baseModule.get(), assetFile)
+		CacheManager.addCacheModule(baseModule.get(),assetFile.path,moduleMap[assetFile.path])
+		
 	}
 
 	private appendUrlModule(AssetFile assetFile, String url) {
@@ -189,6 +200,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		}
 
 		if(moduleMap[assetFile.path]) {
+			CacheManager.addCacheModule(baseModule.get(),assetFile.path,moduleMap[assetFile.path])
 			return
 		}
 		//this is here to prevent circular dependencies
@@ -199,6 +211,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 		})
 		"""
 		moduleMap[assetFile.path] = placeHolderModule
+		CacheManager.addCacheModule(baseModule.get(),assetFile.path,moduleMap[assetFile.path])
 		
 	}
 
@@ -221,7 +234,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 
-	private String modulesJs() {
+	public static String modulesJs() {
 		String output = "var _asset_pipeline_modules = _asset_pipeline_modules || {};\n"
 		output += commonJsModules.get()?.collect { path, encapsulation ->
 			"_asset_pipeline_modules['${path}'] = ${encapsulation};"

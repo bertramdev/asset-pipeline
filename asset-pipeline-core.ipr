@@ -254,7 +254,7 @@
     <remote-repository>
       <option name="id" value="BintrayJCenter" />
       <option name="name" value="BintrayJCenter" />
-      <option name="url" value="https://jcenter.bintray.com/" />
+      <option name="url" value="https://mavenCentral().bintray.com/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="MavenLocal" />

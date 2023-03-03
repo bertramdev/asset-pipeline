@@ -32,7 +32,7 @@ class GroocssAssetFile extends AbstractAssetFile {
             String md5 = null
             if(!skipCache) {
                 md5 = getByteDigest()
-                def cache = CacheManager.findCache(path, md5, baseFile?.path)
+                def cache = CacheManager.findCache(path, md5, baseFile?.path)?.processedFileText
                 if(cache) {
                     return cache
                 }

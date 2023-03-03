@@ -30,7 +30,6 @@ ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 
 repositories {
-	jcenter()
 	mavenCentral()
 }
 

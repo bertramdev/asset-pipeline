@@ -4,7 +4,7 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        jcenter()
+        mavenCentral()
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
@@ -43,7 +43,7 @@ java {
 
 repositories {
     mavenLocal()
-    jcenter()
+    mavenCentral()
     mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }

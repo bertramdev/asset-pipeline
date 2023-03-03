@@ -3,7 +3,7 @@
 buildscript {
 	repositories {
 		mavenLocal()
-		jcenter()
+		mavenCentral()
 	}
 	dependencies {
 	}
@@ -28,7 +28,6 @@ sourceCompatibility = '1.11'
 targetCompatibility = '1.11'
 repositories {
 	mavenCentral()
-	jcenter()
 }
 
 ext {

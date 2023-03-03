@@ -16,7 +16,7 @@ grails {
 					mavenLocal()
 					grailsCentral()
 					mavenCentral()
-					jcenter()
+					mavenCentral()
 					mavenRepo 'http://dl.bintray.com/bertramlabs/asset-pipeline'
 				}
 

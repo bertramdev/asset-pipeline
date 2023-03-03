@@ -5,10 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="262ab899-54c3-4785-b503-a621012b6c15" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/asset-pipeline-docs/src/asciidoc/introduction.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-docs/src/asciidoc/introduction.adoc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset-pipeline-grails/src/main/groovy/asset/pipeline/AssetPipelineGrailsPlugin.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-grails/src/main/groovy/asset/pipeline/AssetPipelineGrailsPlugin.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-classpath-test/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-classpath-test/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-core.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-core.ipr" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-core/Readme.markdown" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-core/Readme.markdown" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-core/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-core/src/main/groovy/asset/pipeline/DirectiveProcessor.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-core/src/main/groovy/asset/pipeline/DirectiveProcessor.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-core/src/main/groovy/asset/pipeline/processors/JsRequireProcessor.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-core/src/main/groovy/asset/pipeline/processors/JsRequireProcessor.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-docs/src/asciidoc/gradle/getting_started.adoc" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-docs/src/asciidoc/gradle/getting_started.adoc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-gradle/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-gradle/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-grails/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-grails/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-grails/grails-app/conf/BuildConfig.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-grails/grails-app/conf/BuildConfig.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-micronaut/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-micronaut/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-servlet/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-servlet/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/gradle.html" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/gradle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/gradle/getting_started.html" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/gradle/getting_started.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-site/src/assets/html/manual-new/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset-pipeline-spring-boot/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline-spring-boot/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/asset-pipeline.iws" beforeDir="false" afterPath="$PROJECT_DIR$/asset-pipeline.iws" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/coffee-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/coffee-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compass-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/compass-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ember-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/ember-asset-pipeline/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/groocss-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/groocss-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handlebars-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/handlebars-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsx-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/jsx-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/less-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/less-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ratpack-asset-pipeline/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/ratpack-asset-pipeline/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ratpack-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/ratpack-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sass-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sass-asset-pipeline/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/typescript-asset-pipeline/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/typescript-asset-pipeline/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +90,12 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="asset-pipeline" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -148,6 +178,7 @@
       <setting name="grailsApplicationRoot" value="$PROJECT_DIR$/asset-pipeline-grails" />
       <setting name="launchBrowser" value="true" />
       <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
       <method v="2" />
     </configuration>
     <configuration name="Grails: i18n-asset-pipeline-grails" type="GrailsRunConfigurationType" factoryName="Grails">
@@ -157,6 +188,7 @@
       <setting name="grailsApplicationRoot" value="$PROJECT_DIR$/i18n-asset-pipeline-grails" />
       <setting name="launchBrowser" value="true" />
       <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -206,6 +238,8 @@
       <option name="presentableId" value="Default" />
       <updated>1644413865330</updated>
       <workItem from="1644413866501" duration="1095000" />
+      <workItem from="1677850473117" duration="34000" />
+      <workItem from="1677850521053" duration="107000" />
     </task>
     <servers />
   </component>

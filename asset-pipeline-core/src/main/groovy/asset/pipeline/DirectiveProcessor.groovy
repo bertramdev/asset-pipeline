@@ -16,6 +16,7 @@
 package asset.pipeline
 
 import groovy.util.logging.Slf4j
+import asset.pipeline.processors.JsRequireProcessor
 import groovy.transform.CompileStatic
 
 /**
@@ -54,16 +55,30 @@ class DirectiveProcessor {
     */
     @CompileStatic
     def compile(AssetFile file) {
-        Long startTime =  new Date().time
-        if(file instanceof GenericAssetFile) {
-            return file.getBytes()
+        try {
+            Long startTime =  new Date().time
+            if(file instanceof GenericAssetFile) {
+                return file.getBytes()
+            }
+            this.baseFile = file
+            this.files = [:]
+            Map tree = getDependencyTree(file)
+            StringBuilder buffer = new StringBuilder(64000)
+            //since we are using tree based injection we need to remove duplicate asset requires
+            JsRequireProcessor.withinDirectiveTree.set(true)
+            JsRequireProcessor.commonJsModules.set([:] as Map<String,String>)
+
+            loadContentsForTree(tree,buffer)
+            if(JsRequireProcessor.commonJsModules.get()) {
+                return JsRequireProcessor.requireMethod + JsRequireProcessor.modulesJs() + buffer.toString()
+            } else {
+                return buffer.toString()    
+            }
+        } finally {
+            JsRequireProcessor.commonJsModules.set([:] as Map<String,String>)
+            JsRequireProcessor.withinDirectiveTree.set(false)
         }
-        this.baseFile = file
-        this.files = [:]
-        Map tree = getDependencyTree(file)
-        StringBuilder buffer = new StringBuilder(64000)
-        loadContentsForTree(tree,buffer)
-        return buffer.toString()
+        
     }
 
     /**
