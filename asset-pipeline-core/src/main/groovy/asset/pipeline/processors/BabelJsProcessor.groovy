@@ -29,11 +29,13 @@ import javax.script.ScriptEngineManager
 import javax.script.SimpleBindings
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.HostAccess
+import groovy.transform.CompileStatic
 
 // CoffeeScript engine will attempt to use Node.JS coffee if it is available on
 // the system path. If not, it uses Mozilla Rhino to compile the CoffeeScript
 // template using the javascript in-browser compiler.
 @Slf4j
+@CompileStatic
 class BabelJsProcessor extends AbstractProcessor {
 
 	static Boolean NODE_SUPPORTED
@@ -44,9 +46,6 @@ class BabelJsProcessor extends AbstractProcessor {
 	private static final $LOCK = new Object[0]
 	BabelJsProcessor(AssetCompiler precompiler) {
 		super(precompiler)
-	
-		
-		
 	}
 
 	protected void loadBabelJs() {
@@ -80,6 +79,7 @@ class BabelJsProcessor extends AbstractProcessor {
 	* @return  String of compiled javascript
 	*/
 	String process(String input,AssetFile  assetFile) {
+		Date now = new Date()
 		if(!input) {
 			return input
 		}
@@ -109,7 +109,7 @@ class BabelJsProcessor extends AbstractProcessor {
 
 			synchronized($LOCK) {
 				bindings.putMember("input", input);
-				def result = context.eval("js","Babel.transform(input, options).code");
+				String result = context.eval("js","Babel.transform(input, options).code") as String;
 				return result
 			}
 		} catch(Exception e) {
@@ -117,7 +117,7 @@ class BabelJsProcessor extends AbstractProcessor {
 			$e
 			""",e)
 		} finally {
-
+			// log.info("Processed BabelJs for ${assetFile.name} in ${new Date().time - now.time}ms")
 		}
 	}
 

@@ -33,6 +33,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 
 
 	String process(final String inputText, final AssetFile assetFile) {
+		Date now = new Date()
 		if(AssetPipelineConfigHolder.config != null && AssetPipelineConfigHolder.config.commonJs == false) {
 			return inputText
 		}
@@ -158,6 +159,7 @@ class JsRequireProcessor extends AbstractUrlRewritingProcessor {
 			}
 			return result
 		} finally {
+			// log.info("Processed JsRequires for ${assetFile.name} in ${new Date().time - now.time}ms")
 			if(originator) {
 				if(!withinDirectiveTree.get()) {
 					commonJsModules.set([:] as Map<String,String>)	
