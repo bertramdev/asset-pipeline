@@ -29,6 +29,7 @@ import javax.script.ScriptEngineManager
 import javax.script.SimpleBindings
 import org.graalvm.polyglot.Context
 import org.graalvm.polyglot.HostAccess
+import org.graalvm.polyglot.Value
 import groovy.transform.CompileStatic
 
 // CoffeeScript engine will attempt to use Node.JS coffee if it is available on
@@ -42,7 +43,7 @@ class BabelJsProcessor extends AbstractProcessor {
 	ClassLoader classLoader
 
 	static Context context
-	static def bindings
+	static Value bindings
 	private static final $LOCK = new Object[0]
 	BabelJsProcessor(AssetCompiler precompiler) {
 		super(precompiler)
@@ -57,11 +58,11 @@ class BabelJsProcessor extends AbstractProcessor {
 
 					context.eval("js",babelJsResource.getText('UTF-8'))
 					def presets = "{ \"presets\": [\"es2015\",[\"stage-2\",{\"decoratorsLegacy\": true}],\"react\"], \"compact\": false }"
-					if(AssetPipelineConfigHolder.config?.babel?.options) {
-						presets = AssetPipelineConfigHolder.config?.babel?.options
+					String options = getOptions()
+					if(options) {
+						presets = options
 					}
 					bindings = context.getBindings("js")
-					
 					bindings.putMember("optionsJson", presets);
 					context.eval("js","var options = JSON.parse(optionsJson);");
 
@@ -122,5 +123,13 @@ class BabelJsProcessor extends AbstractProcessor {
 	}
 
 
+	protected String getOptions() {
+		Map<String,Object> babelOptions = AssetPipelineConfigHolder.config?.babel as Map<String,Object>
+		if(babelOptions) {
+			return babelOptions.options as String
+		} else {
+			return null
+		}
+	}
 
 }
