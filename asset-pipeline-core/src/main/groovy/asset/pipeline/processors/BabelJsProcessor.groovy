@@ -39,7 +39,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class BabelJsProcessor extends AbstractProcessor {
 
-	static Boolean NODE_SUPPORTED
+	static Boolean SWC_SUPPORTED
 	ClassLoader classLoader
 
 	static Context context
@@ -80,7 +80,6 @@ class BabelJsProcessor extends AbstractProcessor {
 	* @return  String of compiled javascript
 	*/
 	String process(String input,AssetFile  assetFile) {
-		Date now = new Date()
 		if(!input) {
 			return input
 		}
@@ -93,33 +92,41 @@ class BabelJsProcessor extends AbstractProcessor {
 				return input
 			}
 		}
-		try {
-			classLoader = getClass().getClassLoader()
-			//cx.setOptimizationLevel(-1)
-			//globalScope = cx.initStandardObjects()
-			loadBabelJs()
-		} catch(Exception e) {
-			throw new Exception("BabelJs Engine initialization failed.", e)
-		} finally {
-			try {
-			} catch(IllegalStateException e) {
-			}
-		}
-		try {
-			
 
-			synchronized($LOCK) {
-				bindings.putMember("input", input);
-				String result = context.eval("js","Babel.transform(input, options).code") as String;
-				return result
+
+		if(isBabelSupported()) {
+			return processWithBabelBinary(input, assetFile)
+		} else {
+			try {
+				classLoader = getClass().getClassLoader()
+				//cx.setOptimizationLevel(-1)
+				//globalScope = cx.initStandardObjects()
+				loadBabelJs()
+			} catch(Exception e) {
+				throw new Exception("BabelJs Engine initialization failed.", e)
+			} finally {
+				try {
+				} catch(IllegalStateException e) {
+				}
 			}
-		} catch(Exception e) {
-			throw new Exception("""BabelJs Engine compilation of javascript failed.
-			$e
-			""",e)
-		} finally {
-			// log.info("Processed BabelJs for ${assetFile.name} in ${new Date().time - now.time}ms")
+			try {
+				
+
+				synchronized($LOCK) {
+					bindings.putMember("input", input);
+					String result = context.eval("js","Babel.transform(input, options).code") as String;
+					return result
+				}
+			} catch(Exception e) {
+				throw new Exception("""BabelJs Engine compilation of javascript failed.
+				$e
+				""",e)
+			} finally {
+			}
 		}
+		
+		
+		
 	}
 
 
@@ -130,6 +137,72 @@ class BabelJsProcessor extends AbstractProcessor {
 		} else {
 			return null
 		}
+	}
+
+		/**
+	 * Processes an input string of ecmascript 6+ using swc on node.js (Don't use directly)
+	* @param   input String input ecmascript script text to be converted to ecmascript5
+	* @param   AssetFile instance of the asset file from which this file came from. Not actually used currently for this implementation.
+	* @return  String of compiled javascript
+	 */
+	def processWithBabelBinary(String input, AssetFile assetFile) {
+		def nodeProcess
+		def output = new StringBuilder()
+		def err = new StringBuilder()
+
+		try {
+			def command = "${ isWindows() ? 'cmd /c ' : '' }babel --no-babelrc -q"
+			nodeProcess = command.execute()
+			nodeProcess.getOutputStream().write(input.bytes)
+			nodeProcess.getOutputStream().flush()
+			nodeProcess.getOutputStream().close()
+			nodeProcess.waitForProcessOutput(output, err)
+			if(err) {
+				throw new Exception(err.toString())
+			}
+			return output.toString()
+		} catch(Exception e) {
+			throw new Exception("""
+			Babel Engine compilation of es6 to es5 failed for ${assetFile.name}.
+			$e
+			""")
+		}
+	}
+
+	/**
+	 * Determins if NODE is supported on the System path
+	 * @return Boolean true if NODE.js is supported on the system path
+	 */
+	Boolean isBabelSupported() {
+		if(SWC_SUPPORTED == null) {
+			def nodeProcess
+			def output = new StringBuilder()
+			def err = new StringBuilder()
+
+			try {
+				def command = "${ isWindows() ? 'cmd /c ' : '' }babel -V"
+				nodeProcess = command.execute()
+				nodeProcess.waitForProcessOutput(output, err)
+				if(err) {
+					SWC_SUPPORTED = false
+				}
+				else {
+					SWC_SUPPORTED = true
+				}
+			} catch(Exception e) {
+				SWC_SUPPORTED = false
+			}
+		}
+			return SWC_SUPPORTED
+	}
+
+	/**
+	 * Determins if this is on a windows platform or not (used for node system path)
+	 * @return Boolean true if this is a windows machine
+	 */
+	Boolean isWindows() {
+		String osName = System.getProperty("os.name");
+		return (osName != null && osName.contains("Windows"))
 	}
 
 }
