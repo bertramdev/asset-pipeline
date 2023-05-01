@@ -40,6 +40,7 @@ import groovy.transform.CompileStatic
 class BabelJsProcessor extends AbstractProcessor {
 
 	static Boolean SWC_SUPPORTED
+	static Boolean BABEL_NATIVE_SUPPORTED
 	ClassLoader classLoader
 
 	static Context context
@@ -93,8 +94,9 @@ class BabelJsProcessor extends AbstractProcessor {
 			}
 		}
 
-
-		if(isBabelSupported()) {
+		if(isSwcSupported()){
+			return processWithSwcBinary(input, assetFile)
+		} else if(isBabelSupported()) {
 			return processWithBabelBinary(input, assetFile)
 		} else {
 			try {
@@ -139,8 +141,8 @@ class BabelJsProcessor extends AbstractProcessor {
 		}
 	}
 
-		/**
-	 * Processes an input string of ecmascript 6+ using swc on node.js (Don't use directly)
+	/**
+	* Processes an input string of ecmascript 6+ using swc on node.js (Don't use directly)
 	* @param   input String input ecmascript script text to be converted to ecmascript5
 	* @param   AssetFile instance of the asset file from which this file came from. Not actually used currently for this implementation.
 	* @return  String of compiled javascript
@@ -180,17 +182,52 @@ class BabelJsProcessor extends AbstractProcessor {
 	}
 
 	/**
+	* Processes an input string of ecmascript 6+ using swc on node.js (Don't use directly)
+	* @param   input String input ecmascript script text to be converted to ecmascript5
+	* @param   AssetFile instance of the asset file from which this file came from. Not actually used currently for this implementation.
+	* @return  String of compiled javascript
+	 */
+	def processWithSwcBinary(String input, AssetFile assetFile) {
+		def nodeProcess
+		def output = new StringBuilder()
+		def err = new StringBuilder()
+		def swcrcLocation = AssetPipelineConfigHolder.config?.swcrc
+
+		try {
+			def config = "-C module.type=commonjs -C module.strict=true -C module.noInterop=true --env-name='production'"
+			if (swcrcLocation) {
+				config += " --config-file ${swcrcLocation}" 
+			}
+			def command = "${ isWindows() ? 'cmd /c ' : '' }swc --no-swcrc ${config}"
+			nodeProcess = command.execute()
+			nodeProcess.getOutputStream().write(input.bytes)
+			nodeProcess.getOutputStream().flush()
+			nodeProcess.getOutputStream().close()
+			nodeProcess.waitForProcessOutput(output, err)
+			if(err) {
+				throw new Exception(err.toString())
+			}
+			return output.toString()
+		} catch(Exception e) {
+			throw new Exception("""
+			SWC Engine compilation of es6 to es5 failed for ${assetFile.name}.
+			$e
+			""")
+		}
+	}
+
+	/**
 	 * Determins if NODE is supported on the System path
 	 * @return Boolean true if NODE.js is supported on the system path
 	 */
-	Boolean isBabelSupported() {
+	Boolean isSwcSupported() {
 		if(SWC_SUPPORTED == null) {
 			def nodeProcess
 			def output = new StringBuilder()
 			def err = new StringBuilder()
 
 			try {
-				def command = "${ isWindows() ? 'cmd /c ' : '' }babel -V"
+				def command = "${ isWindows() ? 'cmd /c ' : '' }swc -V"
 				nodeProcess = command.execute()
 				nodeProcess.waitForProcessOutput(output, err)
 				if(err) {
@@ -204,6 +241,33 @@ class BabelJsProcessor extends AbstractProcessor {
 			}
 		}
 			return SWC_SUPPORTED
+	}
+
+	/**
+	 * Determins if NODE is supported on the System path
+	 * @return Boolean true if NODE.js is supported on the system path
+	 */
+	Boolean isBabelSupported() {
+		if(BABEL_NATIVE_SUPPORTED == null) {
+			def nodeProcess
+			def output = new StringBuilder()
+			def err = new StringBuilder()
+
+			try {
+				def command = "${ isWindows() ? 'cmd /c ' : '' }babel -V"
+				nodeProcess = command.execute()
+				nodeProcess.waitForProcessOutput(output, err)
+				if(err) {
+					BABEL_NATIVE_SUPPORTED = false
+				}
+				else {
+					BABEL_NATIVE_SUPPORTED = true
+				}
+			} catch(Exception e) {
+				BABEL_NATIVE_SUPPORTED = false
+			}
+		}
+			return BABEL_NATIVE_SUPPORTED
 	}
 
 	/**
