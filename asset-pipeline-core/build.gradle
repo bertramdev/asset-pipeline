@@ -48,9 +48,9 @@ groovydoc {
 	windowTitle "Asset Pipeline For the JVM API Doc"
 	groovyClasspath = configurations.doc
 	classpath = configurations.runtime
-	// Links to external Javadoc, currently only the J2SE links are working properly 
-  	link('http://download.oracle.com/javase/8/docs/api/', 'java.', 'org.xml', 'javax.', 'org.xml.') 
-  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.codehaus.groovy.') 
+	// Links to external Javadoc, currently only the J2SE links are working properly
+  	link('http://download.oracle.com/javase/8/docs/api/', 'java.', 'org.xml', 'javax.', 'org.xml.')
+  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.codehaus.groovy.')
 }
 
 dependencies {
@@ -71,6 +71,7 @@ dependencies {
 	testImplementation 'org.codehaus.groovy:groovy-all:2.4.19'
 	testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
 	testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.28'
+	compileOnly 'org.slf4j:slf4j-simple:1.7.28'
 }
 
 publishing {

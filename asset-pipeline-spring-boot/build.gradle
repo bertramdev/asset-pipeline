@@ -13,8 +13,8 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
@@ -46,8 +46,11 @@ dependencies {
 	compileOnly    'org.codehaus.groovy:groovy:2.4.19'
 	api     project(':asset-pipeline-core')
 	api     project(':asset-pipeline-servlet')
-	api     'org.springframework.boot:spring-boot-starter-web:1.5.1.RELEASE'
+	api     'org.springframework.boot:spring-boot-starter-web:3.0.0'
 	testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
+	compileOnly "org.slf4j:log4j-over-slf4j:1.7.28"
+
+
 }
 
 publishing {

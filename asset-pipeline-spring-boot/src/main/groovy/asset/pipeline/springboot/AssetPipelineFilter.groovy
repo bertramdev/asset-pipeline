@@ -1,20 +1,13 @@
 package asset.pipeline.springboot
 
-
 import asset.pipeline.servlet.AssetPipelineFilterCore
 import asset.pipeline.servlet.AssetPipelineServletResource
 import asset.pipeline.servlet.AssetPipelineServletResourceRepository
 import groovy.util.logging.Log4j
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.FilterConfig
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
+import jakarta.servlet.*
 import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
-
 
 @Log4j
 class AssetPipelineFilter implements Filter {

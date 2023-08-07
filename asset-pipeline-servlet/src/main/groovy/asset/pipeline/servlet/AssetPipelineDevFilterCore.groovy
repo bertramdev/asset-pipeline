@@ -1,16 +1,11 @@
 package asset.pipeline.servlet
 
-
 import asset.pipeline.AssetPipeline
-import java.util.logging.Logger
-import javax.servlet.FilterChain
-import javax.servlet.ServletContext
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.*
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
+import java.util.logging.Logger
 
 class AssetPipelineDevFilterCore {
 
