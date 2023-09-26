@@ -12,15 +12,15 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.filter.ServerFilterChain;
 import io.micronaut.http.server.types.files.StreamedFile;
-import io.reactivex.Flowable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.*;

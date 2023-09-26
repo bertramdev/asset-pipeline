@@ -11,14 +11,14 @@ import io.micronaut.http.annotation.Filter;
 import io.micronaut.http.filter.HttpServerFilter;
 import io.micronaut.http.filter.ServerFilterChain;
 import io.micronaut.http.server.types.files.StreamedFile;
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.reactivestreams.Publisher;
 import org.slf4j.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
