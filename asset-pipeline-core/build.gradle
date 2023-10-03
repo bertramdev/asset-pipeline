@@ -64,7 +64,7 @@ dependencies {
     api("org.graalvm.js:js:22.0.0.2")
     api("org.graalvm.js:js-scriptengine:22.0.0.2")
 
-	compileOnly     'com.google.javascript:closure-compiler-unshaded:v20210106'
+	compileOnly     'com.google.javascript:closure-compiler-unshaded:v20230802'
 	api 'org.slf4j:slf4j-api:1.7.28'
 	//api   'log4j:log4j:1.2.16'
 	testImplementation project(':asset-pipeline-classpath-test')
