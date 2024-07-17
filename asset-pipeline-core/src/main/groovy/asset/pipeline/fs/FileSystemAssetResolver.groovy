@@ -138,7 +138,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 		List<File> files = directory.listFiles().toList()
 		files = files?.sort { File a, File b -> a.name.compareTo b.name }
 		for(File file in files) {
-			String[] mimeType = AssetHelper.assetMimeTypeForURI(file.getAbsolutePath())
+			String[] mimeType = AssetHelper.assetMimeTypeForURI(file.getAbsolutePath()).toArray(new String[0])
 			if(file.isDirectory() && recursive) {
 				recursiveTreeAppend(file,tree, contentType, baseFile, recursive, sourceDirectory)
 			}

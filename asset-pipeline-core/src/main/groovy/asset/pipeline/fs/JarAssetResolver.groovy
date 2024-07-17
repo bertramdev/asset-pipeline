@@ -89,7 +89,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
     @CompileStatic
 	public List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null,  Boolean recursive = true, AssetFile relativeFile=null, AssetFile baseFile = null) {
-		def fileList = []
+		ArrayList<AssetFile> fileList = []
 
 		if(!basePath.startsWith('/') && relativeFile != null) {
 			List<String> pathArgs = relativeFile.parentPath ? relativeFile.parentPath.split(DIRECTIVE_FILE_SEPARATOR).toList() as List<String> : [] as List<String> //(path should be relative not canonical)
@@ -104,7 +104,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
 		baseJar.entries().each { JarEntry entry ->
 			if(entry.name.startsWith(basePath)) {
-				String[] mimeType = AssetHelper.assetMimeTypeForURI(entry.name)
+				String[] mimeType = AssetHelper.assetMimeTypeForURI(entry.name).toArray(new String[0])
 				if(!entry.isDirectory() && mimeType && contentType in mimeType) {
 					fileList << assetForFile(entry,contentType, baseFile, prefixPath)
 				}

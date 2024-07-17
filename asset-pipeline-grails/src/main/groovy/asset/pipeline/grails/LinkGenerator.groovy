@@ -5,9 +5,9 @@ import grails.core.support.GrailsApplicationAware
 import grails.core.GrailsApplication
 import asset.pipeline.AssetHelper
 import asset.pipeline.AssetPipelineConfigHolder
-import groovy.util.logging.Commons
+import groovy.util.logging.Slf4j
 
-@Commons
+@Slf4j
 class LinkGenerator extends DefaultLinkGenerator implements GrailsApplicationAware {
 	GrailsApplication grailsApplication
 	def assetProcessorService

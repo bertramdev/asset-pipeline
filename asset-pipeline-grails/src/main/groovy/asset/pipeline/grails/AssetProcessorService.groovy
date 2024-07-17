@@ -17,7 +17,7 @@ import static asset.pipeline.grails.UrlBase.*
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
 import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
 import static asset.pipeline.utils.net.Urls.hasAuthority
-import static org.apache.commons.lang.StringUtils.trimToEmpty
+import static org.apache.commons.lang3.StringUtils.trimToEmpty
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
 

@@ -5,7 +5,8 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url "https://repo.grails.org/grails/core" }
+        maven { url "https://plugins.gradle.org/m2/" }
+      //  maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -19,10 +20,8 @@ group "com.bertramlabs.plugins"
 // apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'java-library'
 apply plugin: "org.grails.grails-plugin"
-apply plugin: 'com.jfrog.bintray'
-apply plugin: "org.grails.grails-gsp"
-apply plugin: "org.grails.grails-doc"
 
 // Used for publishing to central repository, remove if not needed
 ext {
@@ -44,8 +43,7 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
-    mavenCentral()
-    maven { url "https://repo.grails.org/grails/core" }
+ //   maven { url "https://repo.grails.org/grails/core" }
 }
 
 dependencyManagement {
@@ -111,13 +109,29 @@ publishing {
 
 
 dependencies {
-    compileOnly 'org.springframework.boot:spring-boot-starter-logging'
-    compileOnly "org.springframework.boot:spring-boot-starter-actuator"
-    compileOnly "org.springframework.boot:spring-boot-autoconfigure"
-    compileOnly "org.springframework.boot:spring-boot-starter-tomcat"
+        implementation("org.grails:grails-core")
+    implementation("org.grails:grails-logging")
+    // implementation("org.grails:grails-plugin-databinding")
+    // implementation("org.grails:grails-plugin-i18n")
+    // implementation("org.grails:grails-plugin-interceptors")
+    // implementation("org.grails:grails-plugin-rest")
+    // implementation("org.grails:grails-plugin-services")
+    implementation("org.grails:grails-plugin-url-mappings")
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+    implementation("org.grails:grails-web-boot")
+    api("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    compileOnly("io.micronaut:micronaut-inject-groovy")
+    
+    
+    testImplementation("io.micronaut:micronaut-inject-groovy")
+    testImplementation("org.spockframework:spock-core")
+    testImplementation("io.micronaut:micronaut-http-client")
 
-    compileOnly "org.grails:grails-web-boot"
-    compileOnly "org.grails:grails-dependencies"
+
+
     compileOnly 'javax.servlet:javax.servlet-api:3.1.0'
     implementation project(':asset-pipeline-core'), {
         exclude group:'org.mozilla', module:'rhino'
@@ -125,7 +139,6 @@ dependencies {
     }
     testImplementation('org.grails:grails-web-testing-support')
     // testCompile "org.grails:grails-plugin-testing"
-    console "org.grails:grails-console"
 }
 
 bootRun {

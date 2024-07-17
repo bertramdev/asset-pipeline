@@ -56,7 +56,7 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                 final String untrimmedAssetPath = doubleQuotedAssetPath ?: singleQuotedAssetPath
                 final String assetPath          = untrimmedAssetPath.trim()
 
-                final String replacementPath
+                String replacementPath
                 if (cachedPaths.containsKey(assetPath)) {
                     // cachedPaths[assetPath] == null // means use the incoming untrimmedAssetPath to preserve trim spacing
                     replacementPath = cachedPaths[assetPath] ?: untrimmedAssetPath
@@ -69,6 +69,7 @@ class HtmlProcessor extends AbstractUrlRewritingProcessor {
                         return quotedAssetPathWithQuotes
                     }
                 } else {
+                    replacementPath = null
                     //TODO? cachedPaths[assetPath] = null
                     return quotedAssetPathWithQuotes
                 }
