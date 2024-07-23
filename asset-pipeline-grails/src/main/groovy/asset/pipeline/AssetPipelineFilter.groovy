@@ -61,7 +61,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		if(classRegistryKey) {
 			AssetPipelineClassLoaderEntry classLoaderEntry = AssetPipelineConfigHolder.classLoaderRegistry[classRegistryKey]
 			fileUri = fileUri.substring(classRegistryKey.length())
-			final Properties manifest = classLoaderEntry.getFreshManifest()
+			final Properties manifest = classLoaderEntry.manifest
 			String manifestPath = fileUri
 			if(fileUri == '' || fileUri.endsWith('/')) {
 				fileUri += indexFile
