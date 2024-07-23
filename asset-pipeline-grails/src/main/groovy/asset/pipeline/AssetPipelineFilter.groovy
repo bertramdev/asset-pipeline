@@ -61,7 +61,7 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 		if(classRegistryKey) {
 			AssetPipelineClassLoaderEntry classLoaderEntry = AssetPipelineConfigHolder.classLoaderRegistry[classRegistryKey]
 			fileUri = fileUri.substring(classRegistryKey.length())
-			final Properties manifest = classLoaderEntry.manifest
+			final Properties manifest = classLoaderEntry.getFreshManifest()
 			String manifestPath = fileUri
 			if(fileUri == '' || fileUri.endsWith('/')) {
 				fileUri += indexFile
@@ -104,7 +104,9 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 					try {
 						final byte[] buffer = new byte[102400]
 						int len
-						inputStream = file.openStream()
+						URLConnection fileConnection = file.openConnection()
+						fileConnection.setUseCaches(false)
+						inputStream = fileConnection.getInputStream()
 						final ServletOutputStream out = response.outputStream
 						while((len = inputStream.read(buffer)) != -1) {
 							out.write(buffer, 0, len)
