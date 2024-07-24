@@ -16,9 +16,12 @@ class AssetPipelineClassLoaderEntry {
 		URL res = classLoader.getResource(MANIFEST_LOCATION)
 		if(res) {
 			def manifestProps = new Properties()
-			def propertiesStream = res.openStream()
+			URLConnection resConnection = res.openConnection()
+			resConnection.setUseCaches(false)
+			def propertiesStream = resConnection.getInputStream()
 			manifestProps.load(propertiesStream)
 			manifest = manifestProps
 		}
 	}
+
 }
