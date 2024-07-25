@@ -174,7 +174,7 @@ public class AssetHelper {
             }
             return fileSpec.contentType
         }
-        return null
+        return []
     }
 
     /**

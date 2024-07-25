@@ -30,7 +30,7 @@ class AssetsTagLib {
 			if(attrs.containsKey('asset-defer')) {
 				script(outputAttrs + [type: attrs.type ?: "text/javascript", src: assetPath(src: src, useManifest: useManifest) + queryString],'')
 			} else {
-				outPw << '<script type="' << attrs.type ? attrs.type : 'text/javascript' << '" src="' << assetPath(src: src, useManifest: useManifest) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '></script>' << endOfLine
+				outPw << '<script type="' << (attrs.type ? attrs.type : 'text/javascript') << '" src="' << assetPath(src: src, useManifest: useManifest) << queryString << '" ' << paramsToHtmlAttr(outputAttrs) << '></script>' << endOfLine
 			}
 
 		}
