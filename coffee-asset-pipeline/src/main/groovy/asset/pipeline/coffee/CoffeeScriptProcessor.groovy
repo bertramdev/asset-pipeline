@@ -36,7 +36,7 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 	private static final $LOCK = new Object[0]
 	CoffeeScriptProcessor(AssetCompiler precompiler) {
 		super(precompiler)
-		if(!isNodeSupported()) {
+		
 			try {
 				classLoader = getClass().getClassLoader()
 				Context cx = Context.enter()
@@ -51,7 +51,7 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 				} catch(IllegalStateException e) {
 				}
 			}
-		}
+		
 	}
 
 	protected void loadCoffee(Context cx) {
@@ -82,57 +82,25 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 	* @return  String of compiled javascript
 	*/
 	String process(String input,AssetFile  assetFile) {
-		if(isNodeSupported()) {
-			return processWithNode(input, assetFile)
-		}
-		else {
-			try {
-				def cx = Context.enter()
-				def compileScope = cx.newObject(globalScope)
-				compileScope.setParentScope(globalScope)
-				compileScope.put("coffeeScriptSrc", compileScope, input)
-				def result = processScript.exec(cx,compileScope)
-				return result
-			} catch(Exception e) {
-				throw new Exception("""
-				CoffeeScript Engine compilation of coffeescript to javascript failed.
-				$e
-				""")
-			} finally {
-				Context.exit()
-			}
-		}
-	}
-
-	/**
-	 * Processes an input string of coffeescript using node.js (Don't use directly)
-	* @param   input String input coffee script text to be converted to javascript
-	* @param   AssetFile instance of the asset file from which this file came from. Not actually used currently for this implementation.
-	* @return  String of compiled javascript
-	 */
-	def processWithNode(input, assetFile) {
-		def nodeProcess
-		def output = new StringBuilder()
-		def err = new StringBuilder()
-
+	
 		try {
-			def command = "${ isWindows() ? 'cmd /c ' : '' }coffee -csp"
-			nodeProcess = command.execute()
-			nodeProcess.getOutputStream().write(input.bytes)
-			nodeProcess.getOutputStream().flush()
-			nodeProcess.getOutputStream().close()
-			nodeProcess.waitForProcessOutput(output, err)
-			if(err) {
-				throw new Exception(err.toString())
-			}
-			return output.toString()
+			def cx = Context.enter()
+			def compileScope = cx.newObject(globalScope)
+			compileScope.setParentScope(globalScope)
+			compileScope.put("coffeeScriptSrc", compileScope, input)
+			def result = processScript.exec(cx,compileScope)
+			return result
 		} catch(Exception e) {
 			throw new Exception("""
-			Node.js CoffeeScript Engine compilation of coffeescript to javascript failed.
+			CoffeeScript Engine compilation of coffeescript to javascript failed.
 			$e
 			""")
+		} finally {
+			Context.exit()
 		}
+	
 	}
+
 
 	/**
 	 * Determins if this is on a windows platform or not (used for node system path)
@@ -144,31 +112,5 @@ class CoffeeScriptProcessor extends AbstractProcessor {
 	}
 
 
-	/**
-	 * Determins if NODE is supported on the System path
-	 * @return Boolean true if NODE.js is supported on the system path
-	 */
-	Boolean isNodeSupported() {
-		if(NODE_SUPPORTED == null) {
-			def nodeProcess
-			def output = new StringBuilder()
-			def err = new StringBuilder()
-
-			try {
-				def command = "${ isWindows() ? 'cmd /c ' : '' }coffee -v"
-				nodeProcess = command.execute()
-				nodeProcess.waitForProcessOutput(output, err)
-				if(err) {
-					NODE_SUPPORTED = false
-				}
-				else {
-					NODE_SUPPORTED = true
-				}
-			} catch(Exception e) {
-				NODE_SUPPORTED = false
-			}
-		}
-			return NODE_SUPPORTED
-	}
 
 }

@@ -27,7 +27,7 @@ class CoffeeAssetFileSpec extends Specification {
 		def jsFile = new CoffeeAssetFile()
 		when:
 		def matches = (line =~ jsFile.directivePattern)?.collect{ it[1].trim()} ?: []
-		def match = matches.size > 0 ? matches[0] : null
+		def match = matches.size() > 0 ? matches[0] : null
 		then:
 		directive ==  match
 		where:

@@ -39,6 +39,9 @@ dependencies {
 
 	api project(':asset-pipeline-core')
 	api 'com.google.javascript:closure-compiler-unshaded:v20240317'
+	api("org.graalvm.sdk:graal-sdk:22.0.0.2")
+    api("org.graalvm.js:js:22.0.0.2")
+    api("org.graalvm.js:js-scriptengine:22.0.0.2")
 	testImplementation('org.spockframework:spock-core:1.3-groovy-2.4')
 }
 

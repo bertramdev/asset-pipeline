@@ -36,17 +36,5 @@ class CoffeeScriptProcessorSpec extends Specification {
 			output.contains('console.log("hello world");')
 	}
 
-	void "should compile coffeescript into js using node"() {
-		given:
-			def coffeeScript = '''
-			log = ->
-			console.log "hello world"
-			'''
-			CoffeeScriptProcessor.NODE_SUPPORTED=true
-			def processor = new CoffeeScriptProcessor()
-		when:
-			def output = processor.process(coffeeScript, null)
-		then:
-			output.contains('console.log("hello world");')
-	}
+	
 }

@@ -164,7 +164,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
             def buildDependencies = project.buildscript.configurations.findByName("classpath")?.files
             if (buildDependencies) {
                 for (file in buildDependencies) {
-                    if (file.name.startsWith('rhino-') || file.name.startsWith('closure-compiler-unshaded-')) {
+                    if (file.name.startsWith('graal') || file.name.startsWith('js') || file.name.startsWith('rhino-') || file.name.startsWith('closure-compiler-unshaded-')) {
                         additionalFiles.add(file)
                     }
                 }
