@@ -26,72 +26,72 @@ import org.gradle.api.tasks.Optional
  * @author Graeme Rocher
  */
 interface AssetPipelineExtension {
-    // @Input
+    @Input
     boolean getMinifyJs()
     void setMinifyJs(boolean value)
-    // @Input
+    @Input
     boolean getEnableSourceMaps()
     void setEnableSourceMaps(boolean value)
-    // @Input
+    @Input
     boolean getMinifyCss()
     void setMinifyCss(boolean value)
-    // @Input
+    @Input
     boolean getEnableDigests()
     void setEnableDigests(boolean value)
-    // @Input
+    @Input
     boolean getSkipNonDigests()
     void setSkipNonDigests(boolean value)
-    // @Input
+    @Input
     boolean getEnableGzip()
     void setEnableGzip(boolean value)
-    // @Input
+    @Input
     boolean getPackagePlugin()
     void setPackagePlugin(boolean value)
-    // @Input
+    @Input
     boolean getDevelopmentRuntime()
     void setDevelopmentRuntime(boolean value)
-    // @Input
+    @Input
     boolean getVerbose()
     void setVerbose(boolean value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     Integer getMaxThreads()
     void setMaxThreads(Integer value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     String getCompileDir()
     void setCompileDir(String value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     String getAssetsPath()
     void setAssetsPath(String value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
 	String getJarTaskName()
     void setJarTaskName(String value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     Map getMinifyOptions()
     void setMinifyOptions(Map value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     Map getConfigOptions()
     void setConfigOptions(Map value)
 
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     List getExcludesGzip()
     void setExcludesGzip(List value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     List getExcludes()
     void setExcludes(List value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     List getIncludes()
     void setIncludes(List value)
-    // @Input
-    // @Optional
+    @Input
+    @Optional
     List<String> getResolvers()
     void setResolvers(List<String> value)
 

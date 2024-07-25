@@ -23,7 +23,7 @@ import org.gradle.api.tasks.CacheableTask
 @CacheableTask  
 class AssetPluginPackage extends DefaultTask {
     private String destinationDirectoryPath
-    @Delegate(methodAnnotations = true) private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
+    @Delegate() private AssetPipelineExtension pipelineExtension = new AssetPipelineExtensionImpl()
 
     @InputDirectory
     @PathSensitive(PathSensitivity.RELATIVE)
