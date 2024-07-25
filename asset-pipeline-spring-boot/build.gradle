@@ -48,7 +48,7 @@ dependencies {
 	api     project(':asset-pipeline-servlet')
 	api     'org.springframework.boot:spring-boot-starter-web:3.0.0'
 	testImplementation 'org.spockframework:spock-core:1.3-groovy-2.4'
-	compileOnly "org.slf4j:log4j-over-slf4j:1.7.28"
+	// compileOnly "org.slf4j:log4j-over-slf4j:1.7.28"
 
 
 }

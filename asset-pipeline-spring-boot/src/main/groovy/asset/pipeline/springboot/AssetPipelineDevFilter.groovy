@@ -1,10 +1,10 @@
 package asset.pipeline.springboot
 
 import asset.pipeline.servlet.AssetPipelineDevFilterCore
-import groovy.util.logging.Log4j
+import groovy.util.logging.Slf4j
 import jakarta.servlet.*
 
-@Log4j
+@Slf4j
 class AssetPipelineDevFilter implements Filter {
 
 	AssetPipelineDevFilterCore assetPipelineDevFilterCoreStandalone = new AssetPipelineDevFilterCore()

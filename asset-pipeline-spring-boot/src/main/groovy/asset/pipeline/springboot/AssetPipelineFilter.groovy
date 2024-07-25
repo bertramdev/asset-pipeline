@@ -3,13 +3,13 @@ package asset.pipeline.springboot
 import asset.pipeline.servlet.AssetPipelineFilterCore
 import asset.pipeline.servlet.AssetPipelineServletResource
 import asset.pipeline.servlet.AssetPipelineServletResourceRepository
-import groovy.util.logging.Log4j
+import groovy.util.logging.Slf4j
 import jakarta.servlet.*
 import org.springframework.core.io.Resource
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
 
-@Log4j
+@Slf4j
 class AssetPipelineFilter implements Filter {
 
 	AssetPipelineFilterCore assetPipelineFilterCore = new AssetPipelineFilterCore()
