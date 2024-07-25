@@ -6,7 +6,9 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
-* July 25, 2024 - Update to Closure Compiler for minification on new js object models. Updated to groovy 3, spring 3, graal size reduction.
+* July 25, 2024 
+** 4.5.1 - Fixing a gradle api issue on 7
+** 4.5.0 - Update to Closure Compiler for minification on new js object models. Updated to groovy 3, spring 3, graal size reduction.
 ** - 4.3.0 - Babel Native support (if available on command line) and SWC support (if available on command line) for faster performance 
 * May 1, 2023
 ** - 4.3.0 - Babel Native support (if available on command line) and SWC support (if available on command line) for faster performance of Ecmascript 2017+ javascript transpilation
