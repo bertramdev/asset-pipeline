@@ -11,6 +11,8 @@ import asset.pipeline.AssetHelper;
 @CompileStatic
 public class AssetConnection extends URLConnection
 {
+	private boolean connected = false;
+
 	public AssetConnection(URL u) {
 		super(u);
 	}
