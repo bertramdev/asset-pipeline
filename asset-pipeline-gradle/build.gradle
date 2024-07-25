@@ -35,8 +35,8 @@ java {
 
 dependencies {
 	api gradleApi()
-	api localGroovy()
-
+	//api localGroovy()
+	compileOnly    'org.codehaus.groovy:groovy:3.0.20'
 	api project(':asset-pipeline-core')
 	api 'com.google.javascript:closure-compiler-unshaded:v20240317'
 	api("org.graalvm.sdk:graal-sdk:22.0.0.2")
