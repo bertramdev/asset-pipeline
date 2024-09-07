@@ -144,3 +144,11 @@ node {
     download = true
     version = "16.13.0"
 }
+
+processResources {
+    dependsOn bundleJSCompiler
+}
+
+sourcesJar {
+    dependsOn bundleJSCompiler
+}

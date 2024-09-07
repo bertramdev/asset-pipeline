@@ -1,7 +1,7 @@
 package asset.pipeline.grails.utils.net;
 
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import static asset.pipeline.utils.net.Urls.getDefaultPort;
 import static asset.pipeline.utils.net.Urls.hasAuthority;
