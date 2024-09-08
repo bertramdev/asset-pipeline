@@ -6,8 +6,8 @@ import grails.core.GrailsApplication
 import grails.util.Environment
 import org.grails.config.NavigableMap
 
-import javax.annotation.Resource
-import javax.servlet.http.HttpServletRequest
+import jakarta.annotation.Resource
+import jakarta.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import asset.pipeline.AssetPipelineConfigHolder

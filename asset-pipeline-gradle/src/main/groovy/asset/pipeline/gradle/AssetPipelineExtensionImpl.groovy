@@ -14,7 +14,7 @@ class AssetPipelineExtensionImpl implements AssetPipelineExtension {
     boolean enableSourceMaps = true
     boolean minifyCss = true
     boolean enableDigests = true
-    boolean skipNonDigests = false
+    boolean skipNonDigests = true
     boolean enableGzip = true
     boolean packagePlugin=false
     boolean developmentRuntime=true
