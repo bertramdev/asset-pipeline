@@ -15,8 +15,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
@@ -50,14 +50,14 @@ groovydoc {
 	classpath = configurations.runtime
 	// Links to external Javadoc, currently only the J2SE links are working properly
   	link('http://download.oracle.com/javase/8/docs/api/', 'java.', 'org.xml', 'javax.', 'org.xml.')
-  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.codehaus.groovy.')
+  	link('http://groovy.codehaus.org/api/',  'groovy.', 'org.apache.groovy.')
 }
 
 dependencies {
-	compileOnly    'org.codehaus.groovy:groovy:3.0.20'
-	compileOnly    'org.codehaus.groovy:groovy-json:3.0.20'
-	compileOnly    'org.codehaus.groovy:groovy-templates:3.0.20'
-	doc         'org.codehaus.groovy:groovy-all:3.0.6'
+	compileOnly    'org.apache.groovy:groovy:4.0.22'
+	compileOnly    'org.apache.groovy:groovy-json:4.0.22'
+	compileOnly    'org.apache.groovy:groovy-templates:4.0.22'
+	doc         'org.apache.groovy:groovy-all:4.0.22'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	compileOnly     'org.mozilla:rhino:1.7R4'
 	compileOnly("org.graalvm.sdk:graal-sdk:22.0.0.2")
@@ -67,8 +67,8 @@ dependencies {
 	api 'org.slf4j:slf4j-api:1.7.28'
 	//api   'log4j:log4j:1.2.16'
 	testImplementation project(':asset-pipeline-classpath-test')
-	testImplementation 'org.codehaus.groovy:groovy-all:3.0.20'
-	testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+	testImplementation 'org.apache.groovy:groovy-all:4.0.22'
+	testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 	testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.28'
 	compileOnly 'org.slf4j:slf4j-simple:1.7.28'
 }

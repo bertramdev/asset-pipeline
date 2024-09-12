@@ -18,8 +18,8 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
@@ -37,7 +37,10 @@ dependencies {
 	api gradleApi()
 	//api localGroovy()
 	compileOnly    'org.codehaus.groovy:groovy:3.0.20'
-	api project(':asset-pipeline-core')
+	api(project(':asset-pipeline-core')) {
+		exclude module:'groovy'
+		exclude module:'groovy-all'
+	}
 	api 'com.google.javascript:closure-compiler-unshaded:v20240317'
 	api("org.graalvm.sdk:graal-sdk:22.0.0.2")
     api("org.graalvm.js:js:22.0.0.2")

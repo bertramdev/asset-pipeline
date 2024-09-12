@@ -55,7 +55,7 @@ java {
 // configurations.all {
 	
 // 	resolutionStrategy.dependencySubstitution {
-//         substitute module("org.codehaus.groovy:groovy") using module('org.apache.groovy:4.0.20')
+//         substitute module("org.apache.groovy:groovy") using module('org.apache.groovy:4.0.20')
 
 //     }
 // }

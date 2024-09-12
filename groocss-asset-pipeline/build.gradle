@@ -14,8 +14,8 @@ apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 java {
     withSourcesJar()
@@ -40,7 +40,7 @@ sourceSets {
 }
 
 dependencies {
-    compileOnly 'org.codehaus.groovy:groovy-all:3.0.20'
+    compileOnly 'org.apache.groovy:groovy-all:4.0.22'
     api project(':asset-pipeline-core')
 	api "org.groocss:groocss:1.0-M1"
 

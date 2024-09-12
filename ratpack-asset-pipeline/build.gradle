@@ -47,7 +47,7 @@ java {
 dependencies {
     api project(':asset-pipeline-core')
     api "io.ratpack:ratpack-guice:${ratpackVersion}"
-    api "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    api "org.apache.groovy:groovy-all:${groovyVersion}"
     runtimeOnly "org.slf4j:slf4j-simple:${slf4jVersion}"
     testImplementation "org.spockframework:spock-core:${spockVersion}"
     testImplementation "cglib:cglib:${cglibVersion}"

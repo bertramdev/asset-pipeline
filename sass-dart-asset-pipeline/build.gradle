@@ -15,8 +15,8 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 ext {
     javetVersion = "1.1.0"
@@ -49,11 +49,11 @@ java {
 apply plugin: 'com.github.node-gradle.node'
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:3.0.20'
+    implementation 'org.apache.groovy:groovy-all:4.0.22'
     implementation "com.caoccao.javet:javet-core:${javetVersion}"
     api project(':asset-pipeline-core')
     api 'org.slf4j:slf4j-api:1.7.28'
-    testImplementation 'org.codehaus.groovy:groovy-all:3.0.20'
+    testImplementation 'org.apache.groovy:groovy-all:4.0.22'
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 
     testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.21'

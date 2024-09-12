@@ -15,8 +15,8 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 repositories {
 	mavenCentral()
 }
@@ -40,10 +40,11 @@ java {
 }
 
 dependencies {
-	implementation    'org.codehaus.groovy:groovy:3.0.20'
+	implementation    'org.apache.groovy:groovy:4.0.22'
+	//implementation    'org.apache.groovy:groovy:3.0.20'
 	api     project(':asset-pipeline-core')
 	api 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-	testImplementation 'org.codehaus.groovy:groovy:2.4.19'
+	testImplementation 'org.apache.groovy:groovy:2.4.19'
     testImplementation 'org.eclipse.jetty:jetty-server:11.0.15'
     testImplementation 'org.eclipse.jetty:jetty-servlet:11.0.15'
     testImplementation 'org.eclipse.jetty:jetty-webapp:11.0.15'

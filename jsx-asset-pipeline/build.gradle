@@ -19,8 +19,8 @@ apply plugin: 'org.xbib.gradle.plugin.jflex'
 
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 repositories {
     mavenLocal()
@@ -45,7 +45,7 @@ java {
 
 dependencies {
     api project(':asset-pipeline-core')
-    compileOnly 'org.codehaus.groovy:groovy:3.0.20'
+    compileOnly 'org.apache.groovy:groovy:3.0.20'
     compileOnly 'org.mozilla:rhino:1.7R4'
     compileOnly("org.graalvm.sdk:graal-sdk:22.0.0.2")
     compileOnly("org.graalvm.js:js:22.0.0.2")
@@ -56,7 +56,7 @@ dependencies {
     testImplementation("org.graalvm.sdk:graal-sdk:22.0.0.2")
     testImplementation("org.graalvm.js:js:22.0.0.2")
     testImplementation("org.graalvm.js:js-scriptengine:22.0.0.2")
-    testImplementation 'org.codehaus.groovy:groovy-all:3.0.20'
+    testImplementation 'org.apache.groovy:groovy-all:4.0.22'
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 }
 

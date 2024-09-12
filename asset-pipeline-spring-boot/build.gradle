@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-	compileOnly    'org.codehaus.groovy:groovy:2.4.19'
+	compileOnly    'org.apache.groovy:groovy:2.4.19'
 	api     project(':asset-pipeline-core')
 	api     project(':asset-pipeline-servlet')
 	api     'org.springframework.boot:spring-boot-starter-web:3.0.0'

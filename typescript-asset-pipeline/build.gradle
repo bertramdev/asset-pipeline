@@ -14,8 +14,8 @@ apply plugin: 'idea'
 
 group = 'com.bertramlabs.plugins'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 repositories {
 	mavenLocal()
@@ -40,12 +40,12 @@ java {
 dependencies {
 	api project(':asset-pipeline-core')
     api project(':jsx-asset-pipeline')
-	compileOnly 'org.codehaus.groovy:groovy:3.0.20'
+	compileOnly 'org.apache.groovy:groovy:4.0.22'
     api 'org.mozilla:rhino:1.7R4'
     // api 'log4j:log4j:1.2.17'
 
-    testImplementation 'org.codehaus.groovy:groovy-all:3.0.20'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'org.apache.groovy:groovy-all:4.0.22'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 }
 
 publishing {

@@ -171,7 +171,7 @@ class AssetCompile extends DefaultTask {
         Set<File> processorFiles = project.configurations.getByName(AssetPipelinePlugin.ASSET_CONFIGURATION_NAME)?.files
 
         if (processorFiles) {
-            List<URL> urls = processorFiles.collect { it.toURI().toURL() }
+            URL[] urls = processorFiles.collect { it.toURI().toURL() }.toArray(new URL[0])
             ClassLoader classLoader = new URLClassLoader(urls as URL[], getClass().classLoader)
             AssetSpecLoader.loadSpecifications(classLoader)
         }

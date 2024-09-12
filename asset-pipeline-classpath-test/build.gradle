@@ -15,8 +15,8 @@ apply plugin: 'groovy'
 
 version "0.1"
 
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+sourceCompatibility = '1.17'
+targetCompatibility = '1.17'
 
 // assets {
 // 	packagePlugin = true

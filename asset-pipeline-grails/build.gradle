@@ -29,6 +29,10 @@ ext {
     issueTrackerUrl = "https://github.com/bertramdev/grails-asset-pipeline/issues"
 }
 
+sourceCompatibility = 1.17
+targetCompatibility = 1.17
+
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -117,6 +121,15 @@ publishing {
     }
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("org.codehaus.groovy:groovy") using module('org.apache.groovy:groovy:4.0.22')
+        substitute module("org.codehaus.groovy:groovy-templates") using module('org.apache.groovy:groovy-templates:4.0.22')
+        substitute module("org.codehaus.groovy:groovy-xml") using module('org.apache.groovy:groovy-xml:4.0.22')
+        substitute module("org.codehaus.groovy:groovy-json") using module('org.apache.groovy:groovy-json:4.0.22')
+        substitute module("org.codehaus.groovy:groovy-test-junit5") using module('org.apache.groovy:groovy-test-junit5:4.0.22')
+    }
+}
 
 dependencies {
     implementation("org.grails:grails-core")
@@ -143,11 +156,16 @@ dependencies {
 
 
     compileOnly "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
+    compileOnly "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationApiVersion"
+
+
     implementation project(':asset-pipeline-core'), {
         exclude group:'org.mozilla', module:'rhino'
         exclude group:'com.google.javascript', module:'closure-compiler-unshaded'
     }
     testImplementation('org.grails:grails-web-testing-support')
+    testImplementation "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
+    testImplementation "jakarta.annotation:jakarta.annotation-api:$jakartaAnnotationApiVersion"
     // testCompile "org.grails:grails-plugin-testing"
 }
 
