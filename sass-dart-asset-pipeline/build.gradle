@@ -54,7 +54,7 @@ dependencies {
     api project(':asset-pipeline-core')
     api 'org.slf4j:slf4j-api:1.7.28'
     testImplementation 'org.apache.groovy:groovy-all:4.0.22'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 
     testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.21'
     testRuntimeOnly 'org.webjars:bootstrap:5.1.3'
