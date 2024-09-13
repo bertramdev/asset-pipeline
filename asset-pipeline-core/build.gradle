@@ -54,9 +54,9 @@ groovydoc {
 }
 
 dependencies {
-	compileOnly    'org.apache.groovy:groovy:4.0.22'
-	compileOnly    'org.apache.groovy:groovy-json:4.0.22'
-	compileOnly    'org.apache.groovy:groovy-templates:4.0.22'
+	compileOnly    'org.codehaus.groovy:groovy:3.0.20'
+	compileOnly    'org.codehaus.groovy:groovy-json:3.0.20'
+	compileOnly    'org.codehaus.groovy:groovy-templates:3.0.20'
 	doc         'org.apache.groovy:groovy-all:4.0.22'
 	doc         'org.fusesource.jansi:jansi:1.11'
 	compileOnly     'org.mozilla:rhino:1.7R4'
