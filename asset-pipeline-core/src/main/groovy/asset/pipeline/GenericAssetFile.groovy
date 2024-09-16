@@ -54,7 +54,7 @@ class GenericAssetFile extends AbstractAssetFile {
 		if(pathArgs.size() == 1) {
 			return null
 		}
-		return (pathArgs[0..(pathArgs.size()-2)]).join("/")
+		return (pathArgs[0..-2]).join("/")
 	}
 
     /**
