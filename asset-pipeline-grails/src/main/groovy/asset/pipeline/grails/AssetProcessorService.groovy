@@ -17,7 +17,6 @@ import static asset.pipeline.grails.UrlBase.*
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
 import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
 import static asset.pipeline.utils.net.Urls.hasAuthority
-import static org.apache.commons.lang3.StringUtils.trimToEmpty
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
 
@@ -127,6 +126,9 @@ class AssetProcessorService {
 		return url ?: null
 	}
 
+	static String trimToEmpty(final String str) {
+		return str == null ? "" : str.trim()
+	}
 
 	String assetBaseUrl(final HttpServletRequest req, final UrlBase urlBase, final NavigableMap conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		Map map = conf.toFlatConfig()
