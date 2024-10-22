@@ -142,7 +142,6 @@ dependencies {
     implementation("org.grails:grails-plugin-url-mappings")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
     implementation("org.grails:grails-web-boot")
-    api("org.apache.commons:commons-lang3:$commonsLang3Version")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-validation")
