@@ -25,6 +25,7 @@ import asset.pipeline.fs.*
 import asset.pipeline.*
 import grails.util.BuildSettings
 import org.grails.plugins.BinaryGrailsPlugin
+import org.grails.config.http.GrailsFilters
 import groovy.util.logging.Commons
 import org.springframework.util.ClassUtils
 
@@ -131,7 +132,7 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
                                     ClassUtils.forName("org.springframework.boot.web.servlet.FilterRegistrationBean", classLoader) :
                                     ClassUtils.forName("org.springframework.boot.context.embedded.FilterRegistrationBean", classLoader)
         assetPipelineFilter(registrationBean) {
-            order = 0
+            order = GrailsFilters.ASSET_PIPELINE_FILTER.order
             filter = new asset.pipeline.AssetPipelineFilter()
             if(!mapping) {
                 urlPatterns = ["/*".toString()]
