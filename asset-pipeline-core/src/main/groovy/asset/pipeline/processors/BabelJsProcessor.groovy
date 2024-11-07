@@ -94,11 +94,27 @@ class BabelJsProcessor extends AbstractProcessor {
 			}
 		}
 
-		if(isSwcSupported()){
-			return processWithSwcBinary(input, assetFile)
-		} else if(isBabelSupported()) {
-			return processWithBabelBinary(input, assetFile)
-		} else {
+		Boolean processed = false
+		String result = null
+		if(isSwcSupported()) {
+			try {
+				result = processWithSwcBinary(input, assetFile)
+				processed = true	
+			} catch(ex) {
+				log.error("Error Processing from SWC...continuing with fallback option ", {})
+			}
+			
+		}
+		if(!processed && isBabelSupported()) {
+			try {
+				result = processWithBabelBinary(input, assetFile)
+				processed = true	
+			} catch(ex) {
+				log.error("Error Processing from SWC...continuing with fallback option ", {})
+			}
+		}
+		
+		if(!processed) {
 			try {
 				classLoader = getClass().getClassLoader()
 				//cx.setOptimizationLevel(-1)
@@ -116,8 +132,8 @@ class BabelJsProcessor extends AbstractProcessor {
 
 				synchronized($LOCK) {
 					bindings.putMember("input", input);
-					String result = context.eval("js","Babel.transform(input, options).code") as String;
-					return result
+					result = context.eval("js","Babel.transform(input, options).code") as String;
+					
 				}
 			} catch(Exception e) {
 				throw new Exception("""BabelJs Engine compilation of javascript failed.
@@ -126,7 +142,7 @@ class BabelJsProcessor extends AbstractProcessor {
 			} finally {
 			}
 		}
-		
+		return result
 		
 		
 	}
@@ -155,12 +171,17 @@ class BabelJsProcessor extends AbstractProcessor {
 
 		try {
 			if (!globalLocation) {
-				def npmProc
-				def globalLibLoc = new StringBuilder()
-				def npmCmd = "${ isWindows() ? 'cmd /c ' : '' }npm get prefix"
-				npmProc = npmCmd.execute()
-				npmProc.waitForProcessOutput(globalLibLoc, err)
-				globalLocation = "${globalLibLoc.toString().trim()}/lib/node_modules/"
+				synchronized($LOCK) {
+					if (!globalLocation) {
+						def npmProc
+						def globalLibLoc = new StringBuilder()
+						def npmCmd = "${ isWindows() ? 'cmd /c ' : '' }npm get prefix"
+						npmProc = npmCmd.execute()
+						npmProc.waitForProcessOutput(globalLibLoc, err)
+						globalLocation = "${globalLibLoc.toString().trim()}/lib/node_modules/"	
+					}
+				}
+				
 			}
 			def presets = "--presets=${globalLocation}@babel/preset-env"
 			def command = "${ isWindows() ? 'cmd /c ' : '' }babel --no-babelrc ${presets}"
