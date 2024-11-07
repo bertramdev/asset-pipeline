@@ -155,12 +155,17 @@ class BabelJsProcessor extends AbstractProcessor {
 
 		try {
 			if (!globalLocation) {
-				def npmProc
-				def globalLibLoc = new StringBuilder()
-				def npmCmd = "${ isWindows() ? 'cmd /c ' : '' }npm get prefix"
-				npmProc = npmCmd.execute()
-				npmProc.waitForProcessOutput(globalLibLoc, err)
-				globalLocation = "${globalLibLoc.toString().trim()}/lib/node_modules/"
+				synchronized($LOCK) {
+					if (!globalLocation) {
+						def npmProc
+						def globalLibLoc = new StringBuilder()
+						def npmCmd = "${ isWindows() ? 'cmd /c ' : '' }npm get prefix"
+						npmProc = npmCmd.execute()
+						npmProc.waitForProcessOutput(globalLibLoc, err)
+						globalLocation = "${globalLibLoc.toString().trim()}/lib/node_modules/"	
+					}
+				}
+				
 			}
 			def presets = "--presets=${globalLocation}@babel/preset-env"
 			def command = "${ isWindows() ? 'cmd /c ' : '' }babel --no-babelrc ${presets}"
