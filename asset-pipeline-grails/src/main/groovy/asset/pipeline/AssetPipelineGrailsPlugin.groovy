@@ -25,7 +25,7 @@ import asset.pipeline.fs.*
 import asset.pipeline.*
 import grails.util.BuildSettings
 import org.grails.plugins.BinaryGrailsPlugin
-import org.grails.spring.config.http.GrailsFilters
+import org.grails.web.config.http.GrailsFilters
 import groovy.util.logging.Commons
 import org.springframework.util.ClassUtils
 
