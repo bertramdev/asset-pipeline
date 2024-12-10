@@ -19,7 +19,7 @@ package asset.pipeline.grails
 import grails.test.spock.IntegrationSpec
 import asset.pipeline.AssetPipelineConfigHolder
 
-class CachingLinkGeneratorSpec extends IntegrationSpec {
+class AssetSupportingCachingLinkGeneratorSpec extends IntegrationSpec {
     def grailsApplication
     def assetProcessorService
 

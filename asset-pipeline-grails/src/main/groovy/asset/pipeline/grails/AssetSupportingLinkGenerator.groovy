@@ -3,17 +3,15 @@ package asset.pipeline.grails
 import org.grails.web.mapping.DefaultLinkGenerator
 import grails.core.support.GrailsApplicationAware
 import grails.core.GrailsApplication
-import asset.pipeline.AssetHelper
-import asset.pipeline.AssetPipelineConfigHolder
 import groovy.util.logging.Slf4j
 
 @Slf4j
-class LinkGenerator extends DefaultLinkGenerator implements GrailsApplicationAware {
+class AssetSupportingLinkGenerator extends DefaultLinkGenerator implements GrailsApplicationAware {
 	GrailsApplication grailsApplication
 	def assetProcessorService
 
 
-	LinkGenerator(final String serverUrl) {
+	AssetSupportingLinkGenerator(final String serverUrl) {
 		super(serverUrl)
 	}
 
