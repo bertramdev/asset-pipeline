@@ -117,9 +117,9 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         boolean cacheUrls = config?.getProperty('grails.web.linkGenerator.useCache', Boolean, true)
 
         assetProcessorService(AssetProcessorService)
-        grailsLinkGenerator(cacheUrls ? CachingLinkGenerator : LinkGenerator, serverURL) { bean ->
-            bean.autowire = true
-        }
+        // grailsLinkGenerator(cacheUrls ? CachingLinkGenerator : LinkGenerator, serverURL) { bean ->
+        //     bean.autowire = true
+        // }
 
         assetResourceLocator(AssetResourceLocator) { bean ->
             bean.parent = "abstractGrailsResourceLocator"
