@@ -2,8 +2,6 @@ package asset.pipeline.grails
 
 import grails.core.support.GrailsApplicationAware
 import grails.core.GrailsApplication
-import asset.pipeline.AssetHelper
-import asset.pipeline.AssetPipelineConfigHolder
 import groovy.util.logging.Slf4j
 import org.grails.web.servlet.mvc.GrailsWebRequest
 
@@ -11,12 +9,12 @@ import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWith
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
 @Slf4j
-class CachingLinkGenerator extends org.grails.web.mapping.CachingLinkGenerator implements GrailsApplicationAware {
+class AssetSupportingCachingLinkGenerator extends org.grails.web.mapping.CachingLinkGenerator implements GrailsApplicationAware {
 	GrailsApplication grailsApplication
 
 	def assetProcessorService
 
-	CachingLinkGenerator(final String serverUrl) {
+	AssetSupportingCachingLinkGenerator(final String serverUrl) {
 		super(serverUrl)
 	}
 
