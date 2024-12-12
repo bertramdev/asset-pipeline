@@ -5,6 +5,7 @@ import asset.pipeline.AssetHelper
 import grails.core.GrailsApplication
 import grails.core.support.GrailsApplicationAware
 import grails.util.Environment
+import grails.web.mapping.LinkGenerator
 import org.grails.config.NavigableMap
 
 import jakarta.servlet.http.HttpServletRequest
@@ -23,7 +24,7 @@ import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 class AssetProcessorService implements GrailsApplicationAware {
 
 	GrailsApplication grailsApplication
-	grails.web.mapping.LinkGenerator grailsLinkGenerator
+	LinkGenerator grailsLinkGenerator
 
 	/**
 	 * Retrieves the asset path from the property [grails.assets.mapping] which is used by the url mapping and the
