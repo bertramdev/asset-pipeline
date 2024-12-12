@@ -12,10 +12,12 @@ import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 class AssetSupportingCachingLinkGenerator extends org.grails.web.mapping.CachingLinkGenerator implements GrailsApplicationAware {
 	GrailsApplication grailsApplication
 
-	def assetProcessorService
+	AssetProcessorService assetProcessorService
 
-	AssetSupportingCachingLinkGenerator(final String serverUrl) {
+	AssetSupportingCachingLinkGenerator(final String serverUrl, AssetProcessorService assetProcessorService) {
 		super(serverUrl)
+		this.assetProcessorService = assetProcessorService
+		this.assetProcessorService.grailsLinkGenerator = this
 	}
 
 	@Override

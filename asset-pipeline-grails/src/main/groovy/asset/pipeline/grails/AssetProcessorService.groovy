@@ -3,10 +3,10 @@ package asset.pipeline.grails
 
 import asset.pipeline.AssetHelper
 import grails.core.GrailsApplication
+import grails.core.support.GrailsApplicationAware
 import grails.util.Environment
 import org.grails.config.NavigableMap
 
-import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
@@ -20,14 +20,10 @@ import static asset.pipeline.utils.net.Urls.hasAuthority
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
 
-class AssetProcessorService {
+class AssetProcessorService implements GrailsApplicationAware {
 
-	@Resource
 	GrailsApplication grailsApplication
-
-	@Resource
 	grails.web.mapping.LinkGenerator grailsLinkGenerator
-
 
 	/**
 	 * Retrieves the asset path from the property [grails.assets.mapping] which is used by the url mapping and the

@@ -8,13 +8,13 @@ import groovy.util.logging.Slf4j
 @Slf4j
 class AssetSupportingLinkGenerator extends DefaultLinkGenerator implements GrailsApplicationAware {
 	GrailsApplication grailsApplication
-	def assetProcessorService
+	AssetProcessorService assetProcessorService
 
-
-	AssetSupportingLinkGenerator(final String serverUrl) {
+	AssetSupportingLinkGenerator(final String serverUrl, AssetProcessorService assetProcessorService) {
 		super(serverUrl)
+		this.assetProcessorService = assetProcessorService
+		this.assetProcessorService.grailsLinkGenerator = this
 	}
-
 
 	@Override
 	String resource(final Map attrs) {
