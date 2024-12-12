@@ -109,7 +109,6 @@ class AssetPipelineGrailsPlugin extends grails.plugins.Plugin {
         if (BuildSettings.TARGET_DIR) {
             AssetPipelineConfigHolder.config.cacheLocation = new File((File) BuildSettings.TARGET_DIR, ".assetcache").canonicalPath
         }
-        assetProcessorService(AssetProcessorService)
 
         assetResourceLocator(AssetResourceLocator) { bean ->
             bean.parent = "abstractGrailsResourceLocator"
