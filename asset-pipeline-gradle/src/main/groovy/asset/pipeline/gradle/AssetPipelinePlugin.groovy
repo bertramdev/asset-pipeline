@@ -42,6 +42,7 @@ import org.gradle.language.jvm.tasks.ProcessResources
 class AssetPipelinePlugin implements Plugin<Project> {
 
     static final String ASSET_CONFIGURATION_NAME = 'assets'
+    static final String ASSET_DEVELOPMENT_CONFIGURATION_NAME = 'assetDevelopmentRuntime'
 
     void apply(Project project) {
         createGradleConfiguration(project)
@@ -65,7 +66,10 @@ class AssetPipelinePlugin implements Plugin<Project> {
         def assetPluginTask = project.tasks.getByName('assetPluginPackage')
         // assetPrecompileTask.dependsOn('classes')
         def assetCleanTask = project.tasks.create('assetClean', Delete)
-
+        project.configurations.create("assetDevelopmentRuntime")
+        project.dependencies.add(ASSET_DEVELOPMENT_CONFIGURATION_NAME,"org.graalvm.sdk:graal-sdk:22.0.0.2")
+        project.dependencies.add(ASSET_DEVELOPMENT_CONFIGURATION_NAME,"org.graalvm.js:js:22.0.0.2")
+        project.dependencies.add(ASSET_DEVELOPMENT_CONFIGURATION_NAME,"org.graalvm.js:js-scriptengine:22.0.0.2")
 
         project.afterEvaluate {
             def assetPipeline = project.extensions.getByType(AssetPipelineExtensionImpl)
@@ -160,6 +164,9 @@ class AssetPipelinePlugin implements Plugin<Project> {
     private void configureBootRun(Project project) {
         JavaExec bootRunTask = (JavaExec)project.tasks.findByName('bootRun')
         if (bootRunTask != null) {
+            
+
+    
             List additionalFiles = []
             def buildDependencies = project.buildscript.configurations.findByName("classpath")?.files
             if (buildDependencies) {
@@ -176,6 +183,8 @@ class AssetPipelinePlugin implements Plugin<Project> {
                 }
             }
             bootRunTask.classpath += project.files(additionalFiles)
+            bootRunTask.classpath += project.files(project.configurations.findByName(ASSET_DEVELOPMENT_CONFIGURATION_NAME).files)
+
         }
     }
 
