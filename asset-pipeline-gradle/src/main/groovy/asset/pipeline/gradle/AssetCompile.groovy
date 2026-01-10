@@ -112,7 +112,7 @@ abstract class AssetCompile extends DefaultTask {
         registerResolvers()
         loadAssetSpecifications()
 
-        def listener = config.verbose.get() ? new GradleEventListener() : null
+        def listener = config.verbose.get() ? new GradleEventListener(logger) : null
 
         Map compilerArgs = [
                 compileDir      : destinationDirectory.get().asFile.absolutePath,
