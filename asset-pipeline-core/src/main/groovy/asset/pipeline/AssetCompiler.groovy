@@ -20,6 +20,7 @@ import asset.pipeline.utils.MultiOutputStream
 import asset.pipeline.processors.CssMinifyPostProcessor
 import asset.pipeline.fs.JarAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
+import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
 
@@ -62,9 +63,10 @@ public class AssetCompiler {
 	 * </ul>
 	 * @param eventListener
 	 */
-	AssetCompiler(options = [:], eventListener = null) {
+	AssetCompiler(Map options = [:], eventListener = null) {
 		this.eventListener = eventListener
-		this.options = options
+		// always clone the map in case a lazy map was used, which will cause errors if entryset() has not been previously invoked
+		this.options = options ? new HashMap(options) : [:]
 		if(!options.compileDir) {
 			options.compileDir = "target/assets"
 		}
@@ -219,7 +221,7 @@ Options:
 					case 'J':
 						def jsonString = args[++x]
 						try {
-							def json = new JsonSlurper().parseText(jsonString)
+							def json = new JsonSlurper().setType(JsonParserType.CHAR_BUFFER).parseText(jsonString)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing JSON options: ${jsonString}", e)
@@ -230,7 +232,7 @@ Options:
 						def base64JsonString = args[++x]
 						try {
 							def jsonStringDecoded = new String(base64JsonString.decodeBase64())
-							def json = new JsonSlurper().parseText(jsonStringDecoded)
+							def json = new JsonSlurper().setType(JsonParserType.CHAR_BUFFER).parseText(jsonStringDecoded)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing Base64 JSON options: ${base64JsonString}", e)

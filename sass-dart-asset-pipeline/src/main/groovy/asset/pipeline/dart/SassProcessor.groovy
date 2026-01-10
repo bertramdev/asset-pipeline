@@ -34,7 +34,7 @@ class SassProcessor extends AbstractProcessor {
     final String sassCompiler
 
     // Compiler options
-    final Map configOptions = (AssetPipelineConfigHolder.config?.sass ?: [:]) as Map
+    final Map configOptions = new HashMap((AssetPipelineConfigHolder.config?.sass ?: [:]) as Map)
 
     static {
         File nativeLibrary = new NativeLibraryLoader(JSRuntimeType.Node).extractNativeLibrary()
