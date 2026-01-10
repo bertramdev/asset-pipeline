@@ -132,6 +132,7 @@ public class AssetCompiler {
 						minifyJs        : false,
 						minifyOptions   : null,
 						skipNonDigests  : false,
+						verbose			: false,
 		]
 
 		for(int x = 0 ; x < args.length; x++) {
@@ -152,6 +153,7 @@ Options:
 	-z                        Enable gzip compression for compiled assets
 	-m                        Enable source maps for compiled assets
 	-n                        Skip non-digested files
+	-v 						  Enable verbose logging
 	-E <excludePattern>       Exclude files matching this pattern from compilation (can be specified multiple times)
 	-Z <excludeGzipPattern>   Exclude files matching this pattern from gzip compression (can be specified multiple times)
 	-I <includePattern>       Include files matching this pattern in compilation (can be specified multiple times)
@@ -189,6 +191,9 @@ Options:
 						break
 					case 'n':
 						compilerArgs.skipNonDigests = true
+						break
+					case 'v':
+						compilerArgs.verbose = true
 						break
 					case 'E':
 						def excludePattern = args[++x]
@@ -236,7 +241,9 @@ Options:
 				}
 			}
 		}
-		def assetCompiler = new AssetCompiler(compilerArgs)
+
+		AssetEventListener listener = compilerArgs['verbose'] ? new LoggingAssetEventListener() : null
+		def assetCompiler = new AssetCompiler(compilerArgs, listener)
 		assetCompiler.excludeRules.default = compilerArgs.excludes ?: []
 		assetCompiler.includeRules.default = compilerArgs.includes ?: []
 		if(compilerArgs.get("configOptions")) {

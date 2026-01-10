@@ -156,6 +156,7 @@ abstract class AssetForkedCompileTask extends AbstractCompile {
             configurationJson.put("minifyJs", config.minifyJs.get())
             configurationJson.put("skipNonDigests", config.skipNonDigests.get())
             configurationJson.put("minifyOptions", config.minifyOptions.get())
+            configurationJson.put("verbose", config.verbose.get())
             configurationJson.put("excludes", config.effectiveExcludes)
             configurationJson.put("includes", config.includes.getOrElse([]))
             configurationJson.put("resolvers", config.resolvers.files.collect { it.canonicalPath })
