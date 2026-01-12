@@ -227,7 +227,7 @@ class I18nProcessor extends AbstractProcessor {
             Properties props = new Properties()
             try{
                 File file = locateFile(option)
-                if(!file.exists()) {
+                if(!file?.exists()) {
                      Resource res = locateResource(option)
                     if(!res?.exists()) {
                         log.warn "i18N: Could not load file ${option}"    
