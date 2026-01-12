@@ -33,6 +33,7 @@ import org.gradle.process.ExecOperations
 import org.gradle.process.ExecResult
 import org.gradle.process.JavaExecSpec
 import javax.inject.Inject
+import java.util.jar.JarFile
 
 /**
  * Forked Execution task for compiling static assets using the Asset Pipeline AssetCompiler.
@@ -155,7 +156,8 @@ abstract class AssetForkedCompileTask extends AbstractCompile {
             configurationJson.put("minifyJs", config.minifyJs.get())
             configurationJson.put("skipNonDigests", config.skipNonDigests.get())
             configurationJson.put("minifyOptions", config.minifyOptions.get())
-            configurationJson.put("excludes", config.excludes.getOrElse([]))
+            configurationJson.put("verbose", config.verbose.get())
+            configurationJson.put("excludes", config.effectiveExcludes)
             configurationJson.put("includes", config.includes.getOrElse([]))
             configurationJson.put("resolvers", config.resolvers.files.collect { it.canonicalPath })
             configurationJson.put("assetsPath", config.assetsPath.get().asFile.canonicalPath)
@@ -193,8 +195,21 @@ abstract class AssetForkedCompileTask extends AbstractCompile {
     void registerJarResolvers(List<String> arguments, File jarFile) {
         def isJarFile = jarFile.name.endsWith('.jar') || jarFile.name.endsWith('.zip')
         if (jarFile.exists() && isJarFile) {
-            arguments.add("-j")
-            arguments.add(jarFile.canonicalPath)
+            JarFile jar = null
+            try {
+                jar = new JarFile(jarFile)
+                // Only add the jar if it has the expected asset folders used by
+                // AssetCompile.registerJarResolvers() and AssetCompiler.registerJarResolvers()
+                if (['META-INF/assets/', 'META-INF/static/', 'META-INF/resources/'].any { jar.getJarEntry(it) != null }) {
+                    arguments.add("-j")
+                    arguments.add(jarFile.canonicalPath)
+                }
+            } catch (Exception e) {
+                // If we can't read the jar, skip it
+                return
+            } finally {
+                jar?.close()
+            }
         }
     }
 }

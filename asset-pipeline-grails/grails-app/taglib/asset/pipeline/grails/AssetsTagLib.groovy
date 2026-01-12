@@ -76,6 +76,7 @@ class AssetsTagLib {
 		if (srcOverride) {
 			src = srcOverride
 		}
+
 		def uniqMode = attrs.remove('uniq') != null
 
 		src = "${AssetHelper.nameWithoutExtension(src)}.${ext}"

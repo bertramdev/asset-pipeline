@@ -15,6 +15,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.compile.GroovyForkOptions
+import org.gradle.api.tasks.Internal
 
 import javax.inject.Inject
 
@@ -60,6 +61,9 @@ abstract class AssetPipelineExtension implements Serializable {
     abstract final Property<Boolean> verbose
 
     @Input
+    abstract final Property<Boolean> excludeWebjarsByDefault
+
+    @Input
     @Optional
     abstract final Property<Integer> maxThreads
 
@@ -90,8 +94,11 @@ abstract class AssetPipelineExtension implements Serializable {
     @PathSensitive(PathSensitivity.RELATIVE)
     abstract final ConfigurableFileCollection resolvers
 
+    private final Project project
+
     @Inject
     AssetPipelineExtension(ObjectFactory objects, Project project) {
+        this.project = project
         assetsPath = objects.directoryProperty().convention(
                 project.layout.projectDirectory.dir(
                         project.extensions.findByName('grails') ?
@@ -103,6 +110,7 @@ abstract class AssetPipelineExtension implements Serializable {
         enableDigests = objects.property(Boolean).convention(true)
         enableGzip = objects.property(Boolean).convention(true)
         enableSourceMaps = objects.property(Boolean).convention(true)
+        excludeWebjarsByDefault = objects.property(Boolean).convention(false)
         excludes = objects.listProperty(String).convention([])
         excludesGzip = objects.listProperty(String).convention([])
         includes = objects.listProperty(String).convention([])
@@ -117,7 +125,32 @@ abstract class AssetPipelineExtension implements Serializable {
         verbose = objects.property(Boolean).convention(true)
     }
 
+    /**
+     * Legacy helper method to maintain behavior from previous asset pipeline versions
+     * @param resolverPath the path to find the resolver
+     */
     void from(String resolverPath) {
-        resolvers.add(resolverPath)
+        resolvers.from(project.file(resolverPath))
+    }
+
+    /**
+     * Returns the effective excludes list, automatically adding 'webjars/**' if
+     * excludeWebjarsByDefault is enabled.
+     *
+     * @return The complete list of exclusion patterns
+     */
+    @Internal
+    List<String> getEffectiveExcludes() {
+        List<String> effectiveExcludes = []
+
+        // Add automatic webjar exclusion if enabled
+        if (excludeWebjarsByDefault.get()) {
+            effectiveExcludes.add('webjars/**')
+        }
+
+        // Add user-defined excludes
+        effectiveExcludes.addAll(excludes.getOrElse([]))
+
+        return effectiveExcludes
     }
 }
