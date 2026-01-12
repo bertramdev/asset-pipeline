@@ -15,21 +15,16 @@
  */
 package asset.pipeline
 
-import asset.pipeline.processors.ClosureCompilerProcessor
-import asset.pipeline.utils.MultiOutputStream
-import asset.pipeline.processors.CssMinifyPostProcessor
-import asset.pipeline.fs.JarAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
-import groovy.json.JsonParserType
-import groovy.json.JsonSlurper
+import asset.pipeline.fs.JarAssetResolver
+import asset.pipeline.processors.ClosureCompilerProcessor
+import asset.pipeline.processors.CssMinifyPostProcessor
+import asset.pipeline.utils.MultiOutputStream
+import groovy.json.JsonSlurperClassic
 import groovy.util.logging.Slf4j
 
+import java.util.concurrent.*
 import java.util.zip.GZIPOutputStream
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.ExecutorCompletionService
-import java.util.concurrent.CompletionService
 
 /**
  * Build time compiler for assets. This does a differential comparison of the source directory
@@ -65,8 +60,7 @@ public class AssetCompiler {
 	 */
 	AssetCompiler(Map options = [:], eventListener = null) {
 		this.eventListener = eventListener
-		// always clone the map in case a lazy map was used, which will cause errors if entryset() has not been previously invoked
-		this.options = options ? new HashMap(options) : [:]
+		this.options = options ?: [:]
 		if(!options.compileDir) {
 			options.compileDir = "target/assets"
 		}
@@ -221,7 +215,7 @@ Options:
 					case 'J':
 						def jsonString = args[++x]
 						try {
-							def json = new JsonSlurper().setType(JsonParserType.CHAR_BUFFER).parseText(jsonString)
+							def json = new JsonSlurperClassic().parseText(jsonString)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing JSON options: ${jsonString}", e)
@@ -232,7 +226,7 @@ Options:
 						def base64JsonString = args[++x]
 						try {
 							def jsonStringDecoded = new String(base64JsonString.decodeBase64())
-							def json = new JsonSlurper().setType(JsonParserType.CHAR_BUFFER).parseText(jsonStringDecoded)
+							def json = new JsonSlurperClassic().parseText(jsonStringDecoded)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing Base64 JSON options: ${base64JsonString}", e)
