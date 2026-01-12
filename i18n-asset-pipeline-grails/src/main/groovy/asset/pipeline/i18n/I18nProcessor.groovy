@@ -135,9 +135,9 @@ class I18nProcessor extends AbstractProcessor {
         
         Properties props
         if (assetFile.encoding != null) {
-            props = loadMessages(options, assetFile.encoding)
+            props = loadMessages(options as List<String>, assetFile.encoding)
         } else {
-            props = loadMessages(options)
+            props = loadMessages(options as List<String>)
         }
 
         // At this point, inputText has been pre-processed (I18nPreprocessor).

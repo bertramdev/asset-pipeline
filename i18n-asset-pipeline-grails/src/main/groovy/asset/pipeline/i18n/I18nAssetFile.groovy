@@ -36,7 +36,6 @@ import java.util.regex.Pattern
  * @author  David Estes
  * @version 3.0
  */
-@CompileStatic
 class I18nAssetFile extends AbstractAssetFile {
 
     //-- Class fields ---------------------------
