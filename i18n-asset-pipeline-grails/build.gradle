@@ -33,19 +33,13 @@ group = 'cloud.wondrify'
 apply plugin: 'groovy'
 apply plugin: 'java-library'
 apply plugin: "org.apache.grails.gradle.grails-plugin"
-apply plugin: 'asset-pipeline'
+apply plugin:"cloud.wondrify.asset-pipeline"
 
 ext {
     
     pomDescription = 'asset-pipeline plugin to use localized messages in JavaScript.'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.apache.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
 
 dependencies {
     api 'org.springframework.boot:spring-boot-autoconfigure'
@@ -77,7 +71,8 @@ apply {
     from rootProject.layout.projectDirectory.file('gradle/publish-config.gradle')
 }
 
-tasks.named('groovydoc', Groovydoc).configure { Groovydoc it ->
-    it.docTitle = "I18n asset pipeline API v${version}"
-    it.windowTitle = "I18n asset pipeline API v${version}"
-}
+
+// tasks.named('groovydoc', Groovydoc).configure { Groovydoc it ->
+//     it.docTitle = "I18n asset pipeline API v${version}"
+//     it.windowTitle = "I18n asset pipeline API v${version}"
+// }
