@@ -21,10 +21,10 @@ buildscript {
     }
     repositories {
         // mavenLocal()
-        maven { url = 'https://repo.grails.org/grails/core' }
+        mavenCentral()
     }
     dependencies {
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"
+        classpath "cloud.wondrify:asset-pipeline-gradle:5.0.21"
     }
 }
 
@@ -32,10 +32,8 @@ group = 'cloud.wondrify'
 
 apply plugin: 'groovy'
 apply plugin: 'java-library'
+apply plugin: "org.apache.grails.gradle.grails-plugin"
 apply plugin: 'asset-pipeline'
-apply plugin: 'org.apache.grails.gradle.grails-plugin'
-apply plugin: 'org.apache.grails.gradle.grails-gsp'
-apply plugin: 'org.apache.grails.gradle.grails-docs'
 
 ext {
     grailsVersion = project.grailsVersion
