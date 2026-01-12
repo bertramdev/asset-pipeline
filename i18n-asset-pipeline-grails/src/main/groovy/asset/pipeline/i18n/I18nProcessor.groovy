@@ -245,7 +245,8 @@ class I18nProcessor extends AbstractProcessor {
                 
             }
             catch(Exception e){
-                log.warn "i18N: Could not load file ${option}"
+
+                log.warn("i18N: Could not load file ${option}",e)
             }
         }
         messages
