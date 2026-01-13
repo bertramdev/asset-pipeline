@@ -57,6 +57,7 @@ bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
 }
 
+
 apply {
     from rootProject.layout.projectDirectory.file('gradle/java-config.gradle')
     from rootProject.layout.projectDirectory.file('gradle/publish-config.gradle')
@@ -71,4 +72,9 @@ tasks.withType(Jar).configureEach { Jar it ->
             filter { line -> excludes.find { line.contains(it) } ? null : line }
         }
     }
+}
+
+tasks.named('javadocJar', Jar).configure { Jar it ->
+    // TODO: help-doc.html is a duplicate
+    it.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

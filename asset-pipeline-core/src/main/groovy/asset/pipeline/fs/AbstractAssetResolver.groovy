@@ -27,12 +27,13 @@ import java.nio.file.Path
 import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry
-
+import groovy.util.logging.Slf4j
 /**
  * The abstract class for any helper methods in resolving files
  *
  * @author David Estes
  */
+ @Slf4j
 abstract class AbstractAssetResolver<T> implements AssetResolver {
     String name
 
@@ -70,6 +71,7 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
                 if (!tmpFileName.endsWith("." + ext)) {
                     tmpFileName += "." + ext
                 }
+                // log.info("Looking for Relative File: ${tmpFileName} in prefixPath: ${prefixPath}")
                 def file = getRelativeFile(prefixPath, tmpFileName)
                 def inputStreamClosure = createInputStreamClosure(file)
 

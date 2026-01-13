@@ -22,7 +22,7 @@ import asset.pipeline.processors.CssProcessor
 import java.util.regex.Pattern
 
 class SassAssetFile extends AbstractAssetFile {
-    static final String contentType = 'text/css'
+    static final List<String> contentType = ['text/css']
     static extensions = ['sass','css.sass','css.scss', 'scss']
     static final String compiledExtension = 'css'
     static processors = [SassProcessor,CssProcessor]

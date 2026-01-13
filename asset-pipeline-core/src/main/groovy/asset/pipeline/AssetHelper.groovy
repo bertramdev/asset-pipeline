@@ -218,7 +218,10 @@ public class AssetHelper {
      * @return The {@link AssetFile} classes
      */
     static Collection<Class<AssetFile>> getPossibleFileSpecs(String contentType) {
-        return assetFileClasses().findAll { Class<AssetFile> it -> (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
+
+        return assetFileClasses().findAll { Class<AssetFile> it ->
+            // log.info("Checking AssetFile: {}",it.contentType)
+         (it.contentType instanceof CharSequence) ? it.contentType.equals(contentType) : contentType in it.contentType }
     }
 
     /**
@@ -461,16 +464,12 @@ public class AssetHelper {
         if (!contentType) {
             return []
         }
-        switch (contentType) {
-            case 'text/css':
-                return ['css']
-            case 'application/javascript':
-            case 'application/x-javascript':
-            case 'text/javascript':
-                return ['js']
-            default:
-                return []
+        List<String> extensions = []
+        List<Class<AssetFile>> fileSpecs = getPossibleFileSpecs(contentType)
+        fileSpecs.each { fileSpec ->
+            extensions += fileSpec.extensions
         }
+        return extensions.unique()
     }
 
     /**
