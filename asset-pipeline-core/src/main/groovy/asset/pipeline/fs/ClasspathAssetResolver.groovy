@@ -93,6 +93,32 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
             name = name.substring(1)
         }
 
+				if(relativePath.contains('*')) { //we have some wildcard patterns to resolve.
+					String[] pathComponents = relativePath.split(DIRECTIVE_FILE_SEPARATOR);
+					int wildCardIndex = pathComponents.findIndexOf { it.equals("*") }
+					if(wildCardIndex > -1) {
+						//scan classpath for matching directories
+						String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(DIRECTIVE_FILE_SEPARATOR)
+						String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(DIRECTIVE_FILE_SEPARATOR)
+						def resources = classLoader.getResources("$preWildcardPath")
+						for(res in resources) {
+							def dirUrl = res
+							if(dirUrl?.getProtocol()?.equals("file")) {
+								File preWildcardDir = new File(dirUrl.getPath())
+								if(preWildcardDir.exists() && preWildcardDir.isDirectory()) {
+									File[] possibleDirs = preWildcardDir.listFiles()?.findAll { it.isDirectory() } as File[]
+									for(possibleDir in possibleDirs) {
+										File testFile = new File(possibleDir, postWildcardPath + "/" + name)
+										if(testFile.exists() && !testFile.isDirectory()) {
+											return testFile.toURI().toURL()
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
         URL file = classLoader.getResource("$relativePath/$name")
         if (file?.getProtocol()?.equals("file")) {
             if(new File(file.getPath()).isDirectory()) {
@@ -116,7 +142,7 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
 
     @CompileStatic
     List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null, Boolean recursive = true, AssetFile relativeFile = null, AssetFile baseFile = null) {
-        def specs
+			Collection<Class<AssetFile>> specs
         if (contentType) {
             specs = AssetHelper.getPossibleFileSpecs(contentType)
         }
