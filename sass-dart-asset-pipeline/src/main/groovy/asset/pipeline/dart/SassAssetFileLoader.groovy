@@ -149,7 +149,7 @@ class SassAssetFileLoader {
     private String getPartialPath(String originalUri) {
         String[] components = originalUri.split(DIRECTIVE_FILE_SEPARATOR);
         String fileName = components[components.length-1]
-        components[length-1] = "_" + fileName
+        components[components.length-1] = "_" + fileName
         return components.join(DIRECTIVE_FILE_SEPARATOR)
     }
 }
