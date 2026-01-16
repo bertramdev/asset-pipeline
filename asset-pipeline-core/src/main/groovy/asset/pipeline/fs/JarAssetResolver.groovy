@@ -121,21 +121,21 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
     }
 
     @CompileStatic
-    protected ZipEntry getRelativeFile(String relativePath, String name) {
-			if(relativePath.contains('*')) { //we have some wildcard patterns to resolve.
-				String[] pathComponents = relativePath.split(DIRECTIVE_FILE_SEPARATOR);
+    public ZipEntry getRelativeFile(String relativePath, String name) {
+			if(name.contains('*')) { //we have some wildcard patterns to resolve.
+				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
 				int wildCardIndex = pathComponents.findIndexOf {it.equals("*")}
 				if(wildCardIndex > -1) {
 					String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(DIRECTIVE_FILE_SEPARATOR)
 					String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(DIRECTIVE_FILE_SEPARATOR)
 					List<ZipEntry> possibleDirs = []
 					for(entry in baseJar.entries()) {
-						if(entry.name.startsWith([prefixPath, preWildcardPath].join("/") + "/") && entry.isDirectory()) {
+						if(entry.name.startsWith([relativePath, preWildcardPath].join("/") + "/") && entry.isDirectory()) {
 							possibleDirs << entry
 						}
 					}
 					for(possibleDir in possibleDirs) {
-						String testPath = [possibleDir.name, postWildcardPath].join(DIRECTIVE_FILE_SEPARATOR)
+						String testPath = possibleDir.name + postWildcardPath
 						def testEntry = baseJar.getEntry(testPath)
 						if(testEntry && !testEntry.isDirectory()) {
 							return testEntry
@@ -143,6 +143,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 					}
 				}
 			}
+
 		return baseJar.getEntry([relativePath, name].join("/"))
 	}
 

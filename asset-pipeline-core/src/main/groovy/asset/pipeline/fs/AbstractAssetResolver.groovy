@@ -34,7 +34,7 @@ import groovy.util.logging.Slf4j
  * @author David Estes
  */
  @Slf4j
-abstract class AbstractAssetResolver<T> implements AssetResolver {
+abstract class AbstractAssetResolver<T> implements AssetResolver<T> {
     String name
 
     AbstractAssetResolver(String name) {
@@ -43,7 +43,7 @@ abstract class AbstractAssetResolver<T> implements AssetResolver {
 
     protected abstract String relativePathToResolver(T file, String scanDirectoryPath)
 
-    protected abstract T getRelativeFile(String relativePath, String name)
+    abstract T getRelativeFile(String relativePath, String name)
 
     protected abstract Closure<InputStream> createInputStreamClosure(T file)
 

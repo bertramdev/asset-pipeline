@@ -91,30 +91,32 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	}
 
     @Override
-    protected File getRelativeFile(String relativePath, String name) {
-			if(relativePath.contains('*')) { //we have some wildcard patterns to resolve.
-				String[] pathComponents = relativePath.split(DIRECTIVE_FILE_SEPARATOR);
+    public File getRelativeFile(String relativePath, String name) {
+			if(name.contains('*')) { //we have some wildcard patterns to resolve.
+				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
 				int wildCardIndex = pathComponents.findIndexOf {it.equals("*")}
 				if(wildCardIndex > -1) {
 					String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(File.separator)
 					String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(File.separator)
-					for(directoryPath in scanDirectories) {
-						File preWildcardDir = new File(directoryPath, preWildcardPath)
-						if(preWildcardDir.exists() && preWildcardDir.isDirectory()) {
-							File[] possibleDirs = preWildcardDir.listFiles()?.findAll { it.isDirectory() } as File[]
-							for(possibleDir in possibleDirs) {
-								File testFile = new File(possibleDir, postWildcardPath)
-								if(testFile.exists() && !testFile.isDirectory()) {
-									return testFile
+					File preWildcardDir = new File(relativePath, preWildcardPath)
+					if(preWildcardDir.exists() && preWildcardDir.isDirectory()) {
+						File[] possibleDirs = preWildcardDir.listFiles()
+						for(possibleDir in possibleDirs) {
+							if(possibleDir.isDirectory()) {
+								if(postWildcardPath.contains('*')) {//still have to search down more
+									return getRelativeFile(relativePath, "${preWildcardPath}/${possibleDir.name}/${postWildcardPath}" )
+								} else {
+									File testFile = new File(possibleDir, postWildcardPath)
+									if(testFile.exists() && !testFile.isDirectory()) {
+										return testFile
+									}
 								}
 							}
 						}
 					}
 				}
-
-			} else {
-				return new File(relativePath, name)
 			}
+			return new File(relativePath, name)
     }
 
     @Override

@@ -77,9 +77,10 @@ class SassAssetFileLoader {
         
         def newFile
         if( fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
-            newFile = AssetHelper.fileForUri( fileName, 'text/css', null, baseFile )
+						newFile = AssetHelper.fileForUri( getPartialPath(fileName) , 'text/css', null, baseFile )
+
             if(!newFile) {
-                newFile = AssetHelper.fileForUri( getPartialPath(fileName) , 'text/css', null, baseFile )
+							newFile = AssetHelper.fileForUri( fileName, 'text/css', null, baseFile )
             }
         }
         else 
@@ -91,26 +92,26 @@ class SassAssetFileLoader {
             }
             
             def relativeFileName = [ parentPath, fileName ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
-            newFile = AssetHelper.fileForUri( relativeFileName, 'text/css', null, baseFile )
+						newFile = AssetHelper.fileForUri( getPartialPath(relativeFileName), 'text/css', null, baseFile )
+
             if(!newFile) {
-                newFile = AssetHelper.fileForUri( getPartialPath(relativeFileName), 'text/css', null, baseFile )
+							newFile = AssetHelper.fileForUri( relativeFileName, 'text/css', null, baseFile )
             }
         }
 
 
         if( !newFile && !fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
-            newFile = AssetHelper.fileForUri( AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName, 'text/css', null, baseFile )
-            if(!newFile) {
-                newFile = AssetHelper.fileForUri( getPartialPath(AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName), 'text/css', null, baseFile )
-            }
+					newFile = AssetHelper.fileForUri( getPartialPath(AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName), 'text/css', null, baseFile )
+					if(!newFile) {
+						newFile = AssetHelper.fileForUri( AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName, 'text/css', null, baseFile )
+					}
         }
         else if (!newFile) {
             log.warn( "Unable to Locate Asset: ${ fileName }" )
         }
 
         if(newFile) {
-            // CacheManager.addCacheDependency(options.baseFile?.path ?: sourceFile.path, newFile)
-
+            CacheManager.addCacheDependency(baseFile?.path ?: parent, newFile)
             return newFile
         }
 

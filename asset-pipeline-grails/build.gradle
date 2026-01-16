@@ -34,7 +34,6 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api' // Provided by the servlet container
     compileOnly 'org.apache.grails:grails-core' // Provided as this is a Grails plugin
     compileOnly 'org.apache.grails.views:grails-web-taglib' // For taglib compilation
-    compileOnly "org.webjars:webjars-locator-core:$webjarsLocatorVersion" // WebJar version resolution
 
     testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
     testImplementation 'org.apache.grails:grails-testing-support-web'

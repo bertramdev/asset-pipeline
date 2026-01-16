@@ -23,7 +23,7 @@ import asset.pipeline.*
  *
 * @author David Estes
 */
-public interface AssetResolver {
+public interface AssetResolver<T> {
 
 	public String getName()
 
@@ -69,4 +69,6 @@ public interface AssetResolver {
 	public List<AssetFile> getAssets(String basePath)
 
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns)
+
+	T getRelativeFile(String relativePath, String name)
 }
