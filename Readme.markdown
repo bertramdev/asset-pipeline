@@ -2,6 +2,7 @@ Asset Pipeline Core
 ===================
 [![Build Status](https://github.com/wondrify/asset-pipeline/actions/workflows/ci.yml/badge.svg?branch=5.0.x)](https://github.com/wondrify/asset-pipeline/actions/workflows/ci.yml)
 
+> **📚 Documentation:** Full documentation is now available at [https://wondrify.github.io/asset-pipeline/](https://wondrify.github.io/asset-pipeline/)
 
 Overview
 --------
@@ -21,9 +22,8 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 Documentation
 ------------
 
-* [API Doc](http://asset-pipeline.com/apidoc/index.html)
-* [Usage Guide](http://asset-pipeline.com/manual/)
-* [Website](http://asset-pipeline.com)
+* [Usage Guide](https://wondrify.github.io/asset-pipeline/) - Complete documentation on GitHub Pages
+* [API Doc](http://asset-pipeline.com/apidoc/index.html) - JavaDoc/GroovyDoc API reference
 
 
 Gradle Usage
@@ -171,8 +171,8 @@ dependencies {
 Documentation
 -------------
 
-* [API Doc](http://asset-pipeline.com/apidoc/index.html)
-* [Doc](http://asset-pipeline.com/manual/index.html)
+* [Usage Guide](https://wondrify.github.io/asset-pipeline/) - Complete documentation on GitHub Pages
+* [API Doc](http://asset-pipeline.com/apidoc/index.html) - JavaDoc/GroovyDoc API reference
 
 
 For Grails 3 asset-pipeline has to be provided both for Grails and Gradle. An example configuration could be: 

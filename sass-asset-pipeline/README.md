@@ -4,7 +4,7 @@ The `sass-asset-pipeline` is a plugin that provides SASS / SCSS support for the 
 
 The version numbering is synced on [jsass](https://github.com/bit3/jsass) versions, the underlying library used by this plugin.
 
-For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
+For more information on how to use asset-pipeline, visit [here](http://www.github.com/wondrify/asset-pipeline).
 
 Configuration
 -------------

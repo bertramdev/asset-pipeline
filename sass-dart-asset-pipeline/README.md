@@ -4,7 +4,7 @@ The `sass-dart-asset-pipeline` is a plugin that provides SASS / SCSS support for
 
 The plugin uses [Javet](https://www.caoccao.com/Javet/) (based on Google's V8 runtime) to allow for execution of the dart-sass JS compiler directly from Java.
 
-For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
+For more information on how to use asset-pipeline, visit [here](http://www.github.com/wondrify/asset-pipeline).
 
 Integration
 ===========

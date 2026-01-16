@@ -2,7 +2,7 @@ LESS Asset Pipeline
 ==========================
 The `less-asset-pipeline` is a plugin that provides LESS support for the asset-pipeline static asset management plugin.
 
-For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
+For more information on how to use asset-pipeline, visit [here](http://www.github.com/wondrify/asset-pipeline).
 
 Installation
 ------------

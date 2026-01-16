@@ -174,4 +174,4 @@ This plugin was published under the
 
 [amc-world]: http://www.amc-world.de
 [apache-license]: http://www.apache.org/licenses/LICENSE-2.0
-[asset-pipeline]: http://www.github.com/bertramdev/asset-pipeline
+[asset-pipeline]: http://www.github.com/wondrify/asset-pipeline
