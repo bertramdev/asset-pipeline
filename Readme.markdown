@@ -40,7 +40,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "cloud.wondrify:asset-pipeline-gradle:5.0.13"
+    classpath "cloud.wondrify:asset-pipeline-gradle:5.0.27"
   }
 }
 
@@ -208,8 +208,6 @@ The Asset Pipeline plugin provides automatic version resolution for WebJars, eli
 
 ### Setup
 
-The Asset Pipeline plugin includes `webjars-locator-core` for automatic WebJar version resolution. Simply add your WebJar dependencies:
-
 ```groovy
 dependencies {
     // Add your webjar dependencies
@@ -222,22 +220,18 @@ dependencies {
 
 ### Usage in Grails
 
-In your GSP files, you can now reference WebJars without specifying package names or versions:
+In your GSP files, you can now reference wildcard paths like in webJars without specifying package names or versions:
 
 ```gsp
 <!-- Version automatically resolved from classpath -->
 <!-- IMPORTANT: Use file path WITHOUT package name -->
-<asset:javascript src="webjars/dist/jquery.js"/>
-<asset:javascript src="webjars/js/jquery.fileupload.js"/>
-<asset:stylesheet href="webjars/dist/css/bootstrap.css"/>
+<asset:javascript src="webjars/jquery/*/dist/jquery.js"/>
+<asset:stylesheet href="webjars/bootstrap/*/css/bootstrap.css"/>
 
 <!-- Explicit versions still work (backward compatible) -->
 <asset:javascript src="webjars/jquery/3.7.1/dist/jquery.js"/>
 ```
 
-**Important**: The WebJarAssetLocator searches across **all** webjars for files matching the given path, so you **do not** include the package name. For example:
-- `webjars/dist/jquery.js` (searches all webjars for `dist/jquery.js`)
-- `webjars/jquery/dist/jquery.js` (incorrect - includes package name)
 
 ### Usage with Require Directives
 
@@ -245,14 +239,13 @@ WebJar version resolution also works with require directives in JavaScript and C
 
 **JavaScript:**
 ```javascript
-//= require webjars/dist/jquery.js
-//= require webjars/dist/js/bootstrap.bundle.js
+//= require webjars/jquery/*/dist/jquery.js
 ```
 
 **CSS:**
 ```css
 /*
- *= require webjars/dist/css/bootstrap.css
+ *= require webjars/bootstrap/*/dist/css/bootstrap.css
  *= require webjars/font/bootstrap-icons.css
  */
 ```
@@ -265,8 +258,8 @@ WebJar version resolution also works with require directives in JavaScript and C
 
 **After (version-less):**
 ```javascript
-//= require webjars/dist/jquery.js
-//= require webjars/dist/js/bootstrap.bundle.js
+//= require webjars/jquary/*/dist/jquery.js
+//= require webjars/bootstrap/*/dist/js/bootstrap.bundle.js
 ```
 
 When you upgrade dependencies in `build.gradle`, your require directives automatically resolve to the new versions - no code changes needed!
@@ -311,64 +304,6 @@ The locator finds the file in the webjar's `META-INF/resources/webjars/{package}
 
 When you upgrade jQuery from 3.7.1 to 3.7.2, just update `build.gradle` - no view changes needed!
 
-### Excluding WebJars from Compilation
-
-By default, all webjar assets are included during asset compilation. If you only want to compile specific webjar files (e.g., to reduce build output size), you can use the `excludeWebjarsByDefault` option:
-
-```groovy
-assets {
-    excludeWebjarsByDefault = true  // Automatically excludes webjars/**
-
-    includes = [
-        // Only include specific webjar files you need
-        'webjars/angular/*/angular.js',
-        'webjars/jquery/*/dist/jquery.js',
-        'webjars/bootstrap/*/dist/js/bootstrap.bundle.js',
-        'webjars/bootstrap/*/dist/css/bootstrap.css',
-    ]
-
-    // You can still exclude other non-webjar assets
-    excludes = [
-        '*.map',
-        'test/**'
-    ]
-}
-```
-
-**How it works:**
-- When `excludeWebjarsByDefault = true`, the pattern `webjars/**` is automatically added to the excludes list
-- You then use `includes` to whitelist only the specific webjar files you want to compile
-- The `excludes` list can still be used for other exclusion patterns (like `*.map`)
-- This is useful when you have many webjar dependencies but only need to compile a few specific files
-
-**Without excludeWebjarsByDefault** (manual approach):
-```groovy
-assets {
-    excludes = [
-        'webjars/angularjs/**',
-        'webjars/jquery/**',
-        'webjars/bootstrap/**',
-        // ... list every webjar manually
-    ]
-    includes = [
-        'webjars/angular/*/angular.js',
-        'webjars/jquery/*/dist/jquery.js',
-        // ...
-    ]
-}
-```
-
-**With excludeWebjarsByDefault** (automatic):
-```groovy
-assets {
-    excludeWebjarsByDefault = true  // Much simpler!
-    includes = [
-        'webjars/angular/*/angular.js',
-        'webjars/jquery/*/dist/jquery.js',
-        // ...
-    ]
-}
-```
 
 Contributions
 -------------
@@ -393,14 +328,3 @@ dependencies {
   compile "cloud.wondrify:asset-pipeline-core:5.0.13"
 }
 ```
-
-Additional Resources
---------------------
-* [Coffeescript Asset-Pipeline Plugin](http://github.com/bertramdev/coffee-asset-pipeline)
-* [LESS Css Asset-Pipeline Plugin](http://github.com/bertramdev/less-asset-pipeline)
-* SASS Coming Soon
-* [Handlebars Asset-Pipeline Plugin](http://github.com/bertramdev/handlebars-asset-pipeline)
-* [Ember Asset-Pipeline Plugin](http://github.com/bertramdev/ember-asset-pipeline)
-* [AngularJS Template Asset-Pipeline Plugin](https://github.com/craigburke/angular-template-grails-asset-pipeline)
-* [AngularJS Annotate Asset-Pipeline Plugin](https://github.com/craigburke/angular-annotate-grails-asset-pipeline)
-* [Grails Asset Pipeline Guide](http://bertramdev.github.io/grails-asset-pipeline/)
