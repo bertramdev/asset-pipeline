@@ -129,9 +129,9 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<Object> {
             name = name.substring(1)
         }
 
-				if(name.contains('*')) { //we have some wildcard patterns to resolve.
+				if(name.contains('*') || name.contains('%')) { //we have some wildcard patterns to resolve.
 					String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
-					int wildCardIndex = pathComponents.findIndexOf {it.equals("*")}
+					int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
 					if(wildCardIndex > -1) {
 						String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(DIRECTIVE_FILE_SEPARATOR)
 						String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(DIRECTIVE_FILE_SEPARATOR)

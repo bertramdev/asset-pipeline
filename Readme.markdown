@@ -245,8 +245,8 @@ WebJar version resolution also works with require directives in JavaScript and C
 **CSS:**
 ```css
 /*
- *= require webjars/bootstrap/*/dist/css/bootstrap.css
- *= require webjars/font/bootstrap-icons.css
+ *= require webjars/bootstrap/%/dist/css/bootstrap.css
+ *= require webjars/bootstrap/%/font/bootstrap-icons.css
  */
 ```
 
