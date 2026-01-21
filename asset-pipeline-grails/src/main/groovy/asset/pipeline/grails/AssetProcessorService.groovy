@@ -192,11 +192,11 @@ class AssetProcessorService implements GrailsApplicationAware {
 	private resolveManifestProperty(String path) {
 		if(manifest) {
 			String result = manifest.getProperty(path)
-			if(result == null && (path.contains('*') || path.contains('%'))) {
+			if(result == null && (AssetHelper.isWildcardPath(path))) {
 				result = manifestWildcardCache.get(path)
 				if(result == null) {
 					//Wildcard lookup
-					String[] pathComponents = path.split('[*%]')
+					String[] pathComponents = AssetHelper.WILDCARD_PATTERN.split(path)
 					for(String entryKey : manifest.keySet()) {
 						if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
 							result = manifest.getProperty(entryKey)
@@ -210,8 +210,8 @@ class AssetProcessorService implements GrailsApplicationAware {
 					}
 				}
 			}
-			return result
+			return result ?: path
 		}
-		return null
+		return path
 	}
 }

@@ -37,6 +37,7 @@ public class AssetHelper {
     static final Collection<Class<AssetFile>> assetSpecs = AssetSpecLoader.loadSpecifications()
     static final String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
     static final String DIRECTIVE_FILE_SEPARATOR = '/'
+		static final Pattern WILDCARD_PATTERN = Pattern.compile(/[*%]/)
 
     /**
      * Resolve an {@link AssetFile} for the given URI
@@ -322,4 +323,10 @@ public class AssetHelper {
         }
         return extensions.unique()
     }
+
+		@CompileStatic
+		static boolean isWildcardPath(String path) {
+			WILDCARD_PATTERN.matcher(path).find()
+		}
+
 }

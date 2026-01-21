@@ -71,4 +71,6 @@ public interface AssetResolver<T> {
 	public Collection<AssetFile> scanForFiles(List<String> excludePatterns, List<String> includePatterns)
 
 	T getRelativeFile(String relativePath, String name)
+
+
 }

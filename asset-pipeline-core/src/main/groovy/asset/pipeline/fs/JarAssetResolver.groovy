@@ -122,7 +122,7 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 
     @CompileStatic
     public ZipEntry getRelativeFile(String relativePath, String name) {
-			if(name.contains('*') || name.contains('%')) { //we have some wildcard patterns to resolve.
+			if(AssetHelper.isWildcardPath(name)) { //we have some wildcard patterns to resolve.
 				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
 				int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
 				if(wildCardIndex > -1) {

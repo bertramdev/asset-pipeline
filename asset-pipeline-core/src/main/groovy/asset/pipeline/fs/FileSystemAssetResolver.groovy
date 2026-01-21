@@ -92,7 +92,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 
     @Override
     public File getRelativeFile(String relativePath, String name) {
-			if(name.contains('*') || name.contains('%')) { //we have some wildcard patterns to resolve.
+			if(AssetHelper.isWildcardPath(name)) { //we have some wildcard patterns to resolve.
 				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
 				int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
 				if(wildCardIndex > -1) {
@@ -103,7 +103,7 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 						File[] possibleDirs = preWildcardDir.listFiles()
 						for(possibleDir in possibleDirs) {
 							if(possibleDir.isDirectory()) {
-								if(postWildcardPath.contains('*') || postWildcardPath.contains('%')) {//still have to search down more
+								if(AssetHelper.isWildcardPath(name)) {//still have to search down more
 									return getRelativeFile(relativePath, "${preWildcardPath}/${possibleDir.name}/${postWildcardPath}" )
 								} else {
 									File testFile = new File(possibleDir, postWildcardPath)
