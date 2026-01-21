@@ -2131,14 +2131,6 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.28/6444f3c8fce32e20f621e264807256c5e65f11c9/slf4j-api-1.7.28-sources.jar!/" />
       </SOURCES>
     </library>
-    <library name="Gradle: org.slf4j:slf4j-api:2.0.13" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.slf4j" artifactId="slf4j-api" version="2.0.13" baseVersion="2.0.13" />
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.13/80229737f704b121a318bba5d5deacbcf395bc77/slf4j-api-2.0.13.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
     <library name="Gradle: org.slf4j:slf4j-api:2.0.16" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.slf4j" artifactId="slf4j-api" version="2.0.16" baseVersion="2.0.16" />
       <CLASSES>

@@ -6,6 +6,7 @@ import grails.core.GrailsApplication
 import grails.core.support.GrailsApplicationAware
 import grails.util.Environment
 import grails.web.mapping.LinkGenerator
+import groovy.util.logging.Slf4j
 import org.grails.config.NavigableMap
 
 import jakarta.servlet.http.HttpServletRequest
@@ -20,7 +21,7 @@ import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
 import static asset.pipeline.utils.net.Urls.hasAuthority
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
-
+@Slf4j
 class AssetProcessorService implements GrailsApplicationAware {
 
 	GrailsApplication grailsApplication
@@ -52,7 +53,21 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:]), final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
 		if (useManifest) {
-			return manifest?.getProperty(relativePath) ?: relativePath
+
+			String result = manifest.getProperty(relativePath)
+			if(result == null && (relativePath.contains('*') || relativePath.contains('%'))) {
+				//Wildcard lookup
+				for(String entryKey : manifest.keySet()) {
+					String[] pathComponents = relativePath.split('[*%]')
+					log.info("Path Components: ${pathComponents}")
+					if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
+						return manifest.getProperty(entryKey)
+					} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
+						return manifest.getProperty(entryKey)
+					}
+				}
+			}
+			return result
 		} else {
 			return relativePath
 		}
@@ -62,8 +77,25 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getResolvedAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		final String relativePath = trimLeadingSlash(path)
 		if(manifest) {
-			if(relativePath)
-			return manifest.getProperty(relativePath)
+			if(relativePath) {
+				String result = manifest.getProperty(relativePath)
+				if(result == null && (relativePath.contains('*') || relativePath.contains('%'))) {
+					//Wildcard lookup
+					for(String entryKey : manifest.keySet()) {
+						String[] pathComponents = relativePath.split('[*%]')
+						log.info("Path Components: ${pathComponents}")
+						if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
+							return manifest.getProperty(entryKey)
+						} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
+							return manifest.getProperty(entryKey)
+						}
+					}
+				}
+				return result
+			} else {
+				return path
+			}
+
 		} else {
 			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
 		}
