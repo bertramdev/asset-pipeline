@@ -13,6 +13,9 @@ import jakarta.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import asset.pipeline.AssetPipelineConfigHolder
+
+import java.util.concurrent.ConcurrentHashMap
+
 import static asset.pipeline.AssetPipelineConfigHolder.manifest
 import asset.pipeline.AssetPipelineClassLoaderEntry
 import static asset.pipeline.grails.UrlBase.*
@@ -53,21 +56,7 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:]), final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
 		if (useManifest) {
-
-			String result = manifest.getProperty(relativePath)
-			if(result == null && (relativePath.contains('*') || relativePath.contains('%'))) {
-				//Wildcard lookup
-				for(String entryKey : manifest.keySet()) {
-					String[] pathComponents = relativePath.split('[*%]')
-					log.info("Path Components: ${pathComponents}")
-					if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
-						return manifest.getProperty(entryKey)
-					} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
-						return manifest.getProperty(entryKey)
-					}
-				}
-			}
-			return result
+			return resolveManifestProperty(relativePath)
 		} else {
 			return relativePath
 		}
@@ -78,24 +67,10 @@ class AssetProcessorService implements GrailsApplicationAware {
 		final String relativePath = trimLeadingSlash(path)
 		if(manifest) {
 			if(relativePath) {
-				String result = manifest.getProperty(relativePath)
-				if(result == null && (relativePath.contains('*') || relativePath.contains('%'))) {
-					//Wildcard lookup
-					for(String entryKey : manifest.keySet()) {
-						String[] pathComponents = relativePath.split('[*%]')
-						log.info("Path Components: ${pathComponents}")
-						if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
-							return manifest.getProperty(entryKey)
-						} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
-							return manifest.getProperty(entryKey)
-						}
-					}
-				}
-				return result
+				return resolveManifestProperty(relativePath)
 			} else {
 				return path
 			}
-
 		} else {
 			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
 		}
@@ -210,5 +185,33 @@ class AssetProcessorService implements GrailsApplicationAware {
 			return s
 		}
 		return s.substring(1)
+	}
+
+	private ConcurrentHashMap<String,String> manifestWildcardCache = new ConcurrentHashMap<>()
+
+	private resolveManifestProperty(String path) {
+		if(manifest) {
+			String result = manifest.getProperty(path)
+			if(result == null && (path.contains('*') || path.contains('%'))) {
+				result = manifestWildcardCache.get(path)
+				if(result == null) {
+					//Wildcard lookup
+					String[] pathComponents = path.split('[*%]')
+					for(String entryKey : manifest.keySet()) {
+						if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
+							result = manifest.getProperty(entryKey)
+							manifestWildcardCache.put(path, result)
+							break
+						} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
+							manifestWildcardCache.put(path, result)
+							result = manifest.getProperty(entryKey)
+							break
+						}
+					}
+				}
+			}
+			return result
+		}
+		return null
 	}
 }
