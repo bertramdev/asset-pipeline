@@ -40,7 +40,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "cloud.wondrify:asset-pipeline-gradle:5.0.27"
+    classpath "cloud.wondrify:asset-pipeline-gradle:5.0.28"
   }
 }
 
@@ -204,7 +204,7 @@ dependencies {
 WebJar Support
 --------------
 
-The Asset Pipeline plugin provides automatic version resolution for WebJars, eliminating the need to hardcode version numbers in your views.
+The Asset Pipeline plugin provides wildcard asset path resolution for WebJars, eliminating the need to hardcode version numbers in your views.
 
 ### Setup
 
@@ -267,12 +267,11 @@ When you upgrade dependencies in `build.gradle`, your require directives automat
 ### How It Works
 
 **Version Resolution:**
-1. Detects version-less paths (e.g., `webjars/dist/jquery.js`)
-2. Uses WebJarAssetLocator to search all webjars for matching file path (`dist/jquery.js`)
-3. Resolves to versioned path (e.g., `webjars/jquery/3.7.1/dist/jquery.js`)
-4. Caches resolved paths for performance
+1. Detects wildcard path (e.g., `webjars/jqueruy/*/dist/jquery.js`)
+2. Resolves to versioned path (e.g., `webjars/jquery/3.7.1/dist/jquery.js`)
+3. Caches resolved paths for performance
 
-The locator finds the file in the webjar's `META-INF/resources/webjars/{package}/{version}/` directory and returns the full path with version included.
+The locator scans the file system, classpath, and jars for matching wildcard paths and returns the first match it can.
 
 ### Benefits
 
@@ -296,10 +295,10 @@ The locator finds the file in the webjar's `META-INF/resources/webjars/{package}
 
 **After:**
 ```gsp
-<asset:javascript src="webjars/dist/jquery.js"/>
-<asset:javascript src="webjars/src/jquery.form.js"/>
-<asset:javascript src="webjars/dist/js/bootstrap.bundle.js"/>
-<asset:stylesheet href="webjars/dist/css/bootstrap.css"/>
+<asset:javascript src="webjars/jquery/*/dist/jquery.js"/>
+<asset:javascript src="webjars/jquery-form/*/src/jquery.form.js"/>
+<asset:javascript src="webjars/bootstrap/*/dist/js/bootstrap.bundle.js"/>
+<asset:stylesheet href="webjars/boostrap/*/dist/css/bootstrap.css"/>
 ```
 
 When you upgrade jQuery from 3.7.1 to 3.7.2, just update `build.gradle` - no view changes needed!
@@ -324,7 +323,7 @@ sourceSets {
 }
 
 dependencies {
-  provided 'org.codehaus.groovy:groovy-all:2.0.7'
-  compile "cloud.wondrify:asset-pipeline-core:5.0.13"
+  provided 'org.apache.groovy:groovy:4.0.25'
+  implementation "cloud.wondrify:asset-pipeline-core:5.0.28"
 }
 ```
