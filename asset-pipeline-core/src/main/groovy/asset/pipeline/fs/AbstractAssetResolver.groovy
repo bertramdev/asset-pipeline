@@ -58,8 +58,13 @@ abstract class AbstractAssetResolver<T> implements AssetResolver<T> {
                     }
                 }
             }
-            def extensions = extensionMap.keySet().sort{a,b -> -(a.size()) <=> -(b.size())}
 
+            def extensions = extensionMap.keySet().sort{a,b -> -(a.size()) <=> -(b.size())}
+						//we want to see if there is an extension exact match first before going down the list
+						if(extension && extensionMap[extension]) {
+							extensions.remove(extension)
+							extensions.add(0, extension)
+						}
             for (ext in extensions) {
                 def fileSpec = extensionMap[ext]
                 def fileName = normalizedPath
