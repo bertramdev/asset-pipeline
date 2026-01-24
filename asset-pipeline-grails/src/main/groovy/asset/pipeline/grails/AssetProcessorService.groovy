@@ -56,7 +56,7 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:]), final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
 		if (useManifest) {
-			return resolveManifestProperty(relativePath)
+			return resolveManifestProperty(relativePath) ?: relativePath
 		} else {
 			return relativePath
 		}
@@ -209,9 +209,10 @@ class AssetProcessorService implements GrailsApplicationAware {
 						}
 					}
 				}
+				return result ?: path
 			}
-			return result ?: path
+			return result
 		}
-		return path
+		return null
 	}
 }
