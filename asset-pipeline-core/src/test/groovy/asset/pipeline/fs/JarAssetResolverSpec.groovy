@@ -16,7 +16,8 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.JsEs6AssetFile
 import spock.lang.Specification
 
 /**
@@ -31,7 +32,7 @@ class JarAssetResolverSpec extends Specification {
 			def file = resolver.getAsset('jartest','application/javascript')
 		then:
 			println file?.inputStream?.text
-			file instanceof JsAssetFile
+			file instanceof JsEs6AssetFile
 	}
 
 	void "should be able to fetch files from a jar file if root path given"() {
@@ -41,7 +42,7 @@ class JarAssetResolverSpec extends Specification {
 			def file = resolver.getAsset('/jartest','application/javascript')
 		then:
 			println file?.inputStream?.text
-			file instanceof JsAssetFile
+			file instanceof JsEs6AssetFile
 	}
 
 
@@ -52,5 +53,45 @@ class JarAssetResolverSpec extends Specification {
 			def files = resolver.getAssets('jquery','application/javascript')
 		then:
             files.name == ['jquery.js']
+	}
+
+	void "should prefer .js file over .mjs file when explicitly requesting .js extension from jar"() {
+		given:
+		def resolver = new JarAssetResolver('application','lib/test-lib.zip','META-INF/assets')
+
+		when:
+		def file = resolver.getAsset('jartest.js', 'application/javascript')
+
+		then:
+		file != null
+		file.name == 'jartest.js'
+		file.path.endsWith('.js')
+	}
+
+	void "should prefer .mjs file over .js file when explicitly requesting .mjs extension from jar"() {
+		given:
+		def resolver = new JarAssetResolver('application','lib/test-lib.zip','META-INF/assets')
+
+		when:
+		def file = resolver.getAsset('jartest.mjs', 'application/javascript')
+
+		then:
+		file != null
+		file.name == 'jartest.mjs'
+		file.path.endsWith('.mjs')
+	}
+
+	void "should prefer .mjs file over .js when no extension is specified"() {
+		given:
+		def resolver = new JarAssetResolver('application','lib/test-lib.zip','META-INF/assets')
+
+		when:
+		def jsFile = resolver.getAsset('jartest', 'application/javascript')
+
+		then:
+		jsFile != null
+		jsFile instanceof JsEs6AssetFile
+		jsFile.name == 'jartest.mjs'
+		jsFile.path.endsWith('.mjs')
 	}
 }
