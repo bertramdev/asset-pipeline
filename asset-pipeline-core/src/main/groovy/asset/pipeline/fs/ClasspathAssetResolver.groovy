@@ -8,7 +8,6 @@ import groovy.util.logging.Slf4j
 
 import java.nio.file.LinkOption
 import java.util.concurrent.ConcurrentHashMap
-import java.util.jar.JarEntry
 import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 
@@ -58,14 +57,15 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<Object> {
         if(!normalizedPath) {
             return null
         }
-        def specs
 
+        if (!extension) {
+            extension = AssetHelper.extensionFromURI(relativePath)
+        }
+
+        def specs
         if (contentType) {
             specs = AssetHelper.getPossibleFileSpecs(contentType)
         } else {
-            if (!extension) {
-                extension = AssetHelper.extensionFromURI(relativePath)
-            }
             specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
         }
 

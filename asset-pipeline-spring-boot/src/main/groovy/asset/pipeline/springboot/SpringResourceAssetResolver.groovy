@@ -44,14 +44,15 @@ class SpringResourceAssetResolver extends AbstractAssetResolver<Resource> {
             return null
         }
         def normalizedPath = AssetHelper.normalizePath(relativePath)
-        def specs
 
+        if(!extension) {
+            extension = AssetHelper.extensionFromURI(relativePath)
+        }
+
+        def specs
         if(contentType) {
             specs = AssetHelper.getPossibleFileSpecs(contentType)
         } else {
-            if(!extension) {
-                extension = AssetHelper.extensionFromURI(relativePath)
-            }
             specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
         }
 
