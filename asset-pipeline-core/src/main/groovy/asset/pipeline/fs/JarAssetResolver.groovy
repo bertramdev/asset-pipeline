@@ -16,13 +16,16 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import java.util.jar.JarEntry
-import java.util.regex.Pattern
 import java.util.jar.JarFile
+import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipException
 
@@ -64,12 +67,13 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 		}
 		def specs
 
+		if(!extension) {
+			extension = AssetHelper.extensionFromURI(relativePath)
+		}
+
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		} else {
-			if(!extension) {
-				extension = AssetHelper.extensionFromURI(relativePath)
-			}
 			specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
 		}
 

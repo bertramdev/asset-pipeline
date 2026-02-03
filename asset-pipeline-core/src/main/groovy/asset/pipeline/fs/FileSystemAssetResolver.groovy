@@ -16,13 +16,15 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import java.util.regex.Pattern
 import java.nio.file.LinkOption
-
+import java.util.regex.Pattern
 
 /**
  * Implementation of the {@link AssetResolver} interface for the file system
@@ -65,13 +67,15 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 			return null
 		}
 		relativePath = relativePath.replaceAll(QUOTED_FILE_SEPARATOR,DIRECTIVE_FILE_SEPARATOR)
+
+		if(!extension) {
+			extension = AssetHelper.extensionFromURI(relativePath)
+		}
+
 		def specs
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		} else {
-			if(!extension) {
-				extension = AssetHelper.extensionFromURI(relativePath)
-			}
 			specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
 		}
 

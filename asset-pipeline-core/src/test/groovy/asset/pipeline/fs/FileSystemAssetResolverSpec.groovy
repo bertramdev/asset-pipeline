@@ -16,7 +16,10 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.CssAssetFile
+import asset.pipeline.GenericAssetFile
+import asset.pipeline.JsAssetFile
 import spock.lang.Specification
 
 /**
@@ -88,5 +91,62 @@ class FileSystemAssetResolverSpec extends Specification {
 		then:
 			files?.size() == 4
 	}
-	
+
+	void "should prefer .js file over .mjs file when explicitly requesting .js extension"() {
+		given:
+			def resolver = new FileSystemAssetResolver('application','assets')
+			def jsFile = new File('assets/javascripts/mylibrary.js')
+			def mjsFile = new File('assets/javascripts/mylibrary.mjs')
+			jsFile.parentFile.mkdirs()
+			jsFile.text = '// JavaScript file'
+			mjsFile.text = '// ES Module file'
+		when:
+			def file = resolver.getAsset('mylibrary.js', 'application/javascript')
+		then:
+			file != null
+			file.name == 'mylibrary.js'
+			!file.name.endsWith('.mjs')
+		cleanup:
+			jsFile?.delete()
+			mjsFile?.delete()
+	}
+
+	void "should resolve .mjs file when explicitly requesting .mjs extension"() {
+		given:
+			def resolver = new FileSystemAssetResolver('application','assets')
+			def jsFile = new File('assets/javascripts/mylibrary.js')
+			def mjsFile = new File('assets/javascripts/mylibrary.mjs')
+			jsFile.parentFile.mkdirs()
+			jsFile.text = '// JavaScript file'
+			mjsFile.text = '// ES Module file'
+		when:
+			def file = resolver.getAsset('mylibrary.mjs', 'application/javascript')
+		then:
+			file != null
+			file.name == 'mylibrary.mjs'
+		cleanup:
+			jsFile?.delete()
+			mjsFile?.delete()
+	}
+
+	void "should prefer .mjs file over .js when no extension is specified"() {
+		given:
+			def resolver = new FileSystemAssetResolver('application','assets')
+			def jsFile = new File('assets/javascripts/mylibrary.js')
+			def mjsFile = new File('assets/javascripts/mylibrary.mjs')
+			jsFile.parentFile.mkdirs()
+			jsFile.text = '// JavaScript file'
+			mjsFile.text = '// ES Module file'
+		when:
+			// When no extension is specified, should prefer .mjs (modern ES modules) due to extension priority
+			def file = resolver.getAsset('mylibrary', 'application/javascript')
+		then:
+			file != null
+			file.name == 'mylibrary.mjs'
+			file.path.endsWith('.mjs')
+		cleanup:
+			jsFile?.delete()
+			mjsFile?.delete()
+	}
+
 }
