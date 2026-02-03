@@ -38,7 +38,8 @@ abstract class AssetPluginPackage extends DefaultTask {
     @TaskAction
     @CompileDynamic
     void compile() {
-        AssetPipelineConfigHolder.config = config.configOptions.get()
+        Map configOptions = config.configOptions.get()
+        AssetPipelineConfigHolder.config = new LinkedHashMap(configOptions)
 
         FileSystemAssetResolver fsResolver = new FileSystemAssetResolver('manifest', config.assetsPath.get().asFile.canonicalPath)
 
