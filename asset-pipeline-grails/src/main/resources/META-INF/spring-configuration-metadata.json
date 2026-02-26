@@ -1,0 +1,148 @@
+{
+  "groups": [
+    {
+      "name": "grails.assets",
+      "description": "Asset Pipeline Configuration"
+    }
+  ],
+  "properties": [
+    {
+      "name": "grails.assets.mapping",
+      "type": "java.lang.String",
+      "description": "URL path prefix used by the asset pipeline filter and taglib.",
+      "defaultValue": "assets"
+    },
+    {
+      "name": "grails.assets.url",
+      "type": "java.lang.Object",
+      "description": "Base URL for asset links. Can be a string or a request-aware closure.",
+      "defaultValue": null
+    },
+    {
+      "name": "grails.assets.storagePath",
+      "type": "java.lang.String",
+      "description": "External storage path to copy compiled assets to when running in production.",
+      "defaultValue": null
+    },
+    {
+      "name": "grails.assets.bundle",
+      "type": "java.lang.Boolean",
+      "description": "Bundle assets in development instead of serving individual dependency files.",
+      "defaultValue": false
+    },
+    {
+      "name": "grails.assets.useManifest",
+      "type": "java.lang.Boolean",
+      "description": "Use manifest.properties for digest resolution when available.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.skipNotFound",
+      "type": "java.lang.Boolean",
+      "description": "Skip 404 responses for missing assets when handling requests.",
+      "defaultValue": false
+    },
+    {
+      "name": "grails.assets.includes",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Glob patterns of assets to include during compilation.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.excludes",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Glob patterns of assets to exclude during compilation.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.plugin.*.includes",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Plugin-specific include patterns applied during compilation.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.plugin.*.excludes",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Plugin-specific exclude patterns applied during compilation.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.minifyJs",
+      "type": "java.lang.Boolean",
+      "description": "Enable JavaScript minification during asset compilation.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.minifyCss",
+      "type": "java.lang.Boolean",
+      "description": "Enable CSS minification during asset compilation.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.enableSourceMaps",
+      "type": "java.lang.Boolean",
+      "description": "Enable source map generation for compiled assets.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.minifyOptions",
+      "type": "java.util.Map<java.lang.String, java.lang.Object>",
+      "description": "Minifier options passed to the JavaScript or CSS minifiers.",
+      "defaultValue": {}
+    },
+    {
+      "name": "grails.assets.minifyOptions.excludes",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Patterns of files to exclude from minification.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.enableDigests",
+      "type": "java.lang.Boolean",
+      "description": "Enable digest filename generation for compiled assets.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.skipNonDigests",
+      "type": "java.lang.Boolean",
+      "description": "Skip writing non-digest files during compilation.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.enableGzip",
+      "type": "java.lang.Boolean",
+      "description": "Enable gzip compression for compiled assets.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.excludesGzip",
+      "type": "java.util.List<java.lang.String>",
+      "description": "File extensions excluded from gzip compression.",
+      "defaultValue": []
+    },
+    {
+      "name": "grails.assets.developmentRuntime",
+      "type": "java.lang.Boolean",
+      "description": "Enable the Grails development runtime for on-the-fly asset compilation.",
+      "defaultValue": true
+    },
+    {
+      "name": "grails.assets.cacheLocation",
+      "type": "java.lang.String",
+      "description": "File path for the asset pipeline cache.",
+      "defaultValue": null
+    },
+    {
+      "name": "grails.assets.digestAlgorithm",
+      "type": "java.lang.String",
+      "description": "Message digest algorithm used for asset digests.",
+      "defaultValue": "MD5"
+    },
+    {
+      "name": "grails.assets.digestSalt",
+      "type": "java.lang.String",
+      "description": "Salt applied when generating asset digests.",
+      "defaultValue": ""
+    }
+  ]
+}
