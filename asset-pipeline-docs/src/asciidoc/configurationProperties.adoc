@@ -1,0 +1,31 @@
+== Configuration Properties
+
+NOTE: IDEs that support Spring configuration metadata can provide auto-completion and documentation for these properties.
+
+[cols="1,3,1",options="header"]
+|===
+|Property |Description |Default
+|`grails.assets.bundle` |Bundle assets in development instead of serving individual dependency files. |`false`
+|`grails.assets.cacheLocation` |File path for the asset pipeline cache. |-
+|`grails.assets.developmentRuntime` |Enable the Grails development runtime for on-the-fly asset compilation. |`true`
+|`grails.assets.digestAlgorithm` |Message digest algorithm used for asset digests. |`MD5`
+|`grails.assets.digestSalt` |Salt applied when generating asset digests. |-
+|`grails.assets.enableDigests` |Enable digest filename generation for compiled assets. |`true`
+|`grails.assets.enableGzip` |Enable gzip compression for compiled assets. |`true`
+|`grails.assets.enableSourceMaps` |Enable source map generation for compiled assets. |`true`
+|`grails.assets.excludes` |Glob patterns of assets to exclude during compilation. |`[]`
+|`grails.assets.excludesGzip` |File extensions excluded from gzip compression. |`[]`
+|`grails.assets.includes` |Glob patterns of assets to include during compilation. |`[]`
+|`grails.assets.mapping` |URL path prefix used by the asset pipeline filter and taglib. |`assets`
+|`grails.assets.minifyCss` |Enable CSS minification during asset compilation. |`true`
+|`grails.assets.minifyJs` |Enable JavaScript minification during asset compilation. |`true`
+|`grails.assets.minifyOptions` |Minifier options passed to the JavaScript or CSS minifiers. |`[:]`
+|`grails.assets.minifyOptions.excludes` |Patterns of files to exclude from minification. |`[]`
+|`grails.assets.plugin.*.excludes` |Plugin-specific exclude patterns applied during compilation. |`[]`
+|`grails.assets.plugin.*.includes` |Plugin-specific include patterns applied during compilation. |`[]`
+|`grails.assets.skipNonDigests` |Skip writing non-digest files during compilation. |`true`
+|`grails.assets.skipNotFound` |Skip 404 responses for missing assets when handling requests. |`false`
+|`grails.assets.storagePath` |External storage path to copy compiled assets to when running in production. |-
+|`grails.assets.url` |Base URL for asset links. Can be a string or a request-aware closure. |-
+|`grails.assets.useManifest` |Use manifest.properties for digest resolution when available. |`true`
+|===

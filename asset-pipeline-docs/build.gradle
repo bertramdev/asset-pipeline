@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id 'org.asciidoctor.jvm.convert' version '4.0.4'
 }
@@ -24,4 +26,45 @@ asciidoctor {
         idprefix            : '',
         idseparator         : '-'
     ]
+}
+
+def configurationMetadataFile = rootProject.file('asset-pipeline-grails/src/main/resources/META-INF/spring-configuration-metadata.json')
+def configurationPropertiesDoc = layout.projectDirectory.file('src/asciidoc/configurationProperties.adoc')
+
+tasks.register('generateConfigurationProperties') {
+    inputs.file(configurationMetadataFile)
+    outputs.file(configurationPropertiesDoc)
+
+    doLast {
+        def metadata = new JsonSlurper().parse(configurationMetadataFile)
+        def properties = (metadata.properties ?: []).sort { it.name }
+        def builder = new StringBuilder()
+
+        builder << '== Configuration Properties\n\n'
+        builder << 'NOTE: IDEs that support Spring configuration metadata can provide auto-completion and documentation for these properties.\n\n'
+        builder << '[cols="1,3,1",options="header"]\n'
+        builder << '|===\n'
+        builder << '|Property |Description |Default\n'
+
+        properties.each { prop ->
+            def description = prop.description ?: ''
+            def defaultValue = prop.containsKey('defaultValue') ? prop.defaultValue : null
+            def defaultText
+            if (defaultValue == null || defaultValue.toString().trim().isEmpty()) {
+                defaultText = '-'
+            } else {
+                defaultText = "`${defaultValue}`"
+            }
+
+            builder << "|`${prop.name}` |${description} |${defaultText}\n"
+        }
+
+        builder << '|===\n'
+        configurationPropertiesDoc.asFile.parentFile.mkdirs()
+        configurationPropertiesDoc.asFile.text = builder.toString()
+    }
+}
+
+tasks.named('asciidoctor') {
+    dependsOn(tasks.named('generateConfigurationProperties'))
 }
