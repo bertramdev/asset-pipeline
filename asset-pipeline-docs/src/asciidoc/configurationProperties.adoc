@@ -9,7 +9,7 @@ NOTE: IDEs that support Spring configuration metadata can provide auto-completio
 |`grails.assets.cacheLocation` |File path for the asset pipeline cache. |-
 |`grails.assets.developmentRuntime` |Enable the Grails development runtime for on-the-fly asset compilation. |`true`
 |`grails.assets.digestAlgorithm` |Message digest algorithm used for asset digests. |`MD5`
-|`grails.assets.digestSalt` |Salt applied when generating asset digests. |-
+|`grails.assets.digestSalt` |Salt applied when generating asset digests. |`""`
 |`grails.assets.enableDigests` |Enable digest filename generation for compiled assets. |`true`
 |`grails.assets.enableGzip` |Enable gzip compression for compiled assets. |`true`
 |`grails.assets.enableSourceMaps` |Enable source map generation for compiled assets. |`true`

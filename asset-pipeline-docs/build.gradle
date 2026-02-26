@@ -50,8 +50,10 @@ tasks.register('generateConfigurationProperties') {
             def description = prop.description ?: ''
             def defaultValue = prop.containsKey('defaultValue') ? prop.defaultValue : null
             def defaultText
-            if (defaultValue == null || defaultValue.toString().trim().isEmpty()) {
+            if (defaultValue == null) {
                 defaultText = '-'
+            } else if (defaultValue instanceof CharSequence && defaultValue.toString().isEmpty()) {
+                defaultText = '`""`'
             } else {
                 defaultText = "`${defaultValue}`"
             }
