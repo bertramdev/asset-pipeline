@@ -1,0 +1,130 @@
+=== Closure Compiler
+
+Asset-pipeline uses the https://developers.google.com/closure/compiler[Google Closure Compiler] to minify JavaScript during production builds. It is automatically applied when `minifyJs = true` is set and requires no additional dependency — the compiler is bundled with the Gradle plugin.
+
+NOTE: As of `closure-compiler-unshaded:v20260302`, the Closure Compiler requires **Java 21 or newer**. Asset-pipeline 5.1.x requires Java 25 as a result of this transitive requirement.
+
+==== Optimization Levels
+
+The `optimizationLevel` minify option controls how aggressively the compiler optimizes output:
+
+[cols="1,3"]
+|===
+|Value |Description
+
+|`SIMPLE` *(default)*
+|Renames local variables and removes comments. Safe for any JavaScript.
+
+|`WHITESPACE` / `WHITESPACE_ONLY`
+|Strips comments and whitespace only. No renaming or inlining.
+
+|`ADVANCED`
+|Aggressive dead-code elimination and symbol renaming. Requires that your code follow Closure Compiler https://developers.google.com/closure/compiler/docs/api-tutorial3[ADVANCED_OPTIMIZATIONS conventions].
+|===
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    minifyOptions = [
+        optimizationLevel: 'SIMPLE'
+    ]
+}
+----
+
+==== Language Mode
+
+The `languageMode` and `targetLanguage` options control which ECMAScript specification is used as the input and output dialect.
+
+[cols="1,3"]
+|===
+|Value |ECMAScript version
+
+|`ES3` |ECMAScript 3
+|`ES5` |ECMAScript 5
+|`ES5_SCRIPT` |ECMAScript 5 strict mode
+|`ES2016` |ECMAScript 2016
+|`ES2017` |ECMAScript 2017
+|`ES2018` |ECMAScript 2018
+|`ES2019` |ECMAScript 2019
+|`ES2020` *(default)*|ECMAScript 2020
+|`ES2021` |ECMAScript 2021
+|`ECMASCRIPT_NEXT` |Latest ECMAScript (may be unstable)
+|`UNSTABLE` |Experimental / in-progress features
+|===
+
+When `targetLanguage` is omitted the compiler emits output without transpiling (`NO_TRANSPILE`).
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    minifyOptions = [
+        languageMode:   'ES2020',
+        targetLanguage: 'ES5'   // transpile down to ES5
+    ]
+}
+----
+
+==== Angular Pass
+
+Setting `angularPass: true` enables the `@ngInject` annotation so the Closure Compiler can automatically generate Angular dependency injection annotations.
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    minifyOptions = [
+        angularPass: true
+    ]
+}
+----
+
+==== Warning Level
+
+Individual diagnostic groups can be promoted, demoted, or suppressed using the `warningLevel` map. Keys are Closure Compiler https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java[DiagnosticGroup] names and values are `OFF`, `WARNING`, or `ERROR`.
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    minifyOptions = [
+        warningLevel: [
+            ACCESS_CONTROLS: 'OFF',
+            DEPRECATED:      'WARNING'
+        ]
+    ]
+}
+----
+
+==== Dynamic Import Support
+
+By default the Closure Compiler rejects `import()` expressions and raises a `JSC_DYNAMIC_IMPORT_USAGE` error. To allow them you must set **both** `allowDynamicImport` and `dynamicImportAlias` together.
+
+`dynamicImportAlias`:: The name of a function that replaces every `import(x)` expression at compile time. The function must exist in the compiled output (either declared in the same file or provided externally).
+
+`allowDynamicImport`:: Must be `true` to activate the rewrite. Setting it to `true` without also setting `dynamicImportAlias` throws an `IllegalArgumentException` immediately.
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    minifyOptions = [
+        languageMode:        'ES2020',
+        targetLanguage:      'ES2020',
+        allowDynamicImport:  true,
+        dynamicImportAlias:  '__import__'  // every import(x) becomes __import__(x)
+    ]
+}
+----
+
+[source,javascript]
+.application.js
+----
+// Provide the alias implementation before any file that uses import()
+function __import__(path) {
+    return import(path);  // native dynamic import at runtime
+}
+----
+
+IMPORTANT: Setting `dynamicImportAlias` alone without `allowDynamicImport: true` has no effect — dynamic imports will still be rejected.
