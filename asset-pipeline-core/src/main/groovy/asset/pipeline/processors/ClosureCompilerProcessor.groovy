@@ -19,9 +19,9 @@ package asset.pipeline.processors
 import asset.pipeline.AssetCompiler
 import com.google.javascript.jscomp.*
 import com.google.javascript.jscomp.CompilerOptions.LanguageMode
+import groovy.transform.CompileStatic
 
 import java.util.logging.Level
-import groovy.transform.CompileStatic
 
 /**
  * A PostProcessor designed to minify javascript utilizing the Google Closure javascript compiler
@@ -119,6 +119,20 @@ class ClosureCompilerProcessor {
 					}
 				}
 			}
+		}
+		if(minifyOptions.containsKey('allowDynamicImport')) {
+			boolean allowDynamicImport = minifyOptions.get('allowDynamicImport') as boolean
+			if(allowDynamicImport && !minifyOptions.containsKey('dynamicImportAlias')) {
+				throw new IllegalArgumentException(
+					"minifyOptions.allowDynamicImport requires minifyOptions.dynamicImportAlias to also be set. " +
+					"The closure compiler cannot emit dynamic import expressions without an alias function to rewrite them to."
+				)
+			}
+			compilerOptions.allowDynamicImport = allowDynamicImport
+		}
+
+		if(minifyOptions.containsKey('dynamicImportAlias')) {
+			compilerOptions.dynamicImportAlias = minifyOptions.get('dynamicImportAlias') as String
 		}
 	}
 

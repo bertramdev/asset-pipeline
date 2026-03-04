@@ -19,6 +19,11 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 * GZIP File Generation
 * Last-Modified Header
 
+Requirements
+------------
+
+* **Java 25 or newer** — the closure compiler dependency (`com.google.javascript:closure-compiler-unshaded`) requires a Java 21+ JVM as of version `v20260302`. The asset pipleine as of 5.1.x requires Java 25 as a result.
+
 Documentation
 ------------
 
