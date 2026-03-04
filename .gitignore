@@ -15,3 +15,4 @@ asset-pipeline-site/src/assets/html/apidoc/
 .sass-cache
 .sass-work
 .shelf/
+asset-pipeline-docs/src/asciidoc/configurationProperties.adoc
