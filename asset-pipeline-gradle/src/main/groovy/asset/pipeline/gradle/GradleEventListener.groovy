@@ -32,6 +32,11 @@ class GradleEventListener implements AssetEventListener {
 
     @Override
     void triggerEvent(String eventName, String message) {
-        logger.info(message)
+        if(eventName == 'StatusDebug') {
+            logger.debug(message)
+        }
+        else {
+            logger.info(message)
+        }
     }
 }

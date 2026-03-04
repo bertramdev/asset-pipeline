@@ -282,7 +282,7 @@ Options:
 					def fileName = assetFile.path
 					String futureResult = assetFile.path
 					def startTime = new Date().time
-					eventListener?.triggerEvent("StatusUpdate", "Processing File ${indexPosition + 1} of ${filesToProcess.size()} - ${fileName}")
+					eventListener?.triggerEvent("StatusDebug", "Processing File ${indexPosition + 1} of ${filesToProcess.size()} - ${fileName}")
 
 					def digestName
 					def isUnchanged = false
