@@ -11,7 +11,7 @@ Integration
 Javet requires native libraries for integration. The first time you execute the pipeline, the appropriate native library will be downloaded for your platform. The supported
 platforms are:
 
-* Linux - x86_64
+* Linux - x86_64, arm64
 * Windows - x86_64
 * MacOS - x86_64, arm64
 
@@ -23,11 +23,12 @@ override this behavior by setting the following options:
 
 If the native library already exists at `javetLibraryHome` it will not be downloaded again.
 
-The full platform URL is constructed from the `javetBaseUrl`. 
+The full platform URL is constructed from the `javetBaseUrl` using the artifact naming scheme
+`javet-{runtime}-{os}-{arch}`.
 
-For example, on Mac OS, it would look like this:
+For example, on Apple Silicon (arm64), it would look like this:
 
-`"${javetBaseUrl}/javet-macos/1.0.6/javet-macos-1.0.6.jar"`
+`"${javetBaseUrl}/javet-node-macos-arm64/5.0.5/javet-node-macos-arm64-5.0.5.jar"`
 
 Configuration
 -------------
