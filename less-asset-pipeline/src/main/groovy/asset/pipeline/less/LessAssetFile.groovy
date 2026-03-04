@@ -9,7 +9,7 @@ import java.util.regex.Pattern
 import asset.pipeline.utils.Handler
 
 class LessAssetFile extends AbstractAssetFile {
-    static final String contentType = 'text/css'
+    static final List<String> contentType = ['text/css']
     static extensions = ['less', 'css.less']
     static final String compiledExtension = 'css'
     static processors = [CssProcessor]

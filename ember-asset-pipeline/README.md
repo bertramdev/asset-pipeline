@@ -1,6 +1,6 @@
 Ember Asset-Pipeline
 =========================
-[![Build Status](https://travis-ci.org/bertramdev/ember-asset-pipeline.svg)](https://travis-ci.org/bertramdev/ember-asset-pipeline)
+[![Build Status](https://travis-ci.org/wondrify/ember-asset-pipeline.svg)](https://travis-ci.org/wondrify/ember-asset-pipeline)
 
 Overview
 --------
@@ -8,7 +8,7 @@ The JVM `ember-asset-pipeline` is a plugin that provides handlebars template pre
 
 Current Ember Version: 1.7.0
 
-For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
+For more information on how to use asset-pipeline, visit [here](http://www.github.com/wondrify/asset-pipeline).
 
 
 Usage

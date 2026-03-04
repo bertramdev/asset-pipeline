@@ -21,10 +21,10 @@ buildscript {
     }
     repositories {
         // mavenLocal()
-        maven { url = 'https://repo.grails.org/grails/core' }
+        mavenCentral()
     }
     dependencies {
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.13.2"
+        classpath "cloud.wondrify:asset-pipeline-gradle:5.0.21"
     }
 }
 
@@ -32,32 +32,24 @@ group = 'cloud.wondrify'
 
 apply plugin: 'groovy'
 apply plugin: 'java-library'
-apply plugin: 'asset-pipeline'
-apply plugin: 'org.apache.grails.gradle.grails-plugin'
-apply plugin: 'org.apache.grails.gradle.grails-gsp'
-apply plugin: 'org.apache.grails.gradle.grails-docs'
+apply plugin: "org.apache.grails.gradle.grails-plugin"
+apply plugin:"cloud.wondrify.asset-pipeline"
 
 ext {
-    grailsVersion = project.grailsVersion
-    gradleWrapperVersion = project.gradleWrapperVersion
+    
     pomDescription = 'asset-pipeline plugin to use localized messages in JavaScript.'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom "org.apache.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
 
 dependencies {
     api 'org.springframework.boot:spring-boot-autoconfigure'
     api 'org.springframework.boot:spring-boot-starter-actuator'
     api 'org.springframework.boot:spring-boot-starter-logging'
     api 'org.springframework.boot:spring-boot-starter-tomcat'
-    api "org.apache.grails:grails-core:$grailsVersion"
-    api "org.apache.grails:grails-dependencies:$grailsVersion"
-    api "org.apache.grails.web:grails-web-boot:$grailsVersion"
+    api "org.apache.grails:grails-core"
+    api "org.apache.grails:grails-web-boot"
+    api "org.apache.grails:grails-services"
+    api "org.apache.grails:grails-url-mappings"
     api project(':asset-pipeline-core')
     api project(':asset-pipeline-grails')
     // api "cloud.wondrify:asset-pipeline-gradle:2.13.2"
@@ -69,9 +61,7 @@ dependencies {
     profile 'org.grails.profiles:web-plugin:3.1.3'
     testImplementation('org.apache.grails:grails-testing-support-web')
 }
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
-}
+
 
 assets {
     packagePlugin = true
@@ -82,7 +72,8 @@ apply {
     from rootProject.layout.projectDirectory.file('gradle/publish-config.gradle')
 }
 
-tasks.named('groovydoc', Groovydoc).configure { Groovydoc it ->
-    it.docTitle = "I18n asset pipeline API v${version}"
-    it.windowTitle = "I18n asset pipeline API v${version}"
-}
+
+// tasks.named('groovydoc', Groovydoc).configure { Groovydoc it ->
+//     it.docTitle = "I18n asset pipeline API v${version}"
+//     it.windowTitle = "I18n asset pipeline API v${version}"
+// }

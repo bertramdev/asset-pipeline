@@ -6,12 +6,16 @@ import grails.core.GrailsApplication
 import grails.core.support.GrailsApplicationAware
 import grails.util.Environment
 import grails.web.mapping.LinkGenerator
+import groovy.util.logging.Slf4j
 import org.grails.config.NavigableMap
 
 import jakarta.servlet.http.HttpServletRequest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
 import asset.pipeline.AssetPipelineConfigHolder
+
+import java.util.concurrent.ConcurrentHashMap
+
 import static asset.pipeline.AssetPipelineConfigHolder.manifest
 import asset.pipeline.AssetPipelineClassLoaderEntry
 import static asset.pipeline.grails.UrlBase.*
@@ -20,7 +24,7 @@ import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
 import static asset.pipeline.utils.net.Urls.hasAuthority
 import static org.grails.web.servlet.mvc.GrailsWebRequest.lookup
 
-
+@Slf4j
 class AssetProcessorService implements GrailsApplicationAware {
 
 	GrailsApplication grailsApplication
@@ -52,7 +56,7 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:]), final boolean useManifest = true) {
 		final String relativePath = trimLeadingSlash(path)
 		if (useManifest) {
-			return manifest?.getProperty(relativePath) ?: relativePath
+			return resolveManifestProperty(relativePath) ?: relativePath
 		} else {
 			return relativePath
 		}
@@ -62,8 +66,11 @@ class AssetProcessorService implements GrailsApplicationAware {
 	String getResolvedAssetPath(final String path, final Map conf = grailsApplication.config.getProperty('grails.assets',Map,[:])) {
 		final String relativePath = trimLeadingSlash(path)
 		if(manifest) {
-			if(relativePath)
-			return manifest.getProperty(relativePath)
+			if(relativePath) {
+				return resolveManifestProperty(relativePath)
+			} else {
+				return path
+			}
 		} else {
 			return AssetHelper.fileForFullName(relativePath) != null ? relativePath : null
 		}
@@ -178,5 +185,34 @@ class AssetProcessorService implements GrailsApplicationAware {
 			return s
 		}
 		return s.substring(1)
+	}
+
+	private ConcurrentHashMap<String,String> manifestWildcardCache = new ConcurrentHashMap<>()
+
+	private resolveManifestProperty(String path) {
+		if(manifest) {
+			String result = manifest.getProperty(path)
+			if(result == null && (AssetHelper.isWildcardPath(path))) {
+				result = manifestWildcardCache.get(path)
+				if(result == null) {
+					//Wildcard lookup
+					String[] pathComponents = AssetHelper.WILDCARD_PATTERN.split(path)
+					for(String entryKey : manifest.keySet()) {
+						if(pathComponents.size() > 1 && entryKey.startsWith(pathComponents[0]) && entryKey.endsWith(pathComponents[-1])) {
+							result = manifest.getProperty(entryKey)
+							manifestWildcardCache.put(path, result)
+							break
+						} else if(pathComponents.size() == 1 && entryKey.endsWith(pathComponents[0])) {
+							manifestWildcardCache.put(path, result)
+							result = manifest.getProperty(entryKey)
+							break
+						}
+					}
+				}
+				return result ?: path
+			}
+			return result
+		}
+		return null
 	}
 }

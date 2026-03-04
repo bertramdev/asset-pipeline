@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AgentMigrationStateService">
+    <option name="migrationStatus" value="COMPLETED" />
+  </component>
+  <component name="Ask2AgentMigrationStateService">
+    <option name="migrationStatus" value="COMPLETED" />
+  </component>
   <component name="CompilerConfiguration">
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
@@ -112,6 +118,11 @@
       <module name="cloud.wondrify.asset-pipeline.handlebars-asset-pipeline" target="17" />
       <module name="cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.main" target="17" />
       <module name="cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.test" target="17" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails" target="17" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.ast" target="17" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.integrationTest" target="17" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.main" target="17" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.test" target="17" />
       <module name="cloud.wondrify.asset-pipeline.jsx-asset-pipeline" target="17" />
       <module name="cloud.wondrify.asset-pipeline.jsx-asset-pipeline.main" target="17" />
       <module name="cloud.wondrify.asset-pipeline.jsx-asset-pipeline.test" target="17" />
@@ -155,6 +166,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/asset-pipeline-bom" />
             <option value="$PROJECT_DIR$/asset-pipeline-classpath-test" />
             <option value="$PROJECT_DIR$/asset-pipeline-core" />
             <option value="$PROJECT_DIR$/asset-pipeline-docs" />
@@ -166,6 +178,7 @@
             <option value="$PROJECT_DIR$/coffee-asset-pipeline" />
             <option value="$PROJECT_DIR$/ember-asset-pipeline" />
             <option value="$PROJECT_DIR$/handlebars-asset-pipeline" />
+            <option value="$PROJECT_DIR$/i18n-asset-pipeline-grails" />
             <option value="$PROJECT_DIR$/jsx-asset-pipeline" />
             <option value="$PROJECT_DIR$/less-asset-pipeline" />
             <option value="$PROJECT_DIR$/sass-asset-pipeline" />
@@ -202,6 +215,11 @@
       <module name="cloud.wondrify.asset-pipeline.asset-pipeline-grails.integrationTest" options="-parameters" />
       <module name="cloud.wondrify.asset-pipeline.asset-pipeline-grails.main" options="-parameters" />
       <module name="cloud.wondrify.asset-pipeline.asset-pipeline-grails.test" options="-parameters" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails" options="-parameters" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.ast" options="-parameters" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.integrationTest" options="-parameters" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.main" options="-parameters" />
+      <module name="cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.test" options="-parameters" />
     </option>
   </component>
   <component name="JavadocGenerationManager">
@@ -217,6 +235,7 @@
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-servlet/asset-pipeline-servlet.iml" filepath="$PROJECT_DIR$/asset-pipeline-servlet/asset-pipeline-servlet.iml" />
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-site/asset-pipeline-site.iml" filepath="$PROJECT_DIR$/asset-pipeline-site/asset-pipeline-site.iml" />
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml" filepath="$PROJECT_DIR$/asset-pipeline-spring-boot/asset-pipeline-spring-boot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/asset-pipeline-bom/asset-pipeline.asset-pipeline-bom.iml" filepath="$PROJECT_DIR$/asset-pipeline-bom/asset-pipeline.asset-pipeline-bom.iml" />
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.iml" filepath="$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.main.iml" filepath="$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.test.iml" filepath="$PROJECT_DIR$/asset-pipeline-classpath-test/asset-pipeline.asset-pipeline-classpath-test.test.iml" />
@@ -314,6 +333,11 @@
       <module fileurl="file://$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.iml" filepath="$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.iml" />
       <module fileurl="file://$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.main.iml" filepath="$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.test.iml" filepath="$PROJECT_DIR$/handlebars-asset-pipeline/cloud.wondrify.asset-pipeline.handlebars-asset-pipeline.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.iml" filepath="$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.ast.iml" filepath="$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.ast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.integrationTest.iml" filepath="$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.integrationTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.main.iml" filepath="$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.test.iml" filepath="$PROJECT_DIR$/i18n-asset-pipeline-grails/cloud.wondrify.asset-pipeline.i18n-asset-pipeline-grails.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.iml" filepath="$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.main.iml" filepath="$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.test.iml" filepath="$PROJECT_DIR$/jsx-asset-pipeline/cloud.wondrify.asset-pipeline.jsx-asset-pipeline.test.iml" />
@@ -395,6 +419,30 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/args4j/args4j/2.33/155fd0af01281cf320eec1db59bb15507ddcb7bf/args4j-2.33-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: ch.qos.logback:logback-classic:1.5.20" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="ch.qos.logback" artifactId="logback-classic" version="1.5.20" baseVersion="1.5.20" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.20/3db675c8bc2f791612721d177ba54021eed3ade9/logback-classic-1.5.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: ch.qos.logback:logback-core:1.5.20" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="ch.qos.logback" artifactId="logback-core" version="1.5.20" baseVersion="1.5.20" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.20/c5e87126a18d729240c683db179a9387b2daa632/logback-core-1.5.20.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: cloud.wondrify:asset-pipeline-gradle:5.0.21" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="cloud.wondrify" artifactId="asset-pipeline-gradle" version="5.0.21" baseVersion="5.0.21" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cloud.wondrify/asset-pipeline-gradle/5.0.21/a607f3207c0b90ed450fa96843aec89304e5c931/asset-pipeline-gradle-5.0.21.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: com.caoccao.javet:javet-core:1.1.0" type="java-imported" external-system-id="GRADLE">
       <properties groupId="com.caoccao.javet" artifactId="javet-core" version="1.1.0" baseVersion="1.1.0" />
       <CLASSES>
@@ -407,6 +455,14 @@
       <properties groupId="com.fasterxml.jackson.core" artifactId="jackson-annotations" version="2.19.2" baseVersion="2.19.2" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.19.2/c5381f11988ae3d424b197a26087d86067b6d7d/jackson-annotations-2.19.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: com.fasterxml.jackson.core:jackson-core:2.17.1" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="com.fasterxml.jackson.core" artifactId="jackson-core" version="2.17.1" baseVersion="2.17.1" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.17.1/5e52a11644cd59a28ef79f02bddc2cc3bab45edb/jackson-core-2.17.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -427,6 +483,14 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="com.fasterxml.jackson.datatype" artifactId="jackson-datatype-jsr310" version="2.19.2" baseVersion="2.19.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.19.2/72e73f048b36d9df82aef146bf8b2ae63b2e28e2/jackson-datatype-jsr310-2.19.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: com.fasterxml.jackson.module:jackson-module-parameter-names:2.19.2" type="java-imported" external-system-id="GRADLE">
       <properties groupId="com.fasterxml.jackson.module" artifactId="jackson-module-parameter-names" version="2.19.2" baseVersion="2.19.2" />
       <CLASSES>
@@ -435,10 +499,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: com.fasterxml:classmate:1.7.0" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="com.fasterxml" artifactId="classmate" version="1.7.0" baseVersion="1.7.0" />
+    <library name="Gradle: com.fasterxml:classmate:1.7.1" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="com.fasterxml" artifactId="classmate" version="1.7.1" baseVersion="1.7.1" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml/classmate/1.7.0/e98374da1f2143ac8e6e0a95036994bb19137a3/classmate-1.7.0.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml/classmate/1.7.1/e803194e4362a2c0585087c5f315682897d12f00/classmate-1.7.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -490,6 +554,14 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/b19b5927c2c25b6c70f093767041e641ae0b1b35/jsr305-3.0.2-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: com.google.code.gson:gson:2.13.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="com.google.code.gson" artifactId="gson" version="2.13.2" baseVersion="2.13.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.13.2/48b8230771e573b54ce6e867a9001e75977fe78e/gson-2.13.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: com.google.code.gson:gson:2.5" external-system-id="GRADLE">
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.5/686c608d1805b6d4d425ec4459e88164ffc85870/gson-2.5.jar!/" />
@@ -523,6 +595,14 @@
       <properties groupId="com.google.errorprone" artifactId="error_prone_annotations" version="2.40.0" baseVersion="2.40.0" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.40.0/81bd85ecc769f008241fa841159c3e1caa08deab/error_prone_annotations-2.40.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: com.google.errorprone:error_prone_annotations:2.41.0" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="com.google.errorprone" artifactId="error_prone_annotations" version="2.41.0" baseVersion="2.41.0" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.41.0/4381275efdef6ddfae38f002c31e84cd001c97f0/error_prone_annotations-2.41.0.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -569,17 +649,6 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.javascript/closure-compiler-unshaded/v20240317/9bac1a2ef24eff2e20832bb8b2b394e96421c937/closure-compiler-unshaded-v20240317-sources.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="Gradle: com.google.protobuf:protobuf-java:2.5.0" external-system-id="GRADLE">
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/2.5.0/a10732c76bfacdbd633a7eb0f7968b1059a65dfa/protobuf-java-2.5.0.jar!/" />
-      </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/2.5.0/171889df161dcd7d2947cd7885e2616f4f3ebe14/protobuf-java-2.5.0-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/2.5.0/7a27a7fc815e481b367ead5df19b4a71ace4a419/protobuf-java-2.5.0-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Gradle: com.google.protobuf:protobuf-java:3.21.12" type="java-imported" external-system-id="GRADLE">
@@ -704,6 +773,14 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: io.github.classgraph:classgraph:4.8.173" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="io.github.classgraph" artifactId="classgraph" version="4.8.173" baseVersion="4.8.173" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.github.classgraph/classgraph/4.8.173/236e1b4360bf078142902c6c3ca80a03bfa95d5d/classgraph-4.8.173.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: io.github.gradle-nexus:publish-plugin:2.0.0" type="java-imported" external-system-id="GRADLE">
       <properties groupId="io.github.gradle-nexus" artifactId="publish-plugin" version="2.0.0" baseVersion="2.0.0" />
       <CLASSES>
@@ -724,10 +801,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: io.micrometer:micrometer-commons:1.15.2" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="io.micrometer" artifactId="micrometer-commons" version="1.15.2" baseVersion="1.15.2" />
+    <library name="Gradle: io.micrometer:micrometer-commons:1.15.5" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="io.micrometer" artifactId="micrometer-commons" version="1.15.5" baseVersion="1.15.5" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.15.2/98e1ce7efa22b82e012d781db74ca54e5fbc730a/micrometer-commons-1.15.2.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.15.5/c7136877f2d8aed7627ef850f25ad2e6e71271dc/micrometer-commons-1.15.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: io.micrometer:micrometer-core:1.15.5" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="io.micrometer" artifactId="micrometer-core" version="1.15.5" baseVersion="1.15.5" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-core/1.15.5/2f0be035b3eb4981c886cf489d2053f02382e40b/micrometer-core-1.15.5.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: io.micrometer:micrometer-jakarta9:1.15.5" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="io.micrometer" artifactId="micrometer-jakarta9" version="1.15.5" baseVersion="1.15.5" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-jakarta9/1.15.5/765a1b13dc36ea83d66adfec554bef1960e4327c/micrometer-jakarta9-1.15.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -740,10 +833,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: io.micrometer:micrometer-observation:1.15.2" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="io.micrometer" artifactId="micrometer-observation" version="1.15.2" baseVersion="1.15.2" />
+    <library name="Gradle: io.micrometer:micrometer-observation:1.15.5" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="io.micrometer" artifactId="micrometer-observation" version="1.15.5" baseVersion="1.15.5" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.15.2/43a0e4b9dad3f03d6dbcaa87b6e3714c4b97cd99/micrometer-observation-1.15.2.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.15.5/60956d6926392e0abef3d34dfcabdc4b013953c8/micrometer-observation-1.15.5.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -756,17 +849,13 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: jakarta.activation:jakarta.activation-api:2.1.3" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="jakarta.activation" artifactId="jakarta.activation-api" version="2.1.3" baseVersion="2.1.3" />
+    <library name="Gradle: jakarta.activation:jakarta.activation-api:2.1.4" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="jakarta.activation" artifactId="jakarta.activation-api" version="2.1.4" baseVersion="2.1.4" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.3/fa165bd70cda600368eee31555222776a46b881f/jakarta.activation-api-2.1.3.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.4/9e5c2a0d75dde71a0bedc4dbdbe47b78a5dc50f8/jakarta.activation-api-2.1.4.jar!/" />
       </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.3/48fb0c80b105a9a4c6d140c93f5fbe8df2ba4b9a/jakarta.activation-api-2.1.3-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.3/b65beccd47ff05cf3f46e810d9eebed8d63a3793/jakarta.activation-api-2.1.3-sources.jar!/" />
-      </SOURCES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Gradle: jakarta.annotation:jakarta.annotation-api:2.1.1" type="java-imported" external-system-id="GRADLE">
       <properties groupId="jakarta.annotation" artifactId="jakarta.annotation-api" version="2.1.1" baseVersion="2.1.1" />
@@ -824,17 +913,13 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: jakarta.xml.bind:jakarta.xml.bind-api:4.0.2" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="jakarta.xml.bind" artifactId="jakarta.xml.bind-api" version="4.0.2" baseVersion="4.0.2" />
+    <library name="Gradle: jakarta.xml.bind:jakarta.xml.bind-api:4.0.4" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="jakarta.xml.bind" artifactId="jakarta.xml.bind-api" version="4.0.4" baseVersion="4.0.4" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2/6cd5a999b834b63238005b7144136379dc36cad2/jakarta.xml.bind-api-4.0.2.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.4/d6d2327f3817d9a33a3b6b8f2e15a96bc2e7afdc/jakarta.xml.bind-api-4.0.4.jar!/" />
       </CLASSES>
-      <JAVADOC>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2/2885777a1607a9998b439d982342d73bef3a236b/jakarta.xml.bind-api-4.0.2-javadoc.jar!/" />
-      </JAVADOC>
-      <SOURCES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2/1e65720468e667565197d77e825ad883eb8aee1a/jakarta.xml.bind-api-4.0.2-sources.jar!/" />
-      </SOURCES>
+      <JAVADOC />
+      <SOURCES />
     </library>
     <library name="Gradle: jline:jline:2.14.6" external-system-id="GRADLE">
       <CLASSES>
@@ -1002,330 +1087,362 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.bootstrap:grails-bootstrap:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.bootstrap" artifactId="grails-bootstrap" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.bootstrap:grails-bootstrap:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.bootstrap" artifactId="grails-bootstrap" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.bootstrap/grails-bootstrap/7.0.0-SNAPSHOT/af720be099922580e5c5b0cfd67532499adc066/grails-bootstrap-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.bootstrap/grails-bootstrap/7.0.2/9ac5e3238cc0bb4e4b5911695889f6015eb3c20c/grails-bootstrap-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.codecs:grails-codecs-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.codecs" artifactId="grails-codecs-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.codecs:grails-codecs-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.codecs" artifactId="grails-codecs-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.codecs/grails-codecs-core/7.0.0-SNAPSHOT/bb7932804213d6eb934879dd8433242854d97e2a/grails-codecs-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.codecs/grails-codecs-core/7.0.2/c522aca1da24a22ddb9d8f7ed1825197205438f5/grails-codecs-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.common:grails-common:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.common" artifactId="grails-common" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.common:grails-common:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.common" artifactId="grails-common" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.common/grails-common/7.0.0-SNAPSHOT/644bbd53bbc5f8041b424076f4f1da0d5444dd66/grails-common-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.common/grails-common/7.0.2/67bbbbaae0d237ec4e85824d54f0a59c2ea6ce1f/grails-common-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.data:grails-datamapping-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.data:grails-datamapping-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-core/7.0.0-SNAPSHOT/a765a9f45aedb23cb14648113e4a0e3f8701886b/grails-datamapping-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-core/7.0.2/d67d299645d82108f34d6c7ca9617b54a49f4dd2/grails-datamapping-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.data:grails-datamapping-support:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-support" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.data:grails-datamapping-support:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-support" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-support/7.0.0-SNAPSHOT/e070ce6afac9c038c4558adebb08b88eb5e84692/grails-datamapping-support-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-support/7.0.2/573c315fed20d16ceeb10c731da09502214b12ee/grails-datamapping-support-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.data:grails-datamapping-validation:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-validation" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.data:grails-datamapping-validation:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.data" artifactId="grails-datamapping-validation" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-validation/7.0.0-SNAPSHOT/db5a7945df2b97f0845f9ddf79406cf95b746de6/grails-datamapping-validation-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datamapping-validation/7.0.2/abfb8c3062138a7cf348225f2bbbcf1ea980730b/grails-datamapping-validation-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.data:grails-datastore-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.data" artifactId="grails-datastore-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.data:grails-datastore-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.data" artifactId="grails-datastore-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datastore-core/7.0.0-SNAPSHOT/4bf4743720d4a2528626f19afeb4bbc5c4032666/grails-datastore-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.data/grails-datastore-core/7.0.2/6fd3f1f2117ff61edef1f1522093677b42d02d60/grails-datastore-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.databinding:grails-databinding-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.databinding" artifactId="grails-databinding-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.databinding:grails-databinding-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.databinding" artifactId="grails-databinding-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.databinding/grails-databinding-core/7.0.0-SNAPSHOT/b9ed454df610dbb218b243a3c7fdcb7e2ed5af4c/grails-databinding-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.databinding/grails-databinding-core/7.0.2/c6172bd5b680daac408302f1c99346264af72e60/grails-databinding-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.gradle:grails-gradle-model:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.gradle" artifactId="grails-gradle-model" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.gradle:grails-gradle-common:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.gradle" artifactId="grails-gradle-common" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.gradle/grails-gradle-model/7.0.0-SNAPSHOT/2ab8cd5aef287a4cc447ba5a08a23393d9b8d5f2/grails-gradle-model-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.gradle/grails-gradle-common/7.0.2/4c8444f28df6e06565236126c649184a3e23883a/grails-gradle-common-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.testing:grails-test-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.testing" artifactId="grails-test-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.gradle:grails-gradle-model:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.gradle" artifactId="grails-gradle-model" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.testing/grails-test-core/7.0.0-SNAPSHOT/85dde5541ee389bc805e91fb0c27033ef2457ba6/grails-test-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.gradle/grails-gradle-model/7.0.2/ef61c6401a66a4fbb7f5ee932649348b759b271a/grails-gradle-model-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.testing:grails-testing-support-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.testing" artifactId="grails-testing-support-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.gradle:grails-publish:0.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.gradle" artifactId="grails-publish" version="0.0.2" baseVersion="0.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.testing/grails-testing-support-core/7.0.0-SNAPSHOT/24033d7f63b9d8e708cf2483bb0df7afae9794cd/grails-testing-support-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.gradle/grails-publish/0.0.2/b340bf3afd5e2f312330f4a76aa1c1cb511b02bb/grails-publish-0.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-gsp-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-gsp-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.i18n:grails-i18n:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.i18n" artifactId="grails-i18n" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-gsp-core/7.0.0-SNAPSHOT/1d50fb46d05b9c17929083467c892cef34a74831/grails-gsp-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.i18n/grails-i18n/7.0.2/783b4de86eb834b80df36d34ce211bdd759da1b3/grails-i18n-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-taglib:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-taglib" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.testing:grails-test-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.testing" artifactId="grails-test-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-taglib/7.0.0-SNAPSHOT/e77d765aa2e72c5a472edc9aa4f9fc9398514b0d/grails-taglib-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.testing/grails-test-core/7.0.2/d93c44a2b3a79843ce17c1b66f55d2405733fc57/grails-test-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-web-gsp-taglib:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-web-gsp-taglib" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.testing:grails-testing-support-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.testing" artifactId="grails-testing-support-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-gsp-taglib/7.0.0-SNAPSHOT/16b919269581fe1cf6ef8688fae9207b627b32b/grails-web-gsp-taglib-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.testing/grails-testing-support-core/7.0.2/abe022dd1cd43e53096db26a6eafcf89660d7333/grails-testing-support-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-web-gsp:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-web-gsp" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-gsp-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-gsp-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-gsp/7.0.0-SNAPSHOT/8cdb6bfb6cf6100fc9826bf61a26331b348c092c/grails-web-gsp-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-gsp-core/7.0.2/a0a597b6c2ddce5187373cd370b50b5d427d10a4/grails-gsp-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-web-jsp:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-web-jsp" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-taglib:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-taglib" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-jsp/7.0.0-SNAPSHOT/1d3e13bd3b5d14b8a499a30b18f2bc9663761b38/grails-web-jsp-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-taglib/7.0.2/7933196e34cfcd9d348cd22bf2f5f7cfc94aec5e/grails-taglib-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.views:grails-web-taglib:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.views" artifactId="grails-web-taglib" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-web-gsp-taglib:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-web-gsp-taglib" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-taglib/7.0.0-SNAPSHOT/91b6332f2ed1fb55034b874dc01486d981139ad/grails-web-taglib-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-gsp-taglib/7.0.2/4f0017cfb578bb60715961c32c4ea9dd56b4a0d4/grails-web-gsp-taglib-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-encoder:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-encoder" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-web-gsp:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-web-gsp" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-encoder/7.0.0-SNAPSHOT/a3c656ef382025d0485b89fc3e134dd30b4b848e/grails-encoder-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-gsp/7.0.2/a8b03499fa1eea0bd1ae7d6abe14b76c5fcf67d2/grails-web-gsp-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-web-common:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-web-common" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-web-jsp:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-web-jsp" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-common/7.0.0-SNAPSHOT/b2dfa5ddc8a6ba931cb16221bc31c9d7ce6474d4/grails-web-common-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-jsp/7.0.2/7bfcacad41764ebce9f31e16ceabb2544d27eaf7/grails-web-jsp-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-web-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-web-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.views:grails-web-taglib:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.views" artifactId="grails-web-taglib" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-core/7.0.0-SNAPSHOT/de5be9efac22723ccd40d775525f1ca8b87cc15/grails-web-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.views/grails-web-taglib/7.0.2/76db20745709edcb455cbb8454cb98fff732f19d/grails-web-taglib-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-web-databinding:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-web-databinding" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-encoder:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-encoder" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-databinding/7.0.0-SNAPSHOT/d72fa93b8a96dae407aabeb95e1bee65ce36c44a/grails-web-databinding-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-encoder/7.0.2/e1f50426c9a31e895cea4e75afa56f574b086ce7/grails-encoder-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-web-mvc:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-web-mvc" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-web-common:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-web-common" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-mvc/7.0.0-SNAPSHOT/7ba9b7cf6bbb6784b36ada818cff462400868e3f/grails-web-mvc-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-common/7.0.2/9333a6741c760356d72624fbd6a8a16c5ab7d29d/grails-web-common-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails.web:grails-web-url-mappings:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails.web" artifactId="grails-web-url-mappings" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-web-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-web-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-url-mappings/7.0.0-SNAPSHOT/61a5a86ce8132b77f20a86585ad9059b55932aa4/grails-web-url-mappings-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-core/7.0.2/e461592d5232511179e4a38b42371066bcf88e25/grails-web-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-codecs:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-codecs" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-web-databinding:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-web-databinding" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-codecs/7.0.0-SNAPSHOT/ce7cfc72203b079719e4cb0200ca965578e76e53/grails-codecs-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-databinding/7.0.2/532a8dc6f06da52462216e6364e43d2cca98e7f1/grails-web-databinding-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-controllers:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-controllers" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-web-mvc:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-web-mvc" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-controllers/7.0.0-SNAPSHOT/b141f2f93bdfa18604e995b6453c7de7fee6378e/grails-controllers-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-mvc/7.0.2/e78f1d015793e86b37a45d5e64412301f19ec0a4/grails-web-mvc-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-converters:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-converters" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails.web:grails-web-url-mappings:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails.web" artifactId="grails-web-url-mappings" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-converters/7.0.0-SNAPSHOT/f421d9e968da2be6b3a6c8ee6de5eafdcc93a8a8/grails-converters-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails.web/grails-web-url-mappings/7.0.2/511d1d172a1a572f106844d1e9acf83598764905/grails-web-url-mappings-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-core:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-core" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-codecs:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-codecs" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-core/7.0.0-SNAPSHOT/6d8792c44c011e2c4bc064efc81d8e1bf2a157e2/grails-core-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-codecs/7.0.2/c3fde5900e5915ba81fc38588f4a3c7bad2982c3/grails-codecs-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-databinding:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-databinding" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-controllers:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-controllers" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-databinding/7.0.0-SNAPSHOT/27e274862d8b74f4e25ba81d204d7c052b24bdf/grails-databinding-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-controllers/7.0.2/4a4b7e13117ad57de78bdeab5d632edfb56d11e5/grails-controllers-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-datasource:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-datasource" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-converters:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-converters" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-datasource/7.0.0-SNAPSHOT/d83dfd4a318f2f9f870e799f8d64d92b35c54e1f/grails-datasource-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-converters/7.0.2/75a9a13aa13826e8f8420015df9695aee2233b90/grails-converters-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-domain-class:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-domain-class" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-core:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-core" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-domain-class/7.0.0-SNAPSHOT/6da763185d6566277fd01352afdfa89f8d317ac/grails-domain-class-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-core/7.0.2/bdbd03e1bcfcae3a0dc88af6d908247e8d0ec045/grails-core-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-gradle-plugins:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-gradle-plugins" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-databinding:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-databinding" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gradle-plugins/7.0.0-SNAPSHOT/23d090be858dfebd8abfc9412a355a82a383fcaf/grails-gradle-plugins-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-databinding/7.0.2/5e9fdc0311042806fb015759b228b88e9aa824e/grails-databinding-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-gradle-tasks:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-gradle-tasks" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-datasource:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-datasource" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gradle-tasks/7.0.0-SNAPSHOT/5f78620d4d577dd7abf419190147c7ac183adc23/grails-gradle-tasks-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-datasource/7.0.2/f4143d574ec80f19cd2fe44d57bf988276af35d3/grails-datasource-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-gsp:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-gsp" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-domain-class:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-domain-class" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gsp/7.0.0-SNAPSHOT/ee6fe49e08930474ea8f0c98501a0a8b6cd04f95/grails-gsp-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-domain-class/7.0.2/81de8e9d9bb8045fd361d096be59b3bcda67803c/grails-domain-class-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-i18n:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-i18n" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-gradle-plugins:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-gradle-plugins" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-i18n/7.0.0-SNAPSHOT/18c0ac6ba6264e880182ec4073008fd4ad5ef984/grails-i18n-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gradle-plugins/7.0.2/9ee3ffe16f55bf76001c238ef81b1ede32b77c84/grails-gradle-plugins-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-interceptors:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-interceptors" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-gradle-tasks:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-gradle-tasks" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-interceptors/7.0.0-SNAPSHOT/c3554d1d4537bfb5cba28277817fa7d2696623d/grails-interceptors-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gradle-tasks/7.0.2/fcbc500c353cefcb84d51daf38f5807bc86c14aa/grails-gradle-tasks-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-mimetypes:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-mimetypes" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-gsp:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-gsp" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-mimetypes/7.0.0-SNAPSHOT/5ec135d399588125799e45f42cc9fb2bc7301429/grails-mimetypes-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-gsp/7.0.2/172c2909aadf2dfa308dadf470233ea0f2e56487/grails-gsp-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-rest-transforms:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-rest-transforms" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-interceptors:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-interceptors" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-rest-transforms/7.0.0-SNAPSHOT/7feda68fcabcd82d75f9382b0008fb3c18cc08f7/grails-rest-transforms-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-interceptors/7.0.2/925e14afbb15dde55e40f1dacedaa3b173da6c64/grails-interceptors-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-spring:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-spring" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-mimetypes:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-mimetypes" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-spring/7.0.0-SNAPSHOT/48926833c599c531ffcd1542bc07280baa82b6e2/grails-spring-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-mimetypes/7.0.2/b209eed4025fe0625885ef13a7e3ff413ca397c4/grails-mimetypes-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-testing-support-web:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-testing-support-web" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-rest-transforms:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-rest-transforms" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-testing-support-web/7.0.0-SNAPSHOT/f24c0a392c1598f882d100efdbd16457d7747e16/grails-testing-support-web-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-rest-transforms/7.0.2/5a61b533962d20d034d1de29bbced654ab2488df/grails-rest-transforms-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-url-mappings:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-url-mappings" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-services:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-services" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-url-mappings/7.0.0-SNAPSHOT/31ea0073aed78ac10bbc8c73be9891b71b5614e4/grails-url-mappings-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-services/7.0.2/576df9033b8b0f422ddc547d695d96aeb835842e/grails-services-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.grails:grails-validation:7.0.0-SNAPSHOT" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.grails" artifactId="grails-validation" version="7.0.0-SNAPSHOT" baseVersion="7.0.0-SNAPSHOT" />
+    <library name="Gradle: org.apache.grails:grails-spring:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-spring" version="7.0.2" baseVersion="7.0.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-validation/7.0.0-SNAPSHOT/65c4fe85dc4731cde7a508af03afc8b4a6f4d739/grails-validation-7.0.0-SNAPSHOT.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-spring/7.0.2/6279c481e0cae3be3fb2eafebacc8f920015f11/grails-spring-7.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.grails:grails-testing-support-web:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-testing-support-web" version="7.0.2" baseVersion="7.0.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-testing-support-web/7.0.2/5307e35496c094fb372d85bcc78d4b266e85104c/grails-testing-support-web-7.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.grails:grails-url-mappings:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-url-mappings" version="7.0.2" baseVersion="7.0.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-url-mappings/7.0.2/a355900e7bd1554e223bc38791a8b58f8c826dfc/grails-url-mappings-7.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.grails:grails-validation:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-validation" version="7.0.2" baseVersion="7.0.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-validation/7.0.2/c9aa7238476d2c92104d7d1d6a116725ac93234f/grails-validation-7.0.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.grails:grails-web-boot:7.0.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.grails" artifactId="grails-web-boot" version="7.0.2" baseVersion="7.0.2" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.grails/grails-web-boot/7.0.2/31bf3a1c753a402a2db8a45d11413a68c30205f6/grails-web-boot-7.0.2.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1338,10 +1455,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: org.apache.groovy:groovy-json:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-json" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-json/4.0.29/936a897193e3e53af6663b1874182aa6f5db9a88/groovy-json-4.0.29.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.apache.groovy:groovy-sql:4.0.25" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.apache.groovy" artifactId="groovy-sql" version="4.0.25" baseVersion="4.0.25" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-sql/4.0.25/8d9cd9e50795141d093a521d36fa9fc24c65e6a9/groovy-sql-4.0.25.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.groovy:groovy-sql:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-sql" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-sql/4.0.29/5f47d019f698d3e21ffa61f9fe6e2f3160dce1cf/groovy-sql-4.0.29.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1354,10 +1487,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: org.apache.groovy:groovy-templates:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-templates" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-templates/4.0.29/ef03504e1c5cfb34e0af946f92a6426e4f75cd93/groovy-templates-4.0.29.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.apache.groovy:groovy-test-junit5:4.0.25" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.apache.groovy" artifactId="groovy-test-junit5" version="4.0.25" baseVersion="4.0.25" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-test-junit5/4.0.25/1343aaa862b435121cf1bc9d4265e31ccf93b782/groovy-test-junit5-4.0.25.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.groovy:groovy-test-junit5:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-test-junit5" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-test-junit5/4.0.29/fe16edb620c5e402608c853e225c1c947efa42ba/groovy-test-junit5-4.0.29.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1370,10 +1519,26 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: org.apache.groovy:groovy-test:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-test" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-test/4.0.29/f381e29a04531c7582c90dae98ad640739caccb4/groovy-test-4.0.29.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.apache.groovy:groovy-xml:4.0.25" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.apache.groovy" artifactId="groovy-xml" version="4.0.25" baseVersion="4.0.25" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-xml/4.0.25/fd783c8934323120142124e06f9e5d77b7fe33dd/groovy-xml-4.0.25.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.groovy:groovy-xml:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy-xml" version="4.0.29" baseVersion="4.0.29" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy-xml/4.0.29/f6ccda36f8fdc3959a181b1a14d9dc2785dc230c/groovy-xml-4.0.29.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1386,34 +1551,34 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.groovy:groovy:4.0.28" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.groovy" artifactId="groovy" version="4.0.28" baseVersion="4.0.28" />
+    <library name="Gradle: org.apache.groovy:groovy:4.0.29" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.groovy" artifactId="groovy" version="4.0.29" baseVersion="4.0.29" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy/4.0.28/c85a95d43af452fdfd9bb47a37af830e037299c2/groovy-4.0.28.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.groovy/groovy/4.0.29/a5f23a7eed8c4140afd6f673a773a206870719c6/groovy-4.0.29.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.httpcomponents.client5:httpclient5:5.5" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.httpcomponents.client5" artifactId="httpclient5" version="5.5" baseVersion="5.5" />
+    <library name="Gradle: org.apache.httpcomponents.client5:httpclient5:5.5.1" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.httpcomponents.client5" artifactId="httpclient5" version="5.5.1" baseVersion="5.5.1" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.client5/httpclient5/5.5/4b3d253351cf74eb0ae8eb21ca5a5fb9815ef861/httpclient5-5.5.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.client5/httpclient5/5.5.1/89ab9084b94afb7893a54f4d09b07c25246af5a7/httpclient5-5.5.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.httpcomponents.core5:httpcore5-h2:5.3.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.httpcomponents.core5" artifactId="httpcore5-h2" version="5.3.4" baseVersion="5.3.4" />
+    <library name="Gradle: org.apache.httpcomponents.core5:httpcore5-h2:5.3.6" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.httpcomponents.core5" artifactId="httpcore5-h2" version="5.3.6" baseVersion="5.3.6" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.core5/httpcore5-h2/5.3.4/3742a9a9ba3a5a0d45be230093b52a1302a561e2/httpcore5-h2-5.3.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.core5/httpcore5-h2/5.3.6/5b4b321d0001aac957f5db293e3cbc4099fc15b8/httpcore5-h2-5.3.6.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.apache.httpcomponents.core5:httpcore5:5.3.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.apache.httpcomponents.core5" artifactId="httpcore5" version="5.3.4" baseVersion="5.3.4" />
+    <library name="Gradle: org.apache.httpcomponents.core5:httpcore5:5.3.6" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.httpcomponents.core5" artifactId="httpcore5" version="5.3.6" baseVersion="5.3.6" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.core5/httpcore5/5.3.4/ea47f0fe6e00ffb07cec3a0cb1bb801b1a9cc353/httpcore5-5.3.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents.core5/httpcore5/5.3.6/2c7f0d11747f9485a02c9f622c0f0477d7ce8677/httpcore5-5.3.6.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1446,10 +1611,50 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/229e4c0eae80465381ae02adf61bca5558360777/httpcore-4.4.16-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: org.apache.logging.log4j:log4j-api:2.24.3" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.logging.log4j" artifactId="log4j-api" version="2.24.3" baseVersion="2.24.3" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.24.3/b02c125db8b6d295adf72ae6e71af5d83bce2370/log4j-api-2.24.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.logging.log4j:log4j-to-slf4j:2.24.3" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.logging.log4j" artifactId="log4j-to-slf4j" version="2.24.3" baseVersion="2.24.3" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.24.3/da1143e2a2531ee1c2d90baa98eb50a28a39d5a7/log4j-to-slf4j-2.24.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.apache.maven:maven-model:3.6.3" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.apache.maven" artifactId="maven-model" version="3.6.3" baseVersion="3.6.3" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.maven/maven-model/3.6.3/61c7848dce2fbf7f7ab0fdc8e8a7cc9da5dd7827/maven-model-3.6.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:10.1.48" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.tomcat.embed" artifactId="tomcat-embed-core" version="10.1.48" baseVersion="10.1.48" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/10.1.48/d4c095a353c839a23a401ce9afbcb52d5be97b69/tomcat-embed-core-10.1.48.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:10.1.48" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.tomcat.embed" artifactId="tomcat-embed-el" version="10.1.48" baseVersion="10.1.48" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-el/10.1.48/220294d3a81451f793c9c54af16a9f04f8ec5824/tomcat-embed-el-10.1.48.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.apache.tomcat.embed:tomcat-embed-websocket:10.1.48" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.apache.tomcat.embed" artifactId="tomcat-embed-websocket" version="10.1.48" baseVersion="10.1.48" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/10.1.48/7fd0d1c6eae6c43106763e458640f4f8868a4ec3/tomcat-embed-websocket-10.1.48.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1708,10 +1913,18 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.hibernate.validator:hibernate-validator:8.0.2.Final" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.hibernate.validator" artifactId="hibernate-validator" version="8.0.2.Final" baseVersion="8.0.2.Final" />
+    <library name="Gradle: org.hdrhistogram:HdrHistogram:2.2.2" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.hdrhistogram" artifactId="HdrHistogram" version="2.2.2" baseVersion="2.2.2" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hibernate.validator/hibernate-validator/8.0.2.Final/220e64815dd87535525331de20570017f899eb13/hibernate-validator-8.0.2.Final.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hdrhistogram/HdrHistogram/2.2.2/7959933ebcc0f05b2eaa5af0a0c8689fa257b15c/HdrHistogram-2.2.2.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.hibernate.validator:hibernate-validator:8.0.3.Final" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.hibernate.validator" artifactId="hibernate-validator" version="8.0.3.Final" baseVersion="8.0.3.Final" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hibernate.validator/hibernate-validator/8.0.3.Final/4425f554297a1c5ba03a3f30e559a9fd91048cf8/hibernate-validator-8.0.3.Final.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1836,6 +2049,18 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="Gradle: org.latencyutils:LatencyUtils:2.0.3" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.latencyutils" artifactId="LatencyUtils" version="2.0.3" baseVersion="2.0.3" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/769c0b82cb2421c8256300e907298a9410a2a3d3/LatencyUtils-2.0.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/828e7ddb471bdae8b0c4d7043caca55e025d5359/LatencyUtils-2.0.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/fbc38259e2077a428984637d811dac542a6a913e/LatencyUtils-2.0.3-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Gradle: org.mozilla:rhino:1.8.0" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.mozilla" artifactId="rhino" version="1.8.0" baseVersion="1.8.0" />
       <CLASSES>
@@ -1885,6 +2110,14 @@
       <properties groupId="org.slf4j" artifactId="jcl-over-slf4j" version="2.0.17" baseVersion="2.0.17" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/jcl-over-slf4j/2.0.17/76ea503eb688f06556a9ba69995d7eab63e34531/jcl-over-slf4j-2.0.17.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.slf4j:jul-to-slf4j:2.0.17" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.slf4j" artifactId="jul-to-slf4j" version="2.0.17" baseVersion="2.0.17" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.17/524cb6ccc2b68a57604750e1ab8b13b5a786a6aa/jul-to-slf4j-2.0.17.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1946,42 +2179,90 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot-autoconfigure:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot-autoconfigure" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot-actuator-autoconfigure:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-actuator-autoconfigure" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/3.5.4/3039bcc94e4cb32faf9306df982e5b8cd1d95eca/spring-boot-autoconfigure-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-actuator-autoconfigure/3.5.7/75662a27d048570e1bbe96649ca6e2896a39a4c7/spring-boot-actuator-autoconfigure-3.5.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot-buildpack-platform:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot-buildpack-platform" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot-actuator:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-actuator" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-buildpack-platform/3.5.4/a1c668eac2c2059940ec5068449c948792f1e182/spring-boot-buildpack-platform-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-actuator/3.5.7/21447fa659becb204b2572ac229f76a056076d92/spring-boot-actuator-3.5.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot-gradle-plugin:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot-gradle-plugin" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot-autoconfigure:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-autoconfigure" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/3.5.4/a9a48b557bded5fa4569cb9ee57e83e24e19e80/spring-boot-gradle-plugin-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/3.5.7/8a1918c778e52c21a102363536320d71289650b4/spring-boot-autoconfigure-3.5.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot-loader-tools:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot-loader-tools" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot-buildpack-platform:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-buildpack-platform" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/3.5.4/532689dd68f88d8a8c7530b3ee4bd7dee91e2144/spring-boot-loader-tools-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-buildpack-platform/3.5.7/75798bdc9c8f3d22a46ddc753512a86394292e06/spring-boot-buildpack-platform-3.5.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot-test:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot-test" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot-gradle-plugin:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-gradle-plugin" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test/3.5.4/71c88155f1030c7b4ab669155146efae29702e51/spring-boot-test-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/3.5.7/916ae580a0320e927c557afbf17054206a998898/spring-boot-gradle-plugin-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-loader-tools:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-loader-tools" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/3.5.7/35bd7e0b1af41b5a53917f98841b9dc3beee0b08/spring-boot-loader-tools-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-starter-actuator:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-actuator" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-actuator/3.5.7/927d2d52c0573dcd92af13d5063e2e3e81c9ea4c/spring-boot-starter-actuator-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-starter-logging:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-logging" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/3.5.7/3d2f969f8fcf7ca6017425144fe88c4f49dd880b/spring-boot-starter-logging-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-starter-tomcat" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/3.5.7/14dfae9a2c9f61fc382845959bc9f7b236840994/spring-boot-starter-tomcat-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-starter:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-starter" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter/3.5.7/ea4a8ad9f4df7d94250d643aa278c3353cd88c5/spring-boot-starter-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework.boot:spring-boot-test:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot-test" version="3.5.7" baseVersion="3.5.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-test/3.5.7/79b6f5f1c0507c403b2768c5c757ce14612b9cf6/spring-boot-test-3.5.7.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -1994,10 +2275,18 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework.boot:spring-boot:3.5.4" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework.boot" artifactId="spring-boot" version="3.5.4" baseVersion="3.5.4" />
+    <library name="Gradle: org.springframework.boot:spring-boot:3.5.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework.boot" artifactId="spring-boot" version="3.5.7" baseVersion="3.5.7" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot/3.5.4/a6fedec8de3c937fc7ea9dd47340bdee29c94af/spring-boot-3.5.4.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot/3.5.7/6c9db579b4669ec4ad6444ca84775d193c513ae2/spring-boot-3.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.springframework:spring-aop:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-aop" version="6.2.12" baseVersion="6.2.12" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aop/6.2.12/12d9001a3e38baf348c4c076efa3e4b7515f9048/spring-aop-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2010,10 +2299,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-aop:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-aop" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-beans:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-beans" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aop/6.2.9/9a4c4a61dd560bf8749aea283ce67f2e255bb286/spring-aop-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/6.2.12/3f344e97550207fac50a5b3376cc9e59ecb02df/spring-beans-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2026,18 +2315,18 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-beans:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-beans" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-context-support:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-context-support" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/6.2.9/e3b86115a856789c654eafe5e625f95679f8035f/spring-beans-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context-support/6.2.12/d96cde7b24fe5ee1c7331dae9d995144c771bb59/spring-context-support-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-context-support:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-context-support" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-context:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-context" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context-support/6.2.9/55a8df97f6544496cf08a3bcc6da3e5fd26da679/spring-context-support-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.2.12/fdeff8060a111920fd38d5a23d48bc7b772d44c4/spring-context-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2050,10 +2339,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-context:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-context" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-core:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-core" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.2.9/6a138a66f3ba69d2234e731d6fb10061d28977e/spring-context-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/6.2.12/298bd954610442d54b276f911d3490372ab62117/spring-core-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2066,10 +2355,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-core:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-core" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-expression:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-expression" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/6.2.9/91f5fd4cc7f0bfd27d7b2a5f51b0193ec22c8712/spring-core-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-expression/6.2.12/aa5033d9e583aafc972b205618de13c5242c9cf5/spring-expression-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2082,10 +2371,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-expression:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-expression" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-jcl:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-jcl" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-expression/6.2.9/e931accc74e2b3b51d44423524a4a3a295254c4a/spring-expression-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/6.2.12/d127f5020441b3cfe197668d32a327391587ff59/spring-jcl-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2098,34 +2387,34 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-jcl:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-jcl" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-jdbc:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-jdbc" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/6.2.9/8959aa4b32d307c8cbfbd99220e41ddb1d070470/spring-jcl-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/6.2.12/9dcb388d984891e32ff6af96abdb582a27a7c41c/spring-jdbc-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-jdbc:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-jdbc" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-test:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-test" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/6.2.9/a5e8d3e8be846a02b398d023e3658e5278972e51/spring-jdbc-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/6.2.12/fbe6b34d1e2169b8c90957e5653a8ea74f9d263c/spring-test-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-test:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-test" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-tx:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-tx" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-test/6.2.9/a57cde565c9be9f57f0e0c2f216bf16b6cb0bb1a/spring-test-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/6.2.12/b1c1ee583c4f1dd6bef6887622cdc56fbb2a3090/spring-tx-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-tx:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-tx" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-web:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-web" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/6.2.9/c2acdd50e5d1aefc07136f1e5551c9a54310bb06/spring-tx-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/6.2.12/58bdd67728631b561a8b9cf4249a0d990bb3ef88/spring-web-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2138,18 +2427,10 @@
       <JAVADOC />
       <SOURCES />
     </library>
-    <library name="Gradle: org.springframework:spring-web:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-web" version="6.2.9" baseVersion="6.2.9" />
+    <library name="Gradle: org.springframework:spring-webmvc:6.2.12" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.springframework" artifactId="spring-webmvc" version="6.2.12" baseVersion="6.2.12" />
       <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/6.2.9/ff0c61246f4abadc5a4ac2c1b2321d374a476254/spring-web-6.2.9.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="Gradle: org.springframework:spring-webmvc:6.2.9" type="java-imported" external-system-id="GRADLE">
-      <properties groupId="org.springframework" artifactId="spring-webmvc" version="6.2.9" baseVersion="6.2.9" />
-      <CLASSES>
-        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/6.2.9/622208b4388c0f1f6cdadd5f477facf4b30e13d3/spring-webmvc-6.2.9.jar!/" />
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/6.2.12/550aea6677c8db7e7ad07b47068b57de4e1a13e9/spring-webmvc-6.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -2166,10 +2447,42 @@
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.tomlj/tomlj/1.0.0/a7e1d14553997347b290e65e195548e4698bb74/tomlj-1.0.0-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Gradle: org.webjars.npm:bootstrap:5.3.0" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.webjars.npm" artifactId="bootstrap" version="5.3.0" baseVersion="5.3.0" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/bootstrap/5.3.0/68a6c001e0cd76833c7c6744fb8c9be761aed004/bootstrap-5.3.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.webjars.npm:bootstrap:5.3.7" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.webjars.npm" artifactId="bootstrap" version="5.3.7" baseVersion="5.3.7" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/bootstrap/5.3.7/94443c250b3abec520835c06cac6e6b50b2a1e0a/bootstrap-5.3.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.webjars.npm:jquery:3.7.1" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.webjars.npm" artifactId="jquery" version="3.7.1" baseVersion="3.7.1" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars.npm/jquery/3.7.1/abca7c4ab5c6ff5f533f5d7dbc646661c36c8b6b/jquery-3.7.1.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Gradle: org.webjars:bootstrap:5.3.3" type="java-imported" external-system-id="GRADLE">
       <properties groupId="org.webjars" artifactId="bootstrap" version="5.3.3" baseVersion="5.3.3" />
       <CLASSES>
         <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/bootstrap/5.3.3/3cba7ec0bf83f3bb02f15ba6ccb5177c714791f7/bootstrap-5.3.3.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: org.webjars:webjars-locator-core:0.59" type="java-imported" external-system-id="GRADLE">
+      <properties groupId="org.webjars" artifactId="webjars-locator-core" version="0.59" baseVersion="0.59" />
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/webjars-locator-core/0.59/a25e04cb0437d88eb177af1dface14edcd0cd767/webjars-locator-core-0.59.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

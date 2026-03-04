@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 
 class GroocssAssetFile extends AbstractAssetFile {
 
-    static final String contentType = 'text/css'
+    static final List<String> contentType = ['text/css']
     static extensions = ['groocss', 'css.groovy']
     static final String compiledExtension = 'css'
     static processors = [CssProcessor]

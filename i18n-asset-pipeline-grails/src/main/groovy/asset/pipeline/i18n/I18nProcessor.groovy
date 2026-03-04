@@ -135,9 +135,9 @@ class I18nProcessor extends AbstractProcessor {
         
         Properties props
         if (assetFile.encoding != null) {
-            props = loadMessages(options, assetFile.encoding)
+            props = loadMessages(options as List<String>, assetFile.encoding)
         } else {
-            props = loadMessages(options)
+            props = loadMessages(options as List<String>)
         }
 
         // At this point, inputText has been pre-processed (I18nPreprocessor).
@@ -227,7 +227,7 @@ class I18nProcessor extends AbstractProcessor {
             Properties props = new Properties()
             try{
                 File file = locateFile(option)
-                if(!file.exists()) {
+                if(!file?.exists()) {
                      Resource res = locateResource(option)
                     if(!res?.exists()) {
                         log.warn "i18N: Could not load file ${option}"    
@@ -245,7 +245,8 @@ class I18nProcessor extends AbstractProcessor {
                 
             }
             catch(Exception e){
-                log.warn "i18N: Could not load file ${option}"
+
+                log.warn("i18N: Could not load file ${option}",e)
             }
         }
         messages

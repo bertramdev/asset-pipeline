@@ -6,6 +6,8 @@ The asset-pipeline provides first class static and 'not so static' asset managem
 This guide documents configuration and usage examples of the asset-pipeline plugin.
 
 === Release History
+* January 2026
+** Documentation migrated to GitHub Pages at https://wondrify.github.io/asset-pipeline/[https://wondrify.github.io/asset-pipeline/]. The old asset-pipeline.com site is no longer maintained.
 * Feb 18, 2024
 ** 5.0.7 - Improvements to graal injection on various gradle build task formats
 * Feb 6, 2024

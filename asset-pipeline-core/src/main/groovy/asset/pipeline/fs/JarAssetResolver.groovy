@@ -16,13 +16,16 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
 import java.util.jar.JarEntry
-import java.util.regex.Pattern
 import java.util.jar.JarFile
+import java.util.regex.Pattern
 import java.util.zip.ZipEntry
 import java.util.zip.ZipException
 
@@ -64,12 +67,13 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
 		}
 		def specs
 
+		if(!extension) {
+			extension = AssetHelper.extensionFromURI(relativePath)
+		}
+
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		} else {
-			if(!extension) {
-				extension = AssetHelper.extensionFromURI(relativePath)
-			}
 			specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
 		}
 
@@ -121,7 +125,29 @@ class JarAssetResolver extends AbstractAssetResolver<ZipEntry> {
     }
 
     @CompileStatic
-    protected ZipEntry getRelativeFile(String relativePath, String name) {
+    public ZipEntry getRelativeFile(String relativePath, String name) {
+			if(AssetHelper.isWildcardPath(name)) { //we have some wildcard patterns to resolve.
+				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
+				int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
+				if(wildCardIndex > -1) {
+					String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(DIRECTIVE_FILE_SEPARATOR)
+					String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(DIRECTIVE_FILE_SEPARATOR)
+					List<ZipEntry> possibleDirs = []
+					for(entry in baseJar.entries()) {
+						if(entry.name.startsWith([relativePath, preWildcardPath].join("/") + "/") && entry.isDirectory()) {
+							possibleDirs << entry
+						}
+					}
+					for(possibleDir in possibleDirs) {
+						String testPath = possibleDir.name + postWildcardPath
+						def testEntry = baseJar.getEntry(testPath)
+						if(testEntry && !testEntry.isDirectory()) {
+							return testEntry
+						}
+					}
+				}
+			}
+
 		return baseJar.getEntry([relativePath, name].join("/"))
 	}
 

@@ -1,12 +1,12 @@
 Coffee Asset-Pipeline
 ===========================
-[![Build Status](https://travis-ci.org/bertramdev/coffee-asset-pipeline.svg?branch=master)](https://travis-ci.org/bertramdev/coffee-asset-pipeline)
+[![Build Status](https://travis-ci.org/wondrify/coffee-asset-pipeline.svg?branch=master)](https://travis-ci.org/wondrify/coffee-asset-pipeline)
 
 Overview
 --------
 The Coffee Asset-Pipeline module provides coffeescript compilation support for the jvm based asset-pipeline. Simply add this file to your buildscript classpath or development environment and they are automatically processed.
 
-For more information on how to use asset-pipeline, visit [here](http://www.github.com/bertramdev/asset-pipeline).
+For more information on how to use asset-pipeline, visit [here](http://www.github.com/wondrify/asset-pipeline).
 
 Installation
 ------------

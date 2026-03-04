@@ -1,0 +1,1 @@
+console.log("This is a test mjs file in the classpath");

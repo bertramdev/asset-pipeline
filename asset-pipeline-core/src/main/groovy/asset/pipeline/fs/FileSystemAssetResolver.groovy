@@ -16,13 +16,15 @@
 
 package asset.pipeline.fs
 
-import asset.pipeline.*
+
+import asset.pipeline.AssetFile
+import asset.pipeline.AssetHelper
+import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
-import java.util.regex.Pattern
 import java.nio.file.LinkOption
-
+import java.util.regex.Pattern
 
 /**
  * Implementation of the {@link AssetResolver} interface for the file system
@@ -65,13 +67,15 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 			return null
 		}
 		relativePath = relativePath.replaceAll(QUOTED_FILE_SEPARATOR,DIRECTIVE_FILE_SEPARATOR)
+
+		if(!extension) {
+			extension = AssetHelper.extensionFromURI(relativePath)
+		}
+
 		def specs
 		if(contentType) {
 			specs = AssetHelper.getPossibleFileSpecs(contentType)
 		} else {
-			if(!extension) {
-				extension = AssetHelper.extensionFromURI(relativePath)
-			}
 			specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
 		}
 
@@ -91,8 +95,32 @@ class FileSystemAssetResolver extends AbstractAssetResolver<File> {
 	}
 
     @Override
-    protected File getRelativeFile(String relativePath, String name) {
-        return new File(relativePath, name)
+    public File getRelativeFile(String relativePath, String name) {
+			if(AssetHelper.isWildcardPath(name)) { //we have some wildcard patterns to resolve.
+				String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
+				int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
+				if(wildCardIndex > -1) {
+					String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(File.separator)
+					String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(File.separator)
+					File preWildcardDir = new File(relativePath, preWildcardPath)
+					if(preWildcardDir.exists() && preWildcardDir.isDirectory()) {
+						File[] possibleDirs = preWildcardDir.listFiles()
+						for(possibleDir in possibleDirs) {
+							if(possibleDir.isDirectory()) {
+								if(AssetHelper.isWildcardPath(name)) {//still have to search down more
+									return getRelativeFile(relativePath, "${preWildcardPath}/${possibleDir.name}/${postWildcardPath}" )
+								} else {
+									File testFile = new File(possibleDir, postWildcardPath)
+									if(testFile.exists() && !testFile.isDirectory()) {
+										return testFile
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return new File(relativePath, name)
     }
 
     @Override

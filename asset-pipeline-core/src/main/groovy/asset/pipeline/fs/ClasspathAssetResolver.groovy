@@ -6,6 +6,11 @@ import asset.pipeline.GenericAssetFile
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 
+import java.nio.file.LinkOption
+import java.util.concurrent.ConcurrentHashMap
+import java.util.regex.Pattern
+import java.util.zip.ZipEntry
+
 /**
 * Implementation of the {@link AssetResolver} interface for resolving files on the classpath.
 * It is important to note that recursive scanning does not function unless an assets.list file is supplied
@@ -13,14 +18,16 @@ import groovy.util.logging.Slf4j
 * @author David Estes
 */
 @Slf4j
-public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
+public class ClasspathAssetResolver extends AbstractAssetResolver<Object> {
     static String NATIVE_FILE_SEPARATOR = File.separator
     static String DIRECTIVE_FILE_SEPARATOR = '/'
-
+		static String QUOTED_FILE_SEPARATOR = Pattern.quote("/")
     ClassLoader classLoader
     String prefixPath
     String assetListPath
     Collection<String> assetList = []
+
+	ConcurrentHashMap<String,AssetResolver> subResolvers = new ConcurrentHashMap<>()//new ConcurrentHashMap<String,AssetResolver>()
 
     ClasspathAssetResolver(String name, String basePath, String assetListPath=null, ClassLoader classLoader = Thread.currentThread().contextClassLoader) {
         super(name)
@@ -50,14 +57,15 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
         if(!normalizedPath) {
             return null
         }
-        def specs
 
+        if (!extension) {
+            extension = AssetHelper.extensionFromURI(relativePath)
+        }
+
+        def specs
         if (contentType) {
             specs = AssetHelper.getPossibleFileSpecs(contentType)
         } else {
-            if (!extension) {
-                extension = AssetHelper.extensionFromURI(relativePath)
-            }
             specs = AssetHelper.assetFileClasses().findAll { it.extensions.contains(extension) }
         }
 
@@ -66,32 +74,96 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
         return assetFile
     }
 
-    protected Closure<InputStream> createInputStreamClosure(URL file) {
-        if (file) {
-            return { -> new BufferedInputStream(file.openStream(), 512) }
-        }
-        return null
+    protected Closure<InputStream> createInputStreamClosure(Object file) {
+      if(file instanceof URL) {
+				URL url = file as URL
+				return { -> new BufferedInputStream(url.openStream(), 512) }
+			}  else if (file instanceof JarAssetEntry) {
+				JarAssetEntry jarAssetEntry = file as JarAssetEntry
+				return jarAssetEntry.resolver.createInputStreamClosure(jarAssetEntry.zipEntry)
+			} else if(file instanceof File) {
+				File f = file as File
+				return {-> f.newInputStream() }
+			}
+
+			return null
     }
 
-    String relativePathToResolver(URL file, String scanDirectoryPath) {
+    String relativePathToResolver(Object file, String scanDirectoryPath) {
+			if(file instanceof URL) {
+				URL url = file as URL
+				def filePath = url.path
+				if (filePath.contains(scanDirectoryPath)) {
+					def i = filePath.indexOf(scanDirectoryPath)
+					return filePath.substring(i + scanDirectoryPath.size() + 1)
+				} else {
+					throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
+				}
+			}  else if (file instanceof JarAssetEntry) {
+				JarAssetEntry jarAssetEntry = file as JarAssetEntry
+				ZipEntry zipEntry = jarAssetEntry.zipEntry
+				return jarAssetEntry.resolver.relativePathToResolver(zipEntry,scanDirectoryPath)
+			} else if(file instanceof File) {
+				File f = file as File
+				String filePath
+				try {
+					filePath = f.toPath().toRealPath(LinkOption.NOFOLLOW_LINKS).toString();
+				} catch(Exception ex2) {
+					filePath = f.canonicalPath
+				}
 
-        if (!file) {
-            return null
-        }
-        def filePath = file.path
-        if (filePath.contains(scanDirectoryPath)) {
-            def i = filePath.indexOf(scanDirectoryPath)
-            return filePath.substring(i + scanDirectoryPath.size() + 1)
-        } else {
-            throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath}")
-        }
+				if(filePath.startsWith(scanDirectoryPath)) {
+					return filePath.substring(scanDirectoryPath.size() + 1).replace(File.separator, DIRECTIVE_FILE_SEPARATOR)
+				} else {
+					throw new RuntimeException("File was not sourced from the same ScanDirectory ${filePath} scanDir: ${scanDirectoryPath}")
+				}
+			} else {
+				throw new RuntimeException("File was not sourced from the same ScanDirectory ${prefixPath}")
+
+			}
     }
 
     @CompileStatic
-    URL getRelativeFile(String relativePath, String name) {
+		Object getRelativeFile(String relativePath, String name) {
         if (name.startsWith('/')) {
             name = name.substring(1)
         }
+
+				if(AssetHelper.isWildcardPath(name)) { //we have some wildcard patterns to resolve.
+					String[] pathComponents = name.split(DIRECTIVE_FILE_SEPARATOR);
+					int wildCardIndex = pathComponents.findIndexOf {it.equals("*") || it.equals('%')}
+					if(wildCardIndex > -1) {
+						String preWildcardPath = pathComponents[0..(wildCardIndex -1)].join(DIRECTIVE_FILE_SEPARATOR)
+						String postWildcardPath = pathComponents[(wildCardIndex + 1)..(pathComponents.length -1)].join(DIRECTIVE_FILE_SEPARATOR)
+						List<URL> possibleDirs = []
+						Enumeration<URL> entries = classLoader.getResources("$relativePath/$preWildcardPath/")
+						for(URL entryPath in entries) {
+							possibleDirs << entryPath
+						}
+						for(possibleDir in possibleDirs) {
+							if(possibleDir.getProtocol()?.equals("jar")) {
+								String jarPath = possibleDir.getPath()
+								if(jarPath.startsWith("file:")) {
+									jarPath = jarPath.substring(5)
+								}
+								if(jarPath.contains("!")) {
+									jarPath = jarPath.substring(0, jarPath.indexOf("!"))
+								}
+								File jarFile = new File(jarPath)
+								if(jarFile.exists()) {
+									subResolvers.putIfAbsent(jarPath, new JarAssetResolver("${name}:${possibleDir.toString()}", jarFile.absolutePath, prefixPath) )
+									def jarResolver =  subResolvers.get(jarPath);
+									def testEntry = jarResolver.getRelativeFile(relativePath, name)
+									if(testEntry) {
+										def jarEntry = new JarAssetEntry(zipEntry:testEntry as ZipEntry,resolver:jarResolver as JarAssetResolver)
+										return jarEntry
+									}
+								}
+							}
+
+						}
+					}
+				}
 
         URL file = classLoader.getResource("$relativePath/$name")
         if (file?.getProtocol()?.equals("file")) {
@@ -104,19 +176,30 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
         return file
     }
 
+
+
     @Override
     @CompileStatic
-    protected String getFileName(URL url) {
-        String path = url.path
-        String name = path
-        if (path.lastIndexOf('/'))
-            name = path.substring(path.lastIndexOf('/'))
-        return name
+    protected String getFileName(Object file) {
+			if(file instanceof URL) {
+				URL url = file as URL
+				String path = url.path
+				String name = path
+				if (path.lastIndexOf('/'))
+					name = path.substring(path.lastIndexOf('/'))
+				return name
+			} else if (file instanceof JarAssetEntry) {
+				JarAssetEntry jarAssetEntry = file as JarAssetEntry
+				return jarAssetEntry.zipEntry.name
+			} else if (file instanceof File) {
+				File f = file as File
+				return f.name
+			}
     }
 
     @CompileStatic
     List<AssetFile> getAssets(String basePath, String contentType = null, String extension = null, Boolean recursive = true, AssetFile relativeFile = null, AssetFile baseFile = null) {
-        def specs
+			Collection<Class<AssetFile>> specs
         if (contentType) {
             specs = AssetHelper.getPossibleFileSpecs(contentType)
         }
@@ -184,5 +267,4 @@ public class ClasspathAssetResolver extends AbstractAssetResolver<URL> {
         }
         return fileList.unique { AssetFile a, AssetFile b -> a.path <=> b.path }
     }
-
 }

@@ -30,7 +30,7 @@ import asset.pipeline.processors.JsProcessor
 */
 @CompileStatic
 class HandlebarsAssetFile extends AbstractAssetFile {
-	static final String contentType = 'application/javascript'
+	static final List<String> contentType = ['application/javascript','application/x-javascript','text/javascript']
 	static extensions = ['handlebars', 'hbs']
 	static final String compiledExtension = 'js'
 	static processors = [EmberHandlebarsProcessor,JsProcessor]

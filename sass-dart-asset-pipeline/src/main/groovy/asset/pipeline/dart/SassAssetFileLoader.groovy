@@ -20,6 +20,7 @@ class SassAssetFileLoader {
     AssetFile baseFile
 
     Map<String, String> importMap = [:]
+    Map<String, String> resolvedPaths = [:]
 
     SassAssetFileLoader(AssetFile assetFile) {
         this.baseFile = assetFile
@@ -71,30 +72,57 @@ class SassAssetFileLoader {
      * @param url
      * @return
      */
-    AssetFile getAssetFromScssImport(String parent, String importUrl) {
-        Path parentPath = Paths.get(parent)
-        Path relativeRootPath = parentPath.parent ?: Paths.get('.')
-        Path importUrlPath = Paths.get(importUrl)
+    AssetFile getAssetFromScssImport(String parent, String fileName) {
+        
+        
+        def newFile
+        if( fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
+						newFile = AssetHelper.fileForUri( getPartialPath(fileName) , 'text/css', null, baseFile )
 
-        List<String> possibleStylesheets = SassAssetFile.extensions.collectMany { String extension ->
-            [
-                relativeRootPath.resolve("${importUrlPath}.${extension}").toString(),
-                relativeRootPath.resolve("${importUrlPath.parent ? importUrlPath.parent.toString() + '/' : ''}_${importUrlPath.fileName}.${extension}").toString(),
-                "${importUrlPath.fileName}.${extension}",
-                "_${importUrlPath.fileName}.${extension}"
-            ] as List<String>
+            if(!newFile) {
+							newFile = AssetHelper.fileForUri( fileName, 'text/css', null, baseFile )
+            }
         }
+        else 
+        {
+            String parentPath = ""
+            String[] pathArgs = parent.split("/")
+            if(pathArgs.size() > 1) {
+                parentPath = (Arrays.copyOfRange(pathArgs,0,pathArgs.size() - 1) as String[]).join("/")
+            }
+            
+            def relativeFileName = [ parentPath, fileName ].join( AssetHelper.DIRECTIVE_FILE_SEPARATOR )
+						newFile = AssetHelper.fileForUri( getPartialPath(relativeFileName), 'text/css', null, baseFile )
 
-        for (String stylesheetPath : possibleStylesheets) {
-            String standardPathStyle = stylesheetPath?.replaceAll(QUOTED_FILE_SEPARATOR, DIRECTIVE_FILE_SEPARATOR)
-            AssetFile assetFile = AssetHelper.fileForFullName(standardPathStyle.toString())
-            if (assetFile) {
-                log.debug "$parent imported $assetFile.path"
-                return assetFile
+            if(!newFile) {
+							newFile = AssetHelper.fileForUri( relativeFileName, 'text/css', null, baseFile )
             }
         }
 
-        log.error "Unable to find the asset for $importUrl imported by $parent"
+
+        if( !newFile && !fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
+					newFile = AssetHelper.fileForUri( getPartialPath(AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName), 'text/css', null, baseFile )
+					if(!newFile) {
+						newFile = AssetHelper.fileForUri( AssetHelper.DIRECTIVE_FILE_SEPARATOR + fileName, 'text/css', null, baseFile )
+					}
+        }
+        else if (!newFile) {
+            log.warn( "Unable to Locate Asset: ${ fileName }" )
+        }
+
+        if(newFile) {
+            CacheManager.addCacheDependency(baseFile?.path ?: parent, newFile)
+            return newFile
+        }
+
+
         return null
+    }
+
+    private String getPartialPath(String originalUri) {
+        String[] components = originalUri.split(DIRECTIVE_FILE_SEPARATOR);
+        String fileName = components[components.length-1]
+        components[components.length-1] = "_" + fileName
+        return components.join(DIRECTIVE_FILE_SEPARATOR)
     }
 }

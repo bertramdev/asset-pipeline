@@ -37,6 +37,7 @@ public class AssetHelper {
     static final Collection<Class<AssetFile>> assetSpecs = AssetSpecLoader.loadSpecifications()
     static final String QUOTED_FILE_SEPARATOR = Pattern.quote(File.separator)
     static final String DIRECTIVE_FILE_SEPARATOR = '/'
+		static final Pattern WILDCARD_PATTERN = Pattern.compile(/[*%]/)
 
     /**
      * Resolve an {@link AssetFile} for the given URI
@@ -50,11 +51,12 @@ public class AssetHelper {
     static AssetFile fileForUri(String uri, String contentType = null, String ext = null, AssetFile baseFile = null) {
         AssetFile file
         for (resolver in AssetPipelineConfigHolder.resolvers) {
-            file = resolver.getAsset(uri, contentType, ext, baseFile)
-            if (file) {
-                return file
-            }
-        }
+					file = resolver.getAsset(uri, contentType, ext, baseFile)
+					if(file) {
+						return file
+					}
+				}
+
         return null
     }
 
@@ -203,7 +205,10 @@ public class AssetHelper {
      * @return The {@link AssetFile} classes
      */
     static Collection<Class<AssetFile>> getPossibleFileSpecs(String contentType) {
-        return assetFileClasses().findAll { Class<AssetFile> it -> (it.contentType instanceof String) ? it.contentType == contentType : contentType in it.contentType }
+
+        return assetFileClasses().findAll { Class<AssetFile> it ->
+            // log.info("Checking AssetFile: {}",it.contentType)
+         (it.contentType instanceof CharSequence) ? it.contentType.equals(contentType) : contentType in it.contentType }
     }
 
     /**
@@ -290,120 +295,38 @@ public class AssetHelper {
         return false
     }
 
-    // WebJar support - lazy initialization and caching
-    private static Object webJarLocator = null
-    private static final Map<String, String> WEBJAR_CACHE = [:].asSynchronized()
-    private static volatile boolean webJarLocatorInitialized = false
 
     /**
-     * Initializes WebJarAssetLocator if available on classpath.
-     * Returns null if webjars-locator-core is not present.
+     * Checks if a path has a file extension.
+     * Checks for common asset file extensions (.js, .css, .min.js, .min.css, etc.)
      */
-    private static synchronized Object initializeWebJarLocator() {
-        if (webJarLocatorInitialized) {
-            return webJarLocator
-        }
-        try {
-            Class<?> locatorClass = Class.forName('org.webjars.WebJarAssetLocator')
-            webJarLocator = locatorClass.getDeclaredConstructor().newInstance()
-            log.debug("WebJar locator initialized successfully")
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            log.debug("WebJar locator not available - version resolution disabled")
-            webJarLocator = null
-        }
-        webJarLocatorInitialized = true
-        return webJarLocator
-    }
-
-    /**
-     * Resolves a webjar path by automatically detecting the version.
-     *
-     * IMPORTANT: Do NOT include the package name in the path. The locator searches
-     * across all webjars for the matching file path.
-     *
-     * Examples:
-     *   Input:  webjars/dist/jquery.min.js
-     *   Output: webjars/jquery/3.7.1/dist/jquery.min.js
-     *
-     *   Input:  webjars/dist/css/bootstrap.css
-     *   Output: webjars/bootstrap/5.3.0/dist/css/bootstrap.css
-     *
-     * Non-webjar paths are returned unchanged:
-     *   Input:  js/application.js
-     *   Output: js/application.js
-     *
-     * Paths that already have versions are returned unchanged:
-     *   Input:  webjars/jquery/3.7.1/dist/jquery.min.js
-     *   Output: webjars/jquery/3.7.1/dist/jquery.min.js
-     *
-     * @param path Original path (may or may not include version)
-     * @return Resolved path with version, or original path if not a webjar or already versioned
-     */
-    static String resolveWebjarPath(String path) {
+    private static boolean hasFileExtension(String path) {
         if (!path) {
-            return path
+            return false
         }
-
-        // Handle paths with leading slash (DirectiveProcessor retries with leading slash if file not found)
-        boolean hasLeadingSlash = path.startsWith('/')
-        String pathToProcess = hasLeadingSlash ? path.substring(1) : path
-
-        // Only process webjar paths
-        if (!pathToProcess.startsWith('webjars/')) {
-            return path
-        }
-
-        // Check if already has version (pattern: webjars/package/1.2.3/...)
-        // Match version like: 1.2.3, 1.0.0-alpha1, 5.3.0-beta.2, etc.
-        if (pathToProcess =~ /webjars\/[^\/]+\/\d+\.\d+[^\/]*\//) {
-            log.debug("Path already contains version: ${path}")
-            return path
-        }
-
-        // Check cache first
-        if (WEBJAR_CACHE.containsKey(pathToProcess)) {
-            String cached = WEBJAR_CACHE[pathToProcess]
-            return hasLeadingSlash ? "/" + cached : cached
-        }
-
-        // Resolve version using WebJarAssetLocator (if available)
-        Object locator = webJarLocatorInitialized ? webJarLocator : initializeWebJarLocator()
-        if (locator) {
-            try {
-                // Remove 'webjars/' prefix - locator expects path without it
-                String partialPath = pathToProcess.substring(8)
-
-                // WebJarAssetLocator.getFullPath() returns: META-INF/resources/webjars/jquery/3.7.1/dist/jquery.js
-                // Need to strip META-INF/resources/ prefix
-                String resolvedPath = locator.getFullPath(partialPath)
-                if (resolvedPath.startsWith("META-INF/resources/")) {
-                    resolvedPath = resolvedPath.substring(19) // Remove "META-INF/resources/"
-                }
-
-                // Cache the resolved path (without leading slash)
-                WEBJAR_CACHE[pathToProcess] = resolvedPath
-
-                // Add leading slash back if original had it
-                String result = hasLeadingSlash ? "/" + resolvedPath : resolvedPath
-
-                log.debug("Resolved webjar path: ${path} -> ${result}")
-                return result
-
-            } catch (Exception e) {
-                log.debug("Could not resolve webjar path: ${path}. ${e.message}")
-            }
-        }
-
-        return path
+        // Check if path ends with a known asset extension
+        def knownExtensions = ['.js', '.css', '.min.js', '.min.css', '.mjs', '.cjs']
+        return knownExtensions.any { ext -> path.endsWith(ext) }
     }
 
     /**
-     * Utility method to clear the webjar resolution cache.
-     * Useful for development when switching webjar versions.
+     * Returns a list of file extensions to try based on the content type.
      */
-    static void clearWebJarCache() {
-        WEBJAR_CACHE.clear()
-        log.info("Cleared webjar path resolution cache")
+    private static List<String> getExtensionsForContentType(String contentType) {
+        if (!contentType) {
+            return []
+        }
+        List<String> extensions = []
+        List<Class<AssetFile>> fileSpecs = getPossibleFileSpecs(contentType)
+        fileSpecs.each { fileSpec ->
+            extensions += fileSpec.extensions
+        }
+        return extensions.unique()
     }
+
+		@CompileStatic
+		static boolean isWildcardPath(String path) {
+			WILDCARD_PATTERN.matcher(path).find()
+		}
 
 }

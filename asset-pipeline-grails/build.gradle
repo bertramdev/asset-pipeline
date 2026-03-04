@@ -34,14 +34,13 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api' // Provided by the servlet container
     compileOnly 'org.apache.grails:grails-core' // Provided as this is a Grails plugin
     compileOnly 'org.apache.grails.views:grails-web-taglib' // For taglib compilation
-    compileOnly 'org.webjars:webjars-locator-core' // WebJar version resolution
 
     testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
     testImplementation 'org.apache.grails:grails-testing-support-web'
     testImplementation 'org.spockframework:spock-core'
 
     // WebJar testing dependencies
-    testImplementation 'org.webjars:webjars-locator-core'
+    testImplementation "org.webjars:webjars-locator-core:$webjarsLocatorVersion"
     testImplementation 'org.webjars.npm:jquery:3.7.1'       // specific version required by AssetsTagLibSpec
     testImplementation 'org.webjars.npm:bootstrap:5.3.0'    // specific version required by AssetsTagLibSpec
 }
@@ -57,6 +56,7 @@ bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
 }
 
+
 apply {
     from rootProject.layout.projectDirectory.file('gradle/java-config.gradle')
     from rootProject.layout.projectDirectory.file('gradle/publish-config.gradle')
@@ -71,4 +71,9 @@ tasks.withType(Jar).configureEach { Jar it ->
             filter { line -> excludes.find { line.contains(it) } ? null : line }
         }
     }
+}
+
+tasks.named('javadocJar', Jar).configure { Jar it ->
+    // TODO: help-doc.html is a duplicate
+    it.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

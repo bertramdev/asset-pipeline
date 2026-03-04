@@ -2,7 +2,7 @@ package asset.pipeline.fs
 
 import asset.pipeline.CssAssetFile
 import asset.pipeline.GenericAssetFile
-import asset.pipeline.JsAssetFile
+import asset.pipeline.JsEs6AssetFile
 import spock.lang.Specification
 
 /**
@@ -42,7 +42,7 @@ class ClasspathAssetResolverSpec extends Specification {
         when:
         def file = resolver.getAsset('asset-test/lib','application/javascript')
         then:
-        file instanceof JsAssetFile
+        file instanceof JsEs6AssetFile
     }
 
     void "should be able to resolve css files based on a content-type"() {
@@ -72,5 +72,42 @@ class ClasspathAssetResolverSpec extends Specification {
         def files = resolver.getAssets('.','application/javascript', null, true, relativeFile)
         then:
         files?.size() == 3
+    }
+
+    void "should prefer .js file over .mjs file when explicitly requesting .js extension from classpath"() {
+        given:
+        def resolver = new ClasspathAssetResolver('application','META-INF/assets','META-INF/assets.list')
+
+        when:
+        def file = resolver.getAsset('asset-test/lib.js', 'application/javascript')
+
+        then:
+        file != null
+        file.name == 'lib.js'
+        file.path.endsWith('.js')
+    }
+
+    void "should prefer .mjs file over .js file when explicitly requesting .mjs extension from classpath"() {
+        given:
+        def resolver = new ClasspathAssetResolver('application','META-INF/assets','META-INF/assets.list')
+
+        when:
+        def file = resolver.getAsset('asset-test/lib.mjs', 'application/javascript')
+
+        then:
+        file != null
+        file.name == 'lib.mjs'
+        file.path.endsWith('.mjs')
+    }
+
+    void "should prefer .mjs over .js when no extension is specified from classpath"() {
+        given:
+        def resolver = new ClasspathAssetResolver('application','META-INF/assets','META-INF/assets.list')
+        when:
+        def file = resolver.getAsset('asset-test/lib', 'application/javascript')
+        then:
+        file != null
+        file.name == 'lib.mjs'
+        file.path.endsWith('.mjs')
     }
 }

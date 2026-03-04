@@ -15,20 +15,16 @@
  */
 package asset.pipeline
 
-import asset.pipeline.processors.ClosureCompilerProcessor
-import asset.pipeline.utils.MultiOutputStream
-import asset.pipeline.processors.CssMinifyPostProcessor
-import asset.pipeline.fs.JarAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
-import groovy.json.JsonSlurper
+import asset.pipeline.fs.JarAssetResolver
+import asset.pipeline.processors.ClosureCompilerProcessor
+import asset.pipeline.processors.CssMinifyPostProcessor
+import asset.pipeline.utils.MultiOutputStream
+import groovy.json.JsonSlurperClassic
 import groovy.util.logging.Slf4j
 
+import java.util.concurrent.*
 import java.util.zip.GZIPOutputStream
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.ExecutorCompletionService
-import java.util.concurrent.CompletionService
 
 /**
  * Build time compiler for assets. This does a differential comparison of the source directory
@@ -62,9 +58,9 @@ public class AssetCompiler {
 	 * </ul>
 	 * @param eventListener
 	 */
-	AssetCompiler(options = [:], eventListener = null) {
+	AssetCompiler(Map options = [:], eventListener = null) {
 		this.eventListener = eventListener
-		this.options = options
+		this.options = options ?: [:]
 		if(!options.compileDir) {
 			options.compileDir = "target/assets"
 		}
@@ -117,7 +113,7 @@ public class AssetCompiler {
 	 *
 	 */
 	static void main(String[] args) {
-
+		println ("Starting AssetCompiler ${args}")
 		Boolean sourceSpecified = false;
 		Boolean flattenResolvers = false
 		// def properties = System.getProperties()
@@ -132,6 +128,7 @@ public class AssetCompiler {
 						minifyJs        : false,
 						minifyOptions   : null,
 						skipNonDigests  : false,
+						verbose			: false,
 		]
 
 		for(int x = 0 ; x < args.length; x++) {
@@ -152,6 +149,7 @@ Options:
 	-z                        Enable gzip compression for compiled assets
 	-m                        Enable source maps for compiled assets
 	-n                        Skip non-digested files
+	-v 						  Enable verbose logging
 	-E <excludePattern>       Exclude files matching this pattern from compilation (can be specified multiple times)
 	-Z <excludeGzipPattern>   Exclude files matching this pattern from gzip compression (can be specified multiple times)
 	-I <includePattern>       Include files matching this pattern in compilation (can be specified multiple times)
@@ -190,6 +188,9 @@ Options:
 					case 'n':
 						compilerArgs.skipNonDigests = true
 						break
+					case 'v':
+						compilerArgs.verbose = true
+						break
 					case 'E':
 						def excludePattern = args[++x]
 						if(!compilerArgs.excludes) {
@@ -214,7 +215,7 @@ Options:
 					case 'J':
 						def jsonString = args[++x]
 						try {
-							def json = new JsonSlurper().parseText(jsonString)
+							def json = new JsonSlurperClassic().parseText(jsonString)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing JSON options: ${jsonString}", e)
@@ -225,7 +226,7 @@ Options:
 						def base64JsonString = args[++x]
 						try {
 							def jsonStringDecoded = new String(base64JsonString.decodeBase64())
-							def json = new JsonSlurper().parseText(jsonStringDecoded)
+							def json = new JsonSlurperClassic().parseText(jsonStringDecoded)
 							compilerArgs.putAll(json)
 						} catch(Exception e) {
 							log.error("Error parsing Base64 JSON options: ${base64JsonString}", e)
@@ -236,7 +237,9 @@ Options:
 				}
 			}
 		}
-		def assetCompiler = new AssetCompiler(compilerArgs)
+
+		AssetEventListener listener = compilerArgs['verbose'] ? new LoggingAssetEventListener() : null
+		def assetCompiler = new AssetCompiler(compilerArgs, listener)
 		assetCompiler.excludeRules.default = compilerArgs.excludes ?: []
 		assetCompiler.includeRules.default = compilerArgs.includes ?: []
 		if(compilerArgs.get("configOptions")) {

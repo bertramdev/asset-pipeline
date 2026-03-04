@@ -10,4 +10,5 @@ extensions.configure(GrailsPublishExtension) {
     it.developers = findProperty('pomDevelopers') as Map<String, String> ?: [davydotcom: 'David Estes']
     it.publicationName = findProperty('pomMavenPublicationName') ?: 'maven'
     it.addComponents = project.name != 'asset-pipeline-gradle'
+    it.websiteUrl = 'http://www.asset-pipeline.com'
 }
