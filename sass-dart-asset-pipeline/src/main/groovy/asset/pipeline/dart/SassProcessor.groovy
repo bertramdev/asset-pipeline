@@ -102,9 +102,10 @@ class SassProcessor extends AbstractProcessor {
 
             // Compile and retrieve the CSS output
             nodeRuntime.getExecutor(sassCompiler).executeVoid()
-            output = nodeRuntime.getGlobalObject().get("css") as String
+            output = nodeRuntime.getGlobalObject().getString("css")
 
-            // Cleanup the global importer
+            // Cleanup the global importer and css
+            nodeRuntime.getGlobalObject().delete("css")
             nodeRuntime.getGlobalObject().delete("importer")
         }
         finally {

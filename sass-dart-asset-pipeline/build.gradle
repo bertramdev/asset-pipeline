@@ -4,7 +4,7 @@ apply plugin: 'java-library'
 group = 'cloud.wondrify'
 
 ext {
-    javetVersion = "1.1.0"
+    javetVersion = "5.0.5"
     pomDescription = 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
     pomDevelopers = ['gferon': 'Gabriel Féron']
 }
@@ -28,7 +28,7 @@ dependencies {
 
     api project(':asset-pipeline-core')
 
-    implementation "com.caoccao.javet:javet-core:$javetVersion"
+    implementation "com.caoccao.javet:javet:$javetVersion"
 
     compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
     compileOnly "org.slf4j:slf4j-api:$slf4jVersion"

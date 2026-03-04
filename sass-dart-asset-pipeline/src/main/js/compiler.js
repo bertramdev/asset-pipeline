@@ -5,4 +5,4 @@ compileOptions.importer = [importer.resolveImport];
 
 // Compile and return the rendered CSS
 const result = sass.renderSync(compileOptions);
-css = result.css;
+global.css = String(result.css);
