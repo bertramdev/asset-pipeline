@@ -7,6 +7,11 @@ class LoggingAssetEventListener implements AssetEventListener {
 
     @Override
     void triggerEvent(String eventName, String message) {
-        log.info(message)
+        if(eventName == 'StatusDebug') {
+            log.debug(message)
+        }
+        else {
+            log.info(message)
+        }
     }
 }
