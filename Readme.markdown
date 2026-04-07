@@ -22,7 +22,7 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 Requirements
 ------------
 
-* **Java 25 or newer** — the closure compiler dependency (`com.google.javascript:closure-compiler-unshaded`) requires a Java 21+ JVM as of version `v20260302`. The asset pipleine as of 5.1.x requires Java 25 as a result.
+* **Java 21 or newer** — the closure compiler dependency (`com.google.javascript:closure-compiler-unshaded`) requires a Java 21+ JVM as of version `v20260302`. The asset pipleine as of 5.1.x requires Java 21 as a result.
 
 Documentation
 ------------
