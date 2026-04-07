@@ -27,15 +27,15 @@ import org.springframework.util.ClassUtils
 
 @Slf4j
 class AssetPipelineGrailsPlugin extends Plugin {
-    def grailsVersion = '7.0.0-SNAPSHOT > *'
+    def grailsVersion = '7.0.0 > *'
     def title = 'Asset Pipeline Plugin'
     def author = 'David Estes'
     def description = 'The Asset-Pipeline is a plugin used for managing and processing static assets in Grails applications. Asset-Pipeline functions include processing and minification of both CSS and JavaScript files. It is also capable of being extended to compile custom static assets, such as CoffeeScript.'
-    def documentation = 'http://www.asset-pipeline.com'
+    def documentation = 'https://wondrify.github.io/asset-pipeline/'
     def license = 'APACHE'
-    def organization = [name: 'Bertram Capital', url: 'http://www.bertramcapital.com/']
-    def issueManagement = [system: 'GITHUB', url: 'http://github.com/wondrify/grails-asset-pipeline/issues']
-    def scm = [url: 'http://github.com/wondrify/grails-asset-pipeline']
+    def organization = [name: 'Bertram Capital', url: 'https://www.bertramcapital.com/']
+    def issueManagement = [system: 'GITHUB', url: 'https://github.com/wondrify/asset-pipeline/issues']
+    def scm = [url: 'https://github.com/wondrify/asset-pipeline']
     def pluginExcludes = [
             'grails-app/assets/**',
             'test/dummy/**'

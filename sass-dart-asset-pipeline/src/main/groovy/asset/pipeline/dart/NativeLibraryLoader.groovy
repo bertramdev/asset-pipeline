@@ -32,7 +32,13 @@ class NativeLibraryLoader {
     }
 
     private String getJavetPackageName() {
-        IS_MACOS ? "javet-macos" : "javet"
+        String runtimeName = javetLibLoader.JSRuntimeType.name
+        String osName
+        if (IS_MACOS) osName = "macos"
+        else if (IS_LINUX) osName = "linux"
+        else osName = "windows"
+        String arch = IS_ARM64 ? "arm64" : "x86_64"
+        "javet-${runtimeName}-${osName}-${arch}"
     }
 
     private String getJavetFileName() {
@@ -79,7 +85,7 @@ class NativeLibraryLoader {
             throw new IllegalStateException("Javet jar file $file does not exist, perhaps the download failed")
         }
 
-        String libraryName = javetLibLoader.libFileName
+        String libraryName = javetLibLoader.getLibFileName()
         File jniLibrary = new File(LIBRARY_HOME, libraryName)
         if (jniLibrary.exists()) {
             log.debug("Native library $libraryName already exists, skipping extract")
