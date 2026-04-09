@@ -6,7 +6,7 @@ With the LESS module it is easy to automatically compile LESS files down to the 
 .build.gradle
 ----
 dependencies {
-  assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
+  assets 'cloud.wondrify:less-asset-pipeline:{project-version}'
 }
 ----
 

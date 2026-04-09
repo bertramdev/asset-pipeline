@@ -6,7 +6,7 @@ The Coffee Asset-Pipeline module provides coffeescript compilation support for t
 .build.gradle
 ----
 dependencies {
-  assets 'com.bertramlabs.plugins:coffee-asset-pipeline:{project-version}'
+  assets 'cloud.wondrify:coffee-asset-pipeline:{project-version}'
 }
 ----
 

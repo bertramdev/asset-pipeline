@@ -48,7 +48,7 @@ class SassProcessorSpec extends Specification {
 		given:
 		AssetPipelineConfigHolder.resolvers = []
 		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
-		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, outputStyle: 'compressed']]
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, style: 'compressed']]
 		def assetFile = AssetHelper.fileForFullName('test.scss')
 		def processor = new SassProcessor()
 		when:
@@ -142,5 +142,85 @@ class SassProcessorSpec extends Specification {
 		def output = processor.process(assetFile.inputStream.text,assetFile)
 		then:
 		output.contains('https://getbootstrap.com')
+	}
+
+	void "should map legacy outputStyle option to style"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, outputStyle: 'compressed']]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
+		output.readLines().size() == 1
+	}
+
+	void "should use expanded style by default"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true]]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
+		output.readLines().size() > 1
+	}
+
+	void "should silence import deprecation warnings when configured"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [silenceDeprecations: ['import']]]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
+	}
+
+	void "should support quietDeps option"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true]]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
+	}
+
+	void "should support sourceMap option"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, sourceMap: true]]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
+	}
+
+	void "should support charset option"() {
+		given:
+		AssetPipelineConfigHolder.resolvers = []
+		AssetPipelineConfigHolder.registerResolver(new FileSystemAssetResolver('test','assets'))
+		AssetPipelineConfigHolder.config = [sass: [quietDeps: true, charset: false]]
+		def assetFile = AssetHelper.fileForFullName('test.scss')
+		def processor = new SassProcessor()
+		when:
+		def output = processor.process(assetFile.inputStream.text, assetFile)
+		then:
+		output.contains('margin')
 	}
 }

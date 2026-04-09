@@ -7,7 +7,7 @@ To get started simply add asset-pipeline to your `build.gradle` file (See Gradle
 [source,groovy,subs="attributes"]
 ----
 dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-grails:{project-version}'
+  runtime 'cloud.wondrify:asset-pipeline-grails:{project-version}'
 }
 ----
 

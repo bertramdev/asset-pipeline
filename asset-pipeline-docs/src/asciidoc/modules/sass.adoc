@@ -1,14 +1,132 @@
 === SASS
 
-The SASS module provides easy processing and implementation of `scss` and `sass` files. It uses libsass for highly performant compiling of SASS files and automatically handles asset resolution correctly.
+There are two SASS modules available for the asset pipeline:
+
+* `sass-dart-asset-pipeline` - Uses the native https://sass-lang.com/dart-sass[dart-sass] JS compiler via https://www.caoccao.com/Javet/[Javet] (Google V8 runtime). This is the recommended module.
+* `sass-asset-pipeline` - Uses libsass via jsass. This module is deprecated as libsass is no longer maintained.
+
+==== Dart SASS (Recommended)
 
 [source,groovy,subs="attributes"]
 .build.gradle
 ----
 dependencies {
-  assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+  assets 'cloud.wondrify:sass-dart-asset-pipeline:{project-version}'
 }
 ----
 
-IMPORTANT: Before 2.9.0 sass-asset-pipeline used jruby and compass. This version of the plugin has been renamed to compass-asset-pipeline.
+Simply create `scss` or `sass` files in your assets folder.
 
+===== Native Library
+
+Javet requires native libraries for integration. The first time you execute the pipeline, the appropriate native library will be downloaded for your platform. Supported platforms:
+
+* Linux - x86_64, arm64
+* Windows - x86_64
+* MacOS - x86_64, arm64
+
+The platform JAR is downloaded by default from Maven Central to the Java system temp directory. You can override this behavior with the following options:
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    configOptions = [
+        javetBaseUrl: 'https://myrepo.mycompany.com/repository/com/caoccao/javet',
+        javetLibraryHome: '/path/to/native/libs'
+    ]
+}
+----
+
+===== Configuration
+
+Configuration is passed through to the dart-sass compiler via the https://sass-lang.com/documentation/js-api/functions/compilestring/[modern JS API].
+
+[source,groovy]
+.build.gradle
+----
+assets {
+    configOptions = [
+        sass: [
+            style: 'compressed',
+            quietDeps: true,
+            silenceDeprecations: ['import']
+        ]
+    ]
+}
+----
+
+The following options are supported:
+
+[cols="2,1,5"]
+|===
+| Option | Default | Description
+
+| `style`
+| `"expanded"`
+| Output style. Either `"expanded"` or `"compressed"`. (Note: the legacy `outputStyle` key is also accepted for backward compatibility.)
+
+| `quietDeps`
+| `false`
+| Don't report deprecation warnings from dependencies (imported files).
+
+| `verbose`
+| `false`
+| Print all deprecation warnings, even when they are repetitive.
+
+| `sourceMap`
+| `false`
+| Whether to generate source maps.
+
+| `sourceMapIncludeSources`
+| `false`
+| Whether to include sources in the generated source map.
+
+| `charset`
+| `true`
+| Whether to include a `@charset` declaration or BOM if the CSS contains non-ASCII characters.
+
+| `silenceDeprecations`
+| `[]`
+| A list of deprecation IDs to silence (e.g. `['import']`). See the https://sass-lang.com/documentation/breaking-changes/[Sass breaking changes] documentation for the available IDs.
+
+| `fatalDeprecations`
+| `[]`
+| A list of deprecation IDs to treat as errors.
+
+| `futureDeprecations`
+| `[]`
+| A list of future deprecation IDs to opt in to early.
+|===
+
+===== Upgrading to 5.x
+
+This version upgrades the dart-sass compiler from the legacy JS API to the modern JS API and updates dart-sass from 1.44 to 1.99. Be aware of the following changes:
+
+*Configuration changes:*
+
+* `outputStyle` has been renamed to `style`. The legacy `outputStyle` key is automatically mapped for backward compatibility, but should be updated.
+* `indentType` and `indentWidth` are no longer supported by the modern sass API. Remove these options if present.
+
+*SCSS/Sass language changes:*
+
+* *`@import` is deprecated.* Migrate to `@use` and `@forward`. To suppress the warnings during migration, add `silenceDeprecations: ['import']` to your sass config. `@import` will be removed in dart-sass 3.0.
+* *`/` as division is removed.* Use `math.div($a, $b)` instead of `$a / $b`. You will need `@use 'sass:math'` at the top of the file.
+* *Global color functions are deprecated.* Functions like `lighten()`, `darken()`, and `adjust-hue()` should be replaced with `color.adjust()`, `color.scale()`, or `color.change()` from the `sass:color` module.
+* *Strict unary operators.* Ambiguous expressions like `$a -$b` now produce errors. Use `$a - $b` or `$a (-$b)`.
+
+For the full list of dart-sass breaking changes, see https://sass-lang.com/documentation/breaking-changes/.
+
+==== SASS (Legacy libsass)
+
+[source,groovy,subs="attributes"]
+.build.gradle
+----
+dependencies {
+  assets 'cloud.wondrify:sass-asset-pipeline:{project-version}'
+}
+----
+
+IMPORTANT: Before 2.9.0 sass-asset-pipeline used jruby and compass. That version of the plugin has been renamed to compass-asset-pipeline.
+
+TIP: During war build your `scss` files are compiled into css files. It may be best to add a sub folder for partial SCSS files and exclude it in your precompile config.

@@ -7,14 +7,14 @@ To get started simply add asset-pipeline to your `build.gradle` file (See Gradle
 [source,groovy,subs="attributes"]
 ----
 plugins {
-	id "com.bertramlabs.asset-pipeline" version "{project-version}"
+	id "cloud.wondrify.asset-pipeline" version "{project-version}"
 }
 
 dependencies {
-  runtime 'com.bertramlabs.plugins:asset-pipeline-micronaut:{project-version}'
+  runtime 'cloud.wondrify:asset-pipeline-micronaut:{project-version}'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+  //assets 'cloud.wondrify:less-asset-pipeline:{project-version}'
+  //assets 'cloud.wondrify:sass-asset-pipeline:{project-version}'
 }
 ----
 

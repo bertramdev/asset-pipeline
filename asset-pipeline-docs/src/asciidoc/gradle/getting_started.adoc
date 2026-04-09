@@ -16,11 +16,11 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:{project-version}"
+    classpath "cloud.wondrify:asset-pipeline-gradle:{project-version}"
   }
 }
 
-apply plugin: "com.bertramlabs.asset-pipeline"
+apply plugin: "cloud.wondrify.asset-pipeline"
 ----
 
 Or even simpler:
@@ -30,7 +30,7 @@ Or even simpler:
 ----
 //gradle 2.1+
 plugins {
-  id "com.bertramlabs.asset-pipeline" version "{project-version}"
+  id "cloud.wondrify.asset-pipeline" version "{project-version}"
 }
 ----
 

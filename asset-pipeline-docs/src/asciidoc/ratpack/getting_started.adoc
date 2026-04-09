@@ -7,10 +7,10 @@ To get started simply add asset-pipeline to your `build.gradle` file (See Gradle
 [source,groovy,subs="attributes"]
 ----
 dependencies {
-  runtime 'com.bertramlabs.plugins:ratpack-asset-pipeline:{project-version}'
+  runtime 'cloud.wondrify:ratpack-asset-pipeline:{project-version}'
   //Example LESS or Sass Integration
-  //assets 'com.bertramlabs.plugins:less-asset-pipeline:{project-version}'
-  //assets 'com.bertramlabs.plugins:sass-asset-pipeline:{project-version}'
+  //assets 'cloud.wondrify:less-asset-pipeline:{project-version}'
+  //assets 'cloud.wondrify:sass-asset-pipeline:{project-version}'
 }
 ----
 
