@@ -52,7 +52,7 @@ class AssetPipelinePlugin implements Plugin<Project> {
             AssetPipelineConfigHolder.config = [:]
         }
         def config = AssetPipelineConfigHolder.config
-        config.cacheLocation = project.layout.buildDirectory.dir('.assetcache').get().asFile.absolutePath
+        config['cacheLocation'] = project.layout.buildDirectory.dir('.assetcache').get().asFile.absolutePath
 
         def assetCleanTask = project.tasks.register('assetClean', Delete)
         def assetPrecompileTask = project.tasks.register('assetCompile', AssetForkedCompileTask)

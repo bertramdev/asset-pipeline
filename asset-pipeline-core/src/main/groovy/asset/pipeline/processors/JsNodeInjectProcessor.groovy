@@ -15,16 +15,10 @@
  */
 package asset.pipeline.processors
 
-
-import asset.pipeline.AssetCompiler
-import asset.pipeline.AssetHelper
-import asset.pipeline.AssetFile
 import asset.pipeline.AbstractProcessor
+import asset.pipeline.AssetCompiler
+import asset.pipeline.AssetFile
 import asset.pipeline.AssetPipelineConfigHolder
-import java.util.regex.Pattern
-
-import static asset.pipeline.utils.net.Urls.isRelative
-
 
 /**
  * This Processor iterates over a js file looking for asset_path directive sand
@@ -44,9 +38,9 @@ class JsNodeInjectProcessor extends AbstractProcessor  {
 	String process(final String inputText, final AssetFile assetFile) {
 		String nodeEnv = 'development'
 		
-		if (AssetPipelineConfigHolder.config != null 
-				&& AssetPipelineConfigHolder.config.nodeEnv != null) {
-			nodeEnv = AssetPipelineConfigHolder.config.nodeEnv
+		if (AssetPipelineConfigHolder.config != null
+				&& AssetPipelineConfigHolder.config['nodeEnv'] != null) {
+			nodeEnv = AssetPipelineConfigHolder.config['nodeEnv']
 		}
 
 		// if(!assetFile.baseFile) {

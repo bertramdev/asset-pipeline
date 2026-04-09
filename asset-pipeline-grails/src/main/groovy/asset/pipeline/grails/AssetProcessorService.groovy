@@ -1,23 +1,21 @@
 package asset.pipeline.grails
 
-
 import asset.pipeline.AssetHelper
+import asset.pipeline.AssetPipelineClassLoaderEntry
+import asset.pipeline.AssetPipelineConfigHolder
 import grails.core.GrailsApplication
 import grails.core.support.GrailsApplicationAware
 import grails.util.Environment
 import grails.web.mapping.LinkGenerator
 import groovy.util.logging.Slf4j
-import org.grails.config.NavigableMap
-
 import jakarta.servlet.http.HttpServletRequest
+import org.grails.config.NavigableMap
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.servlet.mvc.GrailsWebRequest
-import asset.pipeline.AssetPipelineConfigHolder
 
 import java.util.concurrent.ConcurrentHashMap
 
 import static asset.pipeline.AssetPipelineConfigHolder.manifest
-import asset.pipeline.AssetPipelineClassLoaderEntry
 import static asset.pipeline.grails.UrlBase.*
 import static asset.pipeline.grails.utils.net.HttpServletRequests.getBaseUrlWithScheme
 import static asset.pipeline.grails.utils.text.StringBuilders.ensureEndsWith
@@ -38,7 +36,7 @@ class AssetProcessorService implements GrailsApplicationAware {
 	 * @throws IllegalArgumentException if the path contains <code>/</code>
 	 */
 	String getAssetMapping() {
-		final String mapping = AssetPipelineConfigHolder.config.containsKey('mapping') ? AssetPipelineConfigHolder.config.mapping : 'assets'
+		final String mapping = AssetPipelineConfigHolder.config.containsKey('mapping') ? AssetPipelineConfigHolder.config['mapping'] : 'assets'
 		// final String mapping = grailsApplication.config?.grails?.assets?.mapping ?: 'assets'
 		if (mapping.contains('/')) {
 			throw new IllegalArgumentException(

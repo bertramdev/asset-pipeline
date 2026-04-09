@@ -32,8 +32,8 @@ class CssMinifyPostProcessor {
     }
 
     def process(inputText, options = [:]) {
-    	def removeComments = options.containsKey('removeComments') ? options.removeComments : true
-    	def stripWhitespace = options.containsKey('stripWhitespace') ? options.stripWhitespace : true
+    	def removeComments = options.containsKey('removeComments') ? options['removeComments'] : true
+    	def stripWhitespace = options.containsKey('stripWhitespace') ? options['stripWhitespace'] : true
 
 
 
