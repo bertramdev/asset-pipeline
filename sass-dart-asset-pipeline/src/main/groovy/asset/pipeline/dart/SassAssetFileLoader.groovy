@@ -49,7 +49,7 @@ class SassAssetFileLoader {
             String priorParent = importMap[prev]
             if (priorParent && !prev.startsWith('/')) {
                 Path priorParentPath = Paths.get(priorParent)
-                if (priorParentPath.parent) {
+                if (priorParentPath.parent != null) {
                     prev = "${priorParentPath.parent.toString()}/${prev}"
                 }
             }
