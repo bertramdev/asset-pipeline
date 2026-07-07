@@ -2,7 +2,7 @@
 
 Asset-pipeline uses the https://developers.google.com/closure/compiler[Google Closure Compiler] to minify JavaScript during production builds. It is automatically applied when `minifyJs = true` is set and requires no additional dependency — the compiler is bundled with the Gradle plugin.
 
-NOTE: As of `closure-compiler-unshaded:v20260302`, the Closure Compiler requires **Java 21 or newer**. Asset-pipeline 5.1.x requires Java 25 as a result of this transitive requirement.
+NOTE: As of `closure-compiler-unshaded:v20260302`, the Closure Compiler requires **Java 21 or newer**. Asset-pipeline 5.2.x requires Java 21 as a result of this transitive requirement.
 
 ==== Optimization Levels
 

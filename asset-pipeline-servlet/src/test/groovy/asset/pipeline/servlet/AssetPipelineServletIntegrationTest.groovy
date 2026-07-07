@@ -3,22 +3,22 @@ package asset.pipeline.servlet
 import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.AssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
+import jakarta.servlet.DispatcherType
 import org.apache.http.Header
 import org.apache.http.HttpResponse
+import org.apache.http.client.fluent.Request
 import org.apache.http.util.EntityUtils
-import org.eclipse.jetty.server.Handler
+import org.eclipse.jetty.ee11.servlet.FilterHolder
+import org.eclipse.jetty.ee11.webapp.WebAppContext
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ServerConnector
-import org.eclipse.jetty.server.handler.HandlerList
-import org.eclipse.jetty.servlet.FilterHolder
-import org.eclipse.jetty.util.resource.ResourceCollection
-import org.eclipse.jetty.webapp.WebAppContext
-import org.apache.http.client.fluent.Request
+import org.eclipse.jetty.util.resource.ResourceFactory
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Test
 
-import static org.junit.Assert.*
+import static org.junit.Assert.assertEquals
+import static org.junit.Assert.assertNotNull
 
 class AssetPipelineServletIntegrationTest {
     private static Server server
@@ -64,14 +64,12 @@ class AssetPipelineServletIntegrationTest {
         devFilter.mapping = "dev_assets"
 
         WebAppContext context = new WebAppContext()
-        context.setBaseResource(new ResourceCollection(["src/test/resources/web-app"] as String[]))
-        context.addFilter(new FilterHolder(prodFilter), "/*", null)
-        context.addFilter(new FilterHolder(devFilter), "/*", null)
+        context.setBaseResource(ResourceFactory.of(context).newResource(new File("src/test/resources/web-app").absoluteFile.toPath()))
+        context.addFilter(new FilterHolder(prodFilter), "/*", EnumSet.of(DispatcherType.REQUEST))
+        context.addFilter(new FilterHolder(devFilter), "/*", EnumSet.of(DispatcherType.REQUEST))
         context.setContextPath("/")
 
-        HandlerList handlers = new HandlerList();
-        handlers.setHandlers([context] as Handler[])
-        server.setHandler(handlers)
+        server.setHandler(context)
 
         server.start()
         port = ((ServerConnector)server.getConnectors()[0]).getLocalPort()

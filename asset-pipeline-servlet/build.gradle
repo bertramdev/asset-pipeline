@@ -36,8 +36,8 @@ dependencies {
 	testImplementation "org.apache.httpcomponents:httpcore:$httpcoreVersion"
 	testImplementation "junit:junit:$junit4Version"
 	testImplementation "org.eclipse.jetty:jetty-server:$jettyVersion"
-	testImplementation "org.eclipse.jetty:jetty-servlet:$jettyVersion"
-	testImplementation "org.eclipse.jetty:jetty-webapp:$jettyVersion"
+	testImplementation "org.eclipse.jetty.ee11:jetty-ee11-servlet:$jettyVersion"
+	testImplementation "org.eclipse.jetty.ee11:jetty-ee11-webapp:$jettyVersion"
 
 	testRuntimeOnly "org.slf4j:slf4j-simple:$slf4jVersion"
 }
