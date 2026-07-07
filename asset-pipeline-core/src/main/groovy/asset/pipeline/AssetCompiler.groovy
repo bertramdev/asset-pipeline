@@ -61,28 +61,28 @@ public class AssetCompiler {
 	AssetCompiler(Map options = [:], eventListener = null) {
 		this.eventListener = eventListener
 		this.options = options ?: [:]
-		if(!options.compileDir) {
-			options.compileDir = "target/assets"
+		if(!options['compileDir']) {
+			options['compileDir'] = "target/assets"
 		}
-		if(!options.excludesGzip) {
-			options.excludesGzip = ['png', 'jpg', 'jpeg', 'gif', 'zip', 'gz']
+		if(!options['excludesGzip']) {
+			options['excludesGzip'] = ['png', 'jpg', 'jpeg', 'gif', 'zip', 'gz']
 		} else {
-			options.excludesGzip += ['png', 'jpg', 'jpeg', 'gif', 'zip', 'gz']
+			options['excludesGzip'] += ['png', 'jpg', 'jpeg', 'gif', 'zip', 'gz']
 		}
 
 		if(!options.containsKey('enableGzip')) {
-			options.enableGzip = true
+			options['enableGzip'] = true
 		}
 
 		if(!options.containsKey('enableDigests')) {
-			options.enableDigests = true
+			options['enableDigests'] = true
 		}
 		if(!options.containsKey('skipNonDigests')) {
-			options.skipNonDigests = false
+			options['skipNonDigests'] = false
 		}
 
 		// Load in additional assetSpecs
-		options.specs?.each { spec ->
+		options['specs']?.each { spec ->
 			def specClass = this.class.classLoader.loadClass(spec)
 			if(specClass) {
 				AssetHelper.assetSpecs << (Class<AssetFile>) specClass
@@ -159,7 +159,7 @@ Options:
 						System.exit(0)
 						break
 					case 'o':
-						compilerArgs.compileDir = args[++x]
+						compilerArgs['compileDir'] = args[++x]
 						break
 					case 'i':
 						if(!sourceSpecified) {
@@ -177,40 +177,40 @@ Options:
 
 						break
 					case 'd':
-						compilerArgs.enableDigests = true
+						compilerArgs['enableDigests'] = true
 						break
 					case 'z':
-						compilerArgs.enableGzip = true
+						compilerArgs['enableGzip'] = true
 						break
 					case 'm':
-						compilerArgs.enableSourceMaps = true
+						compilerArgs['enableSourceMaps'] = true
 						break
 					case 'n':
-						compilerArgs.skipNonDigests = true
+						compilerArgs['skipNonDigests'] = true
 						break
 					case 'v':
-						compilerArgs.verbose = true
+						compilerArgs['verbose'] = true
 						break
 					case 'E':
 						def excludePattern = args[++x]
-						if(!compilerArgs.excludes) {
-							compilerArgs.excludes = []
+						if(!compilerArgs['excludes']) {
+							compilerArgs['excludes'] = []
 						}
-						compilerArgs.excludes << excludePattern
+						compilerArgs['excludes'] << excludePattern
 						break
 					case 'Z':
 						def excludeGzipPattern = args[++x]
-						if(!compilerArgs.excludesGzip) {
-							compilerArgs.excludesGzip = []
+						if(!compilerArgs['excludesGzip']) {
+							compilerArgs['excludesGzip'] = []
 						}
-						compilerArgs.excludesGzip << excludeGzipPattern
+						compilerArgs['excludesGzip'] << excludeGzipPattern
 						break
 					case 'I':
 						def includePattern = args[++x]
-						if(!compilerArgs.includes) {
-							compilerArgs.includes = []
+						if(!compilerArgs['includes']) {
+							compilerArgs['includes'] = []
 						}
-						compilerArgs.includes << includePattern
+						compilerArgs['includes'] << includePattern
 						break
 					case 'J':
 						def jsonString = args[++x]
@@ -240,15 +240,15 @@ Options:
 
 		AssetEventListener listener = compilerArgs['verbose'] ? new LoggingAssetEventListener() : null
 		def assetCompiler = new AssetCompiler(compilerArgs, listener)
-		assetCompiler.excludeRules.default = compilerArgs.excludes ?: []
-		assetCompiler.includeRules.default = compilerArgs.includes ?: []
+		assetCompiler.excludeRules['default'] = compilerArgs['excludes'] ?: []
+		assetCompiler.includeRules['default'] = compilerArgs['includes'] ?: []
 		if(compilerArgs.get("configOptions")) {
 			AssetPipelineConfigHolder.config = (AssetPipelineConfigHolder.config ?: [:]) + compilerArgs.get("configOptions")
 		} else {
 			AssetPipelineConfigHolder.config = [:]
 		}
-		if(compilerArgs.cacheLocation) {
-			AssetPipelineConfigHolder.config.cacheLocation = compilerArgs.cacheLocation
+		if(compilerArgs['cacheLocation']) {
+			AssetPipelineConfigHolder.config['cacheLocation'] = compilerArgs['cacheLocation']
 		}
 		try {
 			assetCompiler.compile();
@@ -266,7 +266,7 @@ Options:
 	void compile() {
 		def assetDir = initializeWorkspace()
 
-		threadPool = Executors.newFixedThreadPool(options.maxThreads ?: Runtime.getRuntime().availableProcessors())
+		threadPool = Executors.newFixedThreadPool(options['maxThreads'] ?: Runtime.getRuntime().availableProcessors())
 	 	CompletionService completionService = new ExecutorCompletionService(threadPool);
 		try {
 			def minifyCssProcessor = new CssMinifyPostProcessor()
@@ -299,26 +299,26 @@ Options:
 								fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(fileName, assetFile)
 							}
 							def contentType = (assetFile.contentType instanceof String) ? assetFile.contentType : assetFile.contentType[0]
-							def directiveProcessor = new DirectiveProcessor(contentType, this, options.classLoader)
+							def directiveProcessor = new DirectiveProcessor(contentType, this, options['classLoader'])
 							fileData = directiveProcessor.compile(assetFile)
 							digestName = AssetHelper.getByteDigest(fileData.bytes)
 							def existingDigestFile = manifestProperties.getProperty("${fileName}${extension ? ('.' + extension) : ''}")
 							if(existingDigestFile && existingDigestFile == "${fileName}-${digestName}${extension ? ('.' + extension) : ''}") {
 								isUnchanged = true
 							}
-							if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options.minifyJs && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
+							if(fileName.indexOf(".min") == -1 && contentType == 'application/javascript' && options['minifyJs'] && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
 								def newFileData = fileData
 								try {
 									def closureCompilerProcessor = new ClosureCompilerProcessor(this)
 									// eventListener?.triggerEvent("StatusUpdate", "- Minifying File")
-									newFileData = closureCompilerProcessor.process(fileName, fileData, options.minifyOptions ?: [:])
+									newFileData = closureCompilerProcessor.process(fileName, fileData, options['minifyOptions'] ?: [:])
 								} catch(e) {
 									log.error("Closure uglify JS Exception", e)
 									throw(e)
 									newFileData = fileData
 								}
 								fileData = newFileData
-							} else if(fileName.indexOf(".min") == -1 && contentType == 'text/css' && options.minifyCss && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
+							} else if(fileName.indexOf(".min") == -1 && contentType == 'text/css' && options['minifyCss'] && !isUnchanged && !isMinifyExcluded(assetFile.path)) {
 								def newFileData = fileData
 								try {
 									// eventListener?.triggerEvent("StatusUpdate", "- Minifying File")
@@ -349,7 +349,7 @@ Options:
 							if(extension) {
 								outputFileName = "${fileSystemName}.${extension}"
 							}
-							def outputFile = new File(options.compileDir, "${outputFileName}")
+							def outputFile = new File(options['compileDir'], "${outputFileName}")
 
 							def parentTree = new File(outputFile.parent)
 							parentTree.mkdirs()
@@ -380,10 +380,10 @@ Options:
 							def gzipFileStream
 							def gzipStreamCollection = []
 
-							if(!options.skipNonDigests) {
+							if(!options['skipNonDigests']) {
 								outputFile.createNewFile()
 								outputFileStream = outputFile.newOutputStream()
-								if(options.enableGzip == true && !options.excludesGzip.find {
+								if(options['enableGzip'] == true && !options['excludesGzip'].find {
 									it.toLowerCase() == extension?.toLowerCase()
 								}) {
 									File zipFile = new File("${outputFile.getAbsolutePath()}.gz")
@@ -392,11 +392,11 @@ Options:
 								}
 							}
 							if(extension) {
-								if(options.enableDigests) {
-									def digestedFile = new File(options.compileDir, "${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
+								if(options['enableDigests']) {
+									def digestedFile = new File(options['compileDir'], "${fileSystemName}-${digestName}${extension ? ('.' + extension) : ''}")
 									digestedFile.createNewFile()
 									digestFileStream = digestedFile.newOutputStream()
-									if(options.enableGzip == true && !options.excludesGzip.find {
+									if(options['enableGzip'] == true && !options['excludesGzip'].find {
 										it.toLowerCase() == extension?.toLowerCase()
 									}) {
 										File zipFileDigest = new File("${digestedFile.getAbsolutePath()}.gz")
@@ -468,9 +468,9 @@ Options:
 
 	private initializeWorkspace() {
 		// Check for existing Compiled Assets
-		def assetDir = new File(options.compileDir)
+		def assetDir = new File(options['compileDir'])
 		if(assetDir.exists()) {
-			def manifestFile = new File(options.compileDir, "manifest.properties")
+			def manifestFile = new File(options['compileDir'], "manifest.properties")
 			if(manifestFile.exists())
 				manifestProperties.load(manifestFile.newDataInputStream())
 		} else {
@@ -486,8 +486,8 @@ Options:
 	 * @return true if the file should be excluded from minification
 	 */
 	private boolean isMinifyExcluded(String filePath) {
-		if(options.minifyOptions?.excludes) {
-			return AssetHelper.isFileMatchingPatterns(filePath, options.minifyOptions.excludes)
+		if(options['minifyOptions']?.excludes) {
+			return AssetHelper.isFileMatchingPatterns(filePath, options['minifyOptions'].excludes)
 		}
 		return false
 	}
@@ -531,7 +531,7 @@ Options:
 
 	private saveManifest() {
 		// Update Manifest
-		def manifestFile = new File(options.compileDir, 'manifest.properties')
+		def manifestFile = new File(options['compileDir'], 'manifest.properties')
 		manifestProperties.store(manifestFile.newWriter(), "")
 	}
 
@@ -557,10 +557,10 @@ Options:
 			if(!fileFound) {
 				def digestedUri = manifestProperties.getProperty(compiledName)
 				def digestedName = digestedUri//.replace(AssetHelper.DIRECTIVE_FILE_SEPARATOR,File.separator)
-				def compiledFile = new File(options.compileDir, compiledName)
-				def digestedFile = new File(options.compileDir, digestedName)
-				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
-				def zippedDigestFile = new File(options.compileDir, "${digestedName}.gz")
+				def compiledFile = new File(options['compileDir'], compiledName)
+				def digestedFile = new File(options['compileDir'], digestedName)
+				def zippedFile = new File(options['compileDir'], "${compiledName}.gz")
+				def zippedDigestFile = new File(options['compileDir'], "${digestedName}.gz")
 				if(compiledFile.exists()) {
 					compiledFile.delete()
 				}
@@ -575,13 +575,13 @@ Options:
 				}
 				propertiesToRemove << compiledName
 			} else {
-				def compiledFile = new File(options.compileDir, compiledName)
-				def zippedFile = new File(options.compileDir, "${compiledName}.gz")
+				def compiledFile = new File(options['compileDir'], compiledName)
+				def zippedFile = new File(options['compileDir'], "${compiledName}.gz")
 
-				if(compiledFile.exists() && options.skipNonDigests == true) {
+				if(compiledFile.exists() && options['skipNonDigests'] == true) {
 					compiledFile.delete()
 				}
-				if(zippedFile.exists() && options.skipNonDigests == true) {
+				if(zippedFile.exists() && options['skipNonDigests'] == true) {
 					zippedFile.delete()
 				}
 				propertiesToRemove << compiledName

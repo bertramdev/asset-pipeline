@@ -54,8 +54,6 @@ class SassAssetFileLoader {
      * @return
      */
     AssetFile getAssetFromScssImport(String parent, String fileName) {
-        
-        
         def newFile
         if( fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
 						newFile = AssetHelper.fileForUri( getPartialPath(fileName) , 'text/css', null, baseFile )

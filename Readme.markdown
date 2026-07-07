@@ -19,6 +19,11 @@ The Asset-Pipeline is a plugin used for managing and processing static assets in
 * GZIP File Generation
 * Last-Modified Header
 
+Requirements
+------------
+
+* **Java 21 or newer** — the closure compiler dependency (`com.google.javascript:closure-compiler-unshaded`) requires a Java 21+ JVM as of version `v20260302`. The asset pipleine as of 5.1.x requires Java 21 as a result.
+
 Documentation
 ------------
 
@@ -40,7 +45,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath "cloud.wondrify:asset-pipeline-gradle:5.0.28"
+    classpath "cloud.wondrify:asset-pipeline-gradle:5.1.0"
   }
 }
 
@@ -156,7 +161,7 @@ Some CDN providers rely on the existence of a `Last-Modified` header to successf
 
 Dependencies
 ------------
-To accomodate varying uses of the groovy module (i.e. groovy-all vs. groovy) This library depends on groovy even though it does not directly export it. Make sure you add the following dependenices
+To accommodate varying uses of the groovy module (i.e. groovy-all vs. groovy) This library depends on groovy even though it does not directly export it. Make sure you add the following dependenices
 
 ```groovy
 dependencies {
@@ -175,29 +180,29 @@ Documentation
 * [API Doc](http://asset-pipeline.com/apidoc/index.html) - JavaDoc/GroovyDoc API reference
 
 
-For Grails 3 asset-pipeline has to be provided both for Grails and Gradle. An example configuration could be: 
+For Grails, asset-pipeline has to be provided both for Grails and Gradle. An example configuration could be: 
 
 ```groovy
 // Add the Gradle plugin to the build dependencies and apply it to the build process
 buildscript {
     dependencies {        
-        classpath 'cloud.wondrify:asset-pipeline-gradle:5.0.13'
+        classpath 'cloud.wondrify:asset-pipeline-gradle:5.1.0'
     }
 }
 apply plugin: 'asset-pipeline'
 
 // The plugin could also be applied with the newer syntax 
 // plugins {
-//     id "cloud.wondrify.asset-pipeline" version "5.0.13"
+//     id "cloud.wondrify.asset-pipeline" version "5.1.0"
 // }
 
 dependencies {        
     // Add the Grails Plugin to the runtime dependencies
-    runtime 'cloud.wondrify:asset-pipeline-grails:5.0.13'
+    runtime 'cloud.wondrify:asset-pipeline-grails:5.1.0'
     
     // Define needed asset-pipeline plugins with the special assets-scope 
-    assets 'cloud.wondrify:less-asset-pipeline:5.0.13'
-    assets 'cloud.wondrify:sass-asset-pipeline:5.0.13'
+    assets 'cloud.wondrify:less-asset-pipeline:5.1.0'
+    assets 'cloud.wondrify:sass-asset-pipeline:5.1.0'
 }
 ```
 
@@ -323,7 +328,7 @@ sourceSets {
 }
 
 dependencies {
-  provided 'org.apache.groovy:groovy:4.0.25'
-  implementation "cloud.wondrify:asset-pipeline-core:5.0.28"
+  provided 'org.apache.groovy:groovy-all:4.0.30'
+  compile "cloud.wondrify:asset-pipeline-core:5.1.0"
 }
 ```

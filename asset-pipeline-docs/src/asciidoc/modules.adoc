@@ -6,3 +6,4 @@ Asset-pipeline comes out of the box with modules for processing several common a
 include::modules/less.adoc[]
 include::modules/sass.adoc[]
 include::modules/coffeescript.adoc[]
+include::modules/closure-compiler.adoc[]

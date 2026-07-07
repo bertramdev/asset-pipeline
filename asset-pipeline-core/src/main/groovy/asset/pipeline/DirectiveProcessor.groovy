@@ -15,9 +15,9 @@
 */
 package asset.pipeline
 
-import groovy.util.logging.Slf4j
 import asset.pipeline.processors.JsRequireProcessor
 import groovy.transform.CompileStatic
+import groovy.util.logging.Slf4j
 
 /**
  * This processor is a base processor put in front of most asset processing. It is responsible for parsing directives
@@ -103,11 +103,12 @@ class DirectiveProcessor {
     */
     protected loadRequiresForTree(treeSet, flattenedList) {
         def selfLoaded = false
-        for(childTree in treeSet.tree) {
+        for(childTree in treeSet['tree']) {
             if(childTree == "self") {
-                def extension = treeSet.file.compiledExtension
-                def fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(treeSet.file.path,treeSet.file)
-                flattenedList << [path: "${fileName}.${extension}", encoding: treeSet.file.encoding]
+                def treeFile = treeSet['file']
+                def extension = treeFile.compiledExtension
+                def fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(treeFile.path,treeFile)
+                flattenedList << [path: "${fileName}.${extension}", encoding: treeFile.encoding]
                 selfLoaded = true
             } else {
                 flattenedList = loadRequiresForTree(childTree, flattenedList)
@@ -115,9 +116,10 @@ class DirectiveProcessor {
         }
 
         if(!selfLoaded) {
-            def extension = treeSet.file.compiledExtension
-            def fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(treeSet.file.path,treeSet.file)
-            flattenedList << [path: "${fileName}.${extension}", encoding: treeSet.file.encoding]
+            def treeFile = treeSet['file']
+            def extension = treeFile.compiledExtension
+            def fileName = AssetHelper.fileNameWithoutExtensionFromArtefact(treeFile.path,treeFile)
+            flattenedList << [path: "${fileName}.${extension}", encoding: treeFile.encoding]
         }
         return flattenedList
     }
@@ -129,17 +131,17 @@ class DirectiveProcessor {
     protected void loadContentsForTree(Map treeSet,StringBuilder buffer) {
 
         Boolean selfLoaded = false
-        for(childTree in treeSet.tree) {
+        for(childTree in treeSet['tree']) {
             if(childTree == "self") {
-                buffer.append(fileContents(treeSet.file)).append('\n')
+                buffer.append(fileContents(treeSet['file'] as AssetFile)).append('\n')
                 selfLoaded = true
             } else {
-                loadContentsForTree(childTree,buffer)
+                loadContentsForTree(childTree as Map,buffer)
             }
         }
 
         if(!selfLoaded) {
-            buffer.append(fileContents(treeSet.file)).append('\n')
+            buffer.append(fileContents(treeSet['file'] as AssetFile)).append('\n')
         }
     }
 
@@ -208,7 +210,7 @@ class DirectiveProcessor {
     * Used to control file order for when content within your manifest exists
     */
     def requireSelfDirective(command, file, tree) {
-        tree.tree << "self"
+        tree['tree'] << "self"
     }
 
     /**
@@ -236,7 +238,7 @@ class DirectiveProcessor {
 
         files.each { file ->
             if(!isFileInTree(file)) {
-                tree.tree << getDependencyTree(file)
+                tree['tree'] << getDependencyTree(file)
             }
         }
     }
@@ -252,7 +254,7 @@ class DirectiveProcessor {
             def files = resolver.getAssets(directivePath,contentType,null,true ,fileSpec,baseFile)
             files.each { file ->
                 if(!isFileInTree(file)) {
-                    tree.tree << getDependencyTree(file)
+                    tree['tree'] << getDependencyTree(file)
                 }
             }
         }
@@ -289,7 +291,7 @@ class DirectiveProcessor {
 
             if( newFile ) {
                 if( !isFileInTree( newFile ) ) {
-                    tree.tree << getDependencyTree( newFile )
+                    tree['tree'] << getDependencyTree( newFile )
                 }
             }
             else if( !fileName.startsWith( AssetHelper.DIRECTIVE_FILE_SEPARATOR ) ) {
