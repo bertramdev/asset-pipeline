@@ -5,11 +5,15 @@
     "bundle": "webpack"
   },
   "dependencies": {
-    "sass": "^1.44.0"
+    "sass": "^1.101.0"
   },
   "devDependencies": {
     "node-loader": "^2.0.0",
-    "webpack": "^5.105.0",
+    "webpack": "^5.108.4",
     "webpack-cli": "^4.9.1"
+  },
+  "overrides": {
+    "immutable": ">=5.1.9",
+    "fast-uri": ">=3.1.3"
   }
 }

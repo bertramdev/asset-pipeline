@@ -93,11 +93,15 @@ class SassProcessor extends AbstractProcessor {
                 v8ValueObject.close()
             }
 
-            // Combine options
-            Map compileOptions = configOptions + [data: input]
+            // Combine options and map legacy option names to modern API
+            // https://sass-lang.com/documentation/js-api/functions/compilestring/
+            Map compileOptions = new HashMap(configOptions)
+            if (compileOptions.containsKey('outputStyle')) {
+                compileOptions.put('style', compileOptions.remove('outputStyle'))
+            }
+            compileOptions.put('data', input)
 
             // Setup the options passed to the SASS compiler
-            // https://sass-lang.com/documentation/js-api/interfaces/LegacyStringOptions
             nodeRuntime.getGlobalObject().setProperty("compileOptions", compileOptions)
 
             // Compile and retrieve the CSS output
