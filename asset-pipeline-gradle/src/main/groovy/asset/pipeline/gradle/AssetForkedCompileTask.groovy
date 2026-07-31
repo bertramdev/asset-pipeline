@@ -118,6 +118,16 @@ abstract class AssetForkedCompileTask extends AbstractCompile {
                         if (jvmArgs) {
                             javaExecSpec.jvmArgs(jvmArgs)
                         }
+                        // JDK 24+ warns on first use of sun.misc.Unsafe memory-access methods
+                        // (JEP 498). The forked compiler classpath includes protobuf — Closure
+                        // Compiler deserializes its runtime-library TypedASTs with it — and
+                        // protobuf's UnsafeUtil still probes Unsafe during class init
+                        // (protocolbuffers/protobuf#20760), so every fork prints the warning.
+                        // Suppress it unless the build author has set the flag explicitly.
+                        if (Runtime.version().feature() >= 24
+                                && !jvmArgs?.any { it.startsWith('--sun-misc-unsafe-memory-access') }) {
+                            javaExecSpec.jvmArgs('--sun-misc-unsafe-memory-access=allow')
+                        }
                         if(config.forkOptions) {
                             javaExecSpec.setMaxHeapSize(config.forkOptions.memoryMaximumSize)
                             javaExecSpec.setMinHeapSize(config.forkOptions.memoryInitialSize)
