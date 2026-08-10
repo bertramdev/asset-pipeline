@@ -21,6 +21,8 @@ grails {
     packageAssets = false
     springDependencyManagement = false
 
+    // Required for consumers building a GraalVM native image; see gradle/java-config.gradle.
+    indy = true
 }
 
 dependencies {

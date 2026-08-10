@@ -23,36 +23,4 @@ subprojects { project ->
         publishedProjects << project.name
         apply plugin: 'org.apache.grails.gradle.grails-publish'
     }
-
-    // Compile every Groovy class with invokedynamic. Non-indy Groovy emits CallSiteArray
-    // dispatch, which defines call-site classes at runtime; GraalVM native-image forbids
-    // runtime class definition, so any non-indy class on the classpath is fatal there.
-    tasks.withType(GroovyCompile).configureEach {
-        groovyOptions.optimizationOptions.indy = true
-    }
-
-    // The Grails Gradle plugin drives groovyOptions.optimizationOptions.indy from its own
-    // `grails { indy = ... }` extension inside an afterEvaluate. Set it as soon as the
-    // plugin is applied, so the extension already says `true` by the time it is read.
-    ['org.apache.grails.gradle.grails-plugin',
-     'org.apache.grails.gradle.grails-web',
-     'org.apache.grails.gradle.grails-core'].each { String pluginId ->
-        pluginManager.withPlugin(pluginId) {
-            def grailsExt = project.extensions.findByName('grails')
-            if (grailsExt != null && grailsExt.hasProperty('indy')) {
-                grailsExt.indy = true
-            }
-        }
-    }
-}
-
-// Registering the configureEach action after every project has been evaluated guarantees it
-// runs last (task realization happens after all afterEvaluate callbacks), so nothing applied
-// by a third-party plugin can silently turn indy back off.
-gradle.projectsEvaluated {
-    subprojects.each { Project sub ->
-        sub.tasks.withType(GroovyCompile).configureEach {
-            groovyOptions.optimizationOptions.indy = true
-        }
-    }
 }

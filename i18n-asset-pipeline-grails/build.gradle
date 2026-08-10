@@ -39,6 +39,11 @@ ext {
     pomDescription = 'asset-pipeline plugin to use localized messages in JavaScript.'
 }
 
+grails {
+    // Required for consumers building a GraalVM native image; see gradle/java-config.gradle.
+    indy = true
+}
+
 
 dependencies {
     api 'org.springframework.boot:spring-boot-autoconfigure'
