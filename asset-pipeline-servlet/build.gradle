@@ -28,7 +28,7 @@ dependencies {
 
 	api project(':asset-pipeline-core')
 
-	implementation "org.apache.groovy:groovy:$groovy4Version"
+	implementation "org.apache.groovy:groovy:$groovy5Version"
 
 	compileOnlyApi "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
 
@@ -50,8 +50,9 @@ test {
 	}
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-	main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+	dependsOn('classes')
+	mainClass = 'groovy.ui.Console'
 	classpath = sourceSets.main.runtimeClasspath
 }
 

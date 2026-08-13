@@ -24,7 +24,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "cloud.wondrify:asset-pipeline-gradle:5.0.21"
+        classpath "cloud.wondrify:asset-pipeline-gradle:5.2.0-M1"
     }
 }
 
@@ -60,15 +60,21 @@ dependencies {
     // api 'cloud.wondrify:asset-pipeline-grails:2.13.2'
     // api 'cloud.wondrify:asset-pipeline-core:2.13.2'
 
-    console 'org.apache.grails:grails-console'
-
     profile 'org.apache.grails.profiles:web-plugin'
     testImplementation('org.apache.grails:grails-testing-support-web')
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // version managed by grails-bom; required by Gradle 9
 }
 
 
 assets {
     packagePlugin = true
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+        events('passed', 'skipped', 'failed')
+    }
 }
 
 apply {

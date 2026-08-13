@@ -4,7 +4,6 @@ apply plugin: 'java-library'
 group = 'cloud.wondrify'
 
 ext {
-    javetVersion = "5.0.5"
     pomDescription = 'Provides SASS Compiling using jsass (libsass) support for the Asset-Pipeline library.'
     pomDevelopers = ['gferon': 'Gabriel Féron']
 }
@@ -30,11 +29,13 @@ dependencies {
 
     implementation "com.caoccao.javet:javet:$javetVersion"
 
-    compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
+    compileOnly "org.apache.groovy:groovy:$groovy4Version"
     compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
 
     testImplementation "org.apache.groovy:groovy:$groovy4Version"
-    testImplementation "org.spockframework:spock-core:$spockVersion"
+    testImplementation platform("org.spockframework:spock-bom:$spockVersion")
+    testImplementation "org.spockframework:spock-core"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher" // version managed by junit-bom (via spock); required by Gradle 9
 
     testRuntimeOnly "org.webjars:webjars-locator-core:$webjarsLocatorVersion"
     testRuntimeOnly "org.slf4j:slf4j-simple:$slf4jVersion"
@@ -58,8 +59,9 @@ task bundleJSCompiler(type: NpmTask, dependsOn: ['npmInstall']) {
 
 compileGroovy.dependsOn copyJavetVersion, bundleJSCompiler
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-  main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+  dependsOn('classes')
+  mainClass = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -78,7 +80,7 @@ node {
 }
 
 processResources {
-    dependsOn bundleJSCompiler
+    dependsOn(bundleJSCompiler)
 }
 
 apply {
@@ -87,5 +89,5 @@ apply {
 }
 
 sourcesJar {
-    dependsOn bundleJSCompiler
+    dependsOn(bundleJSCompiler)
 }

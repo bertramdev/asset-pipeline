@@ -62,12 +62,13 @@ test {
 	}
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-	main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+	dependsOn('classes')
+	mainClass = 'groovy.ui.Console'
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-tasks.withType(GroovyCompile) {
+tasks.withType(GroovyCompile).configureEach {
     groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
 }
 

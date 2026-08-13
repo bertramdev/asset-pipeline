@@ -31,12 +31,13 @@ dependencies {
 	implementation "org.springframework:spring-web:$springVersion"
 	implementation "org.springframework.boot:spring-boot:$springBootVersion"
 
-	compileOnly "org.apache.groovy:groovy:$groovy4Version"
+	compileOnly "org.apache.groovy:groovy:$groovy5Version"
 	compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-	main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+	dependsOn('classes')
+	mainClass = 'groovy.ui.Console'
 	classpath = sourceSets.main.runtimeClasspath
 }
 
