@@ -30,9 +30,21 @@ class AssetPipelineFilter extends OncePerRequestFilter {
 
 	@Override
 	void initFilterBean() throws ServletException {
-		final FilterConfig config = filterConfig
-		applicationContext = WebApplicationContextUtils.getWebApplicationContext(config.servletContext)
-		servletContext = config.servletContext
+		// GenericFilterBean implements InitializingBean, so when this filter is a container-managed
+		// bean (a nested bean definition of the FilterRegistrationBean) Spring calls this from
+		// afterPropertiesSet() - long before the servlet container supplies a FilterConfig.
+		// Resolve the ServletContext from whichever source is available and simply do nothing when
+		// neither is: init(FilterConfig) calls this method again once the container has started.
+		final FilterConfig config = getFilterConfig()
+		final ServletContext context = config != null ? config.servletContext : servletContext
+		if (context == null) {
+			return
+		}
+		servletContext = context
+		final ApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(context)
+		if (webApplicationContext != null) {
+			applicationContext = webApplicationContext
+		}
 	}
 
 	@Override

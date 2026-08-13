@@ -1,5 +1,13 @@
 compileJava.options.release = javaVersion.toInteger()
 
+// Compile Groovy with invokedynamic. Non-indy Groovy emits CallSiteArray dispatch, which defines
+// call-site classes at runtime; GraalVM native-image forbids runtime class definition, so any
+// non-indy class on the classpath is fatal there. Grails plugin projects additionally need
+// `grails { indy = true }`, as the Grails Gradle plugin drives this from its own extension.
+tasks.withType(GroovyCompile).configureEach {
+    groovyOptions.optimizationOptions.indy = true
+}
+
 extensions.configure(JavaPluginExtension) {
     // Explicit `it` is required here
     it.withJavadocJar()

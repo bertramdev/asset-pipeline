@@ -121,7 +121,12 @@ class AssetPipelineGrailsPlugin extends Plugin {
                     ClassUtils.forName("org.springframework.boot.context.embedded.FilterRegistrationBean", classLoader)
             assetPipelineFilter(registrationBean) {
                 order = GrailsFilters.ASSET_PIPELINE_FILTER.order
-                filter = new asset.pipeline.AssetPipelineFilter()
+                // Use a nested bean definition rather than a constructed instance. A bean
+                // definition is metadata, and Spring AOT turns it into generated Java source;
+                // there is no way to generate code that rebuilds an arbitrary pre-built object,
+                // so `new AssetPipelineFilter()` fails ahead-of-time processing with
+                // UnsupportedTypeValueCodeGenerationException.
+                filter = bean(AssetPipelineFilter)
                 if (!mapping) {
                     urlPatterns = ["/*".toString()]
                 } else {
