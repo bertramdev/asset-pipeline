@@ -11,15 +11,15 @@ ext {
 configurations.configureEach {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         if ((details.requested.group == 'org.codehaus.groovy' || details.requested.group == 'org.apache.groovy') && details.requested.name != 'groovy-bom') {
-            details.useTarget(group: 'org.apache.groovy', name: details.requested.name, version: "$groovy4Version")
-            details.because "The dependency coordinates are changed in Apache Groovy 4, plus ensure version"
+            details.useTarget(group: 'org.apache.groovy', name: details.requested.name, version: "$groovy5Version")
+            details.because "The dependency coordinates are changed in Apache Groovy 4+, plus ensure the Groovy 5 version Grails 8 applications run"
         }
     }
 }
 
 grails {
     packageAssets = false
-    springDependencyManagement = false
+    bom = null // this build applies the grails-bom platform itself
 
     // Required for consumers building a GraalVM native image; see gradle/java-config.gradle.
     indy = true
@@ -40,6 +40,7 @@ dependencies {
     testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
     testImplementation 'org.apache.grails:grails-testing-support-web'
     testImplementation 'org.spockframework:spock-core'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // version managed by grails-bom; required by Gradle 9
 
     // Lets AssetPipelineGrailsPluginSpec drive Spring's ahead-of-time processing, proving the bean
     // definitions this plugin contributes can be turned into generated source for a native image.

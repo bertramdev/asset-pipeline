@@ -21,21 +21,24 @@ dependencies {
 
 	api project(':asset-pipeline-core')
 
-    // Needs to be compiled with Groovy 3 as it is used by the Gradle Plugin
-    compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
-    compileOnly "org.codehaus.groovy:groovy-templates:$groovy3Version"
+    // Needs to be compiled with Groovy 4 as it is used by the Gradle Plugin (Gradle 9 embeds Groovy 4)
+    compileOnly "org.apache.groovy:groovy:$groovy4Version"
+    compileOnly "org.apache.groovy:groovy-templates:$groovy4Version"
     compileOnly "org.graalvm.polyglot:polyglot:$graalvmVersion"
 
     testImplementation "org.apache.groovy:groovy:$groovy4Version"
     testImplementation "org.graalvm.js:js-community:$graalvmVersion"
-    testImplementation "org.spockframework:spock-core:$spockVersion"
+    testImplementation platform("org.spockframework:spock-bom:$spockVersion")
+    testImplementation "org.spockframework:spock-core"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher" // version managed by junit-bom (via spock); required by Gradle 9
 
     testRuntimeOnly "org.apache.groovy:groovy-templates:$groovy4Version"
     testRuntimeOnly "org.slf4j:slf4j-simple:$slf4jVersion"
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-  main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+  dependsOn('classes')
+  mainClass = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
 }
 

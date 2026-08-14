@@ -13,8 +13,8 @@ dependencies {
 
     implementation project(':asset-pipeline-core')
 
-    // Gradle Plugin must be compiled with Groovy 3
-    compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
+    // Gradle Plugin must be compiled with Groovy 4 (the Groovy embedded by Gradle 9)
+    compileOnly "org.apache.groovy:groovy:$groovy4Version"
     compileOnly gradleApi()
 
     // These will be used by the Asset Pipeline Gradle Plugin for pre-compiling assets
@@ -23,8 +23,9 @@ dependencies {
     runtimeOnly "org.graalvm.js:js-community:$graalvmVersion"
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-	main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+	dependsOn('classes')
+	mainClass = 'groovy.ui.Console'
 	classpath = sourceSets.main.runtimeClasspath
 }
 

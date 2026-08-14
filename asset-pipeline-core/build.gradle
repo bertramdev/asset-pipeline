@@ -26,18 +26,20 @@ dependencies {
     doc "org.apache.groovy:groovy-templates:$groovy4Version"
     doc "com.github.javaparser:javaparser-core:$javaparserVersion"
 
-    // Needs to be compiled with Groovy 3 as it is used by the Gradle Plugin
+    // Needs to be compiled with Groovy 4 as it is used by the Gradle Plugin (Gradle 9 embeds Groovy 4)
     compileOnly "com.google.javascript:closure-compiler-unshaded:$closureCompilerVersion"
-    compileOnly "com.google.guava:guava:33.4.6-jre" // required for closure-compiler-unshaded - com.google.common.base.Predicate is missing otherwise
-    compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
-    compileOnly "org.codehaus.groovy:groovy-json:$groovy3Version"
-    compileOnly "org.codehaus.groovy:groovy-templates:$groovy3Version"
+    compileOnly "com.google.guava:guava:33.6.0-jre" // required for closure-compiler-unshaded - com.google.common.base.Predicate is missing otherwise
+    compileOnly "org.apache.groovy:groovy:$groovy4Version"
+    compileOnly "org.apache.groovy:groovy-json:$groovy4Version"
+    compileOnly "org.apache.groovy:groovy-templates:$groovy4Version"
     compileOnly "org.graalvm.polyglot:polyglot:$graalvmVersion"
     compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
 
     testImplementation project(':asset-pipeline-classpath-test')
     testImplementation "org.apache.groovy:groovy:$groovy4Version"
-    testImplementation "org.spockframework:spock-core:$spockVersion"
+    testImplementation platform("org.spockframework:spock-bom:$spockVersion")
+    testImplementation "org.spockframework:spock-core"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher" // version managed by junit-bom (via spock); required by Gradle 9
 
 
     testImplementation "org.webjars.npm:jquery:3.7.1"
@@ -48,8 +50,9 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-simple:$slf4jVersion"
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-    main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+    dependsOn('classes')
+    mainClass = 'groovy.ui.Console'
     classpath = sourceSets.main.runtimeClasspath
 }
 

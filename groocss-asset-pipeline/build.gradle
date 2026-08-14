@@ -27,8 +27,9 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-  main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+  dependsOn('classes')
+  mainClass = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
 }
 

@@ -28,13 +28,14 @@ dependencies {
         exclude group: 'ro.isdc.wro4j', module: 'rhino'
     }
 
-    // Needs to be compiled with Groovy 3 as it is used by the Gradle Plugin
-    compileOnly "org.codehaus.groovy:groovy:$groovy3Version"
+    // Needs to be compiled with Groovy 4 as it is used by the Gradle Plugin (Gradle 9 embeds Groovy 4)
+    compileOnly "org.apache.groovy:groovy:$groovy4Version"
     compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
 }
 
-task(console, dependsOn: 'classes', type: JavaExec) {
-  main = 'groovy.ui.Console'
+tasks.register('console', JavaExec) {
+  dependsOn('classes')
+  mainClass = 'groovy.ui.Console'
   classpath = sourceSets.main.runtimeClasspath
 }
 
