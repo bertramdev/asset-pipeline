@@ -37,10 +37,20 @@ class JsNodeInjectProcessor extends AbstractProcessor  {
 
 	String process(final String inputText, final AssetFile assetFile) {
 		String nodeEnv = 'development'
-		
-		if (AssetPipelineConfigHolder.config != null
-				&& AssetPipelineConfigHolder.config['nodeEnv'] != null) {
-			nodeEnv = AssetPipelineConfigHolder.config['nodeEnv']
+
+		final Object configuredEnv = AssetPipelineConfigHolder.config?.get('nodeEnv')
+
+		// `nodeEnv: false` opts out of the shim entirely. It exists so bundles that read
+		// process.env.NODE_ENV do not blow up in the browser, but it is prepended to every
+		// JS asset whether or not anything reads it — dead bytes for apps whose bundles
+		// never mention `process`. Set it the same way as `commonJs`: `configOptions` in
+		// the gradle `assets` block, or `grails.assets` config in a Grails application.
+		if (configuredEnv instanceof Boolean && !configuredEnv) {
+			return inputText
+		}
+
+		if (configuredEnv != null) {
+			nodeEnv = configuredEnv
 		}
 
 		// if(!assetFile.baseFile) {
