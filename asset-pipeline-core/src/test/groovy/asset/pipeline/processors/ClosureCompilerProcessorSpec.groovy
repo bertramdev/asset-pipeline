@@ -122,4 +122,56 @@ class ClosureCompilerProcessorSpec extends Specification {
         def ex = thrown(MinifyException)
         ex.message.contains("JSC_JS_MODULE_LOAD_WARNING")
     }
+
+    // ES2022 public class fields are common in modern production bundles
+    // (marked's and Chart.js's UMD builds both use them). Before ES2022 was a
+    // recognised languageMode the only ways to accept them were ECMASCRIPT_NEXT
+    // and UNSTABLE, so apps excluded such files from minification entirely.
+    static final String PUBLIC_CLASS_FIELD = "class TallyWidget { tally = 0; bump() { return ++this.tally; } }"
+
+    void "minifies ES2022 public class fields with no languageMode configured"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        when:
+        // Regression guard: the default used to be ECMASCRIPT_2020, which rejected this
+        // outright and made every app exclude its vendor UMD bundles from minification.
+        def result = processor.process("test.js", PUBLIC_CLASS_FIELD, [:])
+        then:
+        noExceptionThrown()
+        result.contains("class")
+    }
+
+    void "explicit ES2020 still rejects ES2022 syntax"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        when:
+        processor.process("test.js", PUBLIC_CLASS_FIELD, [languageMode: 'ES2020'])
+        then:
+        def ex = thrown(MinifyException)
+        ex.message.contains("JSC_LANGUAGE_FEATURE")
+    }
+
+    void "minifies ES2022 public class fields when languageMode is #mode"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        when:
+        def result = processor.process("test.js", PUBLIC_CLASS_FIELD, [languageMode: mode])
+        then:
+        noExceptionThrown()
+        result.contains("class")
+        where:
+        mode << ['STABLE', 'UNSTABLE', 'ECMASCRIPT_NEXT']
+    }
+
+    void "maps ES2015 and its ES6 alias"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        when:
+        def result = processor.process("test.js", "const f = (a) => a * 2;", [languageMode: mode])
+        then:
+        noExceptionThrown()
+        result
+        where:
+        mode << ['ES2015', 'ES6']
+    }
 }
