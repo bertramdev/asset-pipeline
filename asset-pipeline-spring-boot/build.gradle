@@ -35,24 +35,15 @@ dependencies {
 	compileOnly "org.apache.groovy:groovy:$groovy5Version"
 	compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
 
-	// The tag libraries are wired where an application has them. The Grails plugin that carries
-	// them is not otherwise a dependency of a Spring Boot application, so it is compiled against
-	// and left off the class path.
-	compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
-	compileOnly project(':asset-pipeline-grails')
-	compileOnly 'org.apache.grails:grails-core'
-	compileOnly 'org.apache.grails.views:grails-web-taglib'
-
+	// The filter auto-configuration is covered by a Spring context runner, which asserts with AssertJ.
 	testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
-	testImplementation project(':asset-pipeline-grails')
-	testImplementation 'org.apache.grails:grails-core'
-	testImplementation 'org.apache.grails.views:grails-web-taglib'
-	testImplementation 'org.apache.grails:grails-url-mappings' // AssetProcessorService reads a LinkGenerator
 	testImplementation "org.apache.groovy:groovy:$groovy5Version"
 	testImplementation 'org.spockframework:spock-core'
 	testImplementation "org.springframework.boot:spring-boot-test:$springBootVersion"
-	testImplementation 'org.assertj:assertj-core' // the context runner's assertions are AssertJ's"
+	testImplementation 'org.assertj:assertj-core'
 	testImplementation "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
+	testImplementation "org.slf4j:slf4j-api:$slf4jVersion" // @Slf4j on AssetPipelineService needs it at run time
+	testRuntimeOnly "org.slf4j:slf4j-nop:$slf4jVersion"
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // version managed by grails-bom; required by Gradle 9
 }
 

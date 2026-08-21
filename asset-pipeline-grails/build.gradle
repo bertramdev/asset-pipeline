@@ -38,6 +38,12 @@ dependencies {
     compileOnly 'org.apache.grails.views:grails-web-taglib' // For taglib compilation
 
     testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    // AssetPipelineTagLibAutoConfigurationSpec drives the tag libraries the way an application that
+    // renders GSP without being a Grails application does: Spring beans, found by GSP's standalone
+    // tag library lookup, with no plugin lifecycle to register artefacts.
+    testImplementation 'org.apache.grails.views:grails-web-gsp-taglib'
+    testImplementation "org.springframework.boot:spring-boot-test:$springBootVersion"
+    testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.apache.grails:grails-testing-support-web'
     testImplementation 'org.spockframework:spock-core'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // version managed by grails-bom; required by Gradle 9
