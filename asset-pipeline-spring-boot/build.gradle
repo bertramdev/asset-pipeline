@@ -30,9 +30,37 @@ dependencies {
 	implementation "org.springframework:spring-core:$springVersion"
 	implementation "org.springframework:spring-web:$springVersion"
 	implementation "org.springframework.boot:spring-boot:$springBootVersion"
+	implementation "org.springframework.boot:spring-boot-autoconfigure:$springBootVersion"
 
 	compileOnly "org.apache.groovy:groovy:$groovy5Version"
 	compileOnly "org.slf4j:slf4j-api:$slf4jVersion"
+
+	// The tag libraries are wired where an application has them. The Grails plugin that carries
+	// them is not otherwise a dependency of a Spring Boot application, so it is compiled against
+	// and left off the class path.
+	compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
+	compileOnly project(':asset-pipeline-grails')
+	compileOnly 'org.apache.grails:grails-core'
+	compileOnly 'org.apache.grails.views:grails-web-taglib'
+
+	testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
+	testImplementation project(':asset-pipeline-grails')
+	testImplementation 'org.apache.grails:grails-core'
+	testImplementation 'org.apache.grails.views:grails-web-taglib'
+	testImplementation 'org.apache.grails:grails-url-mappings' // AssetProcessorService reads a LinkGenerator
+	testImplementation "org.apache.groovy:groovy:$groovy5Version"
+	testImplementation 'org.spockframework:spock-core'
+	testImplementation "org.springframework.boot:spring-boot-test:$springBootVersion"
+	testImplementation 'org.assertj:assertj-core' // the context runner's assertions are AssertJ's"
+	testImplementation "jakarta.servlet:jakarta.servlet-api:$servletApiVersion"
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // version managed by grails-bom; required by Gradle 9
+}
+
+tasks.withType(Test).configureEach {
+	useJUnitPlatform()
+	testLogging {
+		events('passed', 'skipped', 'failed')
+	}
 }
 
 tasks.register('console', JavaExec) {

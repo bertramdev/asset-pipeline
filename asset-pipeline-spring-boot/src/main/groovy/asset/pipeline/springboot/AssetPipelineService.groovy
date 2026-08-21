@@ -4,29 +4,28 @@ import asset.pipeline.AssetPipelineConfigHolder
 import asset.pipeline.fs.ClasspathAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
 import groovy.util.logging.Slf4j
-import jakarta.servlet.ServletContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.context.support.WebApplicationContextUtils
+import org.springframework.core.io.ResourceLoader
 
 @Slf4j
 @Configuration
 class AssetPipelineService {
 
+	// The context itself, rather than the one the servlet context holds: it is the same context,
+	// and it is there before a servlet container is.
 	@Autowired
-	ServletContext servletContext;
+	ResourceLoader resourceLoader
 
 	@Bean
 	public FilterRegistrationBean assetPipelineFilterBean() {
 		def manifestProps = new Properties()
 
-		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContext)
-		def manifestFile = applicationContext.getResource("classpath:assets/manifest.properties")
+		def manifestFile = resourceLoader.getResource("classpath:assets/manifest.properties")
 		if(!manifestFile.exists()) {
-			manifestFile = applicationContext.getResource("assets/manifest.properties")
+			manifestFile = resourceLoader.getResource("assets/manifest.properties")
 		}
 
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
