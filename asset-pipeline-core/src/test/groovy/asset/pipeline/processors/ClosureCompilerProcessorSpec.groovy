@@ -163,6 +163,40 @@ class ClosureCompilerProcessorSpec extends Specification {
         mode << ['STABLE', 'UNSTABLE', 'ECMASCRIPT_NEXT']
     }
 
+    // Raising the default languageIn only widens what can be PARSED — languageOut stays
+    // NO_TRANSPILE — so emitted output, and therefore browser compatibility, must be
+    // untouched for every source the previous ECMASCRIPT_2020 default already accepted.
+    static final Map PRE_ES2022_SOURCES = [
+        'es5'             : "function add(a,b){ return a+b; } var x = add(1,2);",
+        'es6 class/arrow' : "class A { constructor(){ this.v=1; } } const f = (x) => x*2; let g = `t${1}`;",
+        'es6 destructure' : "const {a,b} = obj; const [c,...d] = arr; function h(p=1,...r){ return p; }",
+        'es2017 async'    : "async function go(){ const r = await fetch('/x'); return r.json(); }",
+        'es2018 spread'   : "const merged = {...a, ...b}; async function w(it){ for await (const x of it) { use(x); } }",
+        'es2020 optional' : "const v = a?.b?.c ?? 'default'; const p = obj?.fn?.();",
+        'es2020 bigint'   : "const big = 9007199254740993n;",
+    ].asImmutable()
+
+    void "new default emits byte-identical output to the old ES2020 default: #name"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        expect:
+        processor.process("test.js", src, [languageMode: 'ES2020']) == processor.process("test.js", src, [:])
+        where:
+        name << PRE_ES2022_SOURCES.keySet()
+        src  << PRE_ES2022_SOURCES.values()
+    }
+
+    void "explicit targetLanguage still transpiles down to ES5"() {
+        given:
+        def processor = new ClosureCompilerProcessor(compiler)
+        when:
+        def result = processor.process("test.js", PRE_ES2022_SOURCES['es6 class/arrow'], [targetLanguage: 'ES5'])
+        then:
+        noExceptionThrown()
+        !result.contains('=>')
+        !result.contains('class ')
+    }
+
     void "maps ES2015 and its ES6 alias"() {
         given:
         def processor = new ClosureCompilerProcessor(compiler)
