@@ -4,14 +4,15 @@ import grails.config.Settings;
 import grails.util.Environment;
 import grails.web.mapping.LinkGenerator;
 import groovy.transform.CompileStatic;
-import org.grails.plugins.web.mapping.UrlMappingsAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 
 @CompileStatic
-@AutoConfiguration(before = { UrlMappingsAutoConfiguration.class })
+// Named rather than referenced by class: grails-url-mappings, which carries it, is absent from a
+// Spring Boot application that uses this plugin's tag libraries without the rest of Grails.
+@AutoConfiguration(beforeName = "org.grails.plugins.web.mapping.UrlMappingsAutoConfiguration")
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 class AssetPipelineAutoConfiguration {
     @Value("${" + Settings.WEB_LINK_GENERATOR_USE_CACHE + ":#{null}}")
