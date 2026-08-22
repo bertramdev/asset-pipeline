@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.ResourceLoader
+import org.springframework.context.ApplicationContext
 
 /**
  * The condition is here rather than only on the auto-configuration because this is what defines
@@ -22,17 +22,20 @@ import org.springframework.core.io.ResourceLoader
 class AssetPipelineService {
 
 	// The context itself, rather than the one the servlet context holds: it is the same context,
-	// and it is there before a servlet container is.
+	// and it is there before a servlet container is. Asked for as an ApplicationContext rather than
+	// as the ResourceLoader it also is, because a field of that name would be satisfied by an
+	// application's own bean called resourceLoader, which resolves paths against the class path
+	// instead of the servlet context.
 	@Autowired
-	ResourceLoader resourceLoader
+	ApplicationContext applicationContext
 
 	@Bean
 	public FilterRegistrationBean assetPipelineFilterBean() {
 		def manifestProps = new Properties()
 
-		def manifestFile = resourceLoader.getResource("classpath:assets/manifest.properties")
+		def manifestFile = applicationContext.getResource("classpath:assets/manifest.properties")
 		if(!manifestFile.exists()) {
-			manifestFile = resourceLoader.getResource("assets/manifest.properties")
+			manifestFile = applicationContext.getResource("assets/manifest.properties")
 		}
 
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
