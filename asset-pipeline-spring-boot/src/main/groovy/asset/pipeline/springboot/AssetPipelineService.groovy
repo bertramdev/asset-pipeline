@@ -5,13 +5,20 @@ import asset.pipeline.fs.ClasspathAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ResourceLoader
 
+/**
+ * The condition is here rather than only on the auto-configuration because this is what defines
+ * the filter: an application that still names this package in its component scan registers this
+ * class itself, and would otherwise get a filter it had switched off.
+ */
 @Slf4j
 @Configuration
+@ConditionalOnProperty(name = AssetPipelineAutoConfiguration.ENABLED, matchIfMissing = true)
 class AssetPipelineService {
 
 	// The context itself, rather than the one the servlet context holds: it is the same context,

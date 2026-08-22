@@ -31,8 +31,9 @@ assets:
 ```
 
 An older application that added `asset.pipeline.springboot` to its `@ComponentScan` needs no
-change - it keeps its own bean and the auto-configuration stands aside - though the scan entry
-is no longer doing anything for it.
+change: the scan registers the configuration, the auto-configuration sees the bean it defines
+and stands aside, and the same `assets.enabled` setting still switches it off. The scan entry is
+redundant rather than inert - remove it and the auto-configuration does the same work.
 
 Example Gradle File for Spring Boot:
 ```groovy

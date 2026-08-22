@@ -46,6 +46,19 @@ class AssetPipelineAutoConfigurationSpec extends Specification {
         }
     }
 
+    void 'an application that scans the configuration itself can still decline the filter'() {
+        given: 'the readme told applications to scan this package long before there was a switch'
+        WebApplicationContextRunner runner = new WebApplicationContextRunner()
+                .withUserConfiguration(AssetPipelineService)
+                .withConfiguration(AutoConfigurations.of(AssetPipelineAutoConfiguration))
+                .withPropertyValues('assets.enabled=false')
+
+        expect: 'the switch reaches the configuration that defines the filter, not only the one that imports it'
+        runner.run { context ->
+            assert context.getBeanNamesForType(FilterRegistrationBean).length == 0
+        }
+    }
+
     void 'an application already scanning the configuration ends up with one filter, not two'() {
         given: 'what the readme has told applications to do since before there was an auto-configuration'
         WebApplicationContextRunner runner = new WebApplicationContextRunner()
