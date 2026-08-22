@@ -41,6 +41,13 @@ import org.springframework.context.annotation.Bean;
  * <p>The condition is the tag library lookup GSP registers for a standalone application. A Grails
  * application has the plugin's own lookup instead, so nothing here applies to it and the beans the
  * plugin registers stay the only ones.
+ *
+ * <p>What this contributes is the tag libraries and the settings they read. What serves the assets
+ * they point at - the resolvers, and the manifest that gives a built asset its digest name - comes
+ * from {@code asset-pipeline-spring-boot}, which a standalone application adds alongside this. A
+ * standalone application with this module and not that one gets tag libraries that render
+ * development markup and non-digest urls, because nothing has told the pipeline where the assets
+ * are.
  */
 @AutoConfiguration(afterName = {
         "grails.gsp.boot.GspAutoConfiguration",
