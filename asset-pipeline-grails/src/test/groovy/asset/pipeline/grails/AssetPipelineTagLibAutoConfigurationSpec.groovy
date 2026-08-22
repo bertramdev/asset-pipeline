@@ -34,6 +34,15 @@ import spock.lang.Specification
  */
 class AssetPipelineTagLibAutoConfigurationSpec extends Specification {
 
+    void 'the auto-configuration is one Spring Boot will find'() {
+        given: 'the tests below import the class themselves, so none of them would notice its absence here'
+        String imports = getClass().getResourceAsStream(
+                '/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports').text
+
+        expect:
+        imports.readLines()*.trim().contains(AssetPipelineTagLibAutoConfiguration.name)
+    }
+
     void cleanup() {
         AssetPipelineConfigHolder.config = [:]
     }
