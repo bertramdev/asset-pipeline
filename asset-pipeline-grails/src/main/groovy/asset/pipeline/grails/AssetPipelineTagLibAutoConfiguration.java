@@ -20,6 +20,8 @@ import java.util.Map;
 import asset.pipeline.AssetPipelineConfigHolder;
 
 import grails.core.GrailsApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -47,6 +49,8 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnBean(value = AssetProcessorService.class, type = "org.grails.web.pages.StandaloneTagLibraryLookup")
 public class AssetPipelineTagLibAutoConfiguration {
+
+    private static final Logger log = LoggerFactory.getLogger(AssetPipelineTagLibAutoConfiguration.class);
 
     /**
      * The tag library the pages use. What it takes is given to it here rather than found by name, as
@@ -87,9 +91,18 @@ public class AssetPipelineTagLibAutoConfiguration {
         return () -> {
             Map<String, Object> configured = grailsApplication.getConfig().getProperty("grails.assets", Map.class,
                     java.util.Collections.emptyMap());
-            if (AssetPipelineConfigHolder.getConfig() == null || AssetPipelineConfigHolder.getConfig().isEmpty()) {
-                AssetPipelineConfigHolder.setConfig(flatten(configured));
+            Map<String, Object> settings = flatten(configured);
+            Map<String, Object> held = AssetPipelineConfigHolder.getConfig();
+            if (held != null && !held.isEmpty() && !held.equals(settings)) {
+                // The pipeline keeps its settings on a static, which outlives an application context:
+                // a devtools reload builds a new context in the same JVM and finds the settings of
+                // the one before it. The application being built now is the one that asked, so its
+                // settings win - the alternative is a changed setting that is quietly ignored until
+                // the JVM restarts.
+                log.debug("Replacing the asset pipeline settings held from an earlier context: {} -> {}",
+                        held, settings);
             }
+            AssetPipelineConfigHolder.setConfig(settings);
         };
     }
 
