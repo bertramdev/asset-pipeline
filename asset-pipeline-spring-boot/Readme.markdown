@@ -6,14 +6,13 @@ This is a preliminary test project for adding support to spring boot.
 It takes files stored in `assets/javascripts` , `assets/stylesheets`, `assets/images`, `assets/**/*`, and compiles them into the root jar `assets` folder.
 It supports both development mode where it compiles on the fly and production `gradle assemble`
 
-Note: Be Sure to add to your `@ComponentScan` annotation the class path `asset.pipeline.springboot`
+The library configures itself: a servlet application that has it on the class path serves what
+the pipeline compiled from `/assets/*`, without anything to wire up.
 
 ```groovy
 package demo
 
-@Configuration
-@ComponentScan(['demo','asset.pipeline.springboot'])
-@EnableAutoConfiguration
+@SpringBootApplication
 class Application {
 
     static void main(String[] args) {
@@ -22,6 +21,18 @@ class Application {
 }
 
 ```
+
+An application that declares its own `assetPipelineFilterBean` keeps it, and one that wants the
+library on the class path without the filter says so:
+
+```yaml
+assets:
+    enabled: false
+```
+
+An older application that added `asset.pipeline.springboot` to its `@ComponentScan` needs no
+change - it keeps its own bean and the auto-configuration stands aside - though the scan entry
+is no longer doing anything for it.
 
 Example Gradle File for Spring Boot:
 ```groovy

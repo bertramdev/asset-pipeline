@@ -39,6 +39,13 @@ class AssetPipelineAutoConfigurationSpec extends Specification {
         }
     }
 
+    void 'an application that does not want the filter says so'() {
+        expect: 'a library on the class path is not the same as a library that was asked for'
+        contextRunner().withPropertyValues('assets.enabled=false').run { context ->
+            assert context.getBeanNamesForType(FilterRegistrationBean).length == 0
+        }
+    }
+
     void 'an application already scanning the configuration ends up with one filter, not two'() {
         given: 'what the readme has told applications to do since before there was an auto-configuration'
         WebApplicationContextRunner runner = new WebApplicationContextRunner()

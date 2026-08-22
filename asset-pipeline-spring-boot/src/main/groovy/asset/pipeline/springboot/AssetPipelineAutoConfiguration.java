@@ -17,6 +17,7 @@ package asset.pipeline.springboot;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Import;
 
@@ -26,14 +27,20 @@ import org.springframework.context.annotation.Import;
  * beside it; an application built without one gets the development filter, which compiles an asset
  * as it is asked for.
  *
- * <p>An application that declares {@link AssetPipelineService} itself keeps its own.
+ * <p>An application that declares {@link AssetPipelineService} itself keeps its own, and one that
+ * has this library on its class path without wanting the filter sets {@code assets.enabled} to
+ * {@code false}.
  */
 @AutoConfiguration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnProperty(name = AssetPipelineAutoConfiguration.ENABLED, matchIfMissing = true)
 @ConditionalOnMissingBean(name = AssetPipelineAutoConfiguration.FILTER_BEAN_NAME)
 @Import(AssetPipelineService.class)
 public class AssetPipelineAutoConfiguration {
 
     static final String FILTER_BEAN_NAME = "assetPipelineFilterBean";
+
+    /** Named for {@code assets.mapping}, which the Micronaut adapter already reads. */
+    static final String ENABLED = "assets.enabled";
 
 }
