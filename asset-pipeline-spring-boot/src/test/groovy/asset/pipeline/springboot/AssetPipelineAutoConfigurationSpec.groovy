@@ -65,7 +65,10 @@ class AssetPipelineAutoConfigurationSpec extends Specification {
                 .withUserConfiguration(AssetPipelineService)
                 .withConfiguration(AutoConfigurations.of(AssetPipelineAutoConfiguration))
 
-        expect: 'the auto-configuration stands aside rather than defining the bean a second time'
+        // Not a test of the backoff: a scanned configuration class is dropped from the
+        // auto-configuration's import before any condition is asked, so this holds with the
+        // condition removed. The specification below is the one that covers the condition.
+        expect: 'one definition of the filter, whichever of the two paths registered it, and a context that started'
         runner.run { context ->
             assert !context.startupFailure
             assert context.getBeanNamesForType(FilterRegistrationBean).length == 1
