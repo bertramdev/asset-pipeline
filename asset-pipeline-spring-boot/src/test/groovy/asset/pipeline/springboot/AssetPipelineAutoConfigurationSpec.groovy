@@ -15,6 +15,7 @@
  */
 package asset.pipeline.springboot
 
+import org.springframework.boot.autoconfigure.AutoConfigurations
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner
 import spock.lang.Specification
@@ -35,6 +36,19 @@ class AssetPipelineAutoConfigurationSpec extends Specification {
             assert registration.urlPatterns.toList() == ['/assets/*']
             // built without a manifest, so what serves an asset is what compiles it as it is asked for
             assert registration.filter instanceof AssetPipelineDevFilter
+        }
+    }
+
+    void 'an application already scanning the configuration ends up with one filter, not two'() {
+        given: 'what the readme has told applications to do since before there was an auto-configuration'
+        WebApplicationContextRunner runner = new WebApplicationContextRunner()
+                .withUserConfiguration(AssetPipelineService)
+                .withConfiguration(AutoConfigurations.of(AssetPipelineAutoConfiguration))
+
+        expect: 'the auto-configuration stands aside rather than defining the bean a second time'
+        runner.run { context ->
+            assert !context.startupFailure
+            assert context.getBeanNamesForType(FilterRegistrationBean).length == 1
         }
     }
 
