@@ -147,6 +147,9 @@ class ClosureCompilerProcessor {
 				return LanguageMode.ECMASCRIPT5
 			case 'ES3':
 				return LanguageMode.ECMASCRIPT3
+			case 'ES2015':
+			case 'ES6':
+				return LanguageMode.ECMASCRIPT_2015
 			case 'ES2016':
 				return LanguageMode.ECMASCRIPT_2016
 			case 'ES2017':
@@ -159,10 +162,20 @@ class ClosureCompilerProcessor {
 				return LanguageMode.ECMASCRIPT_2020	
 			case 'ES2021':
 				return LanguageMode.ECMASCRIPT_2021
+			case 'STABLE':
+				return LanguageMode.STABLE
 			case 'UNSTABLE':
 				return LanguageMode.UNSTABLE
 			default:
-				return LanguageMode.ECMASCRIPT_2020
+				// STABLE tracks the newest language level this compiler fully supports.
+				// The old ECMASCRIPT_2020 default rejected syntax that has shipped in
+				// every browser for years — notably ES2022 public class fields, used by
+				// the stock UMD bundles of Chart.js, marked and friends. That forced
+				// every consuming app to keep a growing minifyOptions.excludes list just
+				// to get its vendor bundles through the pipeline. Parsing newer syntax is
+				// safe here: languageOut defaults to NO_TRANSPILE, so nothing that
+				// compiled before compiles differently now.
+				return LanguageMode.STABLE
 		}
 	}
 
