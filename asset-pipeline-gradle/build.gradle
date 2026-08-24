@@ -21,6 +21,11 @@ dependencies {
     // and when running bootRun task (in development)
     runtimeOnly "com.google.javascript:closure-compiler-unshaded:$closureCompilerVersion"
     runtimeOnly "org.graalvm.js:js-community:$graalvmVersion"
+
+	testImplementation gradleApi()
+	testImplementation platform("org.spockframework:spock-bom:$spockVersion")
+	testImplementation 'org.spockframework:spock-core'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.register('console', JavaExec) {
@@ -29,8 +34,9 @@ tasks.register('console', JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-test {
-	testLogging {
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
 		exceptionFormat = 'full'
 		showStandardStreams = true
 	}
