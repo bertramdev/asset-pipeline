@@ -43,7 +43,7 @@ class AssetPipelineTagLibAutoConfigurationSpec extends Specification {
                 '/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports').text
 
         expect:
-        imports.readLines()*.trim().contains(AssetPipelineTagLibAutoConfiguration.name)
+        imports.readLines()*.trim().contains(AssetPipelineAutoConfiguration.name)
     }
 
     void cleanup() {

@@ -23,7 +23,6 @@ import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.AssetSupportingCachingLinkGenerator
 import asset.pipeline.grails.AssetSupportingLinkGenerator
 import asset.pipeline.grails.AssetsTagLib
-import grails.compiler.beans.GrailsBeans
 import grails.config.Settings
 import grails.core.GrailsApplication
 import grails.plugins.Plugin
@@ -32,6 +31,7 @@ import grails.util.Environment
 import grails.web.mapping.LinkGenerator
 import groovy.util.logging.Slf4j
 import org.grails.config.NavigableMap
+import org.slf4j.LoggerFactory
 import org.grails.plugins.BinaryGrailsPlugin
 import org.springframework.beans.factory.BeanRegistrar
 import org.springframework.beans.factory.InitializingBean
@@ -44,7 +44,6 @@ import java.util.function.Consumer
 import java.util.function.Function
 
 @Slf4j
-@GrailsBeans
 // An ordering hint, not a dependency: everything used below comes from grails-web-url-mappings,
 // while the class named lives in grails-url-mappings, which this plugin declares compileOnly.
 @AutoConfiguration(beforeName = 'org.grails.plugins.web.mapping.UrlMappingsAutoConfiguration')
@@ -128,8 +127,20 @@ class AssetPipelineGrailsPlugin extends Plugin {
                 { GrailsApplication grailsApplication ->
                     { ->
                         def configured = grailsApplication.config.getProperty('grails.assets', Map, [:])
-                        AssetPipelineConfigHolder.config = configured instanceof NavigableMap ?
+                        Map settings = configured instanceof NavigableMap ?
                                 configured.toFlatConfig() : configured
+                        Map held = AssetPipelineConfigHolder.config
+                        if (held && held != settings) {
+                            // The pipeline keeps its settings on a static, which outlives an
+                            // application context: a devtools reload builds a new context in the
+                            // same JVM and finds the settings of the one before it. The application
+                            // being built now is the one that asked, so its settings win - the
+                            // alternative is a changed setting quietly ignored until the JVM restarts.
+                            LoggerFactory.getLogger(AssetPipelineGrailsPlugin).debug(
+                                    'Replacing the asset pipeline settings held from an earlier context: {} -> {}',
+                                    held, settings)
+                        }
+                        AssetPipelineConfigHolder.config = settings
                     } as InitializingBean
                 }
     }
