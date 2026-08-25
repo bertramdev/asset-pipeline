@@ -1,2 +1,1 @@
-asset.pipeline.grails.AssetPipelineAutoConfiguration
-asset.pipeline.grails.AssetPipelineTagLibAutoConfiguration
+asset.pipeline.AssetPipelineAutoConfiguration

@@ -15,6 +15,8 @@
  */
 package asset.pipeline.grails
 
+import asset.pipeline.AssetPipelineAutoConfiguration
+
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import spock.lang.Specification
 

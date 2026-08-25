@@ -15,13 +15,16 @@
  */
 package asset.pipeline
 
+import asset.pipeline.grails.AssetPipelineBeanDefinitionRegistrar
+import asset.pipeline.grails.AssetResourceLocator
 import grails.core.DefaultGrailsApplication
 import grails.core.GrailsApplication
-import grails.spring.BeanBuilder
 import jakarta.servlet.Filter
 import org.grails.web.config.http.GrailsFilters
 import org.springframework.aot.test.generate.TestGenerationContext
 import org.springframework.beans.factory.config.BeanDefinition
+import org.springframework.beans.factory.support.BeanDefinitionRegistry
+import org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.aot.ApplicationContextAotGenerator
 import org.springframework.mock.web.MockFilterConfig
@@ -99,22 +102,31 @@ class AssetPipelineGrailsPluginSpec extends Specification {
         noExceptionThrown()
     }
 
-    private BeanDefinition filterRegistrationDefinition() {
-        AssetPipelineGrailsPlugin plugin = new AssetPipelineGrailsPlugin()
-        plugin.grailsApplication = grailsApplication
-        plugin.applicationContext = applicationContext
+    void 'the resource locator inherits its search locations from the abstract Grails definition'() {
+        when: 'the plugin contributes its bean definitions'
+        BeanDefinition locator = registrarDefinitions().getBeanDefinition('assetResourceLocator')
 
-        Binding binding = new Binding()
-        binding.setVariable('application', grailsApplication)
-        binding.setVariable(GrailsApplication.APPLICATION_ID, grailsApplication)
-
-        BeanBuilder beanBuilder = new BeanBuilder(null, grailsApplication.classLoader)
-        beanBuilder.binding = binding
-
-        Closure beans = plugin.doWithSpring()
-        beans.delegate = beanBuilder
-        beanBuilder.beans(beans)
-
-        beanBuilder.getBeanDefinition('assetPipelineFilter')
+        then: 'it is a child of the definition Grails registers for the purpose'
+        locator.parentName == 'abstractGrailsResourceLocator'
+        locator.beanClassName == AssetResourceLocator.name
     }
+
+    void 'a configured mapping reaches the filter url patterns'() {
+        expect:
+        registrarDefinitions(mapping: 'static')
+                .getBeanDefinition('assetPipelineFilter')
+                .propertyValues.getPropertyValue('urlPatterns').value == ['/static/*']
+    }
+
+    private BeanDefinition filterRegistrationDefinition() {
+        registrarDefinitions().getBeanDefinition('assetPipelineFilter')
+    }
+
+    /** What the plugin contributes through its BeanDefinitionRegistryPostProcessor. */
+    private BeanDefinitionRegistry registrarDefinitions(Map<String, Object> assetsConfig = [:]) {
+        BeanDefinitionRegistry registry = new SimpleBeanDefinitionRegistry()
+        new AssetPipelineBeanDefinitionRegistrar(assetsConfig).postProcessBeanDefinitionRegistry(registry)
+        registry
+    }
+
 }

@@ -15,10 +15,13 @@
  */
 package asset.pipeline.grails
 
+import asset.pipeline.AssetPipelineAutoConfiguration
 import asset.pipeline.AssetPipelineConfigHolder
 
 import grails.core.DefaultGrailsApplication
 import grails.core.GrailsApplication
+import grails.web.mapping.UrlMappingsHolder
+import org.grails.web.mapping.DefaultUrlMappingsHolder
 import org.grails.web.pages.StandaloneTagLibraryLookup
 import org.springframework.beans.BeanUtils
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner
@@ -49,7 +52,7 @@ class AssetPipelineTagLibAutoConfigurationSpec extends Specification {
 
     private WebApplicationContextRunner contextRunner() {
         new WebApplicationContextRunner()
-                .withUserConfiguration(AssetPipelineTagLibAutoConfiguration)
+                .withUserConfiguration(AssetPipelineAutoConfiguration)
                 .withBean('assetProcessorService', AssetProcessorService, () -> new AssetProcessorService())
     }
 
@@ -84,6 +87,9 @@ class AssetPipelineTagLibAutoConfigurationSpec extends Specification {
         expect: 'no standalone lookup, which is what a Grails application has'
         contextRunner()
                 .withBean('grailsApplication', GrailsApplication, () -> new DefaultGrailsApplication())
+                // the merged auto-configuration also contributes grailsLinkGenerator here, which a
+                // real Grails application has this from grails-url-mappings
+                .withBean('grailsUrlMappingsHolder', UrlMappingsHolder, () -> new DefaultUrlMappingsHolder([]))
                 .run { context ->
                     assert !context.containsBean('assetsTagLib')
                     assert !context.containsBean('assetMethodTagLib')
