@@ -44,6 +44,7 @@ abstract class AssetPluginPackage extends DefaultTask {
         FileSystemAssetResolver fsResolver = new FileSystemAssetResolver('manifest', config.assetsPath.get().asFile.canonicalPath)
 
         Collection<AssetFile> fileList = fsResolver.scanForFiles([], [])
+                .sort { it.path } // Sort for reproducible builds
 
         File destination = destinationDirectory.get().asFile.canonicalFile
         File assetsDir = new File(destination, 'assets')
