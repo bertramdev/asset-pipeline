@@ -17,26 +17,19 @@ package asset.pipeline
 
 import asset.pipeline.fs.ClasspathAssetResolver
 import asset.pipeline.fs.FileSystemAssetResolver
-import asset.pipeline.grails.AssetMethodTagLib
 import asset.pipeline.grails.AssetPipelineBeanDefinitionRegistrar
 import asset.pipeline.grails.AssetProcessorService
 import asset.pipeline.grails.AssetSupportingCachingLinkGenerator
 import asset.pipeline.grails.AssetSupportingLinkGenerator
-import asset.pipeline.grails.AssetsTagLib
 import grails.config.Settings
-import grails.core.GrailsApplication
 import grails.plugins.Plugin
 import grails.util.BuildSettings
 import grails.util.Environment
 import grails.web.mapping.LinkGenerator
 import groovy.util.logging.Slf4j
-import org.grails.config.NavigableMap
-import org.slf4j.LoggerFactory
 import org.grails.plugins.BinaryGrailsPlugin
 import org.springframework.beans.factory.BeanRegistrar
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication
 
@@ -71,9 +64,9 @@ class AssetPipelineGrailsPlugin extends Plugin {
      * The beans this plugin contributes, compiled into a sibling AssetPipelineAutoConfiguration.
      *
      * <p>That sibling is a plain auto-configuration listed in AutoConfiguration.imports, so it is
-     * read wherever Spring Boot reads auto-configurations - including an application that renders
-     * GSP without being a Grails application, which runs no plugin lifecycle at all. Each bean
-     * carries the condition that says which of the two it belongs to.
+     * read wherever Spring Boot reads auto-configurations, including an application that renders
+     * GSP without being a Grails application and runs no plugin lifecycle at all. What such an
+     * application needs beyond these - the tag libraries themselves - is asset-pipeline-gsp.
      */
     def beans = {
 
@@ -82,10 +75,11 @@ class AssetPipelineGrailsPlugin extends Plugin {
 
         bean(AssetProcessorService).conditionalOnMissingBean()
 
-        // Only where Grails itself is running: a standalone GSP application has GSP's own tag
-        // library lookup, and no url mappings holder for DefaultLinkGenerator to autowire.
+        // Declared the way grails-url-mappings declares its own, so an application that has one
+        // keeps it. Nothing narrower: AssetProcessorService reads contextPath and serverBaseURL off
+        // this for every asset url it builds, so where it is absent the first assetPath() fails.
         bean('grailsLinkGenerator', LinkGenerator)
-                .annotate(ConditionalOnMissingBean, type: 'org.grails.web.pages.StandaloneTagLibraryLookup')
+                .conditionalOnMissingBeanName()
                 { AssetProcessorService assetProcessorService ->
                     boolean useCache = cacheUrls == null ?
                             !Environment.isDevelopmentMode() && !Environment.getCurrent().isReloadEnabled() :
@@ -95,54 +89,6 @@ class AssetPipelineGrailsPlugin extends Plugin {
                             new AssetSupportingLinkGenerator(serverURL, assetProcessorService)
                 }
 
-        // The mirror of the condition above: the tag library lookup GSP registers for a standalone
-        // application. A Grails application has the plugin's own lookup and finds these by scanning
-        // the plugin's artefacts, so the beans it registers stay the only ones.
-
-        bean(AssetsTagLib)
-                .conditionalOnMissingBean()
-                .annotate(ConditionalOnBean, value: AssetProcessorService,
-                          type: 'org.grails.web.pages.StandaloneTagLibraryLookup')
-                { AssetProcessorService assetProcessorService, GrailsApplication grailsApplication ->
-                    AssetsTagLib tagLib = new AssetsTagLib()
-                    tagLib.assetProcessorService = assetProcessorService
-                    tagLib.grailsApplication = grailsApplication
-                    tagLib
-                }
-
-        bean(AssetMethodTagLib)
-                .conditionalOnMissingBean()
-                .annotate(ConditionalOnBean, value: AssetProcessorService,
-                          type: 'org.grails.web.pages.StandaloneTagLibraryLookup')
-                { AssetProcessorService assetProcessorService ->
-                    AssetMethodTagLib tagLib = new AssetMethodTagLib()
-                    tagLib.assetProcessorService = assetProcessorService
-                    tagLib
-                }
-
-        bean('assetPipelineConfiguration', InitializingBean)
-                .conditionalOnMissingBeanName()
-                .annotate(ConditionalOnBean, value: AssetProcessorService,
-                          type: 'org.grails.web.pages.StandaloneTagLibraryLookup')
-                { GrailsApplication grailsApplication ->
-                    { ->
-                        def configured = grailsApplication.config.getProperty('grails.assets', Map, [:])
-                        Map settings = configured instanceof NavigableMap ?
-                                configured.toFlatConfig() : configured
-                        Map held = AssetPipelineConfigHolder.config
-                        if (held && held != settings) {
-                            // The pipeline keeps its settings on a static, which outlives an
-                            // application context: a devtools reload builds a new context in the
-                            // same JVM and finds the settings of the one before it. The application
-                            // being built now is the one that asked, so its settings win - the
-                            // alternative is a changed setting quietly ignored until the JVM restarts.
-                            LoggerFactory.getLogger(AssetPipelineGrailsPlugin).debug(
-                                    'Replacing the asset pipeline settings held from an earlier context: {} -> {}',
-                                    held, settings)
-                        }
-                        AssetPipelineConfigHolder.config = settings
-                    } as InitializingBean
-                }
     }
 
     void doWithApplicationContext() {

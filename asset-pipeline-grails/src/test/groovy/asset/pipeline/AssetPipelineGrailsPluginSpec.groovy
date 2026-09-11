@@ -24,6 +24,8 @@ import org.grails.web.config.http.GrailsFilters
 import org.springframework.aot.test.generate.TestGenerationContext
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.support.BeanDefinitionRegistry
+import org.springframework.beans.factory.support.GenericBeanDefinition
+import org.springframework.beans.factory.support.RootBeanDefinition
 import org.springframework.beans.factory.support.SimpleBeanDefinitionRegistry
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.aot.ApplicationContextAotGenerator
@@ -31,6 +33,8 @@ import org.springframework.mock.web.MockFilterConfig
 import org.springframework.mock.web.MockServletContext
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.context.support.GenericWebApplicationContext
+import java.util.function.Supplier
+
 import spock.lang.Specification
 
 class AssetPipelineGrailsPluginSpec extends Specification {
@@ -116,6 +120,30 @@ class AssetPipelineGrailsPluginSpec extends Specification {
         registrarDefinitions(mapping: 'static')
                 .getBeanDefinition('assetPipelineFilter')
                 .propertyValues.getPropertyValue('urlPatterns').value == ['/static/*']
+    }
+
+    void 'what beanRegistrar() contributes survives Spring ahead-of-time processing'() {
+        given: 'the abstract parent Grails registers for resource locators, which the registrar inherits from'
+        GenericBeanDefinition abstractLocator = new GenericBeanDefinition()
+        abstractLocator.abstract = true
+        abstractLocator.propertyValues.add('searchLocations', [])
+        applicationContext.registerBeanDefinition('abstractGrailsResourceLocator', abstractLocator)
+
+        and: 'the plugin\'s own BeanRegistrar, registered the way a Grails application registers it'
+        AssetPipelineGrailsPlugin plugin = new AssetPipelineGrailsPlugin()
+        plugin.grailsApplication = grailsApplication
+        plugin.applicationContext = applicationContext
+        applicationContext.register(plugin.beanRegistrar())
+
+        when: 'the definitions are processed ahead of time, as they are when building a native image'
+        new ApplicationContextAotGenerator().processAheadOfTime(applicationContext, new TestGenerationContext())
+
+        then: 'the registrar that carries the definitions #465 is about is itself generatable'
+        noExceptionThrown()
+
+        and: 'having actually contributed them, rather than passing over an empty context'
+        applicationContext.containsBeanDefinition('assetPipelineFilter')
+        applicationContext.containsBeanDefinition('assetResourceLocator')
     }
 
     private BeanDefinition filterRegistrationDefinition() {
